@@ -1,7 +1,10 @@
  #!/usr/bin/env python3
 
 """
-Blackboard API
+Blackboard API,
+an interface to make
+Blackboard API calls
+
 Copyright (C) 2020
 Jacob Sánchez Pérez
 """
@@ -21,6 +24,7 @@ Jacob Sánchez Pérez
 # Boston, MA  02110-1301, USA.
 
 import json
+import base64
 import logging
 import requests
 from bs4 import BeautifulSoup
@@ -40,18 +44,27 @@ class BlackboardSession:
 
     def __init__(self, user, password):
         if not self.auth(user, password):
-            print("Session not authorized")
+            raise ValueError("Login incorrect")
 
     def auth(self, user, password):
+        """
+        Go through regular authentication process,
+        that is, ask auth server to generate token and then
+        provide the token back to the blackboard server
+
+        :param string user: UCLan student email address, including domain
+        :param string password: Corresponding password to UCLan account
+        """
+
         # Create requests session to preserve session coookies
         bb_session = requests.Session()
 
-        # Perform authentication flow as if in browser
+        # Request blackboard landing page to get right url to submit login to
         first_r = bb_session.get(f"{self.base_url}/auth-saml/saml/login?apId=_172_1")
-
         first_soup = BeautifulSoup(first_r.text, features="lxml")
         login_url = first_soup.find(id="loginForm").get('action')
 
+        # POST login to auth server, it'll respond with a token (or error page)
         auth = {
             'UserName': user,
             'Password': password
@@ -59,11 +72,33 @@ class BlackboardSession:
 
         second_r = bb_session.post(f"{self.fs_url}{login_url}", data=auth)
 
+        # Parse base64-encoded token from response
         second_soup = BeautifulSoup(second_r.text, features="lxml")
-        hidden_input = second_soup.find("input").get('value')
+        hidden_input = second_soup.find("input")
 
+        # If server returns error page, password is incorrect but user exists
+        if hidden_input.get("name") != "SAMLResponse":
+            # Password did not match username
+            self.logger.error(f"Password is incorrect")
+            return False
+
+        token_encoded = hidden_input.get('value')
+
+        # Decode it to verify auth was successful
+        token_decoded = base64.b64decode(token_encoded)
+        token_soup = BeautifulSoup(token_decoded, features="lxml")
+        token_status = token_soup.find("samlp:statuscode").get("value")
+        auth_status = token_status.split(':')[-1]
+
+        # Return error if token status was not successful (user not found)
+        if auth_status != "Success":
+            # Username was not found
+            self.logger.error(f"Username was not found")
+            return False
+
+        # Provide token to blackboard server to finish
         hidden_auth = {
-            'SAMLResponse': hidden_input
+            'SAMLResponse': token_encoded
         }
 
         final_r = bb_session.post(f"{self.base_url}/auth-saml/saml/SSO/alias/_172_1", data=hidden_auth)

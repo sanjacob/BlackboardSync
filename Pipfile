@@ -7,6 +7,8 @@ name = "pypi"
 requests = "*"
 bs4 = "*"
 lxml = "*"
+appdirs = "*"
+toml = "*"
 
 [dev-packages]
 

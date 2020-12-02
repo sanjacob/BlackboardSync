@@ -145,3 +145,4 @@ dmypy.json
 
 .directory
 secrets/
+token_info/
