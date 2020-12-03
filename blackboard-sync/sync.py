@@ -24,9 +24,11 @@ Jacob Sánchez Pérez
 # Boston, MA  02110-1301, USA.
 
 import toml
+import logging
 from pathlib import Path
 from getpass import getpass
 from api import BlackboardSession
+from blackboard import BBCourse, BBMembership, BBContentHandler, BBCourseContent, BBContentChild
 from appdirs import user_config_dir
 
 
@@ -34,6 +36,7 @@ class BlackboardSync:
     _config_filename = "blackboard_sync"
     persistance = True
     user_id = ""
+    data_source = "_21_1"
 
     def __init__(self):
         self.config_folder = Path(user_config_dir(appauthor="WeAreMagic",
@@ -46,6 +49,11 @@ class BlackboardSync:
         else:
             self.configure()
 
+        self.sync_folder = Path('sync')
+
+        if not self.sync_folder.exists():
+            self.sync_folder.mkdir()
+
         self.main()
 
     def loadConfig(self):
@@ -56,6 +64,7 @@ class BlackboardSync:
 
         try:
             u_sess = BlackboardSession(login['username'], login['password'])
+            u_sess.logger.addHandler(logging.StreamHandler())
         except ValueError:
             print("Saved credentials are incorrect, launching configure")
             self.configure()
@@ -107,48 +116,53 @@ class BlackboardSync:
                     self.user_id = user_id
                     authorized = True
 
+
+    def handle_file(self, content, parent_path, course_id, depth=0):
+        print(f"{'    ' * depth}{content.title}[{content.contentHandler.id}]")
+
+        type = content.contentHandler
+        file_path = Path(parent_path / content.title_nb)
+
+        if type.isFolder:
+            try:
+                children = self.sess.fetchContentChildren(course_id=course_id,
+                                                          content_id=content.id)
+
+                if children:
+                    file_path.mkdir(exist_ok=True, parents=True)
+
+                for child in children:
+                    self.handle_file(BBContentChild(**child), file_path, course_id, depth + 1)
+            except ValueError:
+                pass
+        elif type.isDocument and content.body:
+            with file_path.with_name(f"{file_path.name}.md").open('w') as md:
+                md.write(content.body)
+
+
     def main(self):
-        memberships = self.sess.fetchUserMemberships(user_id=self.user_id)
+        all_memberships = self.sess.fetchUserMemberships(user_id=self.user_id)
+        filtered_ms = []
 
-        for course in (membership for membership in memberships if membership['dataSourceId'] == '_21_1'):
-            course_data = self.sess.fetchCourses(course_id=course['courseId'])
+        for membership in all_memberships:
+            new_ms = BBMembership(**membership)
+            if new_ms.dataSourceId == self.data_source:
+                filtered_ms.append(new_ms)
 
-            code_split = course_data['name'].split(' : ')
+        for ms in filtered_ms:
+            course = BBCourse(**self.sess.fetchCourses(course_id=ms.courseId))
+            code_split = course.name.split(' : ')
             name_split = code_split[1].split(',')
 
             print(f"<{code_split[0]}> - <{name_split[0]}>")
 
-            course_contents = self.sess.fetchContents(course_id=course['courseId'])
+            course_contents = self.sess.fetchContents(course_id=course.id)
 
-            for content_folder in course_contents:
+            if course_contents:
+                course_path = Path(self.sync_folder / ms.created[:4] / name_split[0])
 
-                try:
-                    folder_children = self.sess.fetchContentChildren(course_id=course['courseId'],
-                                                                  content_id=content_folder['id'])
-
-                    print(f"    {content_folder['title']}")
-
-                    for child in folder_children:
-                        type_tag = ""
-
-                        if 'contentHandler' in child:
-                            type = child['contentHandler']['id']
-
-                            # if type == "resource/x-bb-document":
-                            #     type_tag = "doc"
-                            # elif type == "resource/x-bb-folder":
-                            #     type_tag = "folder"
-                            # elif type == "resource/x-bb-syllabus":
-                            #     type_tag = "syllabus"
-                            # elif type == "resource/x-bb-toollink":
-                            #     type_tag = "toollink"
-
-                            type_tag = f"[{type}]"
-
-                        print(f"        {child['title']}{type_tag}")
-
-                except ValueError:
-                    pass
+            for content in (BBCourseContent(**content) for content in course_contents):
+                self.handle_file(content, course_path, course.id, 1)
 
             print()
 

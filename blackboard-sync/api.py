@@ -23,15 +23,16 @@ Jacob Sánchez Pérez
 # Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 
-import json
 import base64
 import logging
 import requests
 from bs4 import BeautifulSoup
 
+
 class SafeFormat(dict):
     def __missing__(self, key):
         return ''
+
 
 class BlackboardSession:
     base_url = f"https://portal.uclan.ac.uk"
