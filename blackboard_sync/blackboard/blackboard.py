@@ -1,30 +1,30 @@
- #!/usr/bin/env python3
+#!/usr/bin/env python3
 
 """
-Blackboard Wrapper Classes,
-an interface to handle API responses
-
+Blackboard Model Classes
 Copyright (C) 2020
 Jacob Sánchez Pérez
 """
 
 # This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License v2
-# as published by the Free Software Foundation.
-
+# modify it under the terms of the GNU General Public License
+# as published by the Free Software Foundation; either version 2
+# of the License, or (at your option) any later version.
+#
 # This program is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-
-# You should have received a copy of the GNU General Public License v2
+#
+# You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor,
-# Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+
+from dateutil.parser import isoparse
 
 
 class BBLocale:
-    def __init__(self, force=False):
+    def __init__(self, force: bool = False):
         self._force = force
 
     @property
@@ -50,6 +50,27 @@ class BBEnrollment:
         return self._type
 
 
+class BBProctoring:
+    def __init__(self, secureBrowserRequiredToTake: bool = False,
+                 secureBrowserRequiredToReview: bool = False,
+                 webcamRequired: bool = False):
+        self._secureBrowserRequiredToTake = secureBrowserRequiredToTake
+        self._secureBrowserRequiredToReview = secureBrowserRequiredToReview
+        self._webcamRequired = webcamRequired
+
+    @property
+    def secureBrowserRequiredToTake(self):
+        return self._secureBrowserRequiredToTake
+
+    @property
+    def secureBrowserRequiredToReview(self):
+        return self._secureBrowserRequiredToReview
+
+    @property
+    def webcamRequired(self):
+        return self._webcamRequired
+
+
 class BBFile:
     def __init__(self, fileName=""):
         self._fileName = fileName
@@ -59,29 +80,106 @@ class BBFile:
         return self._fileName
 
 
-class BBContentHandler:
-    def __init__(self, id="", url="", file={}, gradeColumnId="", groupContent="",
-                 targetId="", targetType="", placementHandle=""):
+class BBAttachment:
+    def __init__(self, id="", fileName="", mimeType=""):
         self._id = id
-        self._file = BBFile(**file)
-        self._url = url
-        self._gradeColumnId = gradeColumnId
-        self._groupContent = groupContent
-        self._targetId = targetId
-        self._targetType = targetType
-        self._placementHandle = placementHandle
+        self._fileName = fileName
+        self._mimeType = mimeType
 
     @property
     def id(self):
         return self._id
 
     @property
-    def isFolder(self):
+    def fileName(self):
+        return self._fileName
+
+    @property
+    def mimeType(self):
+        return self._mimeType
+
+
+class BBContentHandler:
+    def __init__(self, id="", url="", file={}, gradeColumnId="", groupContent="",
+                 targetId="", targetType="", placementHandle="", assessmentId="", proctoring={}):
+        self._id = id
+        self._file = None
+        if file:
+            self._file = BBFile(**file)
+        self._url = url
+        self._gradeColumnId = gradeColumnId
+        self._groupContent = groupContent
+        self._targetId = targetId
+        self._targetType = targetType
+        self._placementHandle = placementHandle
+        self._proctoring = BBProctoring(**proctoring)
+
+    @property
+    def id(self):
+        return self._id
+
+    # Other unhandled file types
+    # resource/x-bb-bltiplacement-Portal
+    # resource/x-bb-toollink
+    # resource/x-bb-courselink
+
+    @property
+    def isNone(self) -> bool:
+        return not bool(self.id)
+
+    @property
+    def isFolder(self) -> bool:
         return self.id == "resource/x-bb-folder"
 
     @property
-    def isDocument(self):
+    def isFile(self) -> bool:
+        return self.id == "resource/x-bb-file"
+
+    @property
+    def isDocument(self) -> bool:
         return self.id == "resource/x-bb-document"
+
+    @property
+    def isExternalLink(self) -> bool:
+        return self.id == "resource/x-bb-externallink"
+
+    @property
+    def isToolLink(self) -> bool:
+        return self.id == "resource/x-bb-toollink"
+
+    @property
+    def isTurnItInAssignment(self) -> bool:
+        return self.id == "resource/x-turnitin-assignment"
+
+    @property
+    def isPlacement(self) -> bool:
+        return self.id == "resource/x-bb-bltiplacement-Portal"
+
+    @property
+    def isAssignment(self) -> bool:
+        return self.id == "resource/x-bb-assignment"
+
+    @property
+    def isTest(self) -> bool:
+        return self.id == "resource/x-bb-asmt-test-link"
+
+    @property
+    def isSyllabus(self) -> bool:
+        return self.id == "resource/x-bb-syllabus"
+
+    @property
+    def isCourseLink(self) -> bool:
+        return self.id == "resource/x-bb-courselink"
+
+    @property
+    def isBlankPage(self) -> bool:
+        return self.id == "resource/x-bb-blankpage"
+
+    @property
+    def isNotHandled(self) -> bool:
+        return (self.isNone or self.isToolLink or self.isTurnItInAssignment or self.isAssignment
+                or self.isTest or self.isSyllabus or self.isCourseLink or self.isPlacement
+                or self.isBlankPage)
 
     @property
     def file(self):
@@ -111,6 +209,14 @@ class BBContentHandler:
     def placementHandle(self):
         return self._placementHandle
 
+    @property
+    def assessmentId(self):
+        return self._assessmentId
+
+    @property
+    def proctoring(self):
+        return self._proctoring
+
 
 class BBLink:
     def __init__(self, href="", rel="", title="", type=""):
@@ -137,8 +243,7 @@ class BBLink:
 
 
 class BBAvailability:
-    def __init__(self, available="", allowGuests=False, adaptiveRelease={},
-                 duration={}):
+    def __init__(self, available="", allowGuests: bool = False, adaptiveRelease={}, duration={}):
         self._available = (available == "Yes")
         self._allowGuests = allowGuests
         self._adaptiveRelease = adaptiveRelease
@@ -163,9 +268,9 @@ class BBAvailability:
 
 class BBCourseContent:
     def __init__(self, id="", title="", body="", created="", modified="",
-                 position=0, hasChildren=False, launchInNewWindow=False,
-                 reviewable=False, availability={}, contentHandler={}, links={},
-                 hasGradebookColumns=False, hasAssociatedGroups=False):
+                 position: int = 0, hasChildren: bool = False, launchInNewWindow: bool = False,
+                 reviewable: bool = False, availability={}, contentHandler={}, links={},
+                 hasGradebookColumns: bool = False, hasAssociatedGroups: bool = False):
         self._id = id
         self._title = title
         self._body = body
@@ -208,6 +313,10 @@ class BBCourseContent:
     @property
     def modified(self):
         return self._modified
+
+    @property
+    def modifiedDT(self):
+        return isoparse(self._modified)
 
     @property
     def position(self):
@@ -261,21 +370,20 @@ class BBContentChild(BBCourseContent):
         return self._parentId
 
 
-
 class BBMembership:
     def __init__(self, id="", userId="", courseId="", dataSourceId="",
                  created="", modified="", availability={}, courseRoleId="",
                  lastAccessed="", childCourseId=""):
-         self._id = id
-         self._userId = userId
-         self._courseId = courseId
-         self._dataSourceId = dataSourceId
-         self._created = created
-         self._modified = modified
-         self._availability = BBAvailability(**availability)
-         self._courseRoleId = courseRoleId
-         self._lastAccessed = lastAccessed
-         self._childCourseId = childCourseId
+        self._id = id
+        self._userId = userId
+        self._courseId = courseId
+        self._dataSourceId = dataSourceId
+        self._created = created
+        self._modified = modified
+        self._availability = BBAvailability(**availability)
+        self._courseRoleId = courseRoleId
+        self._lastAccessed = lastAccessed
+        self._childCourseId = childCourseId
 
     @property
     def id(self):
@@ -306,6 +414,10 @@ class BBMembership:
         return self._modified
 
     @property
+    def modifiedDT(self):
+        return isoparse(self._modified)
+
+    @property
     def availability(self):
         return self._availability
 
@@ -319,8 +431,8 @@ class BBMembership:
 
 
 class BBCourse:
-    def __init__(self, id="", courseId="", name="", description="",
-                 modified="", organization=False, ultraStatus="", closedComplete=False,
+    def __init__(self, id="", courseId="", name="", description="", modified="",
+                 organization: bool = False, ultraStatus="", closedComplete: bool = False,
                  availability={}, enrollment={}, locale={}, externalAccessUrl=""):
         self._id = id
         self._courseId = courseId
@@ -356,6 +468,10 @@ class BBCourse:
         return self._modified
 
     @property
+    def modifiedDT(self):
+        return isoparse(self._modified)
+
+    @property
     def organization(self):
         return self._organization
 
@@ -374,3 +490,7 @@ class BBCourse:
     @property
     def externalAccessUrl(self):
         return self._externalAccessUrl
+
+
+if __name__ == '__main__':
+    pass
