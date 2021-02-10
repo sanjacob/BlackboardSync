@@ -1,14 +1,13 @@
 # BlackboardSync
-### Sync your blackboard to your computer
-
-BlackboardSync connects to your blackboard, allowing you to keep a local copy of assignments, lab sheets and lectures available as part of your courses.
+### Automatic Syncing Of Your Blackboard Content
 
 
 
-You will need to know your Blackboard user id, currently there's no known easy way to obtain it.
+**Ever wanted to have easier, faster and offline access to Blackboard files?**
 
-Try playing around with the [Blackboard API](https://developer.blackboard.com/portal/displayApi), alternatively, send me an email with your full name.
+BlackboardSync does a periodic, incremental download of all your Blackboard files, such as assignments, lab sheets, lecture slides, etc.
 
 
 
-This software is distributed under the General Public License v2.0, more information available at the [Free Software Foundation](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+This software is distributed under the [General Public License v2.0](LICENSE.txt), more information available at the [Free Software Foundation.](https://www.gnu.org/licenses/old-licenses/gpl-2.0.html)
+

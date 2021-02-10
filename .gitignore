@@ -147,3 +147,4 @@ dmypy.json
 secrets/
 token_info/
 sync/
+.gitignore
