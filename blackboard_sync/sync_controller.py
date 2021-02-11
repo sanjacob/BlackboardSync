@@ -23,7 +23,7 @@ Jacob Sánchez Pérez
 import sys
 from sync import BlackboardSync
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication
+from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
 from qt.qt_elements import LoginWindow, SyncTrayIcon, SettingsWindow
 
 from __about__ import __title__, __version__
@@ -38,6 +38,8 @@ class BBSyncController:
         self.app = QApplication(sys.argv)
         self.app.setApplicationName(__title__)
         self.app.setApplicationVersion(__version__)
+
+        QApplication.setStyle(QStyleFactory.create("Fusion"))
 
         self._init_ui()
 
@@ -95,13 +97,14 @@ class BBSyncController:
         window.show()
         window.setWindowState(Qt.WindowNoState)
 
-    def _tray_icon_activated(self):
-        # if not logged in
-        if not self.model.is_logged_in:
-            self._show_login_window()
-        else:
-            # Open folder in browser
-            self.model.open_sync_folder()
+    def _tray_icon_activated(self, activation_reason: QSystemTrayIcon.ActivationReason):
+        if activation_reason == QSystemTrayIcon.ActivationReason.Trigger:
+            # if not logged in
+            if not self.model.is_logged_in:
+                self._show_login_window()
+            else:
+                # Open folder in browser
+                self.model.open_sync_folder()
 
     def _log_out(self):
         self.model.log_out()
