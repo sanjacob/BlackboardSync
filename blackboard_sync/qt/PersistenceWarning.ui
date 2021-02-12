@@ -35,7 +35,8 @@
     <normaloff>../assets/logo.png</normaloff>../assets/logo.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#Persistence { background-color: #241f21 }</string>
+   <string notr="true">QWidget#Persistence { background-color: #241f21 }
+QLabel {color:white}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>439</width>
-    <height>527</height>
+    <height>531</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,9 @@
     <normaloff>../assets/logo.png</normaloff>../assets/logo.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#SettingsWindow { background-color: #241f21 }</string>
+   <string notr="true">QWidget#SettingsWindow { background-color: #241f21 }
+QLabel: enabled {color:white}
+</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>

@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>360</height>
+    <height>370</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -41,7 +41,9 @@
     <normaloff>../assets/logo.png</normaloff>../assets/logo.png</iconset>
   </property>
   <property name="styleSheet">
-   <string notr="true">QWidget#LoginWindow { background-color: #241f21 }</string>
+   <string notr="true">QWidget#LoginWindow { background-color: #241f21 }
+QLabel {color:white}
+QCheckBox {color:white}</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
@@ -84,7 +86,12 @@
         <font>
          <family>Open Sans</family>
          <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>UCLan Address:</string>
@@ -129,6 +136,8 @@
         <font>
          <family>Open Sans</family>
          <pointsize>12</pointsize>
+         <weight>75</weight>
+         <bold>true</bold>
         </font>
        </property>
        <property name="text">
