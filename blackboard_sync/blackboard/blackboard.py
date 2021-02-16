@@ -20,83 +20,42 @@ Jacob Sánchez Pérez
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+from dataclasses import dataclass
 from dateutil.parser import isoparse
 
 
+@dataclass(frozen=True)
 class BBLocale:
-    def __init__(self, force: bool = False):
-        self._force = force
-
-    @property
-    def force(self):
-        return self._force
+    force: bool = False
 
 
+@dataclass(frozen=True)
 class BBDuration:
-    def __init__(self, type=""):
-        self._type = type
-
-    @property
-    def type(self):
-        return self._type
+    type: str = ""
 
 
+@dataclass(frozen=True)
 class BBEnrollment:
-    def __init__(self, type=""):
-        self._type = type
-
-    @property
-    def type(self):
-        return self._type
+    type: str = ""
 
 
+@dataclass(frozen=True)
 class BBProctoring:
-    def __init__(self, secureBrowserRequiredToTake: bool = False,
-                 secureBrowserRequiredToReview: bool = False,
-                 webcamRequired: bool = False):
-        self._secureBrowserRequiredToTake = secureBrowserRequiredToTake
-        self._secureBrowserRequiredToReview = secureBrowserRequiredToReview
-        self._webcamRequired = webcamRequired
-
-    @property
-    def secureBrowserRequiredToTake(self):
-        return self._secureBrowserRequiredToTake
-
-    @property
-    def secureBrowserRequiredToReview(self):
-        return self._secureBrowserRequiredToReview
-
-    @property
-    def webcamRequired(self):
-        return self._webcamRequired
+    secureBrowserRequiredToTake: bool = False
+    secureBrowserRequiredToReview: bool = False
+    webcamRequired: bool = False
 
 
+@dataclass(frozen=True)
 class BBFile:
-    def __init__(self, fileName=""):
-        self._fileName = fileName
-
-    @property
-    def fileName(self):
-        return self._fileName
+    fileName: str = ""
 
 
+@dataclass(frozen=True)
 class BBAttachment:
-    def __init__(self, id="", fileName="", mimeType=""):
-        self._id = id
-        self._fileName = fileName
-        self._mimeType = mimeType
-
-    @property
-    def id(self):
-        return self._id
-
-    @property
-    def fileName(self):
-        return self._fileName
-
-    @property
-    def mimeType(self):
-        return self._mimeType
+    id: str = ""
+    fileName: str = ""
+    mimeType: str = ""
 
 
 class BBContentHandler:
@@ -218,28 +177,12 @@ class BBContentHandler:
         return self._proctoring
 
 
+@dataclass(frozen=True)
 class BBLink:
-    def __init__(self, href="", rel="", title="", type=""):
-        self._href = href
-        self._rel = rel
-        self._title = title
-        self._type = type
-
-    @property
-    def href(self):
-        return self._href
-
-    @property
-    def rel(self):
-        return self._rel
-
-    @property
-    def title(self):
-        return self._title
-
-    @property
-    def type(self):
-        return self._type
+    href: str = ""
+    rel: str = ""
+    title: str = ""
+    type: str = ""
 
 
 class BBAvailability:
