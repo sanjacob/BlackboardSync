@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>370</height>
+    <height>380</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,7 +19,7 @@
   <property name="minimumSize">
    <size>
     <width>400</width>
-    <height>0</height>
+    <height>380</height>
    </size>
   </property>
   <property name="maximumSize">
@@ -43,7 +43,8 @@
   <property name="styleSheet">
    <string notr="true">QWidget#LoginWindow { background-color: #241f21 }
 QLabel {color:white}
-QCheckBox {color:white}</string>
+QCheckBox {color:white}
+QPushButton {color: white; background-color: #222222;}QPushButton:focus, QPushButton:pressed, QPushButton:hover {background-color: black;	background-image: unset;}</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout_2">
    <item>
@@ -278,17 +279,7 @@ QCheckBox {color:white}</string>
         <enum>Qt::NoFocus</enum>
        </property>
        <property name="styleSheet">
-        <string notr="true">QPushButton {
-	color: white;
-	background-color: #222222;
-}
-
-QPushButton:focus, 
-QPushButton:pressed,
-QPushButton:hover {
-	background-color: black;
-	background-image: unset;
-}</string>
+        <string notr="true"/>
        </property>
        <property name="text">
         <string>Login</string>

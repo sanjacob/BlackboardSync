@@ -20,12 +20,18 @@ Jacob Sánchez Pérez
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import platform
 from pathlib import Path
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import (QApplication, QWidget, QDialog, QMenu,
                              QAction, QSystemTrayIcon, QStyle, QFileDialog)
+
+
+def apply_win_style(widget):
+    if platform.system() == "Windows":
+        widget.setStyleSheet("")
 
 
 class AssetPath():
@@ -163,6 +169,7 @@ class PersistenceWarning(QDialog):
 
     def _init_ui(self):
         uic.loadUi(AssetPath.get_qt_asset(__class__.__name__), self)
+        apply_win_style(self)
         self.setWindowTitle(self._window_title)
 
 
@@ -178,6 +185,7 @@ class SettingsWindow(QWidget):
 
     def _init_ui(self):
         uic.loadUi(AssetPath.get_qt_asset(__class__.__name__), self)
+        apply_win_style(self)
 
         self.move(*self._initial_position)
         self.setWindowTitle(self._window_title)
@@ -242,6 +250,7 @@ class LoginWindow(QWidget):
 
     def _init_ui(self):
         uic.loadUi(AssetPath.get_qt_asset(__class__.__name__), self)
+        apply_win_style(self)
 
         self.move(*self._initial_position)
         self.setWindowTitle(self._window_title)

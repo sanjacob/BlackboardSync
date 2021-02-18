@@ -36,7 +36,18 @@
   </property>
   <property name="styleSheet">
    <string notr="true">QWidget#Persistence { background-color: #241f21 }
-QLabel {color:white}</string>
+QLabel {color:white}
+QPushButton {
+	color: white;
+	background-color: #222222;
+}
+
+QPushButton:focus, 
+QPushButton:pressed,
+QPushButton:hover {
+	background-color: black;
+	background-image: unset;
+}</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -137,17 +148,7 @@ QLabel {color:white}</string>
       </font>
      </property>
      <property name="styleSheet">
-      <string notr="true">QPushButton {
-	color: white;
-	background-color: #222222;
-}
-
-QPushButton:focus, 
-QPushButton:pressed,
-QPushButton:hover {
-	background-color: black;
-	background-image: unset;
-}</string>
+      <string notr="true"/>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
