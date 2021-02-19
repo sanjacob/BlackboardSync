@@ -21,7 +21,7 @@ Jacob Sánchez Pérez
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import unittest
-from blackboard.blackboard import BBLocale, BBFile, BBAttachment
+from blackboard.blackboard import BBLocale, BBFile, BBAttachment, BBCourseContent
 
 
 class TestBBLocale(unittest.TestCase):
@@ -69,6 +69,33 @@ class TestBBAttachment(unittest.TestCase):
 
         empty = BBAttachment(mimeType="")
         self.assertEqual(empty.mimeType, "", "Should be empty")
+
+
+class TestBBCourseContent(unittest.TestCase):
+    def test_safe_title(self):
+        og_title = "puppy.docx"
+        sanitised = og_title
+
+        cc = BBCourseContent(title=og_title)
+        self.assertEqual(sanitised, cc.title_safe, "Title was not preserved")
+
+    def test_unsafe_chars(self):
+        og_title = "a/a\\a<a>a:a\"a|a?a*a.docx"
+        sanitised = f"{'a_' * 9}a.docx"
+        cc = BBCourseContent(title=og_title)
+        self.assertEqual(sanitised, cc.title_safe, "Contains unsafe chars")
+
+    def test_dir_escalation_nix(self):
+        og_title = "../../../../important_file"
+        sanitised = ".._.._.._.._important_file"
+        cc = BBCourseContent(title=og_title)
+        self.assertEqual(sanitised, cc.title_safe, "Contains unsafe chars")
+
+    def test_dir_escalation_win(self):
+        og_title = "..\\..\\..\\..\\important_file.exe"
+        sanitised = ".._.._.._.._important_file.exe"
+        cc = BBCourseContent(title=og_title)
+        self.assertEqual(sanitised, cc.title_safe, "Contains unsafe chars")
 
 
 def main():

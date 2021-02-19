@@ -24,6 +24,19 @@ from dataclasses import dataclass
 from dateutil.parser import isoparse
 
 
+class SanitisePath:
+    _unsafe = ['/', "\\", '<', '>', ':', '"', '|', '?', '*']
+
+    @classmethod
+    def get_path(cls, path):
+        safe_path = path
+
+        for c in cls._unsafe:
+            safe_path = safe_path.replace(c, '_')
+
+        return safe_path
+
+
 @dataclass(frozen=True)
 class BBLocale:
     force: bool = False
@@ -242,8 +255,8 @@ class BBCourseContent:
         return self._title
 
     @property
-    def title_nb(self):
-        return self._title.replace('/', '_')
+    def title_safe(self):
+        return SanitisePath.get_path(self._title)
 
     @property
     def body(self):

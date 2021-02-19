@@ -31,7 +31,7 @@ from datetime import datetime, timezone
 
 from blackboard.api import BlackboardSession
 from blackboard.blackboard import (BBCourse, BBMembership, BBAttachment,
-                                   BBCourseContent, BBContentChild)
+                                   BBCourseContent, BBContentChild, SanitisePath)
 
 
 class BlackboardDownload:
@@ -82,7 +82,7 @@ class BlackboardDownload:
 
         type = content.contentHandler
         body_path = parent_path
-        file_path = Path(parent_path, content.title_nb)
+        file_path = Path(parent_path, content.title_safe)
         has_changed = (content.modifiedDT >= self._last_downloaded)
 
         if type.isFolder:
@@ -124,7 +124,7 @@ class BlackboardDownload:
 
         # If item has body, write in markdown file
         if content.body and has_changed:
-            with Path(body_path, f"{content.title_nb}.md").open('w') as md:
+            with Path(body_path, f"{content.title_safe}.md").open('w') as md:
                 md.write(content.body)
 
         if not type.isFolder and has_changed:
@@ -142,15 +142,16 @@ class BlackboardDownload:
         for ms in memberships:
             course = BBCourse(**self._sess.fetch_courses(course_id=ms.courseId))
 
-            code_split = course.name.split(' : ')
-            name_split = code_split[1].split(',')
+            code_split = course.name.split(' : ', 1)
+            name_split = code_split[-1].split(',')
+            module_name = SanitisePath.get_path(name_split[0])
 
             self.logger.info(f"<{code_split[0]}> - <{name_split[0]}>")
 
             course_contents = self._sess.fetch_contents(course_id=course.id)
 
             if course_contents:
-                course_path = Path(self.download_location / ms.created[:4] / name_split[0])
+                course_path = Path(self.download_location / ms.created[:4] / module_name)
 
             for content in (BBCourseContent(**content) for content in course_contents):
                 self._handle_file(content, course_path, course.id, 1)
