@@ -36,12 +36,43 @@ class TestAllWindows(unittest.TestCase):
         self.settings_window = SettingsWindow()
         self.login_window.show()
         self.settings_window.show()
+        self.login_window.login_signal.connect(self.logging_in)
+        self.settings_window.log_out_signal.connect(self.log_out_clicked)
+        self.settings_window.save_signal.connect(self.settings_saved)
         self.app.exec()
 
+    # @unittest.skip("Skip for now")
     def test_tray(self):
         self.tray = SyncTrayIcon()
         self.tray.quit_signal.connect(self.app.quit)
+        self.tray.login_signal.connect(self.login_clicked)
+        self.tray.settings_signal.connect(self.settings_clicked)
+        self.tray.sync_signal.connect(self.sync_clicked)
+        self.tray.activated.connect(self.tray_activated)
         self.app.exec()
+
+    def login_clicked(self):
+        print("Login entry clicked")
+        self.tray.set_logged_in(True)
+
+    def log_out_clicked(self):
+        print("Logout entry clicked")
+
+    def sync_clicked(self):
+        print("Sync entry clicked")
+
+    def settings_clicked(self):
+        print("Settings entry clicked")
+
+    def settings_saved(self):
+        print("Settings saved")
+
+    def logging_in(self):
+        print("Logging in")
+
+    def tray_activated(self):
+        # Reason not specified
+        print("Tray activated")
 
 
 def main():
