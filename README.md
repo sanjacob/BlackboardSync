@@ -1,4 +1,4 @@
-# BlackboardSync
+# BlackboardSync for UCLan
 ### Automatic Syncing Of Your Blackboard Content
 
 
