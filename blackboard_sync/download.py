@@ -68,7 +68,7 @@ class BlackboardDownload:
         """Creates a platform-aware internet shortcut"""
         if platform.system() in ["Windows", "Darwin"]:
             contents = f"[InternetShortcut]\nURL={url}"
-            path = path.with_suffix("url")
+            path = path.with_suffix(".url")
         else:
             contents = f"[Desktop Entry]\nIcon=text-html\nType=Link\nURL[$e]={url}"
 
