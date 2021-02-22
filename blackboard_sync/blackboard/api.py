@@ -57,7 +57,7 @@ class BlackboardSession:
     def auth(self, user: str, password: str) -> bool:
         """
         Go through regular authentication process,
-        that is, ask auth server to generate token and then
+        i.e. ask auth server to generate token and then
         provide the token back to the blackboard server
 
         :param string user: UCLan student email address,
