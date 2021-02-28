@@ -39,6 +39,7 @@ from __about__ import __author__
 
 
 class BlackboardSync:
+    _max_retries = 3
     _config_filename = "blackboard_sync"
 
     # Filters out non-subjects from blackboard (may need more testing)
@@ -183,12 +184,24 @@ class BlackboardSync:
 
                 # Download from last datetime
                 new_download = BlackboardDownload(self.sess, self.sync_folder, self.last_sync)
-                try:
-                    self.last_sync = new_download.download()
-                except ValueError:
-                    # Session expired, inform user
-                    self.logger.warn("User session expired")
-                    self._sync_on = False
+                conn_errors = True
+                conn_retries = 0
+
+                while conn_errors and conn_retries <= self._max_retries:
+                    conn_errors = False
+                    conn_retries += 1
+
+                    try:
+                        self.last_sync = new_download.download()
+                    except ValueError:
+                        # Session expired, inform user
+                        self.logger.warn("User session expired")
+                        self._sync_on = False
+                    except ConnectionError:
+                        # Random python connection error
+                        self.logger.warn("Requests threw a connection error, retrying...")
+                        conn_errors = True
+
                 self._force_sync = False
                 self._is_syncing = False
             time.sleep(self._check_sleep_time)
