@@ -48,7 +48,7 @@ class BlackboardSync:
     _check_sleep_time = 10
 
     # Time between each sync in seconds
-    _sync_period = 60 * 10
+    _sync_period = 60 * 30
 
     _force_sync = False
     _is_syncing = False
@@ -84,9 +84,6 @@ class BlackboardSync:
             self.logger.info("Preexisting configuration exists")
             self.load_config()
 
-        if self.is_logged_in:
-            self.start_sync()
-
     def auth(self, username, password, persistence=False) -> bool:
         try:
             u_sess = BlackboardSession(username, password)
@@ -101,6 +98,7 @@ class BlackboardSync:
             if persistence:
                 self._save_login_config(username, password)
 
+            self.start_sync()
         return self._is_logged_in
 
     def load_config(self) -> bool:
@@ -108,15 +106,14 @@ class BlackboardSync:
             config = toml.load(config_file)
 
             if config:
-                if 'Login' in config:
-                    self.auth(**config['Login'])
-
                 if 'Sync' in config:
                     if 'last_sync' in (sync_conf := config['Sync']):
                         self._last_sync = datetime.fromisoformat(sync_conf['last_sync'])
                         self._update_next_sync()
                     if 'location' in sync_conf:
                         self._sync_folder = Path(sync_conf['location'])
+                if 'Login' in config:
+                    self.auth(**config['Login'])
 
     def _update_config(func):
         def update_config_wrapper(self, *args, **kwargs):
@@ -266,12 +263,12 @@ class BlackboardSync:
         self._update_sync_folder()
 
     @property
-    def sync_frequency(self) -> int:
-        return self._sync_frequency
+    def sync_period(self) -> int:
+        return self._sync_period
 
-    @sync_frequency.setter
-    def sync_frequency(self, f: int):
-        self._sync_frequency = f
+    @sync_period.setter
+    def sync_period(self, p: int):
+        self._sync_period = p
 
     @property
     def sync_on(self) -> bool:

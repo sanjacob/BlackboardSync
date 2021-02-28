@@ -116,6 +116,7 @@ class BBSyncController:
         self.config_window.setVisible(False)
         self.model.sync_folder = self.config_window.download_location
         self.model.data_source = self.config_window.data_source
+        self.model.sync_period = self.config_window.sync_frequency
 
     def _force_sync(self):
         self.model.force_sync()

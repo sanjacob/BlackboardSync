@@ -20,12 +20,19 @@ Jacob Sánchez Pérez
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+from enum import IntEnum
 from pathlib import Path
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import (QApplication, QWidget, QDialog, QMenu,
                              QAction, QSystemTrayIcon, QStyle, QFileDialog)
+
+
+class SyncPeriod(IntEnum):
+    HALF_HOUR = 60 * 30
+    ONE_HOUR = 60 * 60
+    SIX_HOURS = 60 * 60 * 6
 
 
 class AssetPath():
@@ -210,6 +217,14 @@ class SettingsWindow(QWidget):
     @data_source.setter
     def data_source(self, data_source: str) -> None:
         self.data_source_edit.setText(data_source)
+
+    @property
+    def sync_frequency(self) -> int:
+        return int([*SyncPeriod][self.frequency_combo.currentIndex()])
+
+    @sync_frequency.setter
+    def sync_frequency(self, f: int) -> None:
+        self.frequency_combo.setCurrentIndex(SyncPeriod(f))
 
     @property
     def username(self) -> str:

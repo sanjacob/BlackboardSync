@@ -65,6 +65,7 @@ class TestAllWindows(unittest.TestCase):
         print("Settings entry clicked")
 
     def settings_saved(self):
+        print(self.settings_window.frequency_combo.currentIndex())
         print("Settings saved")
 
     def logging_in(self):

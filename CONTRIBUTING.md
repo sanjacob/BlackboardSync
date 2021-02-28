@@ -27,6 +27,8 @@ All changes happen through pull requests, Pull requests are the best way to prop
 
 Follow [these instructions](README.md#running-without-building) to set up your own development environment.
 
+You should use the `-d` flag of `pipenv install` to also install development dependencies.
+
 
 
 

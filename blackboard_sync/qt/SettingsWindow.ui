@@ -146,7 +146,7 @@ QLabel:enabled {color:white}
      <item>
       <widget class="QComboBox" name="frequency_combo">
        <property name="enabled">
-        <bool>false</bool>
+        <bool>true</bool>
        </property>
        <property name="font">
         <font>
@@ -156,17 +156,17 @@ QLabel:enabled {color:white}
        </property>
        <item>
         <property name="text">
-         <string>10 minutes</string>
-        </property>
-       </item>
-       <item>
-        <property name="text">
          <string>30 minutes</string>
         </property>
        </item>
        <item>
         <property name="text">
          <string>1 hour</string>
+        </property>
+       </item>
+       <item>
+        <property name="text">
+         <string>6 hours</string>
         </property>
        </item>
       </widget>
