@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 """
-BlackboardSync
+BlackboardSync python entrypoint
 Copyright (C) 2020
 Jacob Sánchez Pérez
 """
@@ -21,4 +21,11 @@ Jacob Sánchez Pérez
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 from sync_controller import BBSyncController
-controller = BBSyncController()
+
+
+def main():
+    BBSyncController()
+
+
+if __name__ == "__main__":
+    main()
