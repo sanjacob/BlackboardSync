@@ -6,4 +6,4 @@ pipenv run pyinstaller ^
   --add-data=%SRC%"/assets;assets" ^
   --name="BlackboardSync" ^
   --icon=%SRC%"/assets/logo.ico" ^
-  %SRC%/start.py
+  %SRC%/__main__.py

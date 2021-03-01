@@ -5,4 +5,4 @@ pipenv run pyinstaller \
   --add-data=$SRC"/qt:qt" \
   --add-data=$SRC"/assets:assets" \
   --name="BlackboardSync" \
-  $SRC/start.py
+  $SRC/__main__.py
