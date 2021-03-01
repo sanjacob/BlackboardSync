@@ -4,9 +4,9 @@
 BlackboardSync does a periodic, incremental download of all your Blackboard content, such as lecture slides, lab sheets, and other attachments.
 
 
-
-<img src="blackboard_sync/assets/logo.png" height="auto" width="25%" />
-
+<div align="center">
+	<img src="blackboard_sync/assets/logo.png" height="auto" width="25%" />
+</div>
 
 
 ## Table Of Contents
