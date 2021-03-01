@@ -5,7 +5,7 @@ BlackboardSync does a periodic, incremental download of all your Blackboard cont
 
 
 
-<img src="blackboard_sync/assets/logo.png" style="height:auto;width:25%;" />
+<img src="blackboard_sync/assets/logo.png" height="auto" width="25%" />
 
 
 
