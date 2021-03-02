@@ -107,7 +107,7 @@ class BBSyncController:
                 self.model.open_sync_folder()
 
     def _log_out(self):
-        self.model.log_out()
+        self.model.log_out(hard_reset=True)
         self.tray.set_logged_in(False)
         self.login_window.setVisible(True)
         self.config_window.setVisible(False)
@@ -135,6 +135,7 @@ class BBSyncController:
 
         self.tray.update_last_synced(last_sync_str)
         self.tray.set_logged_in(self.model.is_logged_in)
+        self.login_window.setVisible(not self.model.is_logged_in)
 
         # Disable button if currently syncing
         self.tray.toggle_currently_syncing(self.model.is_syncing)

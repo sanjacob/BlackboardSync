@@ -206,6 +206,8 @@ class BlackboardSync:
                 except ValueError:
                     # Session expired, log out and attempt to reload config
                     self.logger.warning("User session expired")
+                    reload_session = True
+                    self.log_out(hard_reset=False)
                 except ConnectionError as e:
                     # Random python connection error
                     self._log_exception(e)
@@ -219,6 +221,9 @@ class BlackboardSync:
                 self._force_sync = False
                 self._is_syncing = False
             time.sleep(self._check_sleep_time)
+
+        if reload_session:
+            self.load_config()
 
     def start_sync(self):
         self.logger.info("Starting sync thread")
