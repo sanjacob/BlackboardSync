@@ -267,13 +267,15 @@ class BlackboardSync:
     def sync_folder(self) -> Path:
         return self._sync_folder
 
-    @sync_folder.setter
-    def sync_folder(self, folder: Path):
-        # Unset last sync time to fully download all files in new location
-        self._sync_folder = folder
-        self._last_sync = None
-        self._delete_last_sync()
-        self._update_sync_folder()
+    def set_sync_folder(self, folder: Path, redownload: bool = False):
+        if folder != self.sync_folder:
+            self._sync_folder = folder
+            self._update_sync_folder()
+
+            if redownload:
+                # Unset last sync time to fully download all files in new location
+                self._last_sync = None
+                self._delete_last_sync()
 
     @property
     def sync_period(self) -> int:
