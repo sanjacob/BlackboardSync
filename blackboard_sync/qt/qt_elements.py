@@ -252,7 +252,7 @@ class SettingsWindow(QWidget):
 
     @sync_frequency.setter
     def sync_frequency(self, f: int) -> None:
-        self.frequency_combo.setCurrentIndex(SyncPeriod(f))
+        self.frequency_combo.setCurrentIndex([*SyncPeriod].index(SyncPeriod(f)))
 
     @property
     def username(self) -> str:
