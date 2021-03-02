@@ -63,13 +63,13 @@ Built with:
 - Supported content:
   - Attachments of any type (e.g. .docx, .pptx, .pdf, etc.)
   - Internet links
-  - Content descriptions (saved as markdown files [^1])
+  - Content descriptions (saved as markdown files*)
 - Cross-platform
   - Linux, Windows, and macOS ready
 
 
 
-[^1]: You can view markdown files with [Typora][typora]
+\* You can view markdown files with [Typora][typora]
 
 
 
@@ -181,6 +181,7 @@ In windows, this looks like:
 
 
 Initially, it may appear in the overflow menu.
+
 ![][tray-win-of]
 
 To place it in the system tray, simply drag the icon there.
@@ -230,7 +231,7 @@ Left-clicking on the icon will instead open the sync location on the file explor
 
 | Setting           | Description                                                  | Modifiable    |
 | ----------------- | ------------------------------------------------------------ | ------------- |
-| Download Location | The location of downloaded files (changing this will cause all files to be downloaded again to the new location) | Yes           |
+| Download Location | The location of downloaded files                             | Yes           |
 | Sync Every        | Changes the time to wait between each sync                   | Yes           |
 | Data Source       | Internal setting that affects which modules to download content from | Currently not |
 | User Session      | Shows the current user and allows to log out of the session  | Yes           |
