@@ -44,12 +44,15 @@ class BlackboardSession:
 
     _base_url = "https://portal.uclan.ac.uk"
     _fs_url = "https://fs.uclan.ac.uk"
-    _bb_session = None
-    _username = ""
+
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.NullHandler())
 
     def __init__(self, user: str, password: str):
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.ERROR)
+        self._bb_session = None
+        self._username = ""
+        self._timeout = 12
 
         if not self.auth(user, password):
             raise ValueError("Login incorrect")
@@ -144,7 +147,9 @@ class BlackboardSession:
                 if endpoint_format[-1] == "/":
                     endpoint_format = endpoint_format[:-1]
 
-                response = self._bb_session.get(endpoint_format, params=kwargs, **g_kwargs)
+                self.logger.debug(f"Making request to {endpoint_format}")
+                response = self._bb_session.get(endpoint_format, params=kwargs,
+                                                timeout=self._timeout, **g_kwargs)
 
                 if json:
                     response = response.json()
@@ -169,7 +174,16 @@ class BlackboardSession:
     def username(self) -> str:
         return self._username
 
+    @property
+    def timeout(self) -> int:
+        return self._timeout
+
+    @timeout.setter
+    def timeout(self, t: int) -> None:
+        self._timeout = t
+
     # API CALLS
+    # https://developer.blackboard.com/portal/displayApi
 
     # announcements #
 

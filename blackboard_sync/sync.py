@@ -31,6 +31,7 @@ import platform
 import subprocess
 from pathlib import Path
 from appdirs import user_config_dir
+from requests.exceptions import ConnectionError
 from datetime import datetime, timezone, timedelta
 from blackboard.api import BlackboardSession
 from download import BlackboardDownload
@@ -39,33 +40,40 @@ from __about__ import __author__
 
 
 class BlackboardSync:
-    _max_retries = 3
     _config_filename = "blackboard_sync"
+    _log_directory = "Logs"
 
     # Filters out non-subjects from blackboard (may need more testing)
     _data_source = "_21_1"
 
     # Seconds between each check of time elapsed since last sync
     _check_sleep_time = 10
-
-    # Time between each sync in seconds
-    _sync_period = 60 * 30
-
-    _force_sync = False
-    _is_syncing = False
-    _sync_on = False
-
-    # Default download location
-    _sync_folder = Path(Path.home(), 'Downloads', 'BlackboardSync')
-
-    _last_sync = None
-    _next_sync = None
-    _is_logged_in = False
-    _username = ""
+    # Sync thread max retries
+    _max_retries = 3
 
     logger = logging.getLogger(__name__)
 
     def __init__(self):
+        # Time between each sync in seconds
+        self._sync_period = 60 * 30
+
+        # Default download location
+        self._sync_folder = Path(Path.home(), 'Downloads', 'BlackboardSync')
+        # Time before last sync
+        self._last_sync = None
+        # Time of next programmed sync
+        self._next_sync = None
+        # User session active
+        self._is_logged_in = False
+        self._username = ""
+
+        # Flag to force sync
+        self._force_sync = False
+        # Flag to know if syncing is in progress
+        self._is_syncing = False
+        # Flag to know if syncing is on
+        self._sync_on = False
+
         self.logger.setLevel(logging.WARN)
         self.logger.addHandler(logging.StreamHandler())
         self.logger.debug("Initialising BlackboardSync")
@@ -78,6 +86,9 @@ class BlackboardSync:
         download_logger.setLevel(logging.WARN)
         download_logger.addHandler(logging.StreamHandler())
 
+        self.sess_logger = sess_logger
+        self.download_logger = download_logger
+
         config_folder = Path(user_config_dir(appauthor=__author__, roaming=True))
         self._config_file = (config_folder / self._config_filename)
 
@@ -89,7 +100,7 @@ class BlackboardSync:
         try:
             u_sess = BlackboardSession(username, password)
         except ValueError:
-            self.logger.warn("Credentials are incorrect")
+            self.logger.warning("Credentials are incorrect")
         else:
             self.logger.info("Logged in successfully")
             self.sess = u_sess
@@ -166,42 +177,45 @@ class BlackboardSync:
             config['Sync'].pop('last_sync', None)
         return config
 
-    def log_out(self):
+    def log_out(self, hard_reset=True):
         self.stop_sync()
         self.sess = None
         self._username = ""
-        self._delete_login_config()
         self._is_logged_in = False
+
+        if hard_reset:
+            self._delete_login_config()
 
     def sync_task(self):
         """Check if current time is greater than last download + x, every n seconds
         """
+        reload_session = False
+        failed_attempts = 0
+
         while self._sync_on:
             if self.outdated or self._force_sync:
                 self.logger.debug("Syncing now")
-
                 self._is_syncing = True
 
                 # Download from last datetime
                 new_download = BlackboardDownload(self.sess, self.sync_folder, self.last_sync)
-                conn_errors = True
-                conn_retries = 0
 
-                while conn_errors and conn_retries <= self._max_retries:
-                    conn_errors = False
-                    conn_retries += 1
+                try:
+                    self.last_sync = new_download.download()
+                    failed_attempts = 0
+                except ValueError:
+                    # Session expired, log out and attempt to reload config
+                    self.logger.warning("User session expired")
+                except ConnectionError as e:
+                    # Random python connection error
+                    self._log_exception(e)
+                    failed_attempts += 1
 
-                    try:
-                        self.last_sync = new_download.download()
-                    except ValueError:
-                        # Session expired, inform user
-                        self.logger.warn("User session expired")
-                        self._sync_on = False
-                    except ConnectionError:
-                        # Random python connection error
-                        self.logger.warn("Requests threw a connection error, retrying...")
-                        conn_errors = True
+                # Could not sync
+                if failed_attempts >= self._max_retries:
+                    self.log_out(hard_reset=False)
 
+                # Reset force sync flag
                 self._force_sync = False
                 self._is_syncing = False
             time.sleep(self._check_sleep_time)
@@ -215,6 +229,14 @@ class BlackboardSync:
     def stop_sync(self):
         self._sync_on = False
 
+    def _log_exception(self, e):
+        # Log exception to log file
+        self._log_folder.mkdir(exist_ok=True, parents=True)
+        exception_log = logging.FileHandler(self._log_path)
+        self.logger.addHandler(exception_log)
+        self.logger.exception("Exception in sync thread")
+        self.logger.removeHandler(exception_log)
+
     def open_sync_folder(self):
         self.logger.debug("Opening sync folder on file explorer")
         if platform.system() == "Windows":
@@ -227,6 +249,15 @@ class BlackboardSync:
     def force_sync(self):
         self.logger.debug("Forced syncing")
         self._force_sync = True
+
+    @property
+    def _log_path(self) -> Path:
+        filename = f"sync_error_{datetime.now():%Y-%m-%dT%H_%M_%S_%f}.log"
+        return Path(self._log_folder / filename)
+
+    @property
+    def _log_folder(self) -> Path:
+        return Path(self.sync_folder / self._log_directory)
 
     @property
     def username(self) -> str:

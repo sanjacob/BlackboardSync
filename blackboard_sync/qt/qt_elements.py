@@ -50,10 +50,11 @@ class AssetPath():
 
 class SyncTrayMenu(QMenu):
     _unauthenticated_status = "You haven't logged in"
-    _last_synced = ""
 
     def __init__(self, logged_in: bool = False, last_synced: str = ""):
         super().__init__()
+        self._last_synced = ""
+
         self._init_ui()
         self.update_last_synced(last_synced)
         self.set_logged_in(logged_in)

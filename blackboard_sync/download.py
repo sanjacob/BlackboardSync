@@ -37,8 +37,10 @@ from blackboard.blackboard import (BBCourse, BBMembership, BBAttachment,
 class BlackboardDownload:
     _last_downloaded = datetime.fromtimestamp(0, tz=timezone.utc)
     _data_source = "_21_1"
-    _files_processed = 0
+
     logger = logging.getLogger(__name__)
+    logger.setLevel(logging.DEBUG)
+    logger.addHandler(logging.NullHandler())
 
     def __init__(self, sess: BlackboardSession, download_location,
                  last_downloaded: datetime = None):
@@ -57,12 +59,14 @@ class BlackboardDownload:
         self._sess = sess
         self._user_id = sess.username
         self._download_location = download_location
+        self._files_processed = 0
 
         if last_downloaded is not None:
             self._last_downloaded = last_downloaded
 
         if not self.download_location.exists():
             self.download_location.mkdir(parents=True)
+            self.logger.info("Created download folder")
 
     def _create_desktop_link(self, path: Path, url: str, comment: str = "") -> None:
         """Creates a platform-aware internet shortcut"""
@@ -74,6 +78,7 @@ class BlackboardDownload:
 
         with path.open("w") as f:
             f.write(contents)
+            self.logger.info(f"Created internet link file at {path}")
 
     def _handle_file(self, content: BBCourseContent, parent_path,
                      course_id: str, depth: int = 0) -> None:
@@ -113,6 +118,7 @@ class BlackboardDownload:
                                                content_id=content.id,
                                                attachment_id=attachment.id)
                 with Path(body_path / attachment.fileName).open("wb") as f:
+                    self.logger.info(f"Writing to {attachment.fileName}")
                     for chunk in d_stream.iter_content(chunk_size=128):
                         f.write(chunk)
 
@@ -120,7 +126,7 @@ class BlackboardDownload:
             self._create_desktop_link(file_path, type.url)
 
         elif not type.isNotHandled and has_changed:
-            self.logger.warning(f"Not handled yet, {content.title}")
+            self.logger.warning(f"Not handled, {content.title}")
 
         # If item has body, write in markdown file
         if content.body and has_changed:
@@ -134,12 +140,14 @@ class BlackboardDownload:
         """Retrieve the user's courses, and start download of all contents"""
         start_time = datetime.now(timezone.utc)
 
+        self.logger.info("Fetching user memberships")
         all_memberships = self._sess.fetch_user_memberships(user_id=self.user_id,
                                                             dataSourceId=self._data_source)
 
         memberships = [BBMembership(**memb) for memb in all_memberships]
 
         for ms in memberships:
+            self.logger.debug("Fetching course")
             course = BBCourse(**self._sess.fetch_courses(course_id=ms.courseId))
 
             code_split = course.name.split(' : ', 1)
@@ -189,7 +197,7 @@ def configure() -> BlackboardSession:
 
         placeholder_pass = '*' * len(password)
 
-        save = input(f"Use login configuration {username}: {placeholder_pass}? [Y/n]")
+        save = input(f"Use login configuration {username}: {placeholder_pass}? [Y/n] ")
 
         if save.lower() != "n":
             try:
