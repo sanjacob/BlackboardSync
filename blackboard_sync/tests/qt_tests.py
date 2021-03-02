@@ -23,13 +23,16 @@ Jacob Sánchez Pérez
 import sys
 import unittest
 from PyQt5.QtWidgets import QApplication, QStyleFactory
-from qt.qt_elements import SettingsWindow, LoginWindow, SyncTrayIcon
+from qt.qt_elements import SettingsWindow, LoginWindow, SyncTrayIcon, RedownloadDialog
 
 
 class TestAllWindows(unittest.TestCase):
     def setUp(self):
         self.app = QApplication(sys.argv)
         QApplication.setStyle(QStyleFactory.create("Fusion"))
+
+    def test_redownload_dialog(self):
+        print(RedownloadDialog().redownload)
 
     def test_windows(self):
         self.login_window = LoginWindow()

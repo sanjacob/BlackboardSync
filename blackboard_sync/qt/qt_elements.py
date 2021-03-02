@@ -26,7 +26,7 @@ from PyQt5 import uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import (QApplication, QWidget, QDialog, QMenu,
-                             QAction, QSystemTrayIcon, QStyle, QFileDialog)
+                             QAction, QSystemTrayIcon, QStyle, QFileDialog, QMessageBox)
 
 
 class SyncPeriod(IntEnum):
@@ -41,6 +41,11 @@ class AssetPath():
 
     def get_asset(icon):
         return str((Path(__file__).parent.parent / 'assets' / icon).resolve())
+
+    @classmethod
+    @property
+    def app_logo(cls):
+        return QIcon(cls.get_asset("logo.png"))
 
 
 class SyncTrayMenu(QMenu):
@@ -112,7 +117,7 @@ class SyncTrayIcon(QSystemTrayIcon):
 
     def _init_ui(self):
         # Create the icon
-        icon = QIcon(AssetPath.get_asset("logo.png"))
+        icon = AssetPath.app_logo
 
         # Create the tray
         self.setIcon(icon)
@@ -159,6 +164,29 @@ class SyncTrayIcon(QSystemTrayIcon):
     @property
     def show_menu_signal(self):
         return self._show_menu_signal
+
+
+class RedownloadDialog(QMessageBox):
+    _window_title = "Redownload all files?"
+    _dialog_text = "Should BlackboardSync redownload all files to the new location?"
+    _info_text = "Answer no if you intend to move all past downloads manually (Recommended)"
+
+    def __init__(self):
+        super().__init__()
+        self._init_ui()
+
+    def _init_ui(self):
+        self.setText(self._dialog_text)
+        self.setInformativeText(self._info_text)
+        self.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
+        self.setDefaultButton(QMessageBox.No)
+        self.setWindowTitle(self._window_title)
+        self.setIcon(QMessageBox.Question)
+        self.setWindowIcon(AssetPath.app_logo)
+
+    @property
+    def redownload(self):
+        return self.exec() == QMessageBox.Yes
 
 
 class PersistenceWarning(QDialog):

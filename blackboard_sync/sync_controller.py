@@ -24,7 +24,7 @@ import sys
 from sync import BlackboardSync
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
-from qt.qt_elements import LoginWindow, SyncTrayIcon, SettingsWindow
+from qt.qt_elements import LoginWindow, SyncTrayIcon, SettingsWindow, RedownloadDialog
 
 from __about__ import __title__, __version__
 
@@ -114,7 +114,11 @@ class BBSyncController:
 
     def _save_setting_changes(self):
         self.config_window.setVisible(False)
-        self.model.sync_folder = self.config_window.download_location
+
+        if self.model.sync_folder != self.config_window.download_location:
+            redownload = RedownloadDialog().redownload
+            self.model.set_sync_folder(self.config_window.download_location, redownload)
+
         self.model.data_source = self.config_window.data_source
         self.model.sync_period = self.config_window.sync_frequency
 
