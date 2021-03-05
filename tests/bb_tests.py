@@ -21,7 +21,7 @@ Jacob Sánchez Pérez
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import unittest
-from blackboard.blackboard import BBLocale, BBFile, BBAttachment, BBCourseContent
+from blackboard_sync.blackboard.blackboard import BBLocale, BBFile, BBAttachment, BBCourseContent
 
 
 class TestBBLocale(unittest.TestCase):

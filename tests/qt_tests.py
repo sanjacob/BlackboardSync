@@ -20,10 +20,15 @@ Jacob Sánchez Pérez
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+
+# Currently just used to preview UI
+
+
 import sys
 import unittest
 from PyQt5.QtWidgets import QApplication, QStyleFactory
-from qt.qt_elements import SettingsWindow, LoginWindow, SyncTrayIcon, RedownloadDialog
+from blackboard_sync.qt.qt_elements import (SettingsWindow, LoginWindow,
+                                            SyncTrayIcon, RedownloadDialog)
 
 
 class TestAllWindows(unittest.TestCase):

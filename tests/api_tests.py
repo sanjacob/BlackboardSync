@@ -22,7 +22,7 @@ Jacob Sánchez Pérez
 
 import unittest
 from getpass import getpass
-from blackboard.api import SafeFormat, BlackboardSession
+from blackboard_sync.blackboard.api import SafeFormat, BlackboardSession
 
 user = ""
 password = ""
