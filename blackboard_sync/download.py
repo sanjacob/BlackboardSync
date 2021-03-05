@@ -3,10 +3,9 @@
 """
 BlackboardDownload,
 mass download all user content from Blackboard
-
-Copyright (C) 2020
-Jacob Sánchez Pérez
 """
+
+# Copyright (C) 2021, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
