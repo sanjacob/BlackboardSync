@@ -1,10 +1,8 @@
-#!/usr/bin/env python3
-
 """
 BlackboardSync
-Copyright (C) 2020
-Jacob Sánchez Pérez
 """
+
+# Copyright (C) 2021, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -31,15 +29,14 @@ __all__ = [
     "__copyright__",
 ]
 
-
 __title__ = "BlackboardSync"
 __summary__ = "Automatic Syncing Of Your Blackboard Content"
 __uri__ = "https://github.com/jacobszpz/BlackboardSync"
 
-__version__ = "0.5"
+__version__ = "0.7.0"
 
 __author__ = "Jacob Sánchez"
 __email__ = "jacobszpz@protonmail.com"
 
 __license__ = "GNU General Public License v2"
-__copyright__ = f"2020 {__author__}"
+__copyright__ = f"2021, {__author__}"

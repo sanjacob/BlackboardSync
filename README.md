@@ -1,7 +1,9 @@
 # BlackboardSync for UCLan
 ### Automatic Syncing Of Your Blackboard Content
 
-BlackboardSync does a periodic, incremental download of all your Blackboard content, such as lecture slides, lab sheets, and other attachments.
+[![License: GPL  v2][license-badge]][gnu]
+
+**BlackboardSync** performs a periodic, incremental download of all your Blackboard content, such as lecture slides, lab sheets, and other attachments.
 
 
 <div align="center">
@@ -19,10 +21,9 @@ BlackboardSync does a periodic, incremental download of all your Blackboard cont
    - [Building from source](#building-from-source)
 4. [Usage](#usage)
 5. [Contributions](#contributions)
-6. [Project Structure](#project-structure)
-7. [Show Your Support](#show-your-support)
-8. [License](#license)
-9. [Acknowledgements](#acknowledgements)
+6. [Show Your Support](#show-your-support)
+7. [License](#license)
+8. [Acknowledgements](#acknowledgements)
 
 
 
@@ -35,7 +36,7 @@ Being a student in this day and age means constantly having to keep up to date w
 What I was looking for in such an application was:
 
 - Automatic syncing with minimal intervention after the initial setup
-- No console required
+- Graphical interface
 - Cross-platform compatibility
 - It would make use of the [Blackboard REST API][blackboard-api]
 
@@ -63,13 +64,12 @@ Built with:
 - Supported content:
   - Attachments of any type (e.g. .docx, .pptx, .pdf, etc.)
   - Internet links
-  - Content descriptions (saved as markdown files*)
+  - Content descriptions (saved as markdown files [^1])
 - Cross-platform
   - Linux, Windows, and macOS ready
 
 
-
-\* You can view markdown files with [Typora][typora]
+[^1]: For a list of available markdown editors, see [this][markdown-editors]. Personally, I like to use [Typora][typora].
 
 
 
@@ -123,7 +123,7 @@ pipenv run python blackboard_sync
 
 
 
-#### Building from source
+#### Build an executable
 
 ##### Requirements
 
@@ -236,7 +236,9 @@ Left-clicking on the icon will instead open the sync location on the file explor
 | Data Source       | Internal setting that affects which modules to download content from | Currently not |
 | User Session      | Shows the current user and allows to log out of the session  | Yes           |
 
-\* Settings won't take effect unless saved
+
+
+>  Settings won't take effect unless saved
 
 
 
@@ -251,51 +253,6 @@ More details available at [CONTRIBUTING.md](CONTRIBUTING.md)
 ##### Bugs, issues or feature requests?
 
 Open a GitHub issue [here][issues].
-
-
-
-## Project Structure
-
-```bash
-.
-├── blackboard_sync # Contains the python code and assets
-│   ├── __about__.py # Project metadata, such as version and author
-│   ├── __main__.py # Python package entrypoint
-│   ├── assets # Icons used in the application
-│   │   ├── alert.png
-│   │   ├── alert.svg
-│   │   ├── logo.ico # Windows executable icon
-│   │   └── logo.png
-│   ├── blackboard # Blackboard API
-│   │   ├── api.py
-│   │   └── blackboard.py
-│   ├── download.py # Simple script that handles downloading content from blackboard,
-│ 	│ 				# also offers limited functionality as a standalone script
-│   ├── qt # Qt interface files
-│   │   ├── LoginWindow.ui
-│   │   ├── PersistenceWarning.ui
-│   │   ├── qt_elements.py # Code to create the graphical interface and interact with it
-│   │   └── SettingsWindow.ui
-│   ├── sync_controller.py # Connects sync.py and qt/qt_elements.py
-│   ├── sync.py # The core of BlackboardSync as an application
-│   └── tests # Development tests
-│       ├── api_tests.py
-│       ├── bb_tests.py
-│       └── qt_tests.py
-├── build.bat # Windows build script
-├── build.sh # *nix build script
-├── LICENSE
-├── Pipfile # Contains dependencies, used by pipenv
-├── Pipfile.lock # Used by pipenv
-├── README.md # The file you are currently reading
-├── CONTRIBUTING.md # Contributions policy
-└─── screenshots # Stores the screenshots shown in this file
-    ├── login_win.png
-    ├── settings_win.png
-    ├── tray_win_open.png
-    ├── tray_win_overflow.png
-    └── tray_win.png
-```
 
 
 
@@ -340,6 +297,7 @@ This software is distributed under the [General Public License v2.0][license], m
 [universal-login]: https://github.com/jacobszpz/BlackboardSync/issues/3	"BBSync login"
 [pyqt]: https://pypi.org/project/PyQt5/5.15.1/	"Python Bindings for Qt 5"
 [typora]: https://typora.io/ "Typora"
+[markdown-editors]: https://www.markdownguide.org/tools/ "Some markdown editors"
 [releases]: https://github.com/jacobszpz/BlackboardSync/releases "BlackboardSync Releases"
 [issues]: https://github.com/jacobszpz/BlackboardSync/issues/new "BlackboardSync Issues"
 [git]: https://git-scm.com/	"Git"
@@ -373,7 +331,7 @@ This software is distributed under the [General Public License v2.0][license], m
 
 <!-- MARKDOWN IMAGE REFERENCES -->
 
-[license-badge]: https://img.shields.io/badge/License-GPL%20v2-blue.svg
+[license-badge]: https://img.shields.io/github/license/jacobszpz/BlackboardSync
 [tray-win]: screenshots/tray_win.png
 [tray-win-of]: screenshots/tray_win_overflow.png
 [tray-win-open]: screenshots/tray_win_open.png

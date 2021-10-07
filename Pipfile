@@ -11,11 +11,14 @@ appdirs = "*"
 toml = "*"
 python-dateutil = "*"
 pyqt5 = "<5.15.2"
+setuptools = "*"
 
 [dev-packages]
 coverage = "*"
 pyinstaller = "*"
 pywin32-ctypes = "*"
+sphinx = "*"
+recommonmark = "*"
 
 [requires]
 python_version = "3.9"

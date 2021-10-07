@@ -1,10 +1,8 @@
-#!/usr/bin/env python3
-
 """
 BlackboardSync Qt GUI
-Copyright (C) 2020
-Jacob Sánchez Pérez
 """
+
+# Copyright (C) 2021, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -30,25 +28,31 @@ from PyQt5.QtWidgets import (QApplication, QWidget, QDialog, QMenu,
 
 
 class SyncPeriod(IntEnum):
+    """Enum containing all valid Sync intervals for this UI."""
     HALF_HOUR = 60 * 30
     ONE_HOUR = 60 * 60
     SIX_HOURS = 60 * 60 * 6
 
 
 class AssetPath():
+    """Helper class to get the path of app assets."""
+
+    @staticmethod
     def get_qt_asset(asset_file):
         return (Path(__file__).parent / f"{asset_file}.ui").resolve()
 
+    @staticmethod
     def get_asset(icon):
         return str((Path(__file__).parent.parent / 'assets' / icon).resolve())
 
     @classmethod
     @property
-    def app_logo(cls):
+    def app_logo(cls) -> QIcon:
         return QIcon(cls.get_asset("logo.png"))
 
 
 class SyncTrayMenu(QMenu):
+    """QMenu associated with app system tray icon."""
     _unauthenticated_status = "You haven't logged in"
 
     def __init__(self, logged_in: bool = False, last_synced: str = ""):
@@ -105,6 +109,8 @@ class SyncTrayMenu(QMenu):
 
 
 class SyncTrayIcon(QSystemTrayIcon):
+    """BlackboardSync system tray icon."""
+
     _tooltip = "Blackboard Sync"
     _sync_signal = pyqtSignal()
     _login_signal = pyqtSignal()
@@ -168,6 +174,9 @@ class SyncTrayIcon(QSystemTrayIcon):
 
 
 class RedownloadDialog(QMessageBox):
+    """QMessageBox to show when asking whether files should be re-downloaded
+    after a change in the sync location."""
+
     _window_title = "Redownload all files?"
     _dialog_text = "Should BlackboardSync redownload all files to the new location?"
     _info_text = "Answer no if you intend to move all past downloads manually (Recommended)"
@@ -191,6 +200,9 @@ class RedownloadDialog(QMessageBox):
 
 
 class PersistenceWarning(QDialog):
+    """QDialog shown if user chooses to store their
+    login details on their device."""
+
     _window_title = "Do you wish to stay logged in?"
 
     def __init__(self):
@@ -203,6 +215,8 @@ class PersistenceWarning(QDialog):
 
 
 class SettingsWindow(QWidget):
+    """Settings windown UI element."""
+
     _window_title = "Settings"
     _initial_position = (300, 300)
     _log_out_signal = pyqtSignal()
@@ -276,6 +290,8 @@ class SettingsWindow(QWidget):
 
 
 class LoginWindow(QWidget):
+    """Login window UI element."""
+
     _window_title = "Log in to your blackboard account"
     _initial_position = (300, 300)
     _login_signal = pyqtSignal()
@@ -325,7 +341,3 @@ class LoginWindow(QWidget):
     @property
     def login_signal(self):
         return self._login_signal
-
-
-if __name__ == '__main__':
-    pass

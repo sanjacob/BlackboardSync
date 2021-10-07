@@ -2,9 +2,9 @@
 
 """
 BlackboardSync Controller
-Copyright (C) 2020
-Jacob Sánchez Pérez
 """
+
+# Copyright (C) 2021, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -21,12 +21,12 @@ Jacob Sánchez Pérez
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import sys
-from sync import BlackboardSync
+from .sync import BlackboardSync
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
-from qt.qt_elements import LoginWindow, SyncTrayIcon, SettingsWindow, RedownloadDialog
+from .qt.qt_elements import LoginWindow, SyncTrayIcon, SettingsWindow, RedownloadDialog
 
-from __about__ import __title__, __version__
+from .__about__ import __title__, __version__
 
 
 class BBSyncController:
@@ -91,6 +91,7 @@ class BBSyncController:
         self.config_window.download_location = self.model.sync_folder
         self.config_window.data_source = self.model.data_source
         self.config_window.username = self.model.username.split(':')[1]
+        self.config_window.sync_frequency = self.model.sync_interval
         self._show_window(self.config_window)
 
     def _show_window(self, window):
@@ -120,7 +121,7 @@ class BBSyncController:
             self.model.set_sync_folder(self.config_window.download_location, redownload)
 
         self.model.data_source = self.config_window.data_source
-        self.model.sync_period = self.config_window.sync_frequency
+        self.model.sync_interval = self.config_window.sync_frequency
 
     def _force_sync(self):
         self.model.force_sync()

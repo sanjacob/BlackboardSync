@@ -2,9 +2,9 @@
 
 """
 BlackboardSync python entrypoint
-Copyright (C) 2020
-Jacob Sánchez Pérez
 """
+
+# Copyright (C) 2021, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,7 +20,7 @@ Jacob Sánchez Pérez
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-from sync_controller import BBSyncController
+from .sync_controller import BBSyncController
 
 
 def main():
