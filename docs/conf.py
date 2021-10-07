@@ -13,16 +13,17 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-sys.path.insert(0, os.path.abspath('../blackboard_sync/'))
+
+from blackboard_sync import __about__
 
 # -- Project information -----------------------------------------------------
 
-project = 'BlackboardSync'
-copyright = '2021, Jacob Sánchez'
-author = 'Jacob Sánchez'
+project = __about__.__title__
+copyright = __about__.__copyright__
+author = __about__.__author__
 
 # The full version, including alpha/beta/rc tags
-release = '0.7.0'
+release = __about__.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -32,7 +33,12 @@ release = '0.7.0'
 # ones.
 extensions = [
     'recommonmark',
-    'sphinx.ext.autodoc'
+    'sphinx.ext.autodoc',
+    'sphinx.ext.intersphinx',
+    'sphinx.ext.doctest',
+    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.viewcode',
+    'sphinx.ext.todo',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -50,12 +56,37 @@ source_suffix = {
 }
 
 
+intersphinx_mapping = {
+    'python': ('https://docs.python.org/3', None),
+    'hypothesis': ('https://hypothesis.readthedocs.io/en/latest', None),
+    # 'pathlib': ('https://docs.python.org/3/library/pathlib.html', None)
+}
+
+# Make sure the target is unique
+autosectionlabel_prefix_document = True
+
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
 html_theme = 'alabaster'
+
+# Theme options are theme-specific and customize the look and feel of a theme
+# further.  For a list of options available for each theme, see the
+# documentation.
+html_theme_options = {
+    'show_powered_by': False,
+    'github_user': 'jacobszpz',
+    'github_repo': 'BlackboardSync',
+    'github_banner': True,
+    'show_related': False,
+    'note_bg': '#FFF59C',
+    'github_button': True,
+    'github_type': 'star',
+    'description': __about__.__summary__,
+    # 'analytics_id': 'UA-109078714-2',
+}
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
