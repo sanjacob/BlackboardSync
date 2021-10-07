@@ -28,18 +28,20 @@ from getpass import getpass
 from dateutil.parser import parse
 from datetime import datetime, timezone
 
-from blackboard.api import BlackboardSession
-from blackboard.blackboard import (BBCourse, BBMembership, BBAttachment,
-                                   BBCourseContent, BBContentChild, SanitisePath)
+from .blackboard.api import BlackboardSession
+from .blackboard.blackboard import (BBCourse, BBMembership, BBAttachment,
+                                    BBCourseContent, BBContentChild, SanitisePath)
 
 
 class BlackboardDownload:
+    """Blackboard download job."""
+
     _last_downloaded = datetime.fromtimestamp(0, tz=timezone.utc)
     _data_source = "_21_1"
 
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(logging.NullHandler())
+    _logger = logging.getLogger(__name__)
+    _logger.setLevel(logging.DEBUG)
+    _logger.addHandler(logging.NullHandler())
 
     def __init__(self, sess: BlackboardSession, download_location,
                  last_downloaded: datetime = None):
@@ -136,7 +138,10 @@ class BlackboardDownload:
             self._files_processed += 1
 
     def download(self) -> datetime:
-        """Retrieve the user's courses, and start download of all contents"""
+        """Retrieve the user's courses, and start download of all contents
+
+        :return: Datetime when method was called.
+        """
         start_time = datetime.now(timezone.utc)
 
         self.logger.info("Fetching user memberships")
@@ -167,10 +172,12 @@ class BlackboardDownload:
 
     @property
     def download_location(self) -> str:
+        """The location where files will be downloaded to."""
         return self._download_location
 
     @property
     def data_source(self) -> str:
+        """Filter for courses."""
         return self._data_source
 
     @data_source.setter
@@ -179,14 +186,22 @@ class BlackboardDownload:
 
     @property
     def user_id(self) -> str:
+        """User ID used for API calls."""
         return self._user_id
 
     @property
     def files_processed(self) -> int:
+        """Number of files that have been downloaded."""
         return self._files_processed
+
+    @property
+    def logger(self):
+        """Logger for BlackboardDownload, set at level DEBUG."""
+        return self._logger
 
 
 def configure() -> BlackboardSession:
+    """Setup login for the current download job if accessing via shell."""
     authorized = False
     sess = None
 
@@ -211,6 +226,7 @@ def configure() -> BlackboardSession:
 
 
 def main():
+    """Provide command-line access to creating a download job."""
     sess = configure()
     last_downloaded = input("Download all files modified since: ")
     new_download = BlackboardDownload(sess, 'sync', parse(last_downloaded))

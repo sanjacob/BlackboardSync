@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 Blackboard Model Classes
 """
@@ -25,10 +23,16 @@ from dateutil.parser import isoparse
 
 
 class SanitisePath:
-    _unsafe = ['/', "\\", '<', '>', ':', '"', '|', '?', '*']
+    """Helper class to sanitise paths to ensure OS compatibility."""
+    _unsafe = ('/', "\\", '<', '>', ':', '"', '|', '?', '*')
 
     @classmethod
     def get_path(cls, path):
+        """
+        Sanitise path
+
+        :param path: Path to sanitise
+        """
         safe_path = path
 
         for c in cls._unsafe:
@@ -61,11 +65,13 @@ class BBProctoring:
 
 @dataclass(frozen=True)
 class BBFile:
+    """Blackboard File."""
     fileName: str = ""
 
 
 @dataclass(frozen=True)
 class BBAttachment:
+    """Blackboard File Attachment."""
     id: str = ""
     fileName: str = ""
     mimeType: str = ""
@@ -192,6 +198,7 @@ class BBContentHandler:
 
 @dataclass(frozen=True)
 class BBLink:
+    """Blackboard Link."""
     href: str = ""
     rel: str = ""
     title: str = ""
@@ -223,6 +230,8 @@ class BBAvailability:
 
 
 class BBCourseContent:
+    """Blackboard Content."""
+
     def __init__(self, id="", title="", body="", created="", modified="",
                  position: int = 0, hasChildren: bool = False, launchInNewWindow: bool = False,
                  reviewable: bool = False, availability={}, contentHandler={}, links={},
@@ -312,6 +321,8 @@ class BBCourseContent:
 
 
 class BBContentChild(BBCourseContent):
+    """Blackboard Content Child."""
+
     def __init__(self, body="", parentId="", **kwargs):
         super().__init__(**kwargs)
         self._body = body
@@ -327,6 +338,8 @@ class BBContentChild(BBCourseContent):
 
 
 class BBMembership:
+    """Blackboard Membership. Represents relation between student and course."""
+
     def __init__(self, id="", userId="", courseId="", dataSourceId="",
                  created="", modified="", availability={}, courseRoleId="",
                  lastAccessed="", childCourseId=""):
@@ -387,6 +400,8 @@ class BBMembership:
 
 
 class BBCourse:
+    """BlackboardCourse. Represents an academic course."""
+
     def __init__(self, id="", courseId="", name="", description="", modified="",
                  organization: bool = False, ultraStatus="", closedComplete: bool = False,
                  availability={}, enrollment={}, locale={}, externalAccessUrl=""):
@@ -446,7 +461,3 @@ class BBCourse:
     @property
     def externalAccessUrl(self):
         return self._externalAccessUrl
-
-
-if __name__ == '__main__':
-    pass
