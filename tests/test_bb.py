@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
-"""
-BlackboardSync Tests
-Copyright (C) 2020
-Jacob Sánchez Pérez
-"""
+"""BlackboardSync Tests"""
+
+# Copyright (C) 2021, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,87 +18,77 @@ Jacob Sánchez Pérez
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import unittest
+import pytest
 from blackboard_sync.blackboard.blackboard import BBLocale, BBFile, BBAttachment, BBCourseContent
 
 
-class TestBBLocale(unittest.TestCase):
-
+class TestBBLocale():
     def test_force(self):
         lf = BBLocale(False)
-        self.assertEqual(lf.force, False, "Should be False")
+        assert not lf.force
 
         lt = BBLocale(True)
-        self.assertEqual(lt.force, True, "Should be True")
+        assert lt.force
 
 
-class TestBBFile(unittest.TestCase):
-
-    def test_fileName(self):
+class TestBBFile():
+    def test_filename(self):
         doc_name = "example.docx"
         example = BBFile(fileName=doc_name)
-        self.assertEqual(example.fileName, doc_name, f"Should be {doc_name}")
+        assert example.fileName == doc_name
 
         empty = BBFile("")
-        self.assertEqual(empty.fileName, "", "Should be empty")
+        assert empty.fileName == ""
 
 
-class TestBBAttachment(unittest.TestCase):
+class TestBBAttachment():
     def test_id(self):
         attm_id = "ID"
         example = BBAttachment(id=attm_id)
-        self.assertEqual(example.id, attm_id, f"Should be {attm_id}")
+        assert example.id == attm_id
 
         empty = BBAttachment(id="")
-        self.assertEqual(empty.id, "", "Should be empty")
+        assert empty.id == ""
 
-    def test_fileName(self):
+    def test_filename(self):
         doc_name = "example.docx"
         example = BBAttachment(fileName=doc_name)
-        self.assertEqual(example.fileName, doc_name, f"Should be {doc_name}")
+        assert example.fileName == doc_name
 
         empty = BBAttachment(fileName="")
-        self.assertEqual(empty.fileName, "", "Should be empty")
+        assert empty.fileName == ""
 
-    def test_mimeType(self):
+    def test_mimetype(self):
         mime = "text/html"
         example = BBAttachment(mimeType=mime)
-        self.assertEqual(example.mimeType, mime, f"Should be {mime}")
+        assert example.mimeType == mime
 
         empty = BBAttachment(mimeType="")
-        self.assertEqual(empty.mimeType, "", "Should be empty")
+        assert empty.mimeType == ""
 
 
-class TestBBCourseContent(unittest.TestCase):
+class TestBBCourseContent():
     def test_safe_title(self):
         og_title = "puppy.docx"
         sanitised = og_title
 
         cc = BBCourseContent(title=og_title)
-        self.assertEqual(sanitised, cc.title_safe, "Title was not preserved")
+        assert sanitised == cc.title_safe
 
     def test_unsafe_chars(self):
         og_title = "a/a\\a<a>a:a\"a|a?a*a.docx"
         sanitised = f"{'a_' * 9}a.docx"
         cc = BBCourseContent(title=og_title)
-        self.assertEqual(sanitised, cc.title_safe, "Contains unsafe chars")
+        assert sanitised == cc.title_safe
 
     def test_dir_escalation_nix(self):
         og_title = "../../../../important_file"
         sanitised = ".._.._.._.._important_file"
         cc = BBCourseContent(title=og_title)
-        self.assertEqual(sanitised, cc.title_safe, "Contains unsafe chars")
+        assert sanitised == cc.title_safe
 
     def test_dir_escalation_win(self):
         og_title = "..\\..\\..\\..\\important_file.exe"
         sanitised = ".._.._.._.._important_file.exe"
         cc = BBCourseContent(title=og_title)
-        self.assertEqual(sanitised, cc.title_safe, "Contains unsafe chars")
-
-
-def main():
-    unittest.main()
-
-
-if __name__ == '__main__':
-    main()
+        assert sanitised == cc.title_safe
