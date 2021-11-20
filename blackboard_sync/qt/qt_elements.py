@@ -20,6 +20,8 @@ BlackboardSync Qt GUI
 
 from enum import IntEnum
 from pathlib import Path
+from typing import Optional
+
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtCore import pyqtSignal
@@ -34,15 +36,15 @@ class SyncPeriod(IntEnum):
     SIX_HOURS = 60 * 60 * 6
 
 
-class AssetPath():
+class AssetPath:
     """Helper class to get the path of app assets."""
 
     @staticmethod
-    def get_qt_asset(asset_file):
+    def get_qt_asset(asset_file: str) -> Path:
         return (Path(__file__).parent / f"{asset_file}.ui").resolve()
 
     @staticmethod
-    def get_asset(icon):
+    def get_asset(icon: str) -> str:
         return str((Path(__file__).parent.parent / 'assets' / icon).resolve())
 
     @classmethod
@@ -63,7 +65,7 @@ class SyncTrayMenu(QMenu):
         self.update_last_synced(last_synced)
         self.set_logged_in(logged_in)
 
-    def _init_ui(self):
+    def _init_ui(self) -> None:
         sync_icon = QApplication.style().standardIcon(QStyle.SP_BrowserReload)
         close_icon = QApplication.style().standardIcon(QStyle.SP_DialogCloseButton)
 
@@ -122,7 +124,7 @@ class SyncTrayIcon(QSystemTrayIcon):
         super().__init__()
         self._init_ui()
 
-    def _init_ui(self):
+    def _init_ui(self) -> None:
         # Create the icon
         icon = AssetPath.app_logo
 
@@ -185,7 +187,7 @@ class RedownloadDialog(QMessageBox):
         super().__init__()
         self._init_ui()
 
-    def _init_ui(self):
+    def _init_ui(self) -> None:
         self.setText(self._dialog_text)
         self.setInformativeText(self._info_text)
         self.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
@@ -195,7 +197,7 @@ class RedownloadDialog(QMessageBox):
         self.setWindowIcon(AssetPath.app_logo)
 
     @property
-    def redownload(self):
+    def redownload(self) -> bool:
         return self.exec() == QMessageBox.Yes
 
 
@@ -209,7 +211,7 @@ class PersistenceWarning(QDialog):
         super().__init__()
         self._init_ui()
 
-    def _init_ui(self):
+    def _init_ui(self) -> None:
         uic.loadUi(AssetPath.get_qt_asset(__class__.__name__), self)
         self.setWindowTitle(self._window_title)
 
@@ -226,7 +228,7 @@ class SettingsWindow(QWidget):
         super().__init__()
         self._init_ui()
 
-    def _init_ui(self):
+    def _init_ui(self) -> None:
         uic.loadUi(AssetPath.get_qt_asset(__class__.__name__), self)
 
         self.move(*self._initial_position)
@@ -236,13 +238,19 @@ class SettingsWindow(QWidget):
         self._log_out_signal = self.log_out_button.clicked
         self._save_signal = self.button_box.accepted
 
-    def _choose_location(self):
+    def _choose_location(self) -> None:
+        if (location := self._file_chooser_dialog()):
+            self.download_location = location
+
+    def _file_chooser_dialog(self) -> Optional[Path]:
         self.file_chooser = QFileDialog()
         self.file_chooser.setFileMode(QFileDialog.Directory)
 
         if self.file_chooser.exec():
             new_location = self.file_chooser.directory()
-            self.download_location = Path(new_location.path())
+            return Path(new_location.path())
+
+        return None
 
     @property
     def download_location(self) -> Path:
@@ -300,27 +308,27 @@ class LoginWindow(QWidget):
         super().__init__()
         self._init_ui()
 
-    def _init_ui(self):
+    def _init_ui(self) -> None:
         uic.loadUi(AssetPath.get_qt_asset(__class__.__name__), self)
 
         self.move(*self._initial_position)
         self.setWindowTitle(self._window_title)
 
         # Show warning if trying to select stay logged in option (until we find better option)
-        self._persistence_warn = PersistenceWarning()
-        self._persistence_warn.rejected.connect(self.stay_logged.toggle)
-        self.stay_logged.clicked.connect(self._show_warning)
+        # self._persistence_warn = PersistenceWarning()
+        # self._persistence_warn.rejected.connect(self.stay_logged.toggle)
+        # self.stay_logged.clicked.connect(self._show_warning)
 
         self.error_label.setVisible(False)
         self.login_button.clicked.connect(self.toggle_failed_login, True)
 
         self._login_signal = self.login_button.clicked
 
-    def _show_warning(self):
-        if self.stay_logged.isChecked():
+    def _show_warning(self) -> None:
+        if self.stay_logged_checkbox:
             self._persistence_warn.show()
 
-    def toggle_failed_login(self, visible):
+    def toggle_failed_login(self, visible: bool) -> None:
         self.error_label.setVisible(visible)
 
     @property
@@ -331,7 +339,7 @@ class LoginWindow(QWidget):
     def password(self) -> str:
         return self.pass_edit.text()
 
-    def clear_password(self):
+    def clear_password(self) -> None:
         self.pass_edit.setText("")
 
     @property
