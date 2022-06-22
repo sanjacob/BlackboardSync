@@ -26,7 +26,11 @@ from pathvalidate import sanitize_filename
 
 
 class ImmutableModel(BaseModel):
+    """Model with const attributes."""
+
     class Config:
+        """Modify default configuration."""
+
         allow_mutation = False
 
 
@@ -35,6 +39,8 @@ class BBLocale(ImmutableModel):
 
 
 class BBDurationType(str, Enum):
+    """Blackboard Course Duration Type."""
+
     Continuous: str = 'Continuous'
     DateRange: str = 'DateRange'
     FixedNumDays: str = 'FixedNumDays'
@@ -57,11 +63,13 @@ class BBProctoring(ImmutableModel):
 
 class BBFile(ImmutableModel):
     """Blackboard File."""
+
     fileName: str = None
 
 
 class BBAttachment(ImmutableModel):
     """Blackboard File Attachment."""
+
     id: str = None
     fileName: str = None
     mimeType: str = None
@@ -69,6 +77,7 @@ class BBAttachment(ImmutableModel):
 
 class BBLink(ImmutableModel):
     """Blackboard Link."""
+
     href: str = None
     rel: str = None
     title: str = None
@@ -84,6 +93,7 @@ class BBAvailability(ImmutableModel):
 
 class BBMembership(ImmutableModel):
     """Blackboard Membership. Represents relation between student and course."""
+
     id: str = None
     userId: str = None
     courseId: str = None
@@ -97,6 +107,8 @@ class BBMembership(ImmutableModel):
 
 
 class BBResourceType(str, Enum):
+    """Different resource types on Blackboard."""
+
     folder = 'x-bb-folder'
     file = 'x-bb-file'
     document = 'x-bb-document'
@@ -125,16 +137,19 @@ class BBContentHandler(ImmutableModel):
 
     @validator('id')
     def resource_parser(cls, v: str):
+        """Validate and parse an id resource type."""
         return v.replace('resource/', '')
 
     @property
     def isNotHandled(self) -> bool:
+        """Return true if resource should not be handled."""
         return self.id not in (BBResourceType.folder, BBResourceType.file,
                                BBResourceType.document, BBResourceType.externallink)
 
 
 class BBCourseContent(ImmutableModel):
     """Blackboard Content."""
+
     id: str = None
     title: str = None
     body: str = None
@@ -151,15 +166,18 @@ class BBCourseContent(ImmutableModel):
     hasAssociatedGroups: bool = False
 
     def __str__(self):
+        """Title of the course content."""
         return self.title
 
     @property
     def title_path_safe(self) -> str:
+        """Return a path safe version of the title."""
         return sanitize_filename(self._title, replacement_text='_')
 
 
 class BBContentChild(BBCourseContent):
     """Blackboard Content Child."""
+
     body: str = None
     parentId: str = None
 
@@ -188,6 +206,7 @@ class BBCourse(ImmutableModel):
 
     @validator('code')
     def code_parser(cls, v, values, **kwargs):
+        """Parse course code."""
         if 'name' in values:
             code_split = values['name'].split(' : ', 1)
             return code_split[0]
@@ -195,6 +214,7 @@ class BBCourse(ImmutableModel):
 
     @validator('title')
     def title_parser(cls, v, values, **kwargs):
+        """Parse course title."""
         if 'name' in values:
             name_split = values['name'].split(' : ', 1)[-1].split(',')
             return sanitize_filename(name_split[0], replacement_text='_')

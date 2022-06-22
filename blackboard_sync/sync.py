@@ -1,6 +1,7 @@
 """
-BlackboardSync,
-automatically sync content from Blackboard
+BlackboardSync.
+
+Automatically sync content from Blackboard
 """
 
 # Copyright (C) 2021, Jacob Sánchez Pérez
@@ -26,16 +27,18 @@ import platform
 import threading
 import subprocess
 from pathlib import Path
-from requests.exceptions import ConnectionError
 from datetime import datetime, timezone, timedelta
 
-from .blackboard import BlackboardSession
-from .download import BlackboardDownload
+from requests.exceptions import ConnectionError
+
 from .config import SyncConfig
+from .download import BlackboardDownload
+from .blackboard import BlackboardSession
 
 
 class BlackboardSync:
     """Represents an instance of the BlackboardSync application."""
+
     _log_directory = "log"
     _app_name = 'blackboard_sync'
 
@@ -50,6 +53,7 @@ class BlackboardSync:
     _logger = logging.getLogger(__name__)
 
     def __init__(self):
+        """Create an instance of the program."""
         # Time between each sync in seconds
         self._sync_interval = 60 * 30
 
@@ -95,6 +99,7 @@ class BlackboardSync:
 
     def auth(self, username: str, password: str, persistence: bool = False) -> bool:
         """Create a new Blackboard session with the given credentials.
+
         Will start syncing automatically if login successful.
 
         :param str username: Institutional email address (e.g. example@uclan.ac.uk).
@@ -165,8 +170,9 @@ class BlackboardSync:
         self._username = ""
 
     def _sync_task(self) -> None:
-        """Method run by Sync thread. Constantly checks if last sync is outdated
-        and starts a new download job if so.
+        """Constantly checks if last sync is outdated and starts a new job if so.
+
+        Method run by Sync thread.
         """
         reload_session = False
         failed_attempts = 0
@@ -212,7 +218,7 @@ class BlackboardSync:
         self.sync_thread.start()
 
     def stop_sync(self) -> None:
-        """Stops Sync thread."""
+        """Stop Sync thread."""
         self.logger.info("Stopping sync thread")
         self._is_active = False
 
@@ -225,7 +231,7 @@ class BlackboardSync:
         self.logger.removeHandler(exception_log)
 
     def open_sync_dir(self) -> None:
-        """Starts a subprocess to open the default file explorer at the sync location."""
+        """Start a subprocess to open the default file explorer at the sync location."""
         self.logger.debug("Opening sync dir on file explorer")
         if platform.system() == "Windows":
             os.startfile(self.sync_dir)
@@ -235,7 +241,7 @@ class BlackboardSync:
             subprocess.Popen(["xdg-open", self.sync_dir])
 
     def force_sync(self) -> None:
-        """Forces Sync thread to start download job ASAP."""
+        """Force Sync thread to start download job ASAP."""
         self.logger.debug("Forced syncing")
         self._force_sync = True
 
@@ -265,24 +271,24 @@ class BlackboardSync:
         self._update_next_sync()
 
     def _update_next_sync(self) -> None:
-        """Stores a calculated datetime when next sync should take place."""
+        """Store a calculated datetime when next sync should take place."""
         self._next_sync = (self.last_sync + timedelta(seconds=self._sync_interval))
 
     @property
     def next_sync(self) -> datetime:
-        """Calculated time when last sync will be outdated."""
+        """Time when last sync will be outdated."""
         return self._next_sync
 
     @property
     def outdated(self) -> bool:
-        """Returns true if last download job is outdated."""
+        """Return true if last download job is outdated."""
         if self.last_sync is None:
             return True
         return datetime.now(timezone.utc) >= self.next_sync
 
     @property
     def data_source(self) -> str:
-        """Filters the modules to download."""
+        """Filter the modules to download."""
         # The default works in my testing. However, this might need tweaking for other users,
         # specially if used for different institutions than UCLan.
         return self._data_source
@@ -293,11 +299,11 @@ class BlackboardSync:
 
     @property
     def sync_dir(self) -> Path:
-        """The location to where all Blackboard content will be downloaded."""
+        """Location to where all Blackboard content will be downloaded."""
         return self._sync_dir
 
     def set_sync_dir(self, dir: Path, redownload: bool = False) -> None:
-        """Sets new sync location.
+        """Set new sync location.
 
         :param Path dir: The path of the sync dir.
         :param bool redownload: If true, ALL content will be re-downloaded to the new location.
@@ -313,7 +319,7 @@ class BlackboardSync:
 
     @property
     def sync_interval(self) -> int:
-        """The time to wait between download jobs."""
+        """Time to wait between download jobs."""
         return self._sync_interval
 
     @sync_interval.setter
@@ -322,12 +328,12 @@ class BlackboardSync:
 
     @property
     def is_active(self) -> bool:
-        """Indicates the state of the sync thread."""
+        """Indicate the state of the sync thread."""
         return self._is_active
 
     @property
     def is_logged_in(self) -> bool:
-        """Indicates if a user session is currently active."""
+        """Indicate if a user session is currently active."""
         return self._is_logged_in
 
     @property

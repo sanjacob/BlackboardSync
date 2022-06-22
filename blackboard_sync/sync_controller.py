@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 
-"""
-BlackboardSync Controller
-"""
+"""BlackboardSync Controller."""
 
 # Copyright (C) 2021, Jacob Sánchez Pérez
 
@@ -21,17 +19,22 @@ BlackboardSync Controller
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import sys
-from .sync import BlackboardSync
-from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QWindow
-from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
-from .qt.qt_elements import LoginWebView, SyncTrayIcon, SettingsWindow, RedownloadDialog
 
+from PyQt5.QtGui import QWindow
+from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
+
+from .sync import BlackboardSync
 from .__about__ import __title__, __version__
+from .qt.qt_elements import (LoginWebView, SyncTrayIcon, SettingsWindow,
+                             RedownloadDialog)
 
 
 class BBSyncController:
+    """Connects an instance of BlackboardSync with the UI module."""
+
     def __init__(self):
+        """Create an instance of the BlackboardSync Desktop App."""
         # Create model, which will try to retrieve existing configuration
         # If unsuccessful, we bring up login page
         self.model = BlackboardSync()

@@ -1,5 +1,6 @@
 """
-Blackboard API
+Blackboard API.
+
 ~~~~~~~~~~~~~~
 
 A python interface for the Blackboard REST APIs.
@@ -33,11 +34,10 @@ Full documentation available at <https://blackboardsync.readthedocs.io>.
 # Also available at https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 from .api import BlackboardSession
-
-from .blackboard import (BBLocale, BBDuration, BBEnrollment, BBProctoring, BBFile,
-                         BBAttachment, BBLink, BBContentHandler, BBAvailability,
-                         BBCourseContent, BBContentChild, BBMembership, BBCourse)
-
+from .blackboard import (BBFile, BBLink, BBCourse, BBLocale, BBDuration,
+                         BBAttachment, BBEnrollment, BBMembership,
+                         BBProctoring, BBAvailability, BBContentChild,
+                         BBCourseContent, BBContentHandler)
 
 __all__ = ['BBLocale', 'BBDuration', 'BBEnrollment', 'BBProctoring', 'BBFile',
            'BBAttachment', 'BBLink', 'BBContentHandler', 'BBAvailability',
