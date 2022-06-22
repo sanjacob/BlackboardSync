@@ -18,14 +18,14 @@ All changes happen through pull requests, Pull requests are the best way to prop
 ## Pull Requests
 
 1. Fork the repository and create your branch from `main`.
-2. If you've added code that should be tested, add some tests' example.
+2. If you've added code that should be tested, add some tests.
 3. Ensure to describe your pull request.
 
 
 
 ## Local Development
 
-Follow [these instructions](README.md#running-without-building) to set up your own development environment.
+Follow [these instructions](#todo) to set up your own development environment.
 
 You should use the `-d` flag of `pipenv install` to also install development dependencies.
 
@@ -34,7 +34,7 @@ You should use the `-d` flag of `pipenv install` to also install development dep
 
 ## Issues
 
-We use GitHub issues to track bugs. Please ensure your description is clear and has sufficient instructions to be able to reproduce the issue. Report a bug by [opening a new issue](https://github.com/jacobszpz/BlackboardSync/issues/new); it's that easy!
+We use GitHub issues to track bugs. Please ensure your description is clear and has sufficient instructions to be able to reproduce the issue. Report a bug by [opening a new issue][new-issue]; it's that easy!
 
 
 
@@ -52,6 +52,4 @@ Great feature requests tend to have:
 
 By contributing to BlackboardSync, you agree that your contributions will be licensed under the LICENSE file in the root directory of this source tree.
 
-
-
-<!-- CONTRIBUTING.md template blatantly stolen from https://github.com/benawad/dogehouse/blob/prod/CONTRIBUTING.md -->
+[new-issue]: https://github.com/jacobszpz/BlackboardSync/issues/new

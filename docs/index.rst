@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-BlackboardSync: Blackboard for Humans
+BlackboardSync
 ==========================================
 
 .. image:: https://img.shields.io/github/license/jacobszpz/BlackboardSync
@@ -53,7 +53,7 @@ If you intend to contribute to this project, this may be of interest.
 .. toctree::
   :maxdepth: 2
 
-  dev/folder_structure
+  dev/bb_api
 
 
 .. _Typora: https://typora.io

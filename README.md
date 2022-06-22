@@ -1,7 +1,7 @@
-# BlackboardSync for UCLan
+# BlackboardSync
 ### Automatic Syncing Of Your Blackboard Content
 
-[![License: GPL  v2][license-badge]][gnu]
+[![License: GPL  v2][license-shield]][gnu] [![Build][build-shield]][actions] [![ReadTheDocs][docs-shield]][rtd]
 
 **BlackboardSync** performs a periodic, incremental download of all your Blackboard content, such as lecture slides, lab sheets, and other attachments.
 
@@ -9,22 +9,6 @@
 <div align="center">
 	<img src="blackboard_sync/assets/logo.png" height="auto" width="25%" />
 </div>
-
-
-## Table Of Contents
-
-1. [About](#about)
-2. [Features](#features)
-3. [Installation](#installation)
-   - [Binaries](#binaries)
-   - [Running w/o building](#running-without-building)
-   - [Building from source](#building-from-source)
-4. [Usage](#usage)
-5. [Contributions](#contributions)
-6. [Show Your Support](#show-your-support)
-7. [License](#license)
-8. [Acknowledgements](#acknowledgements)
-
 
 
 ## About
@@ -42,13 +26,9 @@ What I was looking for in such an application was:
 
 
 
-**Why just for UCLan?**
+**Why is my university not supported?**
 
-While most of the application is not bound to the UCLan portal, the auth process is. Other universities might have a very different login process which I cannot account for. However, if you have an idea about how to implement this across the board, say so [here][universal-login].
-
-
-
-If you want to adapt this for your own institution / personal use, that is perfectly possible and easy, just fork the repo and overwrite the `auth` method of `BlackboardSession` in the [`blackboard/api.py`](blackboard_sync/blackboard/api.py) file.
+Simply put, some information is necessary to make the login process compatible with any given university. If you would like to help to add support for your university, or would like to see which universities are currently supported, [start here.](UNIVERSITIES.md)
 
 
 
@@ -69,7 +49,7 @@ Built with:
   - Linux, Windows, and macOS ready
 
 
-[^1]: For a list of available markdown editors, see [this][markdown-editors]. Personally, I like to use [Typora][typora].
+[^1]: For a list of available markdown editors, see [this][markdown-editors].
 
 
 
@@ -80,6 +60,14 @@ Built with:
 Currently unavailable (until a more stable version).
 
 Alternatively, you can run the python package [directly](#running-without-building), or build an executable yourself by following [these steps](#building-from-source).
+
+
+
+#### Via pip
+
+```bash
+python3 -m pip install BlackboardSync
+```
 
 
 
@@ -123,123 +111,6 @@ pipenv run python blackboard_sync
 
 
 
-#### Build an executable
-
-##### Requirements
-
-[Python 3.9 & pip][python]
-
-[Pipenv][pipenv]
-
-[Git][git]
-
-
-
-```bash
-# Clone the repository
-git clone https://github.com/jacobszpz/BlackboardSync.git
-cd BlackboardSync
-# Create virtual environment and install dependencies
-pipenv install -d
-```
-
-
-
-##### Linux & macOS
-
-```bash
-# Execute build script
-$ chmod +x build.sh
-$ ./build.sh
-# An executable will be generated, run with
-$ dist/BlackboardSync
-# You can also move it to a more convenient location
-```
-
-
-
-##### Windows
-
-```batch
-# Execute build script
-build.bat
-# An executable will be generated, run with
-dist\BlackboardSync.exe
-# You can also move it to a more convenient location
-```
-
-
-
-## Usage
-
-BlackboardSync resides in your system tray.
-
-In windows, this looks like:
-
-![][tray-win] 
-
-
-
-Initially, it may appear in the overflow menu.
-
-![][tray-win-of]
-
-To place it in the system tray, simply drag the icon there.
-
-
-
-##### Login
-
-To get started, type in the details of your UCLan account. You may choose to save your login details to avoid typing them every time your session expires or you quit the application. However, be warned this will store your password in plain-text somewhere on your device.
-
-
-
-![][login-win]
-
-
-
-After you login, the first download will start right away. It may take upwards of 20 minutes to get all your files, specially if you have a large amount of content or a slow internet connection. This only needs to be done once, the downloads to follow will only include files that were added/modified after the last download, which will only take a few seconds in most cases.
-
-
-
-##### Tray
-
-At any time you can keep track of the status by right-clicking on the tray icon.
-
-![][tray-win-open]
-
-
-
-| Menu Option | Action                                                       |
-| ----------- | ------------------------------------------------------------ |
-| Sync Now    | Forces BBSync to fetch new files as soon as possible         |
-| Preferences | Opens the preferences dialog                                 |
-| Last Synced | Normally displays the last time the app checked for / downloaded new files |
-| Quit        | Closes the program (may take a few seconds)                  |
-
-
-
-Left-clicking on the icon will instead open the sync location on the file explorer.
-
-
-
-##### Settings
-
-![][settings-win]
-
-
-
-| Setting           | Description                                                  | Modifiable    |
-| ----------------- | ------------------------------------------------------------ | ------------- |
-| Download Location | The location of downloaded files                             | Yes           |
-| Sync Every        | Changes the time to wait between each sync                   | Yes           |
-| Data Source       | Internal setting that affects which modules to download content from | Currently not |
-| User Session      | Shows the current user and allows to log out of the session  | Yes           |
-
-
-
->  Settings won't take effect unless saved
-
 
 
 ## Contributions
@@ -259,20 +130,21 @@ Open a GitHub issue [here][issues].
 
 ## Show Your Support
 
+##### Ko-fi ☕
+[![Support BBSync on ko-fi][kofi-shield]][kofi]
+
+##### LiberaPay
+[![LiberaPay][lp-shield]][liberapay]
+
 ##### Bitcoin ₿
 
 `bc1qhvcs07y3jnf09kahefscs05gxlmvhu542wzvgp`
-
-##### Dogecoin 🐶
-
-`DU7nuPHcphHMKp2932LurnWbVzozmrkKmt`
 
 
 
 ## License
 
-[![License: GPL  v2][license-badge]][gnu]
-
+[![License: GPL  v2][license-shield]][gnu]
 
 This software is distributed under the [General Public License v2.0][license], more information available at the [Free Software Foundation][gnu].
 
@@ -292,7 +164,7 @@ This software is distributed under the [General Public License v2.0][license], m
 
 
 
-<!-- MARKDOWN LINK REFERENCES -->
+<!-- LINK REFERENCES -->
 
 [universal-login]: https://github.com/jacobszpz/BlackboardSync/issues/3	"BBSync login"
 [pyqt]: https://pypi.org/project/PyQt5/5.15.1/	"Python Bindings for Qt 5"
@@ -312,13 +184,7 @@ This software is distributed under the [General Public License v2.0][license], m
 
 <!-- RELEASES -->
 
-[release-win]: https://github.com/jacobszpz/BlackboardSync/releases/	"Windows Release of BlackboardSync"
-[release-win-64]: https://github.com/jacobszpz/BlackboardSync/releases/	"Windows x64 Release of BlackboardSync"
-[release-mac]: https://github.com/jacobszpz/BlackboardSync/releases/	"macOS Release of BlackboardSync"
-[release-mac-64]: https://github.com/jacobszpz/BlackboardSync/releases/	"macOS x64 Release of BlackboardSync"
-[release-nix]: https://github.com/jacobszpz/BlackboardSync/releases/	"Linux Release of BlackboardSync"
-[release-nix-64]: https://github.com/jacobszpz/BlackboardSync/releases/	"Linux x64 Release of BlackboardSync"
-
+[releases]: https://github.com/jacobszpz/BlackboardSync/releases/
 
 
 <!-- README TEMPLATES -->
@@ -329,12 +195,18 @@ This software is distributed under the [General Public License v2.0][license], m
 
 
 
-<!-- MARKDOWN IMAGE REFERENCES -->
+<!-- SHIELDS -->
 
-[license-badge]: https://img.shields.io/github/license/jacobszpz/BlackboardSync
-[tray-win]: screenshots/tray_win.png
-[tray-win-of]: screenshots/tray_win_overflow.png
-[tray-win-open]: screenshots/tray_win_open.png
-[login-win]: screenshots/login_win.png
-[settings-win]: screenshots/settings_win.png
+[license-shield]: https://img.shields.io/github/license/jacobszpz/BlackboardSync
+[build-shield]: https://img.shields.io/github/workflow/status/jacobszpz/BlackboardSync/Python%20CI/master
+[docs-shield]: https://img.shields.io/readthedocs/BlackboardSync
+[kofi-shield]: https://ko-fi.com/img/githubbutton_sm.svg
+[lp-shield]: https://img.shields.io/liberapay/receives/BlackboardSync.svg?logo=liberapay
 
+
+
+<!-- SHIELD LINKS -->
+
+[actions]: https://github.com/jacobszpz/BlackboardSync/actions
+[kofi]: https://ko-fi.com/Q5Q17XN36
+[liberapay]: https://liberapay.com/BlackboardSync
