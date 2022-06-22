@@ -1,0 +1,17 @@
+[
+  {
+    "name": "University of Central Lancashire",
+    "short_name": "UCLan",
+    "login": {
+      "start_url": "https://portal.uclan.ac.uk",
+      "target_url": "https://portal.uclan.ac.uk/ultra/",
+      "username_input_selector": "#userNameInput",
+      "password_input_selector": "#passwordInput"
+    },
+    "network": {
+      "isp": [],
+      "org": ["University of Central Lancashire"]
+    },
+    "data_sources": ["_21_1"]
+  }
+]

@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-
 """
 BlackboardSync,
 automatically sync content from Blackboard
@@ -23,26 +21,23 @@ automatically sync content from Blackboard
 
 import os
 import time
-import toml
 import logging
-import threading
 import platform
+import threading
 import subprocess
 from pathlib import Path
-from appdirs import user_config_dir
 from requests.exceptions import ConnectionError
 from datetime import datetime, timezone, timedelta
-from .blackboard.api import BlackboardSession
-from .download import BlackboardDownload
 
-from .__about__ import __author__
+from .blackboard import BlackboardSession
+from .download import BlackboardDownload
+from .config import SyncConfig
 
 
 class BlackboardSync:
-    """Represents an instance of the BlackboardSync application.
-    """
-    _config_filename = "blackboard_sync"
-    _log_directory = "Logs"
+    """Represents an instance of the BlackboardSync application."""
+    _log_directory = "log"
+    _app_name = 'blackboard_sync'
 
     # Filters out non-subjects from blackboard (may need more testing)
     _data_source = "_21_1"
@@ -59,7 +54,7 @@ class BlackboardSync:
         self._sync_interval = 60 * 30
 
         # Default download location
-        self._sync_folder = Path(Path.home(), 'Downloads', 'BlackboardSync')
+        self._sync_dir = Path(Path.home(), 'Downloads', 'BlackboardSync',)
         # Time before last sync
         self._last_sync = None
         # Time of next programmed sync
@@ -73,8 +68,9 @@ class BlackboardSync:
         # Flag to know if syncing is in progress
         self._is_syncing = False
         # Flag to know if syncing is on
-        self._sync_on = False
+        self._is_active = False
 
+        # Set up logging
         self.logger.setLevel(logging.WARN)
         self.logger.addHandler(logging.StreamHandler())
         self.logger.debug("Initialising BlackboardSync")
@@ -90,8 +86,8 @@ class BlackboardSync:
         self.sess_logger = sess_logger
         self.download_logger = download_logger
 
-        config_folder = Path(user_config_dir(appauthor=__author__, roaming=True))
-        self._config_file = (config_folder / self._config_filename)
+        # Obtain user configuration dir
+        self._config = SyncConfig()
 
         if self._config_file.exists():
             self.logger.info("Preexisting configuration exists")
@@ -103,8 +99,9 @@ class BlackboardSync:
 
         :param str username: Institutional email address (e.g. example@uclan.ac.uk).
         :param str password: Password of the account.
-        :param bool persistence: If true, login details will be stored in disk.
+        :param bool persistence: If true, login will be saved in the OS designated keyring.
         """
+        username = username.strip()
         try:
             u_sess = BlackboardSession(username, password)
         except ValueError:
@@ -121,73 +118,38 @@ class BlackboardSync:
             self.start_sync()
         return self._is_logged_in
 
-    def _load_config(self) -> bool:
-        """Load saved preferences from disk.
-        """
-        with self._config_file.open() as config_file:
-            config = toml.load(config_file)
+    def _load_config(self) -> None:
+        """Load saved preferences from disk."""
+        self._last_sync = self._config.latest_sync
+        self._update_next_sync()
+        self._sync_dir = self._config.location
+        self.auth(username=self._config.username, password=self._config.password)
 
-            if config:
-                if 'Sync' in config:
-                    if 'last_sync' in (sync_conf := config['Sync']):
-                        self._last_sync = datetime.fromisoformat(sync_conf['last_sync'])
-                        self._update_next_sync()
-                    if 'location' in sync_conf:
-                        self._sync_folder = Path(sync_conf['location'])
-                if 'Login' in config:
-                    self.auth(**config['Login'])
+    # def _update_last_sync(self, sync_config: SyncConfig) -> SyncConfig:
+    #     sync_config['last_sync'] = self.last_sync.isoformat()
+    #     return sync_config
 
-    def _update_config(func):
-        def update_config_wrapper(self, *args, **kwargs):
-            """Acts as wrapper for any method that modifies the existing configuration.
-            """
-            if not self._config_file.exists():
-                self._config_file.touch()
+    # def _update_sync_dir(self, sync_config: SyncConfig) -> SyncConfig:
+    #     sync_config['location'] = str(self.sync_dir)
+    #     return sync_config
 
-            with self._config_file.open("r+") as config_file:
-                config = toml.load(config_file)
-                modified_config = func(self, config, *args, **kwargs)
+    def _delete_last_sync(self, sync_config: SyncConfig) -> SyncConfig:
+        sync_config.pop('last_sync', None)
+        return sync_config
 
-                config_file.seek(0)
-                config_file.truncate()
-                toml.dump(modified_config, config_file)
-                self.logger.info("Updated configuration file")
-        return update_config_wrapper
+    # def _save_login_config(self, login_config: ConfigDict,
+    #                        username: str, password: str) -> ConfigDict:
+    #     login_config['username'] = username
+    #     keyring.set_password(self._config_filename, username, password)
+    #     return login_config
 
-    @_update_config
-    def _update_last_sync(self, config):
-        if 'Sync' not in config:
-            config['Sync'] = {}
-
-        config['Sync']['last_sync'] = self.last_sync.isoformat()
-        return config
-
-    @_update_config
-    def _update_sync_folder(self, config):
-        if 'Sync' not in config:
-            config['Sync'] = {}
-
-        config['Sync']['location'] = str(self.sync_folder)
-        return config
-
-    @_update_config
-    def _save_login_config(self, config, username, password):
-        config['Login'] = {'username': username,
-                           'password': password}
-        return config
-
-    @_update_config
-    def _delete_login_config(self, config):
+    @_update_config()
+    def _delete_login_config(self, config: ConfigDict) -> ConfigDict:
         config.pop('Login', None)
+        keyring.delete_password(self._config_filename, self.username)
         return config
 
-    @_update_config
-    def _delete_last_sync(self, config):
-        if 'Sync' in config:
-            config['Sync'].pop('last_sync', None)
-        return config
-
-    def log_out(self, hard_reset=True):
+    def log_out(self, hard_reset: bool = True) -> None:
         """Stop syncing and forget user session.
 
         :param bool hard_reset: If true, login details will be removed from
@@ -195,26 +157,27 @@ class BlackboardSync:
         """
         self.stop_sync()
         self.sess = None
-        self._username = ""
         self._is_logged_in = False
 
         if hard_reset:
             self._delete_login_config()
 
-    def _sync_task(self):
+        self._username = ""
+
+    def _sync_task(self) -> None:
         """Method run by Sync thread. Constantly checks if last sync is outdated
         and starts a new download job if so.
         """
         reload_session = False
         failed_attempts = 0
 
-        while self._sync_on:
+        while self._is_active:
             if self.outdated or self._force_sync:
                 self.logger.debug("Syncing now")
                 self._is_syncing = True
 
                 # Download from last datetime
-                new_download = BlackboardDownload(self.sess, self.sync_folder, self.last_sync)
+                new_download = BlackboardDownload(self.sess, self.sync_dir / '', self.last_sync)
 
                 try:
                     self.last_sync = new_download.download()
@@ -241,40 +204,37 @@ class BlackboardSync:
         if reload_session:
             self._load_config()
 
-    def start_sync(self):
-        """Stars Sync thread.
-        """
+    def start_sync(self) -> None:
+        """Stars Sync thread."""
         self.logger.info("Starting sync thread")
-        self._sync_on = True
+        self._is_active = True
         self.sync_thread = threading.Thread(target=self._sync_task)
         self.sync_thread.start()
 
-    def stop_sync(self):
-        """Stops Sync thread.
-        """
-        self._sync_on = False
+    def stop_sync(self) -> None:
+        """Stops Sync thread."""
+        self.logger.info("Stopping sync thread")
+        self._is_active = False
 
-    def _log_exception(self, e):
-        """Log exception to log file inside sync location.
-        """
-        self._log_folder.mkdir(exist_ok=True, parents=True)
+    def _log_exception(self, e: Exception) -> None:
+        """Log exception to log file inside sync location."""
+        self._log_dir.mkdir(exist_ok=True, parents=True)
         exception_log = logging.FileHandler(self._log_path)
         self.logger.addHandler(exception_log)
         self.logger.exception("Exception in sync thread")
         self.logger.removeHandler(exception_log)
 
-    def open_sync_folder(self):
-        """Starts a subprocess to open the default file explorer at the sync location.
-        """
-        self.logger.debug("Opening sync folder on file explorer")
+    def open_sync_dir(self) -> None:
+        """Starts a subprocess to open the default file explorer at the sync location."""
+        self.logger.debug("Opening sync dir on file explorer")
         if platform.system() == "Windows":
-            os.startfile(self.sync_folder)
+            os.startfile(self.sync_dir)
         elif platform.system() == "Darwin":
-            subprocess.Popen(["open", self.sync_folder])
+            subprocess.Popen(["open", self.sync_dir])
         else:
-            subprocess.Popen(["xdg-open", self.sync_folder])
+            subprocess.Popen(["xdg-open", self.sync_dir])
 
-    def force_sync(self):
+    def force_sync(self) -> None:
         """Forces Sync thread to start download job ASAP."""
         self.logger.debug("Forced syncing")
         self._force_sync = True
@@ -282,11 +242,11 @@ class BlackboardSync:
     @property
     def _log_path(self) -> Path:
         filename = f"sync_error_{datetime.now():%Y-%m-%dT%H_%M_%S_%f}.log"
-        return Path(self._log_folder / filename)
+        return Path(self._log_dir / filename)
 
     @property
-    def _log_folder(self) -> Path:
-        return Path(self.sync_folder / self._log_directory)
+    def _log_dir(self) -> Path:
+        return Path(self.sync_dir / self._log_directory)
 
     @property
     def username(self) -> str:
@@ -304,7 +264,7 @@ class BlackboardSync:
         self._update_last_sync()
         self._update_next_sync()
 
-    def _update_next_sync(self):
+    def _update_next_sync(self) -> None:
         """Stores a calculated datetime when next sync should take place."""
         self._next_sync = (self.last_sync + timedelta(seconds=self._sync_interval))
 
@@ -328,23 +288,23 @@ class BlackboardSync:
         return self._data_source
 
     @data_source.setter
-    def data_source(self, d: str):
+    def data_source(self, d: str) -> None:
         self._data_source = d
 
     @property
-    def sync_folder(self) -> Path:
+    def sync_dir(self) -> Path:
         """The location to where all Blackboard content will be downloaded."""
-        return self._sync_folder
+        return self._sync_dir
 
-    def set_sync_folder(self, folder: Path, redownload: bool = False):
+    def set_sync_dir(self, dir: Path, redownload: bool = False) -> None:
         """Sets new sync location.
 
-        :param Path folder: The path of the sync folder.
+        :param Path dir: The path of the sync dir.
         :param bool redownload: If true, ALL content will be re-downloaded to the new location.
         """
-        if folder != self.sync_folder:
-            self._sync_folder = folder
-            self._update_sync_folder()
+        if dir != self.sync_dir:
+            self._sync_dir = dir
+            self._update_sync_dir()
 
             if redownload:
                 # Unset last sync time to fully download all files in new location
@@ -357,13 +317,13 @@ class BlackboardSync:
         return self._sync_interval
 
     @sync_interval.setter
-    def sync_interval(self, p: int):
+    def sync_interval(self, p: int) -> None:
         self._sync_interval = p
 
     @property
-    def sync_on(self) -> bool:
+    def is_active(self) -> bool:
         """Indicates the state of the sync thread."""
-        return self._sync_on
+        return self._is_active
 
     @property
     def is_logged_in(self) -> bool:
@@ -376,10 +336,6 @@ class BlackboardSync:
         return self._is_syncing
 
     @property
-    def logger(self):
+    def logger(self) -> logging.Logger:
         """Logger for BlackboardSync, set at level WARN."""
         return self._logger
-
-
-if __name__ == '__main__':
-    pass

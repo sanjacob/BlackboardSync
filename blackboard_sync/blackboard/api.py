@@ -19,11 +19,14 @@ an interface to make Blackboard REST API calls on a session basis
 # Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 
-import base64
 import logging
 import requests
+from typing import Union
 from functools import wraps
-from bs4 import BeautifulSoup
+from collections.abc import Callable
+
+from http.cookiejar import CookieJar
+from .blackboard import (BBAttachment, BBContentChild, BBMembership, BBCourseContent, BBCourse)
 
 
 class SafeFormat(dict):
@@ -41,13 +44,12 @@ class BlackboardSession:
     """Represents a user session in Blackboard"""
 
     _base_url = "https://portal.uclan.ac.uk"
-    _fs_url = "https://fs.uclan.ac.uk"
 
-    logger = logging.getLogger(__name__)
-    logger.setLevel(logging.DEBUG)
-    logger.addHandler(logging.NullHandler())
+    _logger = logging.getLogger(__name__)
+    _logger.setLevel(logging.DEBUG)
+    _logger.addHandler(logging.NullHandler())
 
-    def __init__(self, user: str, password: str):
+    def __init__(self, cookies: CookieJar, user: str):
         self._bb_session = None
         self._username = ""
         self._timeout = 12
@@ -55,71 +57,19 @@ class BlackboardSession:
         if not self.auth(user, password):
             raise ValueError("Login incorrect")
 
-    def auth(self, user: str, password: str) -> bool:
-        """
-        Go through regular authentication process,
-        i.e. ask auth server to generate token and then
-        provide the token back to the Blackboard server
-
-        :param string user: UCLan student email address,
-        :param string password: Password of the account
-
-        :return: True if login was successful, otherwise, False
-        """
+    def auth(self) -> bool:
+        """Verify session"""
 
         # Create requests session to preserve session coookies
         bb_session = requests.Session()
 
-        # Request blackboard landing page to get right url to submit login to
-        first_r = bb_session.get(f"{self._base_url}/auth-saml/saml/login?apId=_172_1")
-        first_soup = BeautifulSoup(first_r.text, features="lxml")
-        login_url = first_soup.find(id="loginForm").get('action')
-
-        # POST login to auth server, it'll respond with a token (or error page)
-        auth = {
-            'UserName': user,
-            'Password': password
-        }
-
-        second_r = bb_session.post(f"{self._fs_url}{login_url}", data=auth)
-
-        # Parse base64-encoded token from response
-        second_soup = BeautifulSoup(second_r.text, features="lxml")
-        hidden_input = second_soup.find("input")
-
-        # If server returns error page, password is incorrect but user exists
-        if hidden_input.get("name") != "SAMLResponse":
-            # Password did not match username
-            self.logger.error("Password is incorrect")
-            return False
-
-        token_encoded = hidden_input.get('value')
-
-        # Decode it to verify auth was successful
-        token_decoded = base64.b64decode(token_encoded)
-        token_soup = BeautifulSoup(token_decoded, features="lxml")
-        token_status = token_soup.find("samlp:statuscode").get("value")
-        auth_status = token_status.split(':')[-1]
-
-        # Return error if token status was not successful (user not found)
-        if auth_status != "Success":
-            # Username was not found
-            self.logger.error("Username was not found")
-            return False
-
-        # Provide token to blackboard server to finish
-        hidden_auth = {
-            'SAMLResponse': token_encoded
-        }
-
-        bb_session.post(f"{self._base_url}/auth-saml/saml/SSO/alias/_172_1", data=hidden_auth)
         self.logger.info("Auth flow complete")
 
         self._bb_session = bb_session
         self._username = f"userName:{user.split('@')[0]}"
         return True
 
-    def get(endpoint, version=1, json: bool = True, **g_kwargs):
+    def get(endpoint: str, version: int = 1, json: bool = True, **g_kwargs):
         """Returns a decorator (needed to use fancy @get(...) notation)
 
         :param string endpoint: Endpoint to make API call to, including placeholders
@@ -128,7 +78,7 @@ class BlackboardSession:
         :param dict g_kwargs: Any argument in this parameter will be passed on to the requests call
         """
 
-        def get_decorator(func):
+        def get_decorator(func: Callable) -> Callable:
             """Returns wrapped function
 
             :param function func: Function to decorate
@@ -278,30 +228,30 @@ class BlackboardSession:
 
     # Get Content(s)
     @get("/courses/{course_id}/contents/{content_id}")
-    def fetch_contents(self, response):
+    def fetch_contents(self, response) -> list[BBCourseContent]:
         """List top-level content items in a course.
 
         :param course_id: The course or organization ID.
         :param content_id: The Content ID.
         """
-        return response
+        return [BBCourseContent(**content) for content in response]
 
     # Get Content Children
     @get("/courses/{course_id}/contents/{content_id}/children")
-    def fetch_content_children(self, response):
+    def fetch_content_children(self, response) -> list[BBContentChild]:
         """List all child content items directly beneath another content item.
         This is only valid for content items that are allowed to have children (e.g. Folders).
 
         :param course_id: The course or organization ID.
         :param content_id: The Content ID.
         """
-        return response
+        return [BBContentChild(**child) for child in response]
 
     # content file attachments #
 
     # Get File Attachment(s)
     @get("/courses/{course_id}/contents/{content_id}/attachments/{attachment_id}")
-    def fetch_file_attachments(self, response):
+    def fetch_file_attachments(self, response) -> list[BBAttachment]:
         """Get the file attachment meta data associated to the Content Item.
         / Get the file attachment meta data by an attachment ID.
 
@@ -309,7 +259,10 @@ class BlackboardSession:
         :param content_id: The Content ID.
         :param attachment_id:
         """
-        return response
+        if isinstance(response, list):
+            return [BBAttachment(**a) for a in response]
+        else:
+            return BBAttachment(**response)
 
     # Get File Attachment(s)
     @get("/courses/{course_id}/contents/{content_id}/attachments/{attachment_id}/download",
@@ -636,12 +589,12 @@ class BlackboardSession:
 
     # Get User Memberships
     @get("/users/{user_id}/courses")
-    def fetch_user_memberships(self, response):
+    def fetch_user_memberships(self, response) -> list[BBMembership]:
         """Returns a list of course and organization memberships for the specified user.
 
         :param user_id: The user ID.
         """
-        return response
+        return [BBMembership(**memb) for memb in response]
 
     # courses #
 
@@ -681,13 +634,16 @@ class BlackboardSession:
 
     # Get Course(s)
     @get("/courses/{course_id}", 3)
-    def fetch_courses(self, response):
+    def fetch_courses(self, response) -> Union[BBCourse, list[BBCourse]]:
         """Returns a list of courses and organizations.
         / Loads a specific course or organization.
 
         :param course_id: The course or organization ID.
         """
-        return response
+        if isinstance(response, list):
+            return [BBCourse(**course) for course in response]
+        else:
+            return BBCourse(**response)
 
     # data sources #
 
@@ -887,7 +843,7 @@ class BlackboardSession:
     # TODO: Handle this API call (HTTP header)
     @get("/users/{user_id}/avatar")
     def fetch_avatar(self, response):
-        """Gets a user's avatar image. The response is an HTTP redirect rather then image raw data.
+        """Gets a user's avatar image. The response is an HTTP redirect rather than image raw data.
         It is up to the caller of the api to follow the redirect and download the image.
 
         Not yet implemented.

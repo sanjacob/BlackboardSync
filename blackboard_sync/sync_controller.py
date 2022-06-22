@@ -23,8 +23,9 @@ BlackboardSync Controller
 import sys
 from .sync import BlackboardSync
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QWindow
 from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
-from .qt.qt_elements import LoginWindow, SyncTrayIcon, SettingsWindow, RedownloadDialog
+from .qt.qt_elements import LoginWebView, SyncTrayIcon, SettingsWindow, RedownloadDialog
 
 from .__about__ import __title__, __version__
 
@@ -50,9 +51,9 @@ class BBSyncController:
 
         self.app.exec()
 
-    def _init_ui(self):
-        self.login_window = LoginWindow()
-        self.login_window.login_signal.connect(self._attempt_login)
+    def _init_ui(self) -> None:
+        self.login_window = LoginWebView()
+        self.login_window.login_complete_signal.connect(self._login_complete)
 
         self.config_window = SettingsWindow()
 
@@ -69,7 +70,7 @@ class BBSyncController:
 
         self.app.setQuitOnLastWindowClosed(False)
 
-    def _attempt_login(self):
+    def _login_complete(self) -> None:
         self.app.setOverrideCursor(Qt.WaitCursor)
         # Call login function on sync
         auth = self.model.auth(self.login_window.username, self.login_window.password,
@@ -77,16 +78,12 @@ class BBSyncController:
         self.tray.set_logged_in(auth)
         self.login_window.toggle_failed_login(not auth)
         self.login_window.setVisible(not auth)
-
-        if auth:
-            self.login_window.clear_password()
-
         self.app.restoreOverrideCursor()
 
-    def _show_login_window(self):
+    def _show_login_window(self) -> None:
         self._show_window(self.login_window)
 
-    def _show_config_window(self):
+    def _show_config_window(self) -> None:
         # Update displayed settings
         self.config_window.download_location = self.model.sync_folder
         self.config_window.data_source = self.model.data_source
@@ -94,11 +91,11 @@ class BBSyncController:
         self.config_window.sync_frequency = self.model.sync_interval
         self._show_window(self.config_window)
 
-    def _show_window(self, window):
+    def _show_window(self, window: QWindow) -> None:
         window.show()
         window.setWindowState(Qt.WindowNoState)
 
-    def _tray_icon_activated(self, activation_reason: QSystemTrayIcon.ActivationReason):
+    def _tray_icon_activated(self, activation_reason: QSystemTrayIcon.ActivationReason) -> None:
         if activation_reason == QSystemTrayIcon.ActivationReason.Trigger:
             # if not logged in
             if not self.model.is_logged_in:
@@ -107,13 +104,13 @@ class BBSyncController:
                 # Open folder in browser
                 self.model.open_sync_folder()
 
-    def _log_out(self):
+    def _log_out(self) -> None:
         self.model.log_out(hard_reset=True)
         self.tray.set_logged_in(False)
         self.login_window.setVisible(True)
         self.config_window.setVisible(False)
 
-    def _save_setting_changes(self):
+    def _save_setting_changes(self) -> None:
         self.config_window.setVisible(False)
 
         if self.model.sync_folder != self.config_window.download_location:
@@ -123,10 +120,10 @@ class BBSyncController:
         self.model.data_source = self.config_window.data_source
         self.model.sync_interval = self.config_window.sync_frequency
 
-    def _force_sync(self):
+    def _force_sync(self) -> None:
         self.model.force_sync()
 
-    def _update_tray_menu(self):
+    def _update_tray_menu(self) -> None:
         # Update last sync time
         last_sync = self.model.last_sync
         last_sync_str = "Never"
@@ -141,7 +138,7 @@ class BBSyncController:
         # Disable button if currently syncing
         self.tray.toggle_currently_syncing(self.model.is_syncing)
 
-    def _stop(self):
+    def _stop(self) -> None:
         if self.model.sync_on:
             self.model.stop_sync()
         self.app.quit()

@@ -5,13 +5,18 @@ name = "pypi"
 
 [packages]
 requests = "*"
-bs4 = "*"
 lxml = "*"
 appdirs = "*"
 toml = "*"
 python-dateutil = "*"
 pyqt5 = "<5.15.2"
 setuptools = "*"
+keyring = "*"
+pathvalidate = "*"
+hypothesis = "*"
+pydantic = "*"
+openapi2jsonschema = "*"
+pyqtwebengine = "*"
 
 [dev-packages]
 coverage = "*"
@@ -19,6 +24,14 @@ pyinstaller = "*"
 pywin32-ctypes = "*"
 sphinx = "*"
 recommonmark = "*"
+pytest = "*"
+tox = "*"
+twine = "*"
+mypy = "*"
+pytest-qt = "*"
+datamodel-code-generator = "*"
+python-lsp-server = {extras = ["all"], version = "*"}
+isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
 
 [requires]
 python_version = "3.9"

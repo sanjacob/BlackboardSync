@@ -23,9 +23,10 @@ BlackboardSync python entrypoint
 from .sync_controller import BBSyncController
 
 
-def main():
+def main() -> int:
     BBSyncController()
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

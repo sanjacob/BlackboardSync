@@ -18,44 +18,76 @@ BlackboardSync Qt GUI
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import webbrowser
 from enum import IntEnum
 from pathlib import Path
+
+from requests.cookies import RequestsCookieJar
 from PyQt5 import uic
-from PyQt5.QtGui import QIcon
-from PyQt5.QtCore import pyqtSignal
-from PyQt5.QtWidgets import (QApplication, QWidget, QDialog, QMenu,
+from PyQt5.QtGui import QIcon, QWindow, QPixmap
+from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QUrl
+from PyQt5.QtWidgets import (QApplication, QWidget, QDialog, QMenu, QWizard, QCompleter,
                              QAction, QSystemTrayIcon, QStyle, QFileDialog, QMessageBox)
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage, QWebEngineProfile
+from PyQt5.QtWebEngineCore import QWebEngineCookieStore
+from PyQt5.QtNetwork import QNetworkCookie
 
 
 class SyncPeriod(IntEnum):
     """Enum containing all valid Sync intervals for this UI."""
+
     HALF_HOUR = 60 * 30
     ONE_HOUR = 60 * 60
     SIX_HOURS = 60 * 60 * 6
 
 
-class AssetPath():
+class Assets:
     """Helper class to get the path of app assets."""
 
-    @staticmethod
-    def get_qt_asset(asset_file):
-        return (Path(__file__).parent / f"{asset_file}.ui").resolve()
+    _icon_filename = 'logo.png'
+    _watermark_filename = 'watermark.png'
 
     @staticmethod
-    def get_asset(icon):
-        return str((Path(__file__).parent.parent / 'assets' / icon).resolve())
+    def _get_qt_asset_path(asset_file) -> Path:
+        """Get the `Path` corresponding to a Qt UI file."""
+        return (Path(__file__).parent / f"{asset_file}.ui").resolve()
+
+    @classmethod
+    def load_ui(cls, qt_obj):
+        """Load a UI file for a `QObject`."""
+        uic.loadUi(cls._get_qt_asset_path(qt_obj.__class__.__name__), qt_obj)
+
+    @staticmethod
+    def _get_asset_path(icon) -> Path:
+        """Get the `Path` of a media asset."""
+        return (Path(__file__).parent.parent / 'assets' / icon).resolve()
 
     @classmethod
     @property
-    def app_logo(cls) -> QIcon:
-        return QIcon(cls.get_asset("logo.png"))
+    def icon(cls) -> QIcon:
+        """`QIcon` of application logo."""
+        return QIcon(str(cls._get_asset_path(cls._icon_filename)))
+
+    @classmethod
+    @property
+    def watermark(cls) -> QPixmap:
+        """`QPixmap` of application watermark."""
+        wm = QPixmap(str(cls._get_asset_path(cls._watermark_filename)))
+        wm = wm.scaledToWidth(100)
+        return wm
 
 
 class SyncTrayMenu(QMenu):
-    """QMenu associated with app system tray icon."""
+    """`QMenu` associated with app system tray icon."""
+
     _unauthenticated_status = "You haven't logged in"
 
     def __init__(self, logged_in: bool = False, last_synced: str = ""):
+        """Create the menu for a `SyncTrayIcon`.
+
+        :param bool logged_in: Whether user is currently logged in.
+        :param str last_synced: Last sync time shown.
+        """
         super().__init__()
         self._last_synced = ""
 
@@ -88,6 +120,7 @@ class SyncTrayMenu(QMenu):
         self.addAction(self.quit)
 
     def set_logged_in(self, logged: bool) -> None:
+        """Set the UI to reflect logged-in status."""
         self.refresh.setVisible(logged)
         self.preferences.setVisible(logged)
         self.log_in.setVisible(not logged)
@@ -98,10 +131,12 @@ class SyncTrayMenu(QMenu):
             self._status.setText("Not Logged In")
 
     def update_last_synced(self, last: str) -> None:
+        """Update the time of last download shown to user."""
         self._last_synced = last
         self._status.setText(f"Last Synced: {self._last_synced}")
 
     def toggle_currently_syncing(self, syncing: bool) -> None:
+        """Toggle the currently syncing indicator."""
         self.refresh.setEnabled(not syncing)
 
         if syncing:
@@ -119,12 +154,13 @@ class SyncTrayIcon(QSystemTrayIcon):
     _show_menu_signal = pyqtSignal()
 
     def __init__(self):
+        """Create a `QSystemTrayIcon`."""
         super().__init__()
         self._init_ui()
 
     def _init_ui(self):
         # Create the icon
-        icon = AssetPath.app_logo
+        icon = Assets.icon
 
         # Create the tray
         self.setIcon(icon)
@@ -144,44 +180,56 @@ class SyncTrayIcon(QSystemTrayIcon):
         self.setToolTip(self._tooltip)
 
     def set_logged_in(self, logged: bool) -> None:
+        """Set logged-in status in menu."""
         self._menu.set_logged_in(logged)
 
     def update_last_synced(self, last: str) -> None:
+        """Update last sync time in menu."""
         self._menu.update_last_synced(last)
 
     def toggle_currently_syncing(self, syncing: bool) -> None:
+        """Toggle currently syncing indicator in menu."""
         self._menu.toggle_currently_syncing(syncing)
 
     @property
     def sync_signal(self):
+        """Fire if user forces sync."""
         return self._sync_signal
 
     @property
     def login_signal(self):
+        """Fire once user is authenticated."""
         return self._login_signal
 
     @property
     def settings_signal(self):
+        """Fire when the settings menu is opened."""
         return self._settings_signal
 
     @property
     def quit_signal(self):
+        """Fire once user decides to quit app."""
         return self._quit_signal
 
     @property
     def show_menu_signal(self):
+        """Fire when menu is about to be shown."""
         return self._show_menu_signal
 
 
 class RedownloadDialog(QMessageBox):
-    """QMessageBox to show when asking whether files should be re-downloaded
-    after a change in the sync location."""
+    """`QMessageBox` shown after a change in download location.
+
+    It consults the user about whether files should be redownloaded to
+    the new location or not.
+    """
 
     _window_title = "Redownload all files?"
     _dialog_text = "Should BlackboardSync redownload all files to the new location?"
     _info_text = "Answer no if you intend to move all past downloads manually (Recommended)"
 
     def __init__(self):
+        """Create a `RedownloadDialog`."""
         super().__init__()
         self._init_ui()
 
@@ -192,16 +240,16 @@ class RedownloadDialog(QMessageBox):
         self.setDefaultButton(QMessageBox.No)
         self.setWindowTitle(self._window_title)
         self.setIcon(QMessageBox.Question)
-        self.setWindowIcon(AssetPath.app_logo)
+        self.setWindowIcon(Assets.icon)
 
     @property
-    def redownload(self):
+    def redownload(self) -> bool:
+        """Indicate if files have to be redownloaded."""
         return self.exec() == QMessageBox.Yes
 
 
 class PersistenceWarning(QDialog):
-    """QDialog shown if user chooses to store their
-    login details on their device."""
+    """QDialog shown if user chooses to store their login details on their device."""
 
     _window_title = "Do you wish to stay logged in?"
 
@@ -210,7 +258,7 @@ class PersistenceWarning(QDialog):
         self._init_ui()
 
     def _init_ui(self):
-        uic.loadUi(AssetPath.get_qt_asset(__class__.__name__), self)
+        Assets.load_ui(self)
         self.setWindowTitle(self._window_title)
 
 
@@ -227,7 +275,7 @@ class SettingsWindow(QWidget):
         self._init_ui()
 
     def _init_ui(self):
-        uic.loadUi(AssetPath.get_qt_asset(__class__.__name__), self)
+        Assets.load_ui(self)
 
         self.move(*self._initial_position)
         self.setWindowTitle(self._window_title)
@@ -246,6 +294,7 @@ class SettingsWindow(QWidget):
 
     @property
     def download_location(self) -> Path:
+        """`Path` of download location."""
         return self._download_location
 
     @download_location.setter
@@ -255,6 +304,7 @@ class SettingsWindow(QWidget):
 
     @property
     def data_source(self) -> str:
+        """Filter which Blackboard source to download."""
         return self.data_source_edit.text()
 
     @data_source.setter
@@ -263,6 +313,7 @@ class SettingsWindow(QWidget):
 
     @property
     def sync_frequency(self) -> int:
+        """Seconds to wait between each sync job."""
         return int([*SyncPeriod][self.frequency_combo.currentIndex()])
 
     @sync_frequency.setter
@@ -271,6 +322,7 @@ class SettingsWindow(QWidget):
 
     @property
     def username(self) -> str:
+        """Username of current session."""
         return self.current_session_label.text()
 
     @username.setter
@@ -282,62 +334,263 @@ class SettingsWindow(QWidget):
 
     @property
     def log_out_signal(self):
+        """Fire when user chooses to log out."""
         return self._log_out_signal
 
     @property
     def save_signal(self):
+        """Fire when settings are saved."""
         return self._save_signal
 
 
 class LoginWindow(QWidget):
-    """Login window UI element."""
+    pass
 
-    _window_title = "Log in to your blackboard account"
-    _initial_position = (300, 300)
-    _login_signal = pyqtSignal()
 
-    def __init__(self):
+class LoginWebView(QWidget):
+    """Blackboard login widget."""
+
+    _login_attempt_signal = pyqtSignal(str, str)
+    _login_complete_signal = pyqtSignal()
+
+    def __init__(self, start_url: str, target_url: str, username_input_selector: str,
+                 password_input_selector: str, username: str = None, password: str = None):
         super().__init__()
+        self.start_url = start_url
+        self.target_url = target_url
+        # self.user_selector = username_input_selector
+        # self.pass_selector = password_input_selector
+        self._auto_login_attempted = False
+        self._credentials_provided = False
+
+        input_selection_script = f'''
+        let userInput = document.querySelector("{username_input_selector}");
+        let passInput = document.querySelector("{password_input_selector}");
+        '''
+
+        find_form_script = f'''
+        {input_selection_script}
+        (userInput !== null && passInput !== null);
+        '''
+
+        fill_form_script = ''
+
+        if username and password:
+            self._credentials_provided = True
+
+            fill_form_script = f'''
+            if (userInput !== null && passInput !== null) {{
+                userInput.value = "{username}";
+                passInput.value = "{password}";
+                userInput.form.submit();
+            }}
+            '''
+
+        get_credentials_script = f'''
+        let loginForm = userInput.form;
+        let oldSubmit = loginForm.submit;
+
+        function captureCredentials() {{
+            return {{username: userInput.value, password: passInput.value}};
+        }}
+
+        loginForm.submit = function() {{
+          oldSubmit.call(this);
+          captureCredentials();
+        }}
+        '''
+
+        self._js = {'find_form': find_form_script,
+                    'fill_form': fill_form_script,
+                    'get_credentials': get_credentials_script}
+
+        self._init_ui()
+        self._cookie_jar = RequestsCookieJar()
+
+    def _init_ui(self) -> None:
+        Assets.load_ui(self)
+        self.web_view.load(QUrl.fromUserInput(self.start_url))
+        self.web_view.loadFinished.connect(self._page_load_handler)
+        self._cookie_store.cookieAdded.connect(self._cookie_added_handler)
+
+    def _find_login_form(self) -> None:
+        if not self._auto_login_attempted:
+            self._engine_page.runJavaScript(self._js['find_form'], self.find_form_callback)
+
+    def _auto_login(self):
+        self._engine_page.runJavaScript(self._js['fill_form'])
+        self._auto_login_attempted = True
+
+    def _catch_credentials(self) -> None:
+        self._engine_page.runJavaScript(self._js['get_credentials'], self.get_credentials_callback)
+
+    def _page_load_handler(self) -> None:
+        if self.url == self.target_url:
+            self._login_complete_signal.emit()
+        else:
+            self._find_login_form()
+
+    def find_form_callback(self, form_found) -> None:
+        if form_found:
+            if self._credentials_provided:
+                self._auto_login()
+            else:
+                self._catch_credentials()
+
+    def get_credentials_callback(self, value):
+        print(value)
+
+    def _cookie_added_handler(self, cookie: QNetworkCookie) -> None:
+        self._cookie_jar.set(
+            cookie.name().data().decode(),
+            cookie.value().data().decode(),
+            domain=cookie.domain(),
+            path=cookie.path(),
+            secure=cookie.isSecure()
+        )
+
+    @property
+    def url(self) -> str:
+        """URL of current website."""
+        return self.web_view.url().toString()
+
+    @property
+    def cookie_jar(self) -> RequestsCookieJar:
+        """Contains session cookies of the current session."""
+        return self._cookie_jar
+
+    @property
+    def _engine_page(self) -> QWebEnginePage:
+        return self.web_view.page()
+
+    @property
+    def _engine_profile(self) -> QWebEngineProfile:
+        return self._engine_page.profile()
+
+    @property
+    def _cookie_store(self) -> QWebEngineCookieStore:
+        return self._engine_profile.cookieStore()
+
+    @property
+    def login_attempt_signal(self):
+        """Fire when an attempt to login is made."""
+        return self._login_attempt_signal
+
+    @property
+    def login_complete_signal(self):
+        """Fire when the login flow has completed."""
+        return self._login_complete_signal
+
+
+class SetupWizard(QWizard):
+    """Initial setup wizard."""
+
+    class Pages(IntEnum):
+        """Pages contained in the wizard."""
+
+        INTRO = 0
+        INSTITUTION = 1
+        DOWNLOAD_LOCATION = 2
+        ANALYTICS = 3
+        LAST = 3
+
+    _help_website = 'https://github.com/jacobszpz/BlackboardSync'
+
+    def __init__(self, institutions: list[str]):
+        """Create a `SetupWizard`.
+
+        :param list[str] institutions: List of institution names
+        """
+        super().__init__()
+
+        self.institutions = institutions
         self._init_ui()
 
     def _init_ui(self):
-        uic.loadUi(AssetPath.get_qt_asset(__class__.__name__), self)
+        Assets.load_ui(self)
+        self.uni_selection_box.addItems(self.institutions)
+        self.uni_selection_box.clearEditText()
 
-        self.move(*self._initial_position)
-        self.setWindowTitle(self._window_title)
+        self.completer = QCompleter(self.institutions, self)
+        self.completer.setCaseSensitivity(Qt.CaseInsensitive)
+        self.completer.setFilterMode(Qt.MatchContains)
+        self.uni_selection_box.setCompleter(self.completer)
 
-        # Show warning if trying to select stay logged in option (until we find better option)
-        self._persistence_warn = PersistenceWarning()
-        self._persistence_warn.rejected.connect(self.stay_logged.toggle)
-        self.stay_logged.clicked.connect(self._show_warning)
+        self.file_chooser = QFileDialog()
+        self.file_chooser.setFileMode(QFileDialog.Directory)
+        self.sync_location_button.clicked.connect(self._choose_location)
 
-        self.error_label.setVisible(False)
-        self.login_button.clicked.connect(self.toggle_failed_login, True)
+        self.uni_selection_page.registerField(
+            "userInstitution*",
+            self.uni_selection_box.lineEdit()
+        )
 
-        self._login_signal = self.login_button.clicked
+        self.sync_location_page.registerField(
+            "syncLocation*",
+            self.sync_location_button,
+            property="text",
+            changedSignal=self.sync_location_button.clicked
+        )
 
-    def _show_warning(self):
-        if self.stay_logged.isChecked():
-            self._persistence_warn.show()
+        self.intro_page.setPixmap(QWizard.WatermarkPixmap, Assets.watermark)
 
-    def toggle_failed_login(self, visible):
-        self.error_label.setVisible(visible)
+    def validateCurrentPage(self) -> bool:
+        """Override QWizard method to validate pages."""
+        id = self.currentId()
+        valid = True
+
+        if id == self.Pages.INSTITUTION:
+            # Do not move forward if institution is not recognised
+            if not self._institution_is_valid():
+                self._show_not_supported_dialog()
+                valid = False
+
+        return valid
+
+    def _choose_location(self):
+        if self.file_chooser.exec():
+            dir = self.download_location.name or str(self.download_location)
+            self.sync_location_button.setText(dir)
+
+    def _show_not_supported_dialog(self):
+        error_dialog = UniNotSupportedDialog(self._help_website)
+        error_dialog.exec()
+
+    def _institution_is_valid(self) -> bool:
+        return self.field("userInstitution") == self.institution
 
     @property
-    def username(self) -> str:
-        return self.user_edit.text()
+    def institution(self) -> str:
+        """Text of item selected in institution combo box."""
+        return self.uni_selection_box.itemText(self.institution_index)
 
     @property
-    def password(self) -> str:
-        return self.pass_edit.text()
-
-    def clear_password(self):
-        self.pass_edit.setText("")
+    def institution_index(self) -> int:
+        """Index of item selected in institution combo box."""
+        return self.uni_selection_box.currentIndex()
 
     @property
-    def stay_logged_checkbox(self) -> bool:
-        return self.stay_logged.isChecked()
+    def download_location(self) -> Path:
+        """Sync location path selected by user."""
+        return Path(self.file_chooser.directory().path())
 
-    @property
-    def login_signal(self):
-        return self._login_signal
+
+class UniNotSupportedDialog(QDialog):
+    """`QDialog` about unsupported Blackboard partners."""
+
+    def __init__(self, help_url: str):
+        """Create instance of dialog.
+
+        :param str help_url: URL to help website
+        """
+        super().__init__()
+        self._init_ui()
+        self._help_url = help_url
+
+    def _init_ui(self):
+        Assets.load_ui(self)
+        self.button_box.helpRequested.connect(self._open_help_website)
+
+    @pyqtSlot()
+    def _open_help_website(self):
+        webbrowser.open(self._help_url)

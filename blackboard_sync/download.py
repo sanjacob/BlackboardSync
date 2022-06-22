@@ -28,9 +28,7 @@ from getpass import getpass
 from dateutil.parser import parse
 from datetime import datetime, timezone
 
-from .blackboard.api import BlackboardSession
-from .blackboard.blackboard import (BBCourse, BBMembership, BBAttachment,
-                                    BBCourseContent, BBContentChild, SanitisePath)
+from .blackboard import BlackboardSession, BBCourseContent
 
 
 class BlackboardDownload:
@@ -43,7 +41,7 @@ class BlackboardDownload:
     _logger.setLevel(logging.DEBUG)
     _logger.addHandler(logging.NullHandler())
 
-    def __init__(self, sess: BlackboardSession, download_location,
+    def __init__(self, sess: BlackboardSession, download_location: Path,
                  last_downloaded: datetime = None):
         """BlackboardDownload constructor
 
@@ -81,7 +79,7 @@ class BlackboardDownload:
             f.write(contents)
             self.logger.info(f"Created internet link file at {path}")
 
-    def _handle_file(self, content: BBCourseContent, parent_path,
+    def _handle_file(self, content: BBCourseContent, parent_path: Path,
                      course_id: str, depth: int = 0) -> None:
         """Download BBContent recursively, depending on filetype"""
         self.logger.info(f"{'    ' * depth}{content.title}[{content.contentHandler.id}]")
@@ -101,7 +99,7 @@ class BlackboardDownload:
                     file_path.mkdir(exist_ok=True, parents=True)
 
                 for child in children:
-                    self._handle_file(BBContentChild(**child), file_path, course_id, depth + 1)
+                    self._handle_file(child, file_path, course_id, depth + 1)
             except ValueError:
                 pass
 
@@ -114,7 +112,7 @@ class BlackboardDownload:
                 file_path.mkdir(exist_ok=True, parents=True)
                 body_path = file_path
 
-            for attachment in [BBAttachment(**a) for a in attachments]:
+            for attachment in attachments:
                 d_stream = self._sess.download(course_id=course_id,
                                                content_id=content.id,
                                                attachment_id=attachment.id)
@@ -145,27 +143,19 @@ class BlackboardDownload:
         start_time = datetime.now(timezone.utc)
 
         self.logger.info("Fetching user memberships")
-        all_memberships = self._sess.fetch_user_memberships(user_id=self.user_id,
-                                                            dataSourceId=self._data_source)
-
-        memberships = [BBMembership(**memb) for memb in all_memberships]
-
+        memberships = self._sess.fetch_user_memberships(user_id=self.user_id,
+                                                        dataSourceId=self._data_source)
         for ms in memberships:
             self.logger.debug("Fetching course")
-            course = BBCourse(**self._sess.fetch_courses(course_id=ms.courseId))
-
-            code_split = course.name.split(' : ', 1)
-            name_split = code_split[-1].split(',')
-            module_name = SanitisePath.get_path(name_split[0])
-
-            self.logger.info(f"<{code_split[0]}> - <{name_split[0]}>")
+            course = self._sess.fetch_courses(course_id=ms.courseId)
+            self.logger.info(f"<{course.code}> - <{course.title}>")
 
             course_contents = self._sess.fetch_contents(course_id=course.id)
 
             if course_contents:
-                course_path = Path(self.download_location / ms.created[:4] / module_name)
+                course_path = Path(self.download_location / ms.created_datetime.year / course.title)
 
-            for content in (BBCourseContent(**content) for content in course_contents):
+            for content in course_contents:
                 self._handle_file(content, course_path, course.id, 1)
 
         return start_time
@@ -181,7 +171,7 @@ class BlackboardDownload:
         return self._data_source
 
     @data_source.setter
-    def data_source(self, source: str):
+    def data_source(self, source: str) -> None:
         self._data_source = source
 
     @property
@@ -195,7 +185,7 @@ class BlackboardDownload:
         return self._files_processed
 
     @property
-    def logger(self):
+    def logger(self) -> logging.Logger:
         """Logger for BlackboardDownload, set at level DEBUG."""
         return self._logger
 
@@ -225,13 +215,14 @@ def configure() -> BlackboardSession:
     return sess
 
 
-def main():
+def main() -> int:
     """Provide command-line access to creating a download job."""
     sess = configure()
     last_downloaded = input("Download all files modified since: ")
     new_download = BlackboardDownload(sess, 'sync', parse(last_downloaded))
     new_download.download()
+    return 0
 
 
 if __name__ == '__main__':
-    main()
+    raise SystemExit(main())
