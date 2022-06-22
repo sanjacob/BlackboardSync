@@ -1,6 +1,4 @@
-"""
-BlackboardSync Qt GUI
-"""
+"""BlackboardSync Qt GUI."""
 
 # Copyright (C) 2021, Jacob Sánchez Pérez
 
@@ -22,15 +20,16 @@ import webbrowser
 from enum import IntEnum
 from pathlib import Path
 
-from requests.cookies import RequestsCookieJar
 from PyQt5 import uic
-from PyQt5.QtGui import QIcon, QWindow, QPixmap
-from PyQt5.QtCore import Qt, pyqtSignal, pyqtSlot, QUrl
-from PyQt5.QtWidgets import (QApplication, QWidget, QDialog, QMenu, QWizard, QCompleter,
-                             QAction, QSystemTrayIcon, QStyle, QFileDialog, QMessageBox)
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage, QWebEngineProfile
-from PyQt5.QtWebEngineCore import QWebEngineCookieStore
+from PyQt5.QtGui import QIcon, QPixmap
+from PyQt5.QtCore import Qt, QUrl, pyqtSlot, pyqtSignal
 from PyQt5.QtNetwork import QNetworkCookie
+from PyQt5.QtWidgets import (QMenu, QStyle, QAction, QDialog, QWidget, QWizard,
+                             QCompleter, QFileDialog, QMessageBox,
+                             QApplication, QSystemTrayIcon)
+from requests.cookies import RequestsCookieJar
+from PyQt5.QtWebEngineCore import QWebEngineCookieStore
+from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineProfile
 
 
 class SyncPeriod(IntEnum):
@@ -254,6 +253,7 @@ class PersistenceWarning(QDialog):
     _window_title = "Do you wish to stay logged in?"
 
     def __init__(self):
+        """Create instance of PersistenceWarning Dialog."""
         super().__init__()
         self._init_ui()
 
@@ -271,6 +271,7 @@ class SettingsWindow(QWidget):
     _save_signal = pyqtSignal()
 
     def __init__(self):
+        """Create instance of SettingsWindow."""
         super().__init__()
         self._init_ui()
 
@@ -344,7 +345,7 @@ class SettingsWindow(QWidget):
 
 
 class LoginWindow(QWidget):
-    pass
+    """Deprecated widget previously used to login."""
 
 
 class LoginWebView(QWidget):
@@ -355,6 +356,7 @@ class LoginWebView(QWidget):
 
     def __init__(self, start_url: str, target_url: str, username_input_selector: str,
                  password_input_selector: str, username: str = None, password: str = None):
+        """Create instance of LoginWebView."""
         super().__init__()
         self.start_url = start_url
         self.target_url = target_url
@@ -386,7 +388,7 @@ class LoginWebView(QWidget):
             }}
             '''
 
-        get_credentials_script = f'''
+        get_credentials_script = '''
         let loginForm = userInput.form;
         let oldSubmit = loginForm.submit;
 
@@ -431,6 +433,7 @@ class LoginWebView(QWidget):
             self._find_login_form()
 
     def find_form_callback(self, form_found) -> None:
+        """Check if form has been found and if so proceed with login flow."""
         if form_found:
             if self._credentials_provided:
                 self._auto_login()
@@ -438,7 +441,9 @@ class LoginWebView(QWidget):
                 self._catch_credentials()
 
     def get_credentials_callback(self, value):
+        """."""
         print(value)
+        raise NotImplementedError()
 
     def _cookie_added_handler(self, cookie: QNetworkCookie) -> None:
         self._cookie_jar.set(
