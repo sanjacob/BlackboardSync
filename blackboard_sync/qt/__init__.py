@@ -1,9 +1,13 @@
 """
-BlackboardSync Qt UI.
+BlackboardSync Qt GUI.
 
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~
 
-Module containing all BlackboardSync UI elements designed with Qt.
+A graphical interface using Qt for BlackboardSync.
+
+Basic usage:
+    >>> from qt import LoginWindow
+    >>> w = LoginWindow()
 
 
 Full documentation available at <https://blackboardsync.readthedocs.io>.
@@ -27,3 +31,9 @@ Full documentation available at <https://blackboardsync.readthedocs.io>.
 # Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
 # Also available at https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+
+from .qt_elements import (SyncPeriod, LoginWindow, SyncTrayIcon, SyncTrayMenu,
+                          SettingsWindow, RedownloadDialog)
+
+__all__ = ['LoginWindow', 'SettingsWindow', 'RedownloadDialog',
+           'SyncTrayIcon', 'SyncTrayMenu', 'SyncPeriod']

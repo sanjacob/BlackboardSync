@@ -18,6 +18,7 @@
 
 import webbrowser
 from enum import IntEnum
+from typing import Optional
 from pathlib import Path
 
 from PyQt5 import uic
@@ -94,7 +95,7 @@ class SyncTrayMenu(QMenu):
         self.update_last_synced(last_synced)
         self.set_logged_in(logged_in)
 
-    def _init_ui(self):
+    def _init_ui(self) -> None:
         sync_icon = QApplication.style().standardIcon(QStyle.SP_BrowserReload)
         close_icon = QApplication.style().standardIcon(QStyle.SP_DialogCloseButton)
 
@@ -157,7 +158,7 @@ class SyncTrayIcon(QSystemTrayIcon):
         super().__init__()
         self._init_ui()
 
-    def _init_ui(self):
+    def _init_ui(self) -> None:
         # Create the icon
         icon = Assets.icon
 
@@ -232,7 +233,7 @@ class RedownloadDialog(QMessageBox):
         super().__init__()
         self._init_ui()
 
-    def _init_ui(self):
+    def _init_ui(self) -> None:
         self.setText(self._dialog_text)
         self.setInformativeText(self._info_text)
         self.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
@@ -285,13 +286,19 @@ class SettingsWindow(QWidget):
         self._log_out_signal = self.log_out_button.clicked
         self._save_signal = self.button_box.accepted
 
-    def _choose_location(self):
+    def _choose_location(self) -> None:
+        if (location := self._file_chooser_dialog()):
+            self.download_location = location
+
+    def _file_chooser_dialog(self) -> Optional[Path]:
         self.file_chooser = QFileDialog()
         self.file_chooser.setFileMode(QFileDialog.Directory)
 
         if self.file_chooser.exec():
             new_location = self.file_chooser.directory()
-            self.download_location = Path(new_location.path())
+            return Path(new_location.path())
+
+        return None
 
     @property
     def download_location(self) -> Path:
