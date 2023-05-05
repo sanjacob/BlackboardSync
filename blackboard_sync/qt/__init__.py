@@ -32,8 +32,9 @@ Full documentation available at <https://blackboardsync.readthedocs.io>.
 # Boston, MA  02110-1301, USA.
 # Also available at https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
-from .qt_elements import (SyncPeriod, LoginWindow, SyncTrayIcon, SyncTrayMenu,
-                          SettingsWindow, RedownloadDialog)
+from .qt_elements import (SyncPeriod, SetupWizard, LoginWebView, SyncTrayIcon,
+                          SyncTrayMenu, SettingsWindow, RedownloadDialog,
+                          UniNotSupportedDialog, OSUtils)
 
-__all__ = ['LoginWindow', 'SettingsWindow', 'RedownloadDialog',
-           'SyncTrayIcon', 'SyncTrayMenu', 'SyncPeriod']
+__all__ = ['SyncPeriod', 'SetupWizard', 'LoginWebView', 'SyncTrayIcon', 'SyncTrayMenu',
+           'SettingsWindow', 'RedownloadDialog', 'UniNotSupportedDialog', 'OSUtils']

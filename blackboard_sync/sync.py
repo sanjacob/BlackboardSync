@@ -4,7 +4,7 @@ BlackboardSync.
 Automatically sync content from Blackboard
 """
 
-# Copyright (C) 2021, Jacob Sánchez Pérez
+# Copyright (C) 2023, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -20,12 +20,10 @@ Automatically sync content from Blackboard
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import os
 import time
 import logging
 import platform
 import threading
-import subprocess
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 
@@ -57,8 +55,6 @@ class BlackboardSync:
         # Time between each sync in seconds
         self._sync_interval = 60 * 30
 
-        # Default download location
-        self._sync_dir = Path(Path.home(), 'Downloads', 'BlackboardSync',)
         # Time before last sync
         self._last_sync = None
         # Time of next programmed sync
@@ -75,9 +71,9 @@ class BlackboardSync:
         self._is_active = False
 
         # Set up logging
-        self.logger.setLevel(logging.WARN)
-        self.logger.addHandler(logging.StreamHandler())
-        self.logger.debug("Initialising BlackboardSync")
+        self._logger.setLevel(logging.WARN)
+        self._logger.addHandler(logging.StreamHandler())
+        self._logger.debug("Initialising BlackboardSync")
 
         sess_logger = logging.getLogger("BlackboardSession")
         sess_logger.setLevel(logging.WARN)
@@ -90,12 +86,14 @@ class BlackboardSync:
         self.sess_logger = sess_logger
         self.download_logger = download_logger
 
-        # Obtain user configuration dir
+        # Attempt to load existing configuration
         self._config = SyncConfig()
 
-        if self._config_file.exists():
+        # Configuration exists thus load settings
+        if self._config.username: # TODO: change
             self.logger.info("Preexisting configuration exists")
-            self._load_config()
+            self._update_next_sync()
+            self.auth(username=self._config.username, password=self._config.password)
 
     def auth(self, username: str, password: str, persistence: bool = False) -> bool:
         """Create a new Blackboard session with the given credentials.
@@ -118,59 +116,27 @@ class BlackboardSync:
             self._is_logged_in = True
 
             if persistence:
-                self._save_login_config(username, password)
+                self._config.set_login(username, password)
 
             self.start_sync()
         return self._is_logged_in
 
-    def _load_config(self) -> None:
-        """Load saved preferences from disk."""
-        self._last_sync = self._config.latest_sync
-        self._update_next_sync()
-        self._sync_dir = self._config.location
-        self.auth(username=self._config.username, password=self._config.password)
-
-    # def _update_last_sync(self, sync_config: SyncConfig) -> SyncConfig:
-    #     sync_config['last_sync'] = self.last_sync.isoformat()
-    #     return sync_config
-
-    # def _update_sync_dir(self, sync_config: SyncConfig) -> SyncConfig:
-    #     sync_config['location'] = str(self.sync_dir)
-    #     return sync_config
-
-    def _delete_last_sync(self, sync_config: SyncConfig) -> SyncConfig:
-        sync_config.pop('last_sync', None)
-        return sync_config
-
-    # def _save_login_config(self, login_config: ConfigDict,
-    #                        username: str, password: str) -> ConfigDict:
-    #     login_config['username'] = username
-    #     keyring.set_password(self._config_filename, username, password)
-    #     return login_config
-
-    @_update_config()
-    def _delete_login_config(self, config: ConfigDict) -> ConfigDict:
-        config.pop('Login', None)
-        keyring.delete_password(self._config_filename, self.username)
-        return config
-
     def log_out(self, hard_reset: bool = True) -> None:
         """Stop syncing and forget user session.
 
-        :param bool hard_reset: If true, login details will be removed from
-            saved configuration.
+        :param bool hard_reset: Also delete saved credentials.
         """
         self.stop_sync()
         self.sess = None
         self._is_logged_in = False
 
         if hard_reset:
-            self._delete_login_config()
+            self._config.delete_login()
 
         self._username = ""
 
     def _sync_task(self) -> None:
-        """Constantly checks if last sync is outdated and starts a new job if so.
+        """Constantly check if the data is outdated and if so start a download job.
 
         Method run by Sync thread.
         """
@@ -230,16 +196,6 @@ class BlackboardSync:
         self.logger.exception("Exception in sync thread")
         self.logger.removeHandler(exception_log)
 
-    def open_sync_dir(self) -> None:
-        """Start a subprocess to open the default file explorer at the sync location."""
-        self.logger.debug("Opening sync dir on file explorer")
-        if platform.system() == "Windows":
-            os.startfile(self.sync_dir)
-        elif platform.system() == "Darwin":
-            subprocess.Popen(["open", self.sync_dir])
-        else:
-            subprocess.Popen(["xdg-open", self.sync_dir])
-
     def force_sync(self) -> None:
         """Force Sync thread to start download job ASAP."""
         self.logger.debug("Forced syncing")
@@ -252,27 +208,28 @@ class BlackboardSync:
 
     @property
     def _log_dir(self) -> Path:
-        return Path(self.sync_dir / self._log_directory)
+        return Path(self.download_location / self._log_directory)
 
     @property
     def username(self) -> str:
         """Last username used to login."""
-        return self._username
+        return self._config.username
 
     @property
-    def last_sync(self) -> datetime:
+    def last_sync_time(self) -> datetime:
         """Datetime right before last download job started."""
-        return self._last_sync
+        return self._config.last_sync_time
 
     @last_sync.setter
-    def last_sync(self, last: datetime):
-        self._last_sync = last
-        self._update_last_sync()
+    def last_sync_time(self, last_time: datetime):
+        """Updates the last sync time recorded."""
+        self._config.last_sync_time = last_time
         self._update_next_sync()
 
     def _update_next_sync(self) -> None:
         """Store a calculated datetime when next sync should take place."""
-        self._next_sync = (self.last_sync + timedelta(seconds=self._sync_interval))
+        self._next_sync = (self._config.last_sync_time +
+                           timedelta(seconds=self._sync_interval))
 
     @property
     def next_sync(self) -> datetime:
@@ -282,7 +239,7 @@ class BlackboardSync:
     @property
     def outdated(self) -> bool:
         """Return true if last download job is outdated."""
-        if self.last_sync is None:
+        if self._config.last_sync_time is None:
             return True
         return datetime.now(timezone.utc) >= self.next_sync
 
@@ -298,24 +255,23 @@ class BlackboardSync:
         self._data_source = d
 
     @property
-    def sync_dir(self) -> Path:
+    def download_location(self) -> Path:
         """Location to where all Blackboard content will be downloaded."""
-        return self._sync_dir
+        return self._config.download_location
 
-    def set_sync_dir(self, dir: Path, redownload: bool = False) -> None:
+    def change_download_location(self, new_dir: Path, redownload: bool = False) -> None:
         """Set new sync location.
 
         :param Path dir: The path of the sync dir.
         :param bool redownload: If true, ALL content will be re-downloaded to the new location.
         """
-        if dir != self.sync_dir:
-            self._sync_dir = dir
-            self._update_sync_dir()
+        if new_dir != self._config.download_location:
+            # Update configuration
+            self._config.download_location = new_dir
 
             if redownload:
                 # Unset last sync time to fully download all files in new location
-                self._last_sync = None
-                self._delete_last_sync()
+                self.last_sync_time = None
 
     @property
     def sync_interval(self) -> int:

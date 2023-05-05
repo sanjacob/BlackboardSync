@@ -16,6 +16,8 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+import os
+import subprocess
 import webbrowser
 from enum import IntEnum
 from typing import Optional
@@ -76,6 +78,16 @@ class Assets:
         wm = wm.scaledToWidth(100)
         return wm
 
+class OSUtils:
+    @staticmethod
+    def open_dir_in_file_browser(dir_to_open: Path) -> None:
+        """Start a subprocess to open the default file explorer at the given location."""
+        if platform.system() == "Windows":
+            os.startfile(dir_to_open)
+        elif platform.system() == "Darwin":
+            subprocess.Popen(["open", dir_to_open])
+        else:
+            subprocess.Popen(["xdg-open", dir_to_open])
 
 class SyncTrayMenu(QMenu):
     """`QMenu` associated with app system tray icon."""

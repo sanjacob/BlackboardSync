@@ -33,7 +33,8 @@ from .__about__ import __author__
 
 
 class Config(configparser.ConfigParser):
-    _file_exists = False
+    """Base configuration manager class, which wraps a ConfigParser."""
+
     _logger = logging.getLogger(__name__)
 
     def __init__(self, config_file: Path, *args, **kwargs):
@@ -43,20 +44,22 @@ class Config(configparser.ConfigParser):
         self.read(self._config_file)
 
         # Set up logging
-        self.logger.setLevel(logging.WARN)
-        self.logger.addHandler(logging.StreamHandler())
+        self._logger.setLevel(logging.WARN)
+        self._logger.addHandler(logging.StreamHandler())
 
-    def save(self):
+    def save(self) -> None:
+        """Save the current configuration to disk."""
         with self._config_file.open('w') as config_file:
             self.write(config_file)
 
     @staticmethod
     def persist(func) -> Callable[[Any, Any], None]:
+        """A decorator to save any changes to the field to disk."""
         @wraps(func)
         def save_wrapper(self, *args: Any, **kwargs: Any) -> None:
             func(self, *args, **kwargs)
             self.save()
-            self.logger.info("Updated configuration file")
+            self._logger.info("Updated configuration file")
         return save_wrapper
 
     @property
@@ -66,9 +69,7 @@ class Config(configparser.ConfigParser):
 
 
 class SyncConfig(Config):
-    """
-    Manages Sync Settings
-    """
+    """Configuration manager for BlackboardSync."""
     _config_filename = "blackboard_sync"
 
     def __init__(self, custom_dir=None):
@@ -95,6 +96,8 @@ class SyncConfig(Config):
 
     @property
     def download_location(self) -> Optional[Path]:
+        # Default download location
+        #self._sync_dir = Path(Path.home(), 'Downloads', 'BlackboardSync',)
         return self._sync.getpath('download_location')
 
     @download_location.setter
@@ -119,3 +122,9 @@ class SyncConfig(Config):
     def set_login(self, username: str, password: str) -> None:
         self.username = username
         keyring.set_password(self._config_filename, username, password)
+
+    def delete_login(self) -> None:
+        if self.username:
+            keyring.delete_password(self._config_filename, self.username)
+            self.username = None
+

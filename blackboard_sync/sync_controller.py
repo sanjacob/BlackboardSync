@@ -27,7 +27,7 @@ from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
 from .sync import BlackboardSync
 from .__about__ import __title__, __version__
 from .qt.qt_elements import (LoginWebView, SyncTrayIcon, SettingsWindow,
-                             RedownloadDialog)
+                             RedownloadDialog, OSUtils)
 
 
 class BBSyncController:
@@ -105,7 +105,7 @@ class BBSyncController:
                 self._show_login_window()
             else:
                 # Open folder in browser
-                self.model.open_sync_folder()
+                OSUtils.open_dir_in_file_browser(self.model.sync_dir)
 
     def _log_out(self) -> None:
         self.model.log_out(hard_reset=True)
