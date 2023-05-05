@@ -1,10 +1,8 @@
 #!/usr/bin/env python3
 
-"""
-BlackboardSync Tests
-Copyright (C) 2020
-Jacob Sánchez Pérez
-"""
+"""BlackboardSync Tests"""
+
+# Copyright (C) 2021, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -28,15 +26,15 @@ user = ""
 password = ""
 
 
-class TestSafeFormat(unittest.TestCase):
+class TestSafeFormat():
 
     def test_missing(self):
         safe_dict = SafeFormat({'a': 1})
-        self.assertEqual(safe_dict['b'], "", "Should be blank")
+        assert safe_dict['b'] == ''
 
     def test_present(self):
         safe_dict = SafeFormat({'a': 1})
-        self.assertEqual(safe_dict['a'], 1, "Should be 1")
+        assert safe_dict['a'] == 1
 
 
 class TestAPI(unittest.TestCase):

@@ -18,17 +18,15 @@
 
 
 import pytest
+import requests
 from PyQt5 import QtCore
+from PyQt5.Qt import QApplication
 from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QDialogButtonBox
-from blackboard_sync.qt import (SettingsWindow, LoginWindow, SyncTrayIcon, SyncPeriod)
+from PyQt5.QtWidgets import QFileDialog, QDialogButtonBox
 
-
-@pytest.fixture
-def login_window():
-    window = LoginWindow()
-    window.show()
-    return window
+from blackboard_sync.qt import SyncPeriod, SyncTrayIcon, SettingsWindow
+from blackboard_sync.qt.qt_elements import (SetupWizard, LoginWebView,
+                                            RedownloadDialog)
 
 
 @pytest.fixture
@@ -40,60 +38,156 @@ def settings_window():
 
 @pytest.fixture
 def tray_icon():
-    icon = SyncTrayIcon()
-    return icon
+    return SyncTrayIcon()
 
 
-class TestLoginWindow:
-    user = 'exampleUser'
-    password = 'examplePassword'
+@pytest.fixture
+def make_setup_wizard(monkeypatch):
+    def _make_setup_wizard(institutions: list[str]):
+        wizard = SetupWizard(institutions)
+        # Don't show uni not supported dialog
+        monkeypatch.setattr(wizard, "_show_not_supported_dialog", lambda *args: None)
+        # Don't show file chooser dialog
+        monkeypatch.setattr(QFileDialog, "exec", lambda *args: True)
 
-    def test_login_window_initial_state(self, qtbot, login_window):
-        qtbot.addWidget(login_window)
-        assert not login_window.error_label.isVisible()
-        assert login_window.username == ''
-        assert login_window.password == ''
-        assert not login_window.stay_logged_checkbox
+        class DirectoryMock:
 
-    @pytest.mark.parametrize('visibility', [True, False])
-    def test_login_window_error_label(self, qtbot, login_window, visibility):
-        qtbot.addWidget(login_window)
-        login_window.toggle_failed_login(visibility)
-        assert login_window.error_label.isVisible() == visibility
+            def path():
+                """."""
+                return ''
 
-    def test_login_window_input_boxes(self, qtbot, login_window):
-        qtbot.addWidget(login_window)
-        qtbot.keyClicks(login_window.user_edit, self.user)
-        qtbot.keyClicks(login_window.pass_edit, self.password)
-        assert login_window.username == self.user
-        assert login_window.password == self.password
+        monkeypatch.setattr(QFileDialog, "directory", lambda *args: "/")
 
-    def test_login_window_clear_pass(self, qtbot, login_window):
-        qtbot.addWidget(login_window)
-        qtbot.keyClicks(login_window.pass_edit, self.password)
-        assert login_window.password == self.password
-        login_window.clear_password()
-        assert login_window.password == ''
+        # monkeypatch.setattr(wizard, "_", lambda *args: None)
+        return wizard
 
-    def test_login_window_checkbox(self, qtbot, login_window):
-        qtbot.addWidget(login_window)
-        checkbox_pos = QtCore.QPoint(login_window.stay_logged.width() // 5,
-                                     login_window.stay_logged.height() // 2)
-        qtbot.mouseClick(login_window.stay_logged, QtCore.Qt.LeftButton, pos=checkbox_pos)
-        assert login_window.stay_logged_checkbox
+    return _make_setup_wizard
 
-        qtbot.mouseClick(login_window.stay_logged, QtCore.Qt.LeftButton, pos=checkbox_pos)
-        assert not login_window.stay_logged_checkbox
 
-    def test_login_window_signal(self, qtbot, login_window):
-        qtbot.addWidget(login_window)
-        qtbot.keyClicks(login_window.user_edit, self.user)
-        qtbot.keyClicks(login_window.pass_edit, self.password)
+class TestSetupWizard:
+    intro = 'You are a few steps away from syncing your Blackboard content straight to your device!'
+    uni_selection = 'First, tell us where you study'
+    location_selection = 'Where do you want files to be downloaded?'
+    page_number = 4
+    institutions = ['Never', 'Gonna', 'Give', 'You', 'Up']
 
-        with qtbot.waitSignal(login_window.login_signal) as blocker:
-            qtbot.mouseClick(login_window.login_button, QtCore.Qt.LeftButton)
+    def test_wizard_page_number(self, qtbot, make_setup_wizard):
+        wizard = make_setup_wizard([])
+        qtbot.addWidget(wizard)
+        assert len(wizard.pageIds()) == self.page_number
 
-        assert blocker.signal_triggered
+    def test_wizard_intro_label(self, qtbot, make_setup_wizard):
+        wizard = make_setup_wizard([])
+        qtbot.addWidget(wizard)
+        assert wizard.intro_label.text() == self.intro
+
+    def test_wizard_uni_selection_label(self, qtbot, make_setup_wizard):
+        wizard = make_setup_wizard([])
+        qtbot.addWidget(wizard)
+        assert wizard.uni_selection_label.text() == self.uni_selection
+
+    def test_wizard_sync_location_label(self, qtbot, make_setup_wizard):
+        wizard = make_setup_wizard([])
+        qtbot.addWidget(wizard)
+        assert wizard.sync_location_label.text() == self.location_selection
+
+    def test_wizard_institutions(self, qtbot, make_setup_wizard):
+        wizard = make_setup_wizard(self.institutions)
+        qtbot.addWidget(wizard)
+
+        for i in range(wizard.uni_selection_box.count()):
+            assert wizard.uni_selection_box.itemText(i) == self.institutions[i]
+
+    def test_wizard_page_one(self, qtbot, make_setup_wizard):
+        wizard = make_setup_wizard(self.institutions)
+        # Necessary to get currentId
+        wizard.show()
+        wizard.stop()
+        qtbot.addWidget(wizard)
+        assert wizard.currentId() == SetupWizard.Pages.INTRO
+
+    def test_wizard_page_two(self, qtbot, make_setup_wizard):
+        wizard = make_setup_wizard(self.institutions)
+        # Necessary to get currentId
+        wizard.show()
+        qtbot.addWidget(wizard)
+        wizard.next()
+        assert wizard.currentId() == SetupWizard.Pages.INSTITUTION
+
+    def test_wizard_valid_institution(self, qtbot, make_setup_wizard):
+        wizard = make_setup_wizard(self.institutions)
+        # Necessary to get currentId
+        wizard.show()
+        qtbot.addWidget(wizard)
+        wizard.next()
+        qtbot.keyClicks(wizard.uni_selection_box, self.institutions[2])
+        qtbot.keyClick(wizard.uni_selection_box, QtCore.Qt.Key_Enter)
+        assert wizard.currentId() == SetupWizard.Pages.DOWNLOAD_LOCATION
+
+    def test_wizard_invalid_institution_enter(self, qtbot, make_setup_wizard, monkeypatch):
+        wizard = make_setup_wizard(self.institutions)
+
+        # Necessary to get currentId
+        wizard.show()
+        qtbot.addWidget(wizard)
+
+        wizard.next()
+        qtbot.keyClicks(wizard.uni_selection_box, 'Fake')
+        qtbot.keyClick(wizard.uni_selection_box, QtCore.Qt.Key_Enter)
+        assert wizard.currentId() == SetupWizard.Pages.INSTITUTION
+
+    def test_wizard_invalid_institution(self, qtbot, make_setup_wizard, monkeypatch):
+        wizard = make_setup_wizard(self.institutions)
+
+        # Necessary to get currentId
+        wizard.show()
+        qtbot.addWidget(wizard)
+
+        wizard.next()
+        qtbot.keyClicks(wizard.uni_selection_box, 'Fake')
+        wizard.next()
+        assert wizard.currentId() == SetupWizard.Pages.INSTITUTION
+
+    def test_wizard_institution_attribute(self, qtbot, make_setup_wizard):
+        wizard = make_setup_wizard(self.institutions)
+        # Necessary to get currentId
+        wizard.show()
+        qtbot.addWidget(wizard)
+        wizard.next()
+        qtbot.keyClicks(wizard.uni_selection_box, self.institutions[3])
+        qtbot.keyClick(wizard.uni_selection_box, QtCore.Qt.Key_Enter)
+        assert wizard.institution_index == 3
+
+    def test_wizard_dummy(self, qtbot, make_setup_wizard):
+        u = ['University of Central Lancashire (UCLan)', 'University of Leeds', 'University of Manchester']
+        wizard = make_setup_wizard(u)
+
+        wizard.show()
+        wizard.next()
+        qtbot.addWidget(wizard)
+
+        qtbot.stop()
+
+
+class TestLoginWebView:
+    app = QApplication([])
+
+    def test_login(self):
+        web = LoginWebView(start_url='https://portal.uclan.ac.uk',
+                           target_url='https://portal.uclan.ac.uk/ultra/',
+                           username_input_selector='#userNameInput',
+                           password_input_selector='#passwordInput')
+        web.show()
+        web.login_complete_signal.connect(self.callback)
+        self.web = web
+        self.app.exec()
+
+    def callback(self):
+        r = requests.get('https://portal.uclan.ac.uk/learn/api/public/v1/users', cookies=self.web.cookie_jar)
+        print(r.text)
+
+    def test_redownload_dialog(self):
+        print(RedownloadDialog().redownload)
 
 
 class TestSettingsWindow:
