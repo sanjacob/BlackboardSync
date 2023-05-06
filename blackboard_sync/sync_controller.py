@@ -47,15 +47,13 @@ class BBSyncController:
 
         self._init_ui()
 
-        if not self.model.is_logged_in:
-            self._show_login_window()
-        else:
-            self.tray.set_logged_in(True)
-
+        self._show_login_window()
         self.app.exec()
 
     def _init_ui(self) -> None:
-        self.login_window = LoginWebView()
+        self.login_window = LoginWebView(start_url='https://portal.uclan.ac.uk',
+                                         target_url='https://portal.uclan.ac.uk/ultra/')
+
         self.login_window.login_complete_signal.connect(self._login_complete)
 
         self.config_window = SettingsWindow()
@@ -76,11 +74,9 @@ class BBSyncController:
     def _login_complete(self) -> None:
         self.app.setOverrideCursor(Qt.WaitCursor)
         # Call login function on sync
-        auth = self.model.auth(self.login_window.username, self.login_window.password,
-                               self.login_window.stay_logged_checkbox)
+        auth = self.model.auth(self.login_window.cookie_jar)
         self.tray.set_logged_in(auth)
-        self.login_window.toggle_failed_login(not auth)
-        self.login_window.setVisible(not auth)
+        self.login_window.setVisible(False)
         self.app.restoreOverrideCursor()
 
     def _show_login_window(self) -> None:
@@ -105,10 +101,10 @@ class BBSyncController:
                 self._show_login_window()
             else:
                 # Open folder in browser
-                OSUtils.open_dir_in_file_browser(self.model.sync_dir)
+                OSUtils.open_dir_in_file_browser(self.model.download_location)
 
     def _log_out(self) -> None:
-        self.model.log_out(hard_reset=True)
+        self.model.log_out()
         self.tray.set_logged_in(False)
         self.login_window.setVisible(True)
         self.config_window.setVisible(False)
@@ -128,7 +124,7 @@ class BBSyncController:
 
     def _update_tray_menu(self) -> None:
         # Update last sync time
-        last_sync = self.model.last_sync
+        last_sync = self.model.last_sync_time
         last_sync_str = "Never"
 
         if last_sync is not None:
@@ -142,7 +138,7 @@ class BBSyncController:
         self.tray.toggle_currently_syncing(self.model.is_syncing)
 
     def _stop(self) -> None:
-        if self.model.sync_on:
+        if self.model.is_active:
             self.model.stop_sync()
         self.app.quit()
 

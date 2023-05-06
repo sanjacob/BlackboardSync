@@ -20,6 +20,7 @@ Blackboard Model Classes
 
 from enum import Enum
 from datetime import datetime
+from typing import Union, Optional
 
 from pydantic import BaseModel, validator
 from pathvalidate import sanitize_filename
@@ -88,7 +89,7 @@ class BBAvailability(ImmutableModel):
     available: bool = None
     allowGuests: bool = False
     adaptiveRelease: dict = {}
-    duration: BBDuration
+    duration: BBDuration = None
 
 
 class BBMembership(ImmutableModel):
@@ -124,7 +125,7 @@ class BBResourceType(str, Enum):
 
 
 class BBContentHandler(ImmutableModel):
-    id: BBResourceType = None
+    id: Union[BBResourceType, str] = None
     url: str = None
     file: BBFile = None
     gradeColumnId: str = None
@@ -136,15 +137,22 @@ class BBContentHandler(ImmutableModel):
     proctoring: BBProctoring = None
 
     @validator('id')
-    def resource_parser(cls, v: str):
+    def resource_parser(cls, v: Union[BBResourceType, str]):
         """Validate and parse an id resource type."""
-        return v.replace('resource/', '')
+        return BBResourceType(v.replace('resource/', ''))
 
     @property
-    def isNotHandled(self) -> bool:
+    def is_not_handled(self) -> bool:
         """Return true if resource should not be handled."""
         return self.id not in (BBResourceType.folder, BBResourceType.file,
                                BBResourceType.document, BBResourceType.externallink)
+
+    def __eq__(self, other: Union[BBResourceType, str]) -> bool:
+        if isinstance(other, BBResourceType):
+            return self.id == other
+        elif isinstance(other, str):
+            return self.id == BBResourceType(other)
+        return False
 
 
 class BBCourseContent(ImmutableModel):
@@ -172,7 +180,7 @@ class BBCourseContent(ImmutableModel):
     @property
     def title_path_safe(self) -> str:
         """Return a path safe version of the title."""
-        return sanitize_filename(self._title, replacement_text='_')
+        return sanitize_filename(self.title, replacement_text='_')
 
 
 class BBContentChild(BBCourseContent):
@@ -200,22 +208,16 @@ class BBCourse(ImmutableModel):
     locale: BBLocale = None
     externalAccessUrl: str = None
 
-    # Used by UCLan module names
-    code: str = None
-    title: str = None
-
-    @validator('code')
-    def code_parser(cls, v, values, **kwargs):
+    @property
+    def code(self) -> Optional[str]:
         """Parse course code."""
-        if 'name' in values:
-            code_split = values['name'].split(' : ', 1)
+        if self.name:
+            code_split = self.name.split(' : ', 1)
             return code_split[0]
-        return v
 
-    @validator('title')
-    def title_parser(cls, v, values, **kwargs):
+    @property
+    def title(self) -> Optional[str]:
         """Parse course title."""
-        if 'name' in values:
-            name_split = values['name'].split(' : ', 1)[-1].split(',')
+        if self.name:
+            name_split = self.name.split(' : ', 1)[-1].split(',')
             return sanitize_filename(name_split[0], replacement_text='_')
-        return v

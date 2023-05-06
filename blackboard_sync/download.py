@@ -28,7 +28,7 @@ from getpass import getpass
 from dateutil.parser import parse
 from datetime import datetime, timezone
 
-from .blackboard import BlackboardSession, BBCourseContent
+from .blackboard import BlackboardSession, BBCourseContent, BBResourceType
 
 
 class BlackboardDownload:
@@ -84,12 +84,12 @@ class BlackboardDownload:
         """Download BBContent recursively, depending on filetype"""
         self.logger.info(f"{'    ' * depth}{content.title}[{content.contentHandler.id}]")
 
-        type = content.contentHandler
+        res = content.contentHandler
         body_path = parent_path
-        file_path = Path(parent_path, content.title_safe)
-        has_changed = (content.modifiedDT >= self._last_downloaded)
+        file_path = Path(parent_path, content.title_path_safe)
+        has_changed = (content.modified >= self._last_downloaded)
 
-        if type.isFolder:
+        if res == BBResourceType.folder:
             try:
                 body_path = file_path
                 children = self._sess.fetch_content_children(course_id=course_id,
@@ -99,12 +99,13 @@ class BlackboardDownload:
                     file_path.mkdir(exist_ok=True, parents=True)
 
                 for child in children:
-                    self._handle_file(child, file_path, course_id, depth + 1)
+                    if child.contentHandler is not None:
+                        self._handle_file(child, file_path, course_id, depth + 1)
             except ValueError:
                 pass
 
         # Omit file if it hasn't been modified since last sync
-        elif (type.isFile or type.isDocument) and has_changed:
+        elif res in (BBResourceType.file, BBResourceType.document) and has_changed:
             attachments = self._sess.fetch_file_attachments(course_id=course_id,
                                                             content_id=content.id)
 
@@ -121,18 +122,20 @@ class BlackboardDownload:
                     for chunk in d_stream.iter_content(chunk_size=128):
                         f.write(chunk)
 
-        elif type.isExternalLink and has_changed:
-            self._create_desktop_link(file_path, type.url)
+        elif res == BBResourceType.externallink and has_changed:
+            file_path.mkdir(exist_ok=True, parents=True)
+            self._create_desktop_link(file_path, res.url)
 
-        elif not type.isNotHandled and has_changed:
+        elif not res.is_not_handled and has_changed:
             self.logger.warning(f"Not handled, {content.title}")
 
         # If item has body, write in markdown file
         if content.body and has_changed:
-            with Path(body_path, f"{content.title_safe}.md").open('w') as md:
+            file_path.mkdir(exist_ok=True, parents=True)
+            with Path(body_path, f"{content.title_path_safe}.md").open('w') as md:
                 md.write(content.body)
 
-        if not type.isFolder and has_changed:
+        if not res == BBResourceType.folder and has_changed:
             self._files_processed += 1
 
     def download(self) -> datetime:
@@ -153,7 +156,7 @@ class BlackboardDownload:
             course_contents = self._sess.fetch_contents(course_id=course.id)
 
             if course_contents:
-                course_path = Path(self.download_location / ms.created_datetime.year / course.title)
+                course_path = Path(self.download_location / str(ms.created.year) / course.title)
 
             for content in course_contents:
                 self._handle_file(content, course_path, course.id, 1)

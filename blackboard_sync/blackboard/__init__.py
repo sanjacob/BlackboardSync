@@ -37,9 +37,9 @@ from .api import BlackboardSession
 from .blackboard import (BBFile, BBLink, BBCourse, BBLocale, BBDuration,
                          BBAttachment, BBEnrollment, BBMembership,
                          BBProctoring, BBAvailability, BBContentChild,
-                         BBCourseContent, BBContentHandler)
+                         BBCourseContent, BBContentHandler, BBResourceType)
 
 __all__ = ['BBLocale', 'BBDuration', 'BBEnrollment', 'BBProctoring', 'BBFile',
            'BBAttachment', 'BBLink', 'BBContentHandler', 'BBAvailability',
            'BBCourseContent', 'BBContentChild', 'BBMembership', 'BBCourse',
-           'BlackboardSession']
+           'BlackboardSession', 'BBResourceType']

@@ -23,10 +23,10 @@ an interface to make Blackboard REST API calls on a session basis
 import logging
 from typing import Union
 from functools import wraps
-from http.cookiejar import CookieJar
 from collections.abc import Callable
 
 import requests
+from requests.cookies import RequestsCookieJar
 
 from .blackboard import (BBCourse, BBAttachment, BBMembership, BBContentChild,
                          BBCourseContent)
@@ -53,25 +53,13 @@ class BlackboardSession:
     _logger.setLevel(logging.DEBUG)
     _logger.addHandler(logging.NullHandler())
 
-    def __init__(self, cookies: CookieJar, user: str):
-        """."""
-        self._bb_session = None
-        self._username = ""
+    def __init__(self, cookies: RequestsCookieJar):
+        # Use cookies for requests
+        self._bb_session = requests.Session()
+        self._bb_session.cookies = cookies
+        # Obtain username by calling self
+        self._username = None
         self._timeout = 12
-
-        if not self.auth(user):
-            raise ValueError("Login incorrect")
-
-    def auth(self) -> bool:
-        """Verify session."""
-        # Create requests session to preserve session coookies
-        bb_session = requests.Session()
-
-        self.logger.info("Auth flow complete")
-
-        self._bb_session = bb_session
-        self._username = f"userName:{user.split('@')[0]}"
-        return True
 
     def get(endpoint: str, version: int = 1, json: bool = True, **g_kwargs):
         """Return a decorator (needed to use fancy notation).
@@ -106,7 +94,6 @@ class BlackboardSession:
                 self.logger.debug(f"Making request to {endpoint_format}")
                 response = self._bb_session.get(endpoint_format, params=kwargs,
                                                 timeout=self._timeout, **g_kwargs)
-
                 if json:
                     response = response.json()
                 else:
@@ -129,6 +116,9 @@ class BlackboardSession:
     @property
     def username(self) -> str:
         """Username field used for API requests."""
+        if self._username is None:
+            username = self.fetch_users(user_id='me')['userName']
+            self._username = f'userName:{username}'
         return self._username
 
     @property

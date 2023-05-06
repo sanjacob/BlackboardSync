@@ -17,6 +17,8 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import os
+import json
+import platform
 import subprocess
 import webbrowser
 from enum import IntEnum
@@ -370,60 +372,13 @@ class LoginWindow(QWidget):
 class LoginWebView(QWidget):
     """Blackboard login widget."""
 
-    _login_attempt_signal = pyqtSignal(str, str)
     _login_complete_signal = pyqtSignal()
 
-    def __init__(self, start_url: str, target_url: str, username_input_selector: str,
-                 password_input_selector: str, username: str = None, password: str = None):
+    def __init__(self, start_url: str, target_url: str):
         """Create instance of LoginWebView."""
         super().__init__()
         self.start_url = start_url
         self.target_url = target_url
-        # self.user_selector = username_input_selector
-        # self.pass_selector = password_input_selector
-        self._auto_login_attempted = False
-        self._credentials_provided = False
-
-        input_selection_script = f'''
-        let userInput = document.querySelector("{username_input_selector}");
-        let passInput = document.querySelector("{password_input_selector}");
-        '''
-
-        find_form_script = f'''
-        {input_selection_script}
-        (userInput !== null && passInput !== null);
-        '''
-
-        fill_form_script = ''
-
-        if username and password:
-            self._credentials_provided = True
-
-            fill_form_script = f'''
-            if (userInput !== null && passInput !== null) {{
-                userInput.value = "{username}";
-                passInput.value = "{password}";
-                userInput.form.submit();
-            }}
-            '''
-
-        get_credentials_script = '''
-        let loginForm = userInput.form;
-        let oldSubmit = loginForm.submit;
-
-        function captureCredentials() {{
-            return {{username: userInput.value, password: passInput.value}};
-        }}
-
-        loginForm.submit = function() {{
-          oldSubmit.call(this);
-          captureCredentials();
-        }}
-        '''
-
-        self._js = {'find_form': find_form_script,
-                    'fill_form': fill_form_script,
-                    'get_credentials': get_credentials_script}
 
         self._init_ui()
         self._cookie_jar = RequestsCookieJar()
@@ -434,35 +389,9 @@ class LoginWebView(QWidget):
         self.web_view.loadFinished.connect(self._page_load_handler)
         self._cookie_store.cookieAdded.connect(self._cookie_added_handler)
 
-    def _find_login_form(self) -> None:
-        if not self._auto_login_attempted:
-            self._engine_page.runJavaScript(self._js['find_form'], self.find_form_callback)
-
-    def _auto_login(self):
-        self._engine_page.runJavaScript(self._js['fill_form'])
-        self._auto_login_attempted = True
-
-    def _catch_credentials(self) -> None:
-        self._engine_page.runJavaScript(self._js['get_credentials'], self.get_credentials_callback)
-
     def _page_load_handler(self) -> None:
-        if self.url == self.target_url:
+        if self.url.startswith(self.target_url):
             self._login_complete_signal.emit()
-        else:
-            self._find_login_form()
-
-    def find_form_callback(self, form_found) -> None:
-        """Check if form has been found and if so proceed with login flow."""
-        if form_found:
-            if self._credentials_provided:
-                self._auto_login()
-            else:
-                self._catch_credentials()
-
-    def get_credentials_callback(self, value):
-        """."""
-        print(value)
-        raise NotImplementedError()
 
     def _cookie_added_handler(self, cookie: QNetworkCookie) -> None:
         self._cookie_jar.set(
@@ -494,11 +423,6 @@ class LoginWebView(QWidget):
     @property
     def _cookie_store(self) -> QWebEngineCookieStore:
         return self._engine_profile.cookieStore()
-
-    @property
-    def login_attempt_signal(self):
-        """Fire when an attempt to login is made."""
-        return self._login_attempt_signal
 
     @property
     def login_complete_signal(self):

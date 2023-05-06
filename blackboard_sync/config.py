@@ -26,7 +26,6 @@ from functools import wraps
 from datetime import datetime
 from collections.abc import Callable
 
-import keyring
 from appdirs import user_config_dir
 
 from .__about__ import __author__
@@ -76,13 +75,9 @@ class SyncConfig(Config):
         config_dir = custom_dir or Path(user_config_dir(appauthor=__author__, roaming=True))
         super().__init__(config_dir / self._config_filename, empty_lines_in_values=False)
 
-        if 'Login' not in self:
-            self['Login'] = {}
-
         if 'Sync' not in self:
             self['Sync'] = {}
 
-        self._login = self['Login']
         self._sync = self['Sync']
 
     @property
@@ -97,34 +92,11 @@ class SyncConfig(Config):
     @property
     def download_location(self) -> Optional[Path]:
         # Default download location
-        #self._sync_dir = Path(Path.home(), 'Downloads', 'BlackboardSync',)
-        return self._sync.getpath('download_location')
+        default = Path(Path.home(), 'Downloads', 'BlackboardSync')
+        return self._sync.getpath('download_location') or default
 
     @download_location.setter
     @Config.persist
     def download_location(self, sync_dir: Path) -> None:
         self._sync['download_location'] = str(sync_dir)
-
-    @property
-    def username(self) -> Optional[str]:
-        return self._login.get('username')
-
-    @username.setter
-    @Config.persist
-    def username(self, user: str) -> None:
-        self._login['username'] = user
-
-    @property
-    def password(self) -> Optional[str]:
-        if self.username is not None:
-            return keyring.get_password(self._config_filename, self.username)
-
-    def set_login(self, username: str, password: str) -> None:
-        self.username = username
-        keyring.set_password(self._config_filename, username, password)
-
-    def delete_login(self) -> None:
-        if self.username:
-            keyring.delete_password(self._config_filename, self.username)
-            self.username = None
 

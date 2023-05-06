@@ -2,7 +2,7 @@
 BlackboardSync
 """
 
-# Copyright (C) 2021, Jacob Sánchez Pérez
+# Copyright (C) 2023, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -39,4 +39,4 @@ __author__ = "Jacob Sánchez"
 __email__ = "jacobszpz@protonmail.com"
 
 __license__ = "GNU General Public License v2"
-__copyright__ = f"2021, {__author__}"
+__copyright__ = f"2023, {__author__}"

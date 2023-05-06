@@ -22,11 +22,11 @@ Automatically sync content from Blackboard
 
 import time
 import logging
-import platform
 import threading
 from pathlib import Path
 from datetime import datetime, timezone, timedelta
 
+from requests.cookies import RequestsCookieJar
 from requests.exceptions import ConnectionError
 
 from .config import SyncConfig
@@ -61,7 +61,6 @@ class BlackboardSync:
         self._next_sync = None
         # User session active
         self._is_logged_in = False
-        self._username = ""
 
         # Flag to force sync
         self._force_sync = False
@@ -89,51 +88,36 @@ class BlackboardSync:
         # Attempt to load existing configuration
         self._config = SyncConfig()
 
-        # Configuration exists thus load settings
-        if self._config.username: # TODO: change
+        if self._config.last_sync_time:
             self.logger.info("Preexisting configuration exists")
             self._update_next_sync()
-            self.auth(username=self._config.username, password=self._config.password)
 
-    def auth(self, username: str, password: str, persistence: bool = False) -> bool:
+    def auth(self, cookie_jar: RequestsCookieJar) -> bool:
         """Create a new Blackboard session with the given credentials.
 
         Will start syncing automatically if login successful.
 
-        :param str username: Institutional email address (e.g. example@uclan.ac.uk).
-        :param str password: Password of the account.
         :param bool persistence: If true, login will be saved in the OS designated keyring.
         """
-        username = username.strip()
+        self._cookies = cookie_jar
+
         try:
-            u_sess = BlackboardSession(username, password)
+            u_sess = BlackboardSession(cookie_jar)
         except ValueError:
             self.logger.warning("Credentials are incorrect")
         else:
             self.logger.info("Logged in successfully")
             self.sess = u_sess
-            self._username = u_sess.username
             self._is_logged_in = True
-
-            if persistence:
-                self._config.set_login(username, password)
-
             self.start_sync()
+
         return self._is_logged_in
 
-    def log_out(self, hard_reset: bool = True) -> None:
-        """Stop syncing and forget user session.
-
-        :param bool hard_reset: Also delete saved credentials.
-        """
+    def log_out(self) -> None:
+        """Stop syncing and forget user session."""
         self.stop_sync()
         self.sess = None
         self._is_logged_in = False
-
-        if hard_reset:
-            self._config.delete_login()
-
-        self._username = ""
 
     def _sync_task(self) -> None:
         """Constantly check if the data is outdated and if so start a download job.
@@ -149,7 +133,7 @@ class BlackboardSync:
                 self._is_syncing = True
 
                 # Download from last datetime
-                new_download = BlackboardDownload(self.sess, self.sync_dir / '', self.last_sync)
+                new_download = BlackboardDownload(self.sess, self.download_location / '', self.last_sync_time)
 
                 try:
                     self.last_sync = new_download.download()
@@ -158,7 +142,7 @@ class BlackboardSync:
                     # Session expired, log out and attempt to reload config
                     self.logger.warning("User session expired")
                     reload_session = True
-                    self.log_out(hard_reset=False)
+                    self.log_out()
                 except ConnectionError as e:
                     # Random python connection error
                     self._log_exception(e)
@@ -166,7 +150,7 @@ class BlackboardSync:
 
                 # Could not sync
                 if failed_attempts >= self._max_retries:
-                    self.log_out(hard_reset=False)
+                    self.log_out()
 
                 # Reset force sync flag
                 self._force_sync = False
@@ -174,7 +158,7 @@ class BlackboardSync:
             time.sleep(self._check_sleep_time)
 
         if reload_session:
-            self._load_config()
+            self.auth(self._cookies)
 
     def start_sync(self) -> None:
         """Stars Sync thread."""
@@ -202,6 +186,10 @@ class BlackboardSync:
         self._force_sync = True
 
     @property
+    def username(self) -> str:
+        return self.sess.username
+
+    @property
     def _log_path(self) -> Path:
         filename = f"sync_error_{datetime.now():%Y-%m-%dT%H_%M_%S_%f}.log"
         return Path(self._log_dir / filename)
@@ -211,16 +199,11 @@ class BlackboardSync:
         return Path(self.download_location / self._log_directory)
 
     @property
-    def username(self) -> str:
-        """Last username used to login."""
-        return self._config.username
-
-    @property
     def last_sync_time(self) -> datetime:
         """Datetime right before last download job started."""
         return self._config.last_sync_time
 
-    @last_sync.setter
+    @last_sync_time.setter
     def last_sync_time(self, last_time: datetime):
         """Updates the last sync time recorded."""
         self._config.last_sync_time = last_time
