@@ -105,6 +105,9 @@ class BlackboardSession:
                     self.logger.error(f"Code {response['status']}: {response['message']}")
                     if response['status'] == 401:
                         raise ValueError('Not authorized')
+                    if response['status'] == 403:
+                        if 'code' in response and response['code'] == 'bb-rest-course-is-private':
+                            raise ValueError('Private course')
                     raise ValueError('Server responded with an error code')
                 elif 'results' in response:
                     return func(self, response['results'])

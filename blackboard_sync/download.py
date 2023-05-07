@@ -27,6 +27,7 @@ from pathlib import Path
 from getpass import getpass
 from dateutil.parser import parse
 from datetime import datetime, timezone
+from concurrent.futures import ThreadPoolExecutor
 
 from .blackboard import BlackboardSession, BBCourseContent, BBResourceType
 
@@ -39,7 +40,7 @@ class BlackboardDownload:
 
     _logger = logging.getLogger(__name__)
     _logger.setLevel(logging.DEBUG)
-    _logger.addHandler(logging.NullHandler())
+    _logger.addHandler(logging.StreamHandler())
 
     def __init__(self, sess: BlackboardSession, download_location: Path,
                  last_downloaded: datetime = None):
@@ -59,6 +60,7 @@ class BlackboardDownload:
         self._user_id = sess.username
         self._download_location = download_location
         self._files_processed = 0
+        self.executor = ThreadPoolExecutor(max_workers=8)
 
         if last_downloaded is not None:
             self._last_downloaded = last_downloaded
@@ -78,6 +80,16 @@ class BlackboardDownload:
         with path.open("w") as f:
             f.write(contents)
             self.logger.info(f"Created internet link file at {path}")
+
+    def _download_file(self, course_id: str, content_id: str, attachment_id: str, file_path: Path) -> None:
+        d_stream = self._sess.download(course_id=course_id,
+                                       content_id=content_id,
+                                       attachment_id=attachment_id)
+        with file_path.open("wb") as f:
+            self.logger.info(f"Writing to {file_path}")
+            for chunk in d_stream.iter_content(chunk_size=1024):
+                f.write(chunk)
+
 
     def _handle_file(self, content: BBCourseContent, parent_path: Path,
                      course_id: str, depth: int = 0) -> None:
@@ -114,13 +126,11 @@ class BlackboardDownload:
                 body_path = file_path
 
             for attachment in attachments:
-                d_stream = self._sess.download(course_id=course_id,
-                                               content_id=content.id,
-                                               attachment_id=attachment.id)
-                with Path(body_path / attachment.fileName).open("wb") as f:
-                    self.logger.info(f"Writing to {attachment.fileName}")
-                    for chunk in d_stream.iter_content(chunk_size=128):
-                        f.write(chunk)
+                download_path = Path(body_path / attachment.fileName)
+                if attachment.mimeType.startswith('video/'):
+                    self.logger.info('Not downloading {attachment.fileName}')
+                else:
+                    self.executor.submit(self._download_file, course_id, content.id, attachment.id, download_path)
 
         elif res == BBResourceType.externallink and has_changed:
             file_path.mkdir(exist_ok=True, parents=True)
@@ -135,32 +145,36 @@ class BlackboardDownload:
             with Path(body_path, f"{content.title_path_safe}.md").open('w') as md:
                 md.write(content.body)
 
-        if not res == BBResourceType.folder and has_changed:
-            self._files_processed += 1
-
     def download(self) -> datetime:
         """Retrieve the user's courses, and start download of all contents
 
         :return: Datetime when method was called.
         """
         start_time = datetime.now(timezone.utc)
+        private = False
 
         self.logger.info("Fetching user memberships")
         memberships = self._sess.fetch_user_memberships(user_id=self.user_id,
                                                         dataSourceId=self._data_source)
         for ms in memberships:
             self.logger.debug("Fetching course")
-            course = self._sess.fetch_courses(course_id=ms.courseId)
-            self.logger.info(f"<{course.code}> - <{course.title}>")
+            try:
+                course = self._sess.fetch_courses(course_id=ms.courseId)
+            except ValueError as e:
+                if not (private := (str(e) == 'Private course')):
+                    raise e
 
-            course_contents = self._sess.fetch_contents(course_id=course.id)
+            if not private:
+                self.logger.info(f"<{course.code}> - <{course.title}>")
 
-            if course_contents:
-                course_path = Path(self.download_location / str(ms.created.year) / course.title)
+                course_contents = self._sess.fetch_contents(course_id=course.id)
 
-            for content in course_contents:
-                self._handle_file(content, course_path, course.id, 1)
+                if course_contents:
+                    course_path = Path(self.download_location / str(ms.created.year) / course.title)
 
+                for content in course_contents:
+                    self._handle_file(content, course_path, course.id, 1)
+        self.executor.shutdown(wait=True)
         return start_time
 
     @property

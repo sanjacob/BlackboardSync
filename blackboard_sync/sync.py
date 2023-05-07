@@ -55,8 +55,6 @@ class BlackboardSync:
         # Time between each sync in seconds
         self._sync_interval = 60 * 30
 
-        # Time before last sync
-        self._last_sync = None
         # Time of next programmed sync
         self._next_sync = None
         # User session active
@@ -70,7 +68,7 @@ class BlackboardSync:
         self._is_active = False
 
         # Set up logging
-        self._logger.setLevel(logging.WARN)
+        self._logger.setLevel(logging.INFO)
         self._logger.addHandler(logging.StreamHandler())
         self._logger.debug("Initialising BlackboardSync")
 
@@ -79,7 +77,7 @@ class BlackboardSync:
         sess_logger.addHandler(logging.StreamHandler())
 
         download_logger = logging.getLogger("BlackboardDownload")
-        download_logger.setLevel(logging.WARN)
+        download_logger.setLevel(logging.DEBUG)
         download_logger.addHandler(logging.StreamHandler())
 
         self.sess_logger = sess_logger
@@ -136,9 +134,9 @@ class BlackboardSync:
                 new_download = BlackboardDownload(self.sess, self.download_location / '', self.last_sync_time)
 
                 try:
-                    self.last_sync = new_download.download()
+                    self.last_sync_time = new_download.download()
                     failed_attempts = 0
-                except ValueError:
+                except ValueError as ve:
                     # Session expired, log out and attempt to reload config
                     self.logger.warning("User session expired")
                     reload_session = True
