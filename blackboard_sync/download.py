@@ -128,7 +128,7 @@ class BlackboardDownload:
             for attachment in attachments:
                 download_path = Path(body_path / attachment.fileName)
                 if attachment.mimeType.startswith('video/'):
-                    self.logger.info('Not downloading {attachment.fileName}')
+                    self.logger.info(f'Not downloading {attachment.fileName}')
                 else:
                     self.executor.submit(self._download_file, course_id, content.id, attachment.id, download_path)
 
@@ -151,12 +151,12 @@ class BlackboardDownload:
         :return: Datetime when method was called.
         """
         start_time = datetime.now(timezone.utc)
-        private = False
 
         self.logger.info("Fetching user memberships")
         memberships = self._sess.fetch_user_memberships(user_id=self.user_id,
                                                         dataSourceId=self._data_source)
         for ms in memberships:
+            private = False
             self.logger.debug("Fetching course")
             try:
                 course = self._sess.fetch_courses(course_id=ms.courseId)
@@ -206,40 +206,3 @@ class BlackboardDownload:
         """Logger for BlackboardDownload, set at level DEBUG."""
         return self._logger
 
-
-def configure() -> BlackboardSession:
-    """Setup login for the current download job if accessing via shell."""
-    authorized = False
-    sess = None
-
-    while not authorized:
-        username = input("Enter your UCLan mail: ")
-        password = getpass("Enter your password: ")
-
-        placeholder_pass = '*' * len(password)
-
-        save = input(f"Use login configuration {username}: {placeholder_pass}? [Y/n] ")
-
-        if save.lower() != "n":
-            try:
-                sess = BlackboardSession(username, password)
-            except ValueError:
-                print("Login parameters are incorrect, try again")
-            else:
-                authorized = True
-        print()
-
-    return sess
-
-
-def main() -> int:
-    """Provide command-line access to creating a download job."""
-    sess = configure()
-    last_downloaded = input("Download all files modified since: ")
-    new_download = BlackboardDownload(sess, 'sync', parse(last_downloaded))
-    new_download.download()
-    return 0
-
-
-if __name__ == '__main__':
-    raise SystemExit(main())
