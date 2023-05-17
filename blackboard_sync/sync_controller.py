@@ -127,6 +127,7 @@ class BBSyncController:
     def _log_out(self) -> None:
         self.model.log_out()
         self.tray.set_logged_in(False)
+        self.login_window.restore()
         self.login_window.setVisible(True)
         self.config_window.setVisible(False)
 

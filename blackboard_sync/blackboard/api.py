@@ -47,13 +47,13 @@ class SafeFormat(dict):
 class BlackboardSession:
     """Represents a user session in Blackboard."""
 
-    _base_url = "https://portal.uclan.ac.uk"
-
     _logger = logging.getLogger(__name__)
     _logger.setLevel(logging.DEBUG)
     _logger.addHandler(logging.NullHandler())
 
-    def __init__(self, cookies: RequestsCookieJar):
+    def __init__(self, base_url: str, cookies: RequestsCookieJar):
+        # Root API URL
+        self._base_url = base_url
         # Use cookies for requests
         self._bb_session = requests.Session()
         self._bb_session.cookies = cookies

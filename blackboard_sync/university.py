@@ -40,6 +40,7 @@ class UniversityInfo(BaseModel):
     name: str
     short_name: str
     login: LoginInfo
+    api_url: str
     network: NetworkInfo = None
     data_sources: List[str] = []
 

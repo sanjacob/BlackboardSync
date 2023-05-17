@@ -402,6 +402,15 @@ class LoginWebView(QWidget):
             secure=cookie.isSecure()
         )
 
+    def restore(self) -> None:
+        self.clear_cookie_store()
+        self.web_view.load(QUrl.fromUserInput(self.start_url))
+
+    def clear_cookie_store(self) -> None:
+        """Clear the HTTP cache and cookies."""
+        self._cookie_store.deleteAllCookies()
+        self._engine_profile.clearHttpCache()
+
     @property
     def url(self) -> str:
         """URL of current website."""

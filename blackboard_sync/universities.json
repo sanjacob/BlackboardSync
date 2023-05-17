@@ -6,6 +6,7 @@
       "start_url": "https://portal.uclan.ac.uk",
       "target_url": "https://portal.uclan.ac.uk/ultra/"
     },
+    "api_url": "https://portal.uclan.ac.uk/",
     "network": {
       "isp": [],
       "org": ["University of Central Lancashire"]

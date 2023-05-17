@@ -112,7 +112,7 @@ class BlackboardSync:
         self._cookies = cookie_jar
 
         try:
-            u_sess = BlackboardSession(cookie_jar)
+            u_sess = BlackboardSession(self.university.api_url, cookie_jar)
         except ValueError:
             self.logger.warning("Credentials are incorrect")
         else:
