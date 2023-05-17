@@ -102,7 +102,6 @@ class TestSetupWizard:
         wizard = make_setup_wizard(self.institutions)
         # Necessary to get currentId
         wizard.show()
-        wizard.stop()
         qtbot.addWidget(wizard)
         assert wizard.currentId() == SetupWizard.Pages.INTRO
 

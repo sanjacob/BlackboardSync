@@ -25,9 +25,10 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
 
 from .sync import BlackboardSync
+from .university import UniversityDB, LoginInfo
 from .__about__ import __title__, __version__
 from .qt.qt_elements import (LoginWebView, SyncTrayIcon, SettingsWindow,
-                             RedownloadDialog, OSUtils)
+                             RedownloadDialog, OSUtils, SetupWizard)
 
 
 class BBSyncController:
@@ -47,14 +48,18 @@ class BBSyncController:
 
         self._init_ui()
 
-        self._show_login_window()
+        if self.model.university is None:
+            self._show_setup_window()
+        else:
+            self._build_login_window(self.model.university.login)
+            self._show_login_window()
         self.app.exec()
 
     def _init_ui(self) -> None:
-        self.login_window = LoginWebView(start_url='https://portal.uclan.ac.uk',
-                                         target_url='https://portal.uclan.ac.uk/ultra/')
+        self.setup_window = SetupWizard(UniversityDB.all())
+        self.setup_window.accepted.connect(self._setup_complete)
 
-        self.login_window.login_complete_signal.connect(self._login_complete)
+        self.login_window = None
 
         self.config_window = SettingsWindow()
 
@@ -71,6 +76,18 @@ class BBSyncController:
 
         self.app.setQuitOnLastWindowClosed(False)
 
+    def _setup_complete(self) -> None:
+        self.setup_window.setVisible(False)
+        self.model.setup(self.setup_window.institution_index, self.setup_window.download_location)
+        self._build_login_window(self.model.university.login)
+        self._show_login_window()
+
+    def _build_login_window(self, uni_login_info: LoginInfo) -> None:
+        # Get login url from uni DB
+        self.login_window = LoginWebView(start_url=uni_login_info.start_url,
+                                         target_url=uni_login_info.target_url)
+        self.login_window.login_complete_signal.connect(self._login_complete)
+
     def _login_complete(self) -> None:
         self.app.setOverrideCursor(Qt.WaitCursor)
         # Call login function on sync
@@ -80,7 +97,11 @@ class BBSyncController:
         self.app.restoreOverrideCursor()
 
     def _show_login_window(self) -> None:
-        self._show_window(self.login_window)
+        if self.login_window is not None:
+            self._show_window(self.login_window)
+
+    def _show_setup_window(self) -> None:
+        self._show_window(self.setup_window)
 
     def _show_config_window(self) -> None:
         # Update displayed settings
@@ -132,7 +153,8 @@ class BBSyncController:
 
         self.tray.update_last_synced(last_sync_str)
         self.tray.set_logged_in(self.model.is_logged_in)
-        self.login_window.setVisible(not self.model.is_logged_in)
+        if self.login_window is not None:
+            self.login_window.setVisible(not self.model.is_logged_in)
 
         # Disable button if currently syncing
         self.tray.toggle_currently_syncing(self.model.is_syncing)

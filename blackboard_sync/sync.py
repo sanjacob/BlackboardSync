@@ -32,6 +32,7 @@ from requests.exceptions import ConnectionError
 from .config import SyncConfig
 from .download import BlackboardDownload
 from .blackboard import BlackboardSession
+from .university import UniversityDB
 
 
 class BlackboardSync:
@@ -83,12 +84,23 @@ class BlackboardSync:
         self.sess_logger = sess_logger
         self.download_logger = download_logger
 
+        self.university = None
+
         # Attempt to load existing configuration
         self._config = SyncConfig()
+        self.logger.info("Loading preexisting configuration")
 
-        if self._config.last_sync_time:
-            self.logger.info("Preexisting configuration exists")
+        if self._config.university_index is not None:
+            self.university = UniversityDB.get(self._config.university_index)
+
+        if self._config.last_sync_time is not None:
             self._update_next_sync()
+
+    def setup(self, university_index: int, download_location: Path,
+              share_errors: bool = False, share_stats: bool = False):
+        """Setup the university information."""
+        self.university_index = university_index
+        self._config.download_location = download_location
 
     def auth(self, cookie_jar: RequestsCookieJar) -> bool:
         """Create a new Blackboard session with the given credentials.
@@ -234,6 +246,15 @@ class BlackboardSync:
     @data_source.setter
     def data_source(self, d: str) -> None:
         self._data_source = d
+
+    @property
+    def university_index(self):
+        return self._config.university_index
+
+    @university_index.setter
+    def university_index(self, uni_index: int) -> None:
+        self._config.university_index = uni_index
+        self.university = UniversityDB.get(uni_index)
 
     @property
     def download_location(self) -> Path:

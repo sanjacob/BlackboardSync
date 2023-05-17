@@ -100,3 +100,11 @@ class SyncConfig(Config):
     def download_location(self, sync_dir: Path) -> None:
         self._sync['download_location'] = str(sync_dir)
 
+    @property
+    def university_index(self) -> Optional[int]:
+        return self._sync.getint('university')
+
+    @university_index.setter
+    @Config.persist
+    def university_index(self, university: int) -> None:
+        self._sync['university'] = str(university)
