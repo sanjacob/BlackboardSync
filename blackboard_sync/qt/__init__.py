@@ -34,7 +34,7 @@ Full documentation available at <https://blackboardsync.readthedocs.io>.
 
 from .qt_elements import (SyncPeriod, SetupWizard, LoginWebView, SyncTrayIcon,
                           SyncTrayMenu, SettingsWindow, RedownloadDialog,
-                          UniNotSupportedDialog, OSUtils)
+                          UniNotSupportedDialog, OSUtils, UpdateFoundDialog)
 
 __all__ = ['SyncPeriod', 'SetupWizard', 'LoginWebView', 'SyncTrayIcon', 'SyncTrayMenu',
-           'SettingsWindow', 'RedownloadDialog', 'UniNotSupportedDialog', 'OSUtils']
+           'SettingsWindow', 'RedownloadDialog', 'UniNotSupportedDialog', 'OSUtils', 'UpdateFoundDialog']

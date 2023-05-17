@@ -17,6 +17,7 @@ hypothesis = "*"
 pydantic = "*"
 openapi2jsonschema = "*"
 pyqtwebengine = "*"
+packaging = "*"
 
 [dev-packages]
 coverage = "*"
@@ -34,4 +35,4 @@ python-lsp-server = {extras = ["all"], version = "*"}
 isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
 
 [requires]
-python_version = "3.9"
+python_version = "3.10"

@@ -19,6 +19,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import sys
+import webbrowser
 
 from PyQt5.QtGui import QWindow
 from PyQt5.QtCore import Qt
@@ -27,8 +28,9 @@ from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
 from .sync import BlackboardSync
 from .university import UniversityDB, LoginInfo
 from .__about__ import __title__, __version__
+from .updates import check_for_updates
 from .qt.qt_elements import (LoginWebView, SyncTrayIcon, SettingsWindow,
-                             RedownloadDialog, OSUtils, SetupWizard)
+                             RedownloadDialog, OSUtils, SetupWizard, UpdateFoundDialog)
 
 
 class BBSyncController:
@@ -95,6 +97,12 @@ class BBSyncController:
         self.tray.set_logged_in(auth)
         self.login_window.setVisible(False)
         self.app.restoreOverrideCursor()
+        self._check_for_updates()
+
+    def _check_for_updates(self) -> None:
+        if (html_url := check_for_updates()) is not None:
+            if UpdateFoundDialog().update:
+                webbrowser.open(html_url)
 
     def _show_login_window(self) -> None:
         if self.login_window is not None:

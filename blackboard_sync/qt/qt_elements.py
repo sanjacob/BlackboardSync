@@ -262,6 +262,33 @@ class RedownloadDialog(QMessageBox):
         return self.exec() == QMessageBox.Yes
 
 
+class UpdateFoundDialog(QMessageBox):
+    """`QMessageBox` shown after a more recent version was found."""
+
+    _window_title = "New BlackboardSync release available"
+    _dialog_text = "A new version of BlackboardSync is now available!"
+    _info_text = "Please download the latest version from the official GitHub repository"
+
+    def __init__(self):
+        """Create a `UpdateFoundDialog`."""
+        super().__init__()
+        self._init_ui()
+
+    def _init_ui(self) -> None:
+        self.setText(self._dialog_text)
+        self.setInformativeText(self._info_text)
+        self.setStandardButtons(QMessageBox.Open | QMessageBox.Cancel)
+        self.setDefaultButton(QMessageBox.Open)
+        self.setWindowTitle(self._window_title)
+        self.setIcon(QMessageBox.Information)
+        self.setWindowIcon(Assets.icon)
+
+    @property
+    def update(self) -> bool:
+        """Indicate if BBSync should be updated."""
+        return self.exec() == QMessageBox.Open
+
+
 class PersistenceWarning(QDialog):
     """QDialog shown if user chooses to store their login details on their device."""
 
