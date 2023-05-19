@@ -74,6 +74,7 @@ class BBSyncController:
         self.tray.settings_signal.connect(self._show_config_window)
         self.tray.sync_signal.connect(self._force_sync)
         self.tray.activated.connect(self._tray_icon_activated)
+        self.tray.open_dir_signal.connect(self._open_download_dir)
         self.tray.show_menu_signal.connect(self._update_tray_menu)
 
         self.app.setQuitOnLastWindowClosed(False)
@@ -123,14 +124,15 @@ class BBSyncController:
         window.show()
         window.setWindowState(Qt.WindowNoState)
 
+    def _open_download_dir(self) -> None:
+        # Open folder in browser
+        OSUtils.open_dir_in_file_browser(self.model.download_location)
+
     def _tray_icon_activated(self, activation_reason: QSystemTrayIcon.ActivationReason) -> None:
         if activation_reason == QSystemTrayIcon.ActivationReason.Trigger:
             # if not logged in
             if not self.model.is_logged_in:
                 self._show_login_window()
-            else:
-                # Open folder in browser
-                OSUtils.open_dir_in_file_browser(self.model.download_location)
 
     def _log_out(self) -> None:
         self.model.log_out()

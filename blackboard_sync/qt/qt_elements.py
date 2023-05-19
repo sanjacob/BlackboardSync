@@ -112,10 +112,15 @@ class SyncTrayMenu(QMenu):
     def _init_ui(self) -> None:
         sync_icon = QApplication.style().standardIcon(QStyle.SP_BrowserReload)
         close_icon = QApplication.style().standardIcon(QStyle.SP_DialogCloseButton)
+        open_dir_icon = QApplication.style().standardIcon(QStyle.SP_DirOpenIcon)
 
         self.refresh = QAction("Sync now")
         self.refresh.setIcon(sync_icon)
         self.addAction(self.refresh)
+
+        self.open_dir = QAction("Open downloads")
+        self.open_dir.setIcon(open_dir_icon)
+        self.addAction(self.open_dir)
 
         self.preferences = QAction("Preferences")
         self.addAction(self.preferences)
@@ -137,6 +142,7 @@ class SyncTrayMenu(QMenu):
         """Set the UI to reflect logged-in status."""
         self.refresh.setVisible(logged)
         self.preferences.setVisible(logged)
+        self.open_dir.setVisible(logged)
         self.log_in.setVisible(not logged)
 
         if logged:
@@ -165,6 +171,7 @@ class SyncTrayIcon(QSystemTrayIcon):
     _login_signal = pyqtSignal()
     _settings_signal = pyqtSignal()
     _quit_signal = pyqtSignal()
+    _open_dir_signal = pyqtSignal()
     _show_menu_signal = pyqtSignal()
 
     def __init__(self):
@@ -187,6 +194,7 @@ class SyncTrayIcon(QSystemTrayIcon):
         self._login_signal = self._menu.log_in.triggered
         self._settings_signal = self._menu.preferences.triggered
         self._quit_signal = self._menu.quit.triggered
+        self._open_dir_signal = self._menu.open_dir.triggered
         self._show_menu_signal = self._menu.aboutToShow
 
         # Add the menu to the tray
@@ -224,6 +232,11 @@ class SyncTrayIcon(QSystemTrayIcon):
     def quit_signal(self):
         """Fire once user decides to quit app."""
         return self._quit_signal
+
+    @property
+    def open_dir_signal(self):
+        """Fire once user wants to open download directory."""
+        return self._open_dir_signal
 
     @property
     def show_menu_signal(self):
