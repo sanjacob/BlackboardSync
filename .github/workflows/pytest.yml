@@ -1,4 +1,4 @@
-name: Run tests and linter
+name: Build CI
 
 on:
   push:
@@ -23,11 +23,13 @@ jobs:
       uses: actions/checkout@v3
     - name: Set up virtual X11
       run: sudo apt-get install xvfb
+    - name: Se up PyQt dependencies
+      uses: tlambert03/setup-qt-libs@v1
     - name: Set up Python 3.10
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python }}
-    - name: Install dependencies
+    - name: Install Python dependencies
       run: |
         python -m pip install --upgrade pip
         pip install pipenv
