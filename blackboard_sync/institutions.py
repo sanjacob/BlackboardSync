@@ -49,8 +49,6 @@ class InstitutionLogin(BaseModel):
 
     start_url: HttpUrl
     target_url: HttpUrl
-    username_input_selector: str
-    password_input_selector: str
 
 
 class InstitutionNetwork(BaseModel):
@@ -77,6 +75,7 @@ class Institution(BaseModel):
     name: str
     short_name: str
     data_sources: list[str]
+    api_url: HttpUrl
     login: InstitutionLogin
     network: InstitutionNetwork
 

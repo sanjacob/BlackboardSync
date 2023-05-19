@@ -26,7 +26,7 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
 
 from .sync import BlackboardSync
-from .university import UniversityDB, LoginInfo
+from .institutions import Institution, get_names, InstitutionLogin
 from .__about__ import __title__, __version__
 from .updates import check_for_updates
 from .qt.qt_elements import (LoginWebView, SyncTrayIcon, SettingsWindow,
@@ -58,7 +58,7 @@ class BBSyncController:
         self.app.exec()
 
     def _init_ui(self) -> None:
-        self.setup_window = SetupWizard(UniversityDB.all())
+        self.setup_window = SetupWizard(get_names())
         self.setup_window.accepted.connect(self._setup_complete)
 
         self.login_window = None
@@ -85,7 +85,7 @@ class BBSyncController:
         self._build_login_window(self.model.university.login)
         self._show_login_window()
 
-    def _build_login_window(self, uni_login_info: LoginInfo) -> None:
+    def _build_login_window(self, uni_login_info: InstitutionLogin) -> None:
         # Get login url from uni DB
         self.login_window = LoginWebView(start_url=uni_login_info.start_url,
                                          target_url=uni_login_info.target_url)

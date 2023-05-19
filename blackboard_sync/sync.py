@@ -32,7 +32,7 @@ from requests.exceptions import ConnectionError
 from .config import SyncConfig
 from .download import BlackboardDownload
 from .blackboard import BlackboardSession
-from .university import UniversityDB
+from .institutions import Institution, get_by_index
 
 
 class BlackboardSync:
@@ -91,7 +91,7 @@ class BlackboardSync:
         self.logger.info("Loading preexisting configuration")
 
         if self._config.university_index is not None:
-            self.university = UniversityDB.get(self._config.university_index)
+            self.university = get_by_index(self._config.university_index)
 
         if self._config.last_sync_time is not None:
             self._update_next_sync()
@@ -254,7 +254,7 @@ class BlackboardSync:
     @university_index.setter
     def university_index(self, uni_index: int) -> None:
         self._config.university_index = uni_index
-        self.university = UniversityDB.get(uni_index)
+        self.university = get_by_index(uni_index)
 
     @property
     def download_location(self) -> Path:
