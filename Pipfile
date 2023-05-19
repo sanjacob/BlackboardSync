@@ -11,13 +11,12 @@ toml = "*"
 python-dateutil = "*"
 pyqt5 = "<5.15.2"
 setuptools = "*"
-keyring = "*"
 pathvalidate = "*"
 hypothesis = "*"
 pydantic = "*"
-openapi2jsonschema = "*"
 pyqtwebengine = "*"
 packaging = "*"
+click = "*"
 
 [dev-packages]
 coverage = "*"
@@ -30,9 +29,9 @@ tox = "*"
 twine = "*"
 mypy = "*"
 pytest-qt = "*"
-datamodel-code-generator = "*"
 python-lsp-server = {extras = ["all"], version = "*"}
 isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
+black = "*"
 
 [requires]
 python_version = "3.10"
