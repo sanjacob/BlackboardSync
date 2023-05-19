@@ -42,7 +42,8 @@ class TestBlackboard:
         print(instance.dict())
 
 
-class NotTestBBDataclasses:
+@pytest.mark.skip
+class TestBBDataclasses:
     @given(st.booleans())
     def test_bblocale(self, force):
         obj = BBLocale(force=force)
@@ -87,7 +88,6 @@ class NotTestBBDataclasses:
         assert obj.title == title
         assert obj.type == bb_type
 
-    @pytest.mark.skip()
     def test_bbcontenthandler():
         pass
 
@@ -106,6 +106,7 @@ class NotTestBBDataclasses:
         assert obj.body == body
         assert obj.parentId == parent_id
 
+    @pytest.mark.skip
     @given(st.text(), st.text(), st.text(), st.text(), st.text(), st.text(), st.text(), st.text(),
            st.text())
     def test_bbmembership(self, id, user_id, course_id, data_source_id,
@@ -143,7 +144,8 @@ class NotTestBBDataclasses:
         assert obj.externalAccessUrl == external_url
 
 
-class NotTestBBCourseContent:
+@pytest.mark.skip
+class TestBBCourseContent:
     def test_content_safe_title(self):
         og_title = "puppy.docx"
         sanitised = og_title

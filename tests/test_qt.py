@@ -157,36 +157,6 @@ class TestSetupWizard:
         qtbot.keyClick(wizard.uni_selection_box, QtCore.Qt.Key_Enter)
         assert wizard.institution_index == 3
 
-    def test_wizard_dummy(self, qtbot, make_setup_wizard):
-        u = ['University of Central Lancashire (UCLan)', 'University of Leeds', 'University of Manchester']
-        wizard = make_setup_wizard(u)
-
-        wizard.show()
-        wizard.next()
-        qtbot.addWidget(wizard)
-
-        qtbot.stop()
-
-
-class TestLoginWebView:
-    app = QApplication([])
-
-    def test_login(self):
-        web = LoginWebView(start_url='https://portal.uclan.ac.uk',
-                           target_url='https://portal.uclan.ac.uk/ultra/',
-                           username_input_selector='#userNameInput',
-                           password_input_selector='#passwordInput')
-        web.show()
-        web.login_complete_signal.connect(self.callback)
-        self.web = web
-        self.app.exec()
-
-    def callback(self):
-        r = requests.get('https://portal.uclan.ac.uk/learn/api/public/v1/users', cookies=self.web.cookie_jar)
-        print(r.text)
-
-    def test_redownload_dialog(self):
-        print(RedownloadDialog().redownload)
 
 
 class TestSettingsWindow:

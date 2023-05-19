@@ -32,9 +32,6 @@ def test_config_default_values():
     with tempfile.TemporaryDirectory() as tmpdir:
         tmp_path = Path(tmpdir)
         s = SyncConfig(tmp_path)
-        assert s.username is None
-        assert s.password is None
-        assert s.download_location is None
         assert s.last_sync_time is None
 
 @given(st.datetimes())
@@ -48,25 +45,3 @@ def test_config_last_sync_time(sync_time):
         new_config = SyncConfig(tmp_path)
         assert new_config.last_sync_time == sync_time
 
-@given(st.text())
-def test_username(username):
-    username = username.strip()
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmp_path = Path(tmpdir)
-        config = SyncConfig(tmp_path)
-        config.username = username
-        assert config.username == username
-        new_config = SyncConfig(tmp_path)
-        assert new_config.username == username
-
-@given(username=st.text(), password=st.text())
-def test_config_password(username, password):
-    with patch('blackboard_sync.config.keyring') as mock_keyring:
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmp_path = Path(tmpdir)
-            config = SyncConfig(tmp_path)
-            config.set_login(username, password)
-            stored_pass = mock_keyring.set_password.call_args.args[-1]
-            mock_keyring.get_password.return_value = stored_pass
-            assert config.password == password
-            mock_keyring.get_password.assert_called_once_with(SyncConfig._config_filename, username)

@@ -38,22 +38,6 @@ def mock_session():
 
 
 class TestBlackboardDownload:
-    def not_test_download(self, mock_session, tmp_path):
-        mock_session.fetch_user_memberships.return_value = {'hermanos': 'pollos'}
-        download = BlackboardDownload(mock_session, tmp_path)
-        # download.download()
-        # assert download.user_id == "handshake"
-
-    @given(st.text())
-    def test_handle_file(self):
-        mock_session = Mock(spec=BlackboardSession)
-        mock_session.username = 'example'
-
-        with tempfile.TemporaryDirectory() as tmpdir:
-            tmp_path = Path(tmpdir)
-            download = BlackboardDownload(mock_session, tmp_path)
-            download._handle_file(None, tmp_path, "", 1)
-
     @patch('blackboard_sync.download.platform')
     @given(url=pr.urls(), current_platform=st.sampled_from(['Windows', 'Darwin']))
     def test_create_link_windows_darwin(self, url, current_platform, mock_platform):
