@@ -6,9 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-permissions:
-  contents: read
-
 jobs:
   build:
     runs-on: ${{ matrix.os }}
@@ -18,20 +15,20 @@ jobs:
         os: [ ubuntu-latest ]
         python: [ "3.10" ]
 
+    env:
+      DISPLAY: ':99.0'
+
     steps:
     - name: Get repository
       uses: actions/checkout@v3
-
-    - name: Set up virtual X11
-      run: sudo apt-get install xvfb
-
-    - name: Set up PyQt dependencies
-      uses: tlambert03/setup-qt-libs@v1
 
     - name: Set up Python 3.10
       uses: actions/setup-python@v4
       with:
         python-version: ${{ matrix.python }}
+
+    - name: Set up PyQt dependencies
+      uses: tlambert03/setup-qt-libs@v1
 
     - name: Update pip and install pipenv
       run: |
@@ -54,4 +51,4 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         #flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
     - name: Test with pytest
-      run: xvfb-run -a pytest
+      run: pytest
