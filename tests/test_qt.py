@@ -65,7 +65,6 @@ def make_setup_wizard(monkeypatch):
     return _make_setup_wizard
 
 
-@pytest.mark.skip()
 class TestSetupWizard:
     intro = 'You are a few steps away from syncing your Blackboard content straight to your device!'
     uni_selection = 'First, tell us where you study'
@@ -160,7 +159,6 @@ class TestSetupWizard:
         assert wizard.institution_index == 3
 
 
-@pytest.mark.skip()
 class TestSettingsWindow:
     user = 'exampleUser'
     data_source = 'exampleDataSource'
@@ -244,7 +242,6 @@ class TestSettingsWindow:
         assert blocker.signal_triggered
 
 
-@pytest.mark.skip()
 class TestSyncTrayIcon:
     def test_tray_icon_initial_state(self, qtbot, tray_icon):
         assert tray_icon._menu._status.text() == 'Not Logged In'
