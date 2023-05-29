@@ -28,7 +28,6 @@ from blackboard_sync.qt import SyncPeriod, SyncTrayIcon, SettingsWindow
 from blackboard_sync.qt.qt_elements import (SetupWizard, LoginWebView,
                                             RedownloadDialog)
 
-pytest.skip(allow_module_level=True)
 
 @pytest.fixture
 def settings_window():
