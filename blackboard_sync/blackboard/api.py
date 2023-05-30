@@ -61,7 +61,7 @@ class BlackboardSession:
         self._username = None
         self._timeout = 12
 
-    def get(endpoint: str, version: int = 1, json: bool = True, **g_kwargs):
+    def get(endpoint: str, version: int = 1, use_api: bool = True, json: bool = True, **g_kwargs):
         """Return a decorator (needed to use fancy notation).
 
         :param string endpoint: Endpoint to make API call to, including placeholders
@@ -88,6 +88,9 @@ class BlackboardSession:
 
                 api_root = f"/learn/api/public/v{version}"
                 endpoint_format = f"{self._base_url}{api_root}{param_endpoint}"
+
+                if not use_api:
+                    endpoint_format = param_endpoint
                 if endpoint_format[-1] == "/":
                     endpoint_format = endpoint_format[:-1]
 
@@ -132,6 +135,14 @@ class BlackboardSession:
     @timeout.setter
     def timeout(self, t: int) -> None:
         self._timeout = t
+
+    # WEBDAV DOWNLOAD
+
+    @get("{webdav_url}", stream=True, json=False, use_api=False)
+    def download_webdav(self, response):
+        """Downloads an arbitrary webdav file"""
+        return response
+
 
     # API CALLS
     # https://developer.blackboard.com/portal/displayApi

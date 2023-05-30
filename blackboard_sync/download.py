@@ -26,18 +26,12 @@ import platform
 import requests
 from pathlib import Path
 from getpass import getpass
-from typing import List, NamedTuple
 from dateutil.parser import parse
 from datetime import datetime, timezone
-from bs4 import BeautifulSoup
 from concurrent.futures import ThreadPoolExecutor
 
 from .blackboard import BlackboardSession, BBCourseContent, BBResourceType
-
-
-class Link(NamedTuple):
-    href: str
-    text: str
+from .webdav import ContentParser, Link, validate_webdav_response
 
 
 class BlackboardDownload:
@@ -94,40 +88,21 @@ class BlackboardDownload:
         d_stream = self._sess.download(course_id=course_id,
                                        content_id=content_id,
                                        attachment_id=attachment_id)
-        self._download_any(d_stream, file_path)
+        self._download_stream(d_stream, file_path)
 
     def _download_webdav_file(self, link: str, file_path: Path) -> None:
-        r = requests.get(link, stream=True)
-        if r.status_code == 200:
-            content_type = r.headers.get('Content-Type')
-            # Only download internal files
-            if link.startswith(self._sess.base_url):
-                # TODO: enable toggling
-                if 'video' not in content_type:
-                    self._download_any(r, file_path)
+        response = self._sess.download_webdav(webdav_url=link)
+        if validate_webdav_response(response, link, self._sess.base_url):
+            self._download_stream(r, file_path)
         else:
-            self.logger.info(f"Could not get webdav/ext file {link}")
+            self.logger.info(f"Not downloading webdav/ext file {link}")
 
-    def _download_any(self, stream, file_path):
+    def _download_stream(self, stream, file_path):
         """Generic stream download function."""
         with file_path.open("wb") as f:
             self.logger.info(f"Writing to {file_path}")
             for chunk in stream.iter_content(chunk_size=1024):
                 f.write(chunk)
-
-    def _replace_ext_links(self, soup) -> str:
-        for link in soup.find_all('a'):
-            if link['href'].startswith(self._sess.base_url):
-                filename = link.text.strip()
-                link['href'] = filename
-                link.string = filename
-        return str(soup)
-
-    def _parse_links(self, soup) -> List[Link]:
-        links = []
-        for link in soup.find_all('a'):
-            links.append(Link(href=link.get('href'), text=link.text.strip()))
-        return links
 
     def _handle_file(self, content: BBCourseContent, parent_path: Path,
                      course_id: str, depth: int = 0) -> None:
@@ -182,15 +157,14 @@ class BlackboardDownload:
             file_path.mkdir(exist_ok=True, parents=True)
 
             # Parse content.body for more attachments
-            soup = BeautifulSoup(content.body, 'html.parser')
-            body_links = self._parse_links(soup)
-            for body_link in body_links:
+            parser = ContentParser(content.body, self._sess.base_url)
+
+            for body_link in parser.links:
                 download_path = Path(file_path / body_link.text)
                 self._download_webdav_file(body_link.href, download_path)
 
-            content_body = self._replace_ext_links(soup)
             with Path(file_path, f"{content.title_path_safe}.html").open('w') as html_content:
-                html_content.write(content_body)
+                html_content.write(parser.body)
 
     def download(self) -> datetime:
         """Retrieve the user's courses, and start download of all contents
