@@ -17,6 +17,7 @@ pydantic = "*"
 pyqtwebengine = "*"
 packaging = "*"
 click = "*"
+beautifulsoup4 = "*"
 
 [dev-packages]
 coverage = "*"
