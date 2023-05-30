@@ -188,9 +188,9 @@ class BlackboardDownload:
                 download_path = Path(file_path / body_link.text)
                 self._download_webdav_file(body_link.href, download_path)
 
-            md_body = self._replace_ext_links(soup)
-            with Path(file_path, f"{content.title_path_safe}.md").open('w') as md:
-                md.write(md_body)
+            content_body = self._replace_ext_links(soup)
+            with Path(file_path, f"{content.title_path_safe}.html").open('w') as html_content:
+                html_content.write(content_body)
 
     def download(self) -> datetime:
         """Retrieve the user's courses, and start download of all contents
