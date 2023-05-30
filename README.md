@@ -44,12 +44,9 @@ Built with:
 - Supported content:
   - Attachments of any type (e.g. .docx, .pptx, .pdf, etc.)
   - Internet links
-  - Content descriptions (saved as markdown files [^1])
+  - Content descriptions (saved as html files)
 - Cross-platform
   - Linux, Windows, and macOS ready
-
-
-[^1]: For a list of available markdown editors, see [this][markdown-editors].
 
 
 
@@ -169,7 +166,6 @@ This software is distributed under the [General Public License v2.0][license], m
 [universal-login]: https://github.com/jacobszpz/BlackboardSync/issues/3	"BBSync login"
 [pyqt]: https://pypi.org/project/PyQt5/5.15.1/	"Python Bindings for Qt 5"
 [typora]: https://typora.io/ "Typora"
-[markdown-editors]: https://www.markdownguide.org/tools/ "Some markdown editors"
 [releases]: https://github.com/jacobszpz/BlackboardSync/releases "BlackboardSync Releases"
 [issues]: https://github.com/jacobszpz/BlackboardSync/issues/new "BlackboardSync Issues"
 [git]: https://git-scm.com/	"Git"

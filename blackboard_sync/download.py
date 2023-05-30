@@ -189,7 +189,7 @@ class BlackboardDownload:
                 self._download_webdav_file(body_link.href, download_path)
 
             md_body = self._replace_ext_links(soup)
-            with Path(body_path, f"{content.title_path_safe}.md").open('w') as md:
+            with Path(file_path, f"{content.title_path_safe}.md").open('w') as md:
                 md.write(md_body)
 
     def download(self) -> datetime:
