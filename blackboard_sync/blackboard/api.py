@@ -901,6 +901,11 @@ class BlackboardSession:
         return response
 
     @property
+    def base_url(self):
+        """API base URL."""
+        return self._base_url
+
+    @property
     def logger(self):
         """Logger for Blackboard API, set at level DEBUG."""
         return self._logger

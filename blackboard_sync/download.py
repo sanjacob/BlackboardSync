@@ -100,9 +100,11 @@ class BlackboardDownload:
         r = requests.get(link, stream=True)
         if r.status_code == 200:
             content_type = r.headers.get('Content-Type')
-            # TODO: enable toggling
-            if 'video' not in content_type:
-                self._download_any(r, file_path)
+            # Only download internal files
+            if link.startswith(self._sess.base_url):
+                # TODO: enable toggling
+                if 'video' not in content_type:
+                    self._download_any(r, file_path)
         else:
             self.logger.info(f"Could not get webdav/ext file {link}")
 
@@ -115,9 +117,10 @@ class BlackboardDownload:
 
     def _replace_ext_links(self, soup) -> str:
         for link in soup.find_all('a'):
-            filename = link.text.strip()
-            link['href'] = filename
-            link.string = filename
+            if link['href'].startswith(self._sess.base_url):
+                filename = link.text.strip()
+                link['href'] = filename
+                link.string = filename
         return str(soup)
 
     def _parse_links(self, soup) -> List[Link]:
