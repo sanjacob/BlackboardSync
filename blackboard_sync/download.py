@@ -23,7 +23,7 @@ mass download all user content from Blackboard
 
 import logging
 import platform
-import requests
+from requests.exceptions import RequestException
 from pathlib import Path
 from getpass import getpass
 from dateutil.parser import parse
@@ -85,17 +85,24 @@ class BlackboardDownload:
 
     def _download_file(self, course_id: str, content_id: str, attachment_id: str, file_path: Path) -> None:
         """Get stream for blackboard file and download."""
-        d_stream = self._sess.download(course_id=course_id,
+        try:
+            d_stream = self._sess.download(course_id=course_id,
                                        content_id=content_id,
                                        attachment_id=attachment_id)
-        self._download_stream(d_stream, file_path)
+            self._download_stream(d_stream, file_path)
+        except RequestException as e:
+            self.logger.warn(f"Error while downloading file {link}")
 
     def _download_webdav_file(self, link: str, file_path: Path) -> None:
-        response = self._sess.download_webdav(webdav_url=link)
-        if validate_webdav_response(response, link, self._sess.base_url):
-            self._download_stream(r, file_path)
-        else:
-            self.logger.info(f"Not downloading webdav/ext file {link}")
+        try:
+            response = self._sess.download_webdav(webdav_url=link)
+            if validate_webdav_response(response, link, self._sess.base_url):
+                self._download_stream(r, file_path)
+            else:
+                self.logger.info(f"Not downloading webdav/ext file {link}")
+        except RequestException as e:
+            self.logger.warn(f"Error while downloading webdav/ext file {link}")
+
 
     def _download_stream(self, stream, file_path):
         """Generic stream download function."""
