@@ -33,6 +33,7 @@ pytest-qt = "*"
 python-lsp-server = {extras = ["all"], version = "*"}
 isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
 black = "*"
+pytest-mock = "*"
 
 [requires]
 python_version = "3.10"
