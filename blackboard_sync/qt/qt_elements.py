@@ -213,6 +213,16 @@ class SyncTrayIcon(QSystemTrayIcon):
         """Toggle currently syncing indicator in menu."""
         self._menu.toggle_currently_syncing(syncing)
 
+    def show_msg(self, title: str, msg: str, severity: int = 1, duration: int = 10) -> None:
+        """Show the user a message through the tray icon."""
+        icons = { 0: QSystemTrayIcon.NoIcon,
+                  1: QSystemTrayIcon.Information,
+                  2: QSystemTrayIcon.Warning,
+                  3: QSystemTrayIcon.Critical }
+        duration = duration * 1000
+        severity = 0 if severity < 0 or severity > 3 else severity
+        self.showMessage(title, msg, icons[severity], duration)
+
     @property
     def sync_signal(self):
         """Fire if user forces sync."""
