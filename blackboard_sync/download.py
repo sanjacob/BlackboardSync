@@ -97,7 +97,7 @@ class BlackboardDownload:
         try:
             response = self._sess.download_webdav(webdav_url=link)
             if validate_webdav_response(response, link, self._sess.base_url):
-                self._download_stream(r, file_path)
+                self._download_stream(response, file_path)
             else:
                 self.logger.info(f"Not downloading webdav/ext file {link}")
         except RequestException as e:
