@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "blackboardsync"
+version = "0.8.0"
+authors = [
+  { name="Jacob Sánchez", email="jacobszpz@protonmail.com" },
+]
+description = "Sync your blackboard content to your device"
+readme = "README.md"
+requires-python = ">=3.10"
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Operating System :: OS Independent",
+]
+dependencies = [
+    "pyqt5>=5.15.9",
+    "pyqtwebengine",
+    "beautifulsoup4",
+    "pydantic",
+    "pathvalidate",
+    "python-dateutil",
+    "appdirs",
+    "lxml",
+    "requests",
+    "packaging"
+]
+
+[project.optional-dependencies]
+test = ["pytest", "hypothesis", "coverage", "pytest-qt", "pytest-mock"]
+package = ["pyinstaller", "build", "twine"]
+
+[project.urls]
+"Homepage" = "https://bbsync.app"
+"Repository" = "https://github.com/jacobszpz/BlackboardSync"
+"Bug Tracker" = "https://github.com/jacobszpz/BlackboardSync/issues"
+
+[tool.setuptools]
+packages = ["blackboard_sync", "blackboard_sync.qt", "blackboard_sync.blackboard", "blackboard_sync.assets"]

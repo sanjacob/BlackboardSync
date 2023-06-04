@@ -2,8 +2,19 @@
 All notable changes to this project will be documented in this file.
 
 
+## [0.8.0][] - 2023-06-04
 
-## [0.7.0][] - 2021-03-03
+### Features
+- User must now login in a webview instead, to support 2FA and arbitrary redirects
+- Automatic packaging of macOS and Windows applications in github actions
+- Improved testing strategy
+- Descriptions are now saved as HTML files instead of markdown
+- Attachments which are only linked from within content are now supported
+- Various other minor improvements
+
+
+
+## 0.7.0 - 2021-03-03
 
 ### Features
 - New option to choose whether files should be re-downloaded upon changing the sync location.
@@ -21,7 +32,7 @@ All notable changes to this project will be documented in this file.
 
 
 
-## [0.5.0][] - 2021-02-10
+## 0.5.0 - 2021-02-10
 
 ### Features
 - Added GUI
@@ -29,6 +40,4 @@ All notable changes to this project will be documented in this file.
 
 
 
-[0.7.0]: https://github.com/jacobszpz/BlackboardSync/releases/
-[0.5.0]: https://github.com/jacobszpz/BlackboardSync/releases/
-
+[0.8.0]: https://github.com/jacobszpz/BlackboardSync/releases/

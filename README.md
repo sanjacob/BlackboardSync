@@ -34,7 +34,7 @@ Simply put, some information is necessary to make the login process compatible w
 
 Built with:
 
-- [Python 3.9][python]
+- [Python 3.10][python]
 - [PyQt5][pyqt]
 
 

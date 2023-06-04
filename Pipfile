@@ -34,6 +34,8 @@ python-lsp-server = {extras = ["all"], version = "*"}
 isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
 black = "*"
 pytest-mock = "*"
+build = "*"
+setuptools-scm = {version = ">=6.2", extras = ["toml"]}
 
 [requires]
 python_version = "3.10"
