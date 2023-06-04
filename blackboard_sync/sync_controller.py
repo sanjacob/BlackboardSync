@@ -51,6 +51,7 @@ class BBSyncController:
         self._init_ui()
 
         if self.model.university is None:
+            OSUtils.add_to_startup()
             self._show_setup_window()
         else:
             self._build_login_window(self.model.university.login)

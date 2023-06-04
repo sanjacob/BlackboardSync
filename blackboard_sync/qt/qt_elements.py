@@ -27,7 +27,7 @@ from pathlib import Path
 
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, QUrl, pyqtSlot, pyqtSignal
+from PyQt5.QtCore import Qt, QSettings, QUrl, pyqtSlot, pyqtSignal
 from PyQt5.QtNetwork import QNetworkCookie
 from PyQt5.QtWidgets import (QMenu, QStyle, QAction, QDialog, QWidget, QWizard,
                              QCompleter, QFileDialog, QMessageBox,
@@ -80,6 +80,7 @@ class Assets:
         wm = wm.scaledToWidth(100)
         return wm
 
+
 class OSUtils:
     @staticmethod
     def open_dir_in_file_browser(dir_to_open: Path) -> None:
@@ -90,6 +91,28 @@ class OSUtils:
             subprocess.Popen(["open", dir_to_open])
         else:
             subprocess.Popen(["xdg-open", dir_to_open])
+
+    @staticmethod
+    def add_to_startup() -> None:
+        """Add the app to start up on macOS."""
+        if platform.system() != "Darwin":
+            return
+
+        # Set the paths and filenames
+        app_path = '/Applications/BBSync.app'
+
+        # Create the QSettings object
+        settings = QSettings(QSettings.NativeFormat, QSettings.SystemScope, 'app.bbsync', 'BBSync')
+
+        # Set the launch agent properties
+        settings.setValue('Label', 'app.bbsync.BBSync')
+        settings.setValue('ProgramArguments', app_path)
+        settings.setValue('RunAtLoad', True)
+        settings.setValue('KeepAlive', False)
+
+        # Save the settings to create the plist file
+        settings.sync()
+
 
 class SyncTrayMenu(QMenu):
     """`QMenu` associated with app system tray icon."""
