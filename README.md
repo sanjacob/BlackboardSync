@@ -1,7 +1,7 @@
 # BlackboardSync
 ### Automatic Syncing Of Your Blackboard Content
 
-[![License: GPL  v2][license-shield]][gnu] [![Build][build-shield]][actions] [![ReadTheDocs][docs-shield]][rtd]
+[![License: GPL  v2][license-shield]][gnu] [![Build][build-shield]][actions]
 
 **BlackboardSync** performs a periodic, incremental download of all your Blackboard content, such as lecture slides, lab sheets, and other attachments.
 
@@ -60,19 +60,19 @@ Alternatively, you can run the python package [directly](#running-without-buildi
 
 
 
-#### Via pip
+#### From PyPI
 
 ```bash
-python3 -m pip install BlackboardSync
+python3 -m pip install blackboardsync
 ```
 
 
 
-#### Running without building
+#### From source
 
 ##### Requirements
 
-[Python 3.9 & pip][python]
+[Python 3.10 & pip][python]
 
 [Pipenv][pipenv]
 
@@ -103,7 +103,7 @@ To start the program
 
 ```bash
 cd blackboard_sync
-pipenv run python blackboard_sync
+pipenv run python -m blackboard_sync
 ```
 
 
@@ -153,11 +153,7 @@ This software is distributed under the [General Public License v2.0][license], m
 
 [PyInstaller][pyinstaller]
 
-[README template by tonycrosby-tech][tonycrosby]
-
-[README template by neildrew][neildrew]
-
-[README guide by Rita Łyczywek][bulldogjob]
+README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], and [Rita Łyczywek][bulldogjob]
 
 
 
@@ -193,9 +189,9 @@ This software is distributed under the [General Public License v2.0][license], m
 
 <!-- SHIELDS -->
 
+[version-shield]: https://img.shields.io/pypi/v/BlackboardSync
 [license-shield]: https://img.shields.io/github/license/jacobszpz/BlackboardSync
-[build-shield]: https://img.shields.io/github/workflow/status/jacobszpz/BlackboardSync/Python%20CI/master
-[docs-shield]: https://img.shields.io/readthedocs/BlackboardSync
+[build-shield]: https://img.shields.io/github/actions/workflow/status/jacobszpz/BlackboardSync/release.yml?branch=main
 [kofi-shield]: https://ko-fi.com/img/githubbutton_sm.svg
 [lp-shield]: https://img.shields.io/liberapay/receives/BlackboardSync.svg?logo=liberapay
 
