@@ -102,7 +102,7 @@ class OSUtils:
         app_path = '/Applications/BBSync.app'
 
         # Create the QSettings object
-        settings = QSettings(QSettings.NativeFormat, QSettings.SystemScope, 'app.bbsync', 'BBSync')
+        settings = QSettings("/Library/LaunchAgents/app.bbsync.plist", QSettings.NativeFormat)
 
         # Set the launch agent properties
         settings.setValue('Label', 'app.bbsync.BBSync')
