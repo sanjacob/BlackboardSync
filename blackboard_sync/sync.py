@@ -53,6 +53,10 @@ class BlackboardSync:
 
     def __init__(self):
         """Create an instance of the program."""
+
+        # Download job
+        self._download = None
+
         # Time between each sync in seconds
         self._sync_interval = 60 * 30
 
@@ -143,10 +147,14 @@ class BlackboardSync:
                 self._is_syncing = True
 
                 # Download from last datetime
-                new_download = BlackboardDownload(self.sess, self.download_location / '', self.last_sync_time)
+                self._download = BlackboardDownload(self.sess, self.download_location / '', self.last_sync_time)
 
                 try:
-                    self.last_sync_time = new_download.download()
+                    if not self._is_active:
+                        self._download.cancel()
+                    job_start_time = self._download.download()
+                    if job_start_time is not None:
+                        self.last_sync_time = job_start_time
                     failed_attempts = 0
                 except ValueError as ve:
                     # Session expired, log out and attempt to reload config
@@ -181,6 +189,9 @@ class BlackboardSync:
         """Stop Sync thread."""
         self.logger.info("Stopping sync thread")
         self._is_active = False
+
+        if self._download is not None:
+            self._download.cancel()
 
     def _log_exception(self, e: Exception) -> None:
         """Log exception to log file inside sync location."""

@@ -26,6 +26,7 @@ import platform
 from requests.exceptions import RequestException
 from pathlib import Path
 from getpass import getpass
+from typing import Optional
 from dateutil.parser import parse
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor
@@ -63,6 +64,7 @@ class BlackboardDownload:
         self._download_location = download_location
         self._files_processed = 0
         self.executor = ThreadPoolExecutor(max_workers=8)
+        self.cancelled = False
 
         if last_downloaded is not None:
             self._last_downloaded = last_downloaded
@@ -173,17 +175,24 @@ class BlackboardDownload:
             with Path(file_path, f"{content.title_path_safe}.html").open('w') as html_content:
                 html_content.write(parser.body)
 
-    def download(self) -> datetime:
+    def download(self) -> Optional[datetime]:
         """Retrieve the user's courses, and start download of all contents
 
         :return: Datetime when method was called.
         """
+        if self.cancelled:
+            return None
+
         start_time = datetime.now(timezone.utc)
 
         self.logger.info("Fetching user memberships")
         memberships = self._sess.fetch_user_memberships(user_id=self.user_id,
                                                         dataSourceId=self._data_source)
         for ms in memberships:
+
+            if self.cancelled:
+                break
+
             private = False
             self.logger.debug("Fetching course")
             try:
@@ -201,9 +210,17 @@ class BlackboardDownload:
                     course_path = Path(self.download_location / str(ms.created.year) / course.title)
 
                 for content in course_contents:
+
+                    if self.cancelled:
+                        break
+
                     self._handle_file(content, course_path, course.id, 1)
         self.executor.shutdown(wait=True)
         return start_time
+
+    def cancel(self) -> None:
+        """Cancel the download job."""
+        self.cancelled = True
 
     @property
     def download_location(self) -> str:
