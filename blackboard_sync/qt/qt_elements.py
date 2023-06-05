@@ -100,9 +100,16 @@ class OSUtils:
 
         # Set the paths and filenames
         app_path = '/Applications/BBSync.app'
+        launch_dir = Path("~/Library/LaunchAgents").expanduser()
+
+        if not launch_dir.exists():
+            launch_dir.mkdir()
+
+        plist_path = launch_dir / "app.bbsync.plist"
+        plist_path.touch()
 
         # Create the QSettings object
-        settings = QSettings("/Library/LaunchAgents/app.bbsync.plist", QSettings.NativeFormat)
+        settings = QSettings(str(plist_path), QSettings.NativeFormat)
 
         # Set the launch agent properties
         settings.setValue('Label', 'app.bbsync.BBSync')

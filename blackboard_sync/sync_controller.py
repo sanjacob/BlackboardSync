@@ -123,8 +123,9 @@ class BBSyncController:
         self._show_window(self.config_window)
 
     def _show_window(self, window: QWindow) -> None:
-        window.show()
         window.setWindowState(Qt.WindowNoState)
+        window.show()
+        window.setFocus()
 
     def _open_download_dir(self) -> None:
         # Open folder in browser
@@ -132,8 +133,10 @@ class BBSyncController:
 
     def _tray_icon_activated(self, activation_reason: QSystemTrayIcon.ActivationReason) -> None:
         if activation_reason == QSystemTrayIcon.ActivationReason.Trigger:
+            if self.model.university is None:
+                self._show_setup_window()
             # if not logged in
-            if not self.model.is_logged_in:
+            elif not self.model.is_logged_in:
                 self._show_login_window()
 
     def _log_out(self) -> None:
