@@ -173,7 +173,8 @@ class BlackboardSync:
                 # Reset force sync flag
                 self._force_sync = False
                 self._is_syncing = False
-            time.sleep(self._check_sleep_time)
+            if self._is_active:
+                time.sleep(self._check_sleep_time)
 
         if reload_session:
             self.auth(self._cookies)

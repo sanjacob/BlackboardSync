@@ -118,6 +118,9 @@ class BlackboardDownload:
         """Download BBContent recursively, depending on filetype"""
         self.logger.info(f"{'    ' * depth}{content.title}[{content.contentHandler.id}]")
 
+        if self.cancelled:
+            return
+
         res = content.contentHandler
         body_path = parent_path
         file_path = Path(parent_path, content.title_path_safe)
@@ -152,7 +155,8 @@ class BlackboardDownload:
                 if attachment.mimeType.startswith('video/'):
                     self.logger.info(f'Not downloading {attachment.fileName}')
                 else:
-                    self.executor.submit(self._download_file, course_id, content.id, attachment.id, download_path)
+                    if not self.cancelled:
+                        self.executor.submit(self._download_file, course_id, content.id, attachment.id, download_path)
 
         elif res == BBResourceType.externallink and has_changed:
             file_path.mkdir(exist_ok=True, parents=True)
@@ -215,7 +219,10 @@ class BlackboardDownload:
                         break
 
                     self._handle_file(content, course_path, course.id, 1)
-        self.executor.shutdown(wait=True)
+        self.executor.shutdown(wait=True, cancel_futures=True)
+
+        if self.cancelled:
+            return None
         return start_time
 
     def cancel(self) -> None:
