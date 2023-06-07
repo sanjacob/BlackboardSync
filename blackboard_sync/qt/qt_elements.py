@@ -542,6 +542,7 @@ class SetupWizard(QWizard):
 
         self.institutions = institutions
         self._init_ui()
+        self._has_chosen_location = False
 
     def _init_ui(self):
         Assets.load_ui(self)
@@ -571,6 +572,11 @@ class SetupWizard(QWizard):
 
         self.intro_page.setPixmap(QWizard.WatermarkPixmap, Assets.watermark)
 
+    def initializePage(self, id) -> None:
+        if id == self.Pages.DOWNLOAD_LOCATION:
+            if self._has_chosen_location:
+                self._set_location()
+
     def validateCurrentPage(self) -> bool:
         """Override QWizard method to validate pages."""
         id = self.currentId()
@@ -584,10 +590,14 @@ class SetupWizard(QWizard):
 
         return valid
 
+    def _set_location(self):
+        dir = self.download_location.name or str(self.download_location)
+        self.sync_location_button.setText(dir)
+
     def _choose_location(self):
         if self.file_chooser.exec():
-            dir = self.download_location.name or str(self.download_location)
-            self.sync_location_button.setText(dir)
+            self._set_location()
+            self._has_chosen_location = True
 
     def _show_not_supported_dialog(self):
         error_dialog = UniNotSupportedDialog(self._help_website)
