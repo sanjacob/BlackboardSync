@@ -2,8 +2,6 @@ name: Test and Deploy
 
 on:
   push:
-    branches:
-      - "**"
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:

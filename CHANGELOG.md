@@ -2,7 +2,16 @@
 All notable changes to this project will be documented in this file.
 
 
-## [0.8.0][] - 2023-06-04
+## 0.8.3 - 2023-06-16
+
+## Fixes
+- Opening preferences window would previously crash the program
+- WebDav filepaths are now sanitised
+- Package workflow not triggering on CI
+
+
+
+## 0.8.0 - 2023-06-04
 
 ### Features
 - User must now login in a webview instead, to support 2FA and arbitrary redirects
