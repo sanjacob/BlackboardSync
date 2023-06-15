@@ -116,7 +116,7 @@ class BBSyncController:
 
     def _show_config_window(self) -> None:
         # Update displayed settings
-        self.config_window.download_location = self.model.sync_folder
+        self.config_window.download_location = self.model.download_location
         self.config_window.data_source = self.model.data_source
         self.config_window.username = self.model.username.split(':')[1]
         self.config_window.sync_frequency = self.model.sync_interval
@@ -149,9 +149,9 @@ class BBSyncController:
     def _save_setting_changes(self) -> None:
         self.config_window.setVisible(False)
 
-        if self.model.sync_folder != self.config_window.download_location:
+        if self.model.download_location != self.config_window.download_location:
             redownload = RedownloadDialog().redownload
-            self.model.set_sync_folder(self.config_window.download_location, redownload)
+            self.model.change_download_location(self.config_window.download_location, redownload)
 
         self.model.data_source = self.config_window.data_source
         self.model.sync_interval = self.config_window.sync_frequency
