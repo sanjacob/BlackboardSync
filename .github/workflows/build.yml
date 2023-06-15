@@ -46,12 +46,14 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Obtain __version__ number
-        run: VER=$(awk -F'["]' '/^__version__ =/ {print $2}' b*/__a*)
+        run: |
+          VER=$(awk -F'["]' '/^__version__ =/ {print $2}' b*/__a*)
+          echo "{bb_version}={$VER}" >> "$GITHUB_ENV"
 
       - name: Check version against tag
         run: |
-          if [ "$GITHUB_REF_NAME" != "$VER" ]; then
-            echo "Version $VER does not match the GitHub tag $GITHUB_REF_NAME"
+          if [ "$GITHUB_REF_NAME" != "${{ env.bb_version }}" ]; then
+            echo "Version ${{ env.bb_version }} does not match the GitHub tag $GITHUB_REF_NAME"
             exit 1
           fi
 
