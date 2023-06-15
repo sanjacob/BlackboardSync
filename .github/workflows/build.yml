@@ -51,7 +51,7 @@ jobs:
       - name: Check version against tag
         run: |
           if [ "$GITHUB_REF_NAME" != "$VER" ]; then
-            echo "Version does not match the tag"
+            echo "Version $VER does not match the GitHub tag $GITHUB_REF_NAME"
             exit 1
           fi
 
