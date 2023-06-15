@@ -48,7 +48,7 @@ jobs:
       - name: Obtain __version__ number
         run: |
           VER=$(awk -F'["]' '/^__version__ =/ {print $2}' b*/__a*)
-          echo "{bb_version}={$VER}" >> "$GITHUB_ENV"
+          echo "bb_version=$VER" >> "$GITHUB_ENV"
 
       - name: Check version against tag
         run: |
