@@ -135,5 +135,5 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           files: |
-            'dist/*.exe'
-            'dist/*.dmg'
+            dist/*.exe
+            dist/*.dmg

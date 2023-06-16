@@ -191,7 +191,7 @@ README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], a
 
 [version-shield]: https://img.shields.io/pypi/v/BlackboardSync
 [license-shield]: https://img.shields.io/github/license/jacobszpz/BlackboardSync
-[build-shield]: https://img.shields.io/github/actions/workflow/status/jacobszpz/BlackboardSync/release.yml?branch=main
+[build-shield]: https://img.shields.io/github/actions/workflow/status/jacobszpz/BlackboardSync/build.yml?branch=main
 [kofi-shield]: https://ko-fi.com/img/githubbutton_sm.svg
 [lp-shield]: https://img.shields.io/liberapay/receives/BlackboardSync.svg?logo=liberapay
 
