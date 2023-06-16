@@ -121,7 +121,7 @@ jobs:
         uses: joncloud/makensis-action@v4
         with:
           script-file: packaging/pkg_win.nsi
-          arguments: '/V3 /DVERSION=$GITHUB_REF_NAME'
+          arguments: "/V3 /DVERSION=${{github.ref_name}}"
 
       - name: Sign and Package into DMG
         if: matrix.os == 'macos-latest'
