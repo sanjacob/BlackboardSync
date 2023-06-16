@@ -45,15 +45,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Obtain __version__ number
-        run: |
-          VER=$(awk -F'["]' '/^__version__ =/ {print $2}' b*/__a*)
-          echo "bb_version=$VER" >> "$GITHUB_ENV"
-
       - name: Check version against tag
         run: |
-          if [ "$GITHUB_REF_NAME" != "${{ env.bb_version }}" ]; then
-            echo "Version ${{ env.bb_version }} does not match the GitHub tag $GITHUB_REF_NAME"
+          VER=$(awk -F'["]' '/^__version__ =/ {print $2}' b*/__a*)
+          if [ "$GITHUB_REF_NAME" != "$VER" ]; then
+            echo "Version $VER does not match the GitHub tag $GITHUB_REF_NAME"
             exit 1
           fi
 
@@ -70,13 +66,18 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Set up Python environment
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pipenv requirements --dev > requirements.txt
+          pip install -r requirements.txt
+
       - name: Build and upload to PyPI
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
         run: |
-          python -m pip install --upgrade pip
-          pip install build
           python -m build
           twine upload dist/*
 
