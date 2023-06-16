@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "blackboardsync"
-version = "0.8.0"
+dynamic = ["version"]
 authors = [
   { name="Jacob Sánchez", email="jacobszpz@protonmail.com" },
 ]
@@ -28,6 +28,9 @@ dependencies = [
     "requests",
     "packaging"
 ]
+
+[tool.setuptools.dynamic]
+version = {attr = "blackboard_sync.__version__"}
 
 [project.optional-dependencies]
 test = ["pytest", "hypothesis", "coverage", "pytest-qt", "pytest-mock"]
