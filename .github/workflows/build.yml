@@ -131,10 +131,9 @@ jobs:
 
       # Save Packages
 
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+      - name: Upload as release - only tagged commits
+        uses: softprops/action-gh-release@v1
         with:
-          name: Release
-          path: |
-            dist/*.exe
-            dist/*.dmg
+          files: |
+            'dist/*.exe'
+            'dist/*.dmg'

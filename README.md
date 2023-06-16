@@ -7,7 +7,7 @@
 
 
 <div align="center">
-	<img src="blackboard_sync/assets/logo.png" height="auto" width="25%" />
+	<img src="https://raw.githubusercontent.com/jacobszpz/BlackboardSync/main/blackboard_sync/assets/logo.png" height="auto" width="25%" />
 </div>
 
 
