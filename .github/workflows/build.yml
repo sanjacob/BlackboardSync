@@ -82,7 +82,10 @@ jobs:
           twine upload dist/*
 
   pyinstaller:
-    runs-on: [ windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ test, version-check ]
     steps:
