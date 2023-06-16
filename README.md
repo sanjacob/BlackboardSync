@@ -54,10 +54,15 @@ Built with:
 
 #### Binaries
 
-Currently unavailable (until a more stable version).
+You can find all releases on [GitHub][releases].
+Only MacOS (.dmg) and Windows (.exe) are supported at the moment.
 
-Alternatively, you can run the python package [directly](#running-without-building), or build an executable yourself by following [these steps](#building-from-source).
+Note: These releases are automatically built on GitHub Actions from source.
 
+**⚠️ ATTENTION MACOS USERS **
+
+On MacOS, you will face an issue when trying to open the application, since it has not
+been notarised by Apple. A workaround can be found [here][apple-dev].
 
 
 #### From PyPI
@@ -177,6 +182,7 @@ README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], a
 <!-- RELEASES -->
 
 [releases]: https://github.com/jacobszpz/BlackboardSync/releases/
+[apple-dev]: https://support.apple.com/en-gb/guide/mac-help/mh40616/mac
 
 
 <!-- README TEMPLATES -->
