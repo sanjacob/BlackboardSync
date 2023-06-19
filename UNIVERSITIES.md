@@ -26,8 +26,29 @@ For the login process:
 
 For downloading files:
 
-- **Valid Blackboard data sources** (don't bother with these for now).
+- **Valid Blackboard data sources**
 
+To know this, you'll need to login to blackboard on a browser, and then visit the
+endpoint "/learn/api/public/v1/users/me/courses" on your university blackboard page.
+For instance, this might be: "https://portal.uclan.ac.uk/learn/api/public/v1/users/me/courses".
+
+Once on this page, you will see the list of courses you are registered for. Entries are of this form:
+
+```json
+{
+  "id":"...",
+  "userId":"...",
+  "courseId":"...",
+  "dataSourceId":"_21_1",
+  "created":"...",
+  "modified":"...",
+  "availability":{"available":"Yes"},
+  "courseRoleId":"Student",
+  "lastAccessed":"..."
+}
+```
+
+Check the dataSourceId for all the entries returned and note down the one that appears most.
 
 
 For the automatic institution detection based on IP:
