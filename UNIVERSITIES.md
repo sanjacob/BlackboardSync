@@ -21,9 +21,6 @@ For the login process:
 
 - **Link to Blackboard portal** (e.g. *https://portal.uclan.ac.uk*).
 - **Landing URL** after successfully logging in (e.g. *https://portal.uclan.ac.uk/ultra*).
-- DOM Selectors for **username** and **password** inputs.
-  - See [querySelector][querySelector], `#id` selectors vastly preferred.
-
 
 
 
