@@ -1,7 +1,7 @@
 # BlackboardSync
 ### Automatic Syncing Of Your Blackboard Content
 
-[![License: GPL  v2][license-shield]][gnu] [![Build][build-shield]][actions]
+[![Get on PyPI][pypi-shield]][pypi] [![License: GPL  v2][license-shield]][gnu] [![Build][build-shield]][actions]
 
 **BlackboardSync** performs a periodic, incremental download of all your Blackboard content, such as lecture slides, lab sheets, and other attachments.
 
@@ -166,6 +166,7 @@ README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], a
 
 [universal-login]: https://github.com/jacobszpz/BlackboardSync/issues/3	"BBSync login"
 [pyqt]: https://pypi.org/project/PyQt5/5.15.1/	"Python Bindings for Qt 5"
+[pypi]: https://pypi.org/project/blackboardsync
 [typora]: https://typora.io/ "Typora"
 [releases]: https://github.com/jacobszpz/BlackboardSync/releases "BlackboardSync Releases"
 [issues]: https://github.com/jacobszpz/BlackboardSync/issues/new "BlackboardSync Issues"
@@ -195,7 +196,7 @@ README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], a
 
 <!-- SHIELDS -->
 
-[version-shield]: https://img.shields.io/pypi/v/BlackboardSync
+[pypi-shield]: https://img.shields.io/pypi/v/BlackboardSync
 [license-shield]: https://img.shields.io/github/license/jacobszpz/BlackboardSync
 [build-shield]: https://img.shields.io/github/actions/workflow/status/jacobszpz/BlackboardSync/build.yml?branch=main
 [kofi-shield]: https://ko-fi.com/img/githubbutton_sm.svg
