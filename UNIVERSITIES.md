@@ -58,10 +58,9 @@ For the automatic institution detection based on IP:
 
 
 
-
 ### Ready to contribute?
 
-Please create an issue using [the following template][support-issue].
+Please create an issue using [the following form][support-issue].
 
 
 
@@ -72,6 +71,4 @@ Please create an issue using [the following template][support-issue].
 
 
 
-[querySelector]: https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
-[support-issue]: #todo
-[login-issue]: #todo
+[support-issue]: https://github.com/jacobszpz/BlackboardSync/issues/new?assignees=jacobszpz&labels=uni-support&projects=&template=unisupport.yml&title=%5BUniversity+Support%5D%3A+
