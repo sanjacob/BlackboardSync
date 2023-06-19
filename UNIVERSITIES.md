@@ -21,16 +21,34 @@ For the login process:
 
 - **Link to Blackboard portal** (e.g. *https://portal.uclan.ac.uk*).
 - **Landing URL** after successfully logging in (e.g. *https://portal.uclan.ac.uk/ultra*).
-- DOM Selectors for **username** and **password** inputs.
-  - See [querySelector][querySelector], `#id` selectors vastly preferred.
-
 
 
 
 For downloading files:
 
-- **Valid Blackboard data sources** (don't bother with these for now).
+- **Valid Blackboard data sources**
 
+To know this, you'll need to login to blackboard on a browser, and then visit the
+endpoint "/learn/api/public/v1/users/me/courses" on your university blackboard page.
+For instance, this might be: "https://portal.uclan.ac.uk/learn/api/public/v1/users/me/courses".
+
+Once on this page, you will see the list of courses you are registered for. Entries are of this form:
+
+```json
+{
+  "id":"...",
+  "userId":"...",
+  "courseId":"...",
+  "dataSourceId":"_21_1",
+  "created":"...",
+  "modified":"...",
+  "availability":{"available":"Yes"},
+  "courseRoleId":"Student",
+  "lastAccessed":"..."
+}
+```
+
+Check the dataSourceId for all the entries returned and note down the one that appears most.
 
 
 For the automatic institution detection based on IP:
@@ -40,10 +58,9 @@ For the automatic institution detection based on IP:
 
 
 
-
 ### Ready to contribute?
 
-Please create an issue using [the following template][support-issue].
+Please create an issue using [the following form][support-issue].
 
 
 
@@ -54,6 +71,4 @@ Please create an issue using [the following template][support-issue].
 
 
 
-[querySelector]: https://developer.mozilla.org/en-US/docs/Web/API/Document/querySelector
-[support-issue]: #todo
-[login-issue]: #todo
+[support-issue]: https://github.com/jacobszpz/BlackboardSync/issues/new?assignees=jacobszpz&labels=uni-support&projects=&template=unisupport.yml&title=%5BUniversity+Support%5D%3A+
