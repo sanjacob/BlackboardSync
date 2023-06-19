@@ -12,5 +12,145 @@
       "org": ["University of Central Lancashire"]
     },
     "data_sources": ["_21_1"]
+  },
+  {
+    "name": "University of Westminster",
+    "short_name": "Westminster",
+    "login": {
+      "start_url": "https://learning.westminster.ac.uk",
+      "target_url": "https://learning.westminster.ac.uk/ultra/"
+    },
+    "api_url": "https://learning.westminster.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["University of Westminster"]
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of Reading",
+    "short_name": "Reading",
+    "login": {
+      "start_url": "https://www.bb.reading.ac.uk",
+      "target_url": "https://www.bb.reading.ac.uk/ultra/"
+    },
+    "api_url": "https://www.bb.reading.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["University of Reading"]
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of East Anglia",
+    "short_name": "UEA",
+    "login": {
+      "start_url": "https://learn.uea.ac.uk",
+      "target_url": "https://learn.uea.ac.uk/ultra/"
+    },
+    "api_url": "https://learn.uea.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["University of East Anglia"]
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Durham University",
+    "short_name": "Durham",
+    "login": {
+      "start_url": "https://blackboard.durham.ac.uk",
+      "target_url": "https://blackboard.durham.ac.uk/ultra/"
+    },
+    "api_url": "https://blackboard.durham.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["Durham University"]
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of Salford",
+    "short_name": "Salford",
+    "login": {
+      "start_url": "https://blackboard.salford.ac.uk",
+      "target_url": "https://blackboard.salford.ac.uk/ultra/"
+    },
+    "api_url": "https://blackboard.salford.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["University of Salford"]
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of South Wales",
+    "short_name": "Prifysgol De Cymru",
+    "login": {
+      "start_url": "https://unilearn.southwales.ac.uk",
+      "target_url": "https://unilearn.southwales.ac.uk/ultra/"
+    },
+    "api_url": "https://unilearn.southwales.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["University of South Wales"]
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of Leicester",
+    "short_name": "Leicester",
+    "login": {
+      "start_url": "https://blackboard.le.ac.uk",
+      "target_url": "https://blackboard.le.ac.uk/ultra/"
+    },
+    "api_url": "https://blackboard.le.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["University of Leicester"]
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Imperial College London",
+    "short_name": "ICL",
+    "login": {
+      "start_url": "https://bb.imperial.ac.uk",
+      "target_url": "https://bb.imperial.ac.uk/ultra/"
+    },
+    "api_url": "https://bb.imperial.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["Imperial College London"]
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of Bristol",
+    "short_name": "Bris",
+    "login": {
+      "start_url": "https://www.ole.bris.ac.uk",
+      "target_url": "https://www.ole.bris.ac.uk/ultra/"
+    },
+    "api_url": "https://www.ole.bris.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["University of Bristol"]
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of Sheffield",
+    "short_name": "Shef",
+    "login": {
+      "start_url": "https://vle.shef.ac.uk",
+      "target_url": "https://vle.shef.ac.uk/ultra/"
+    },
+    "api_url": "https://vle.shef.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": ["University of Sheffield"]
+    },
+    "data_sources": []
   }
 ]
