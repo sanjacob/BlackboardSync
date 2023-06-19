@@ -1,0 +1,78 @@
+name: Add Support for a University or College
+description: File a request to officially support the blackboard instance of your university or college
+title: "[University Support]: "
+labels: ["uni-support"]
+assignees:
+  - jacobszpz
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Please make sure to read UNIVERSITIES.md first**
+        Thanks for taking the time to fill this request form!
+        I will verify this data and add this to the project shortly.
+  - type: input
+    id: uni-name
+    attributes:
+      label: University name
+      description: What is the name of your university in long form?
+      placeholder: ex. University of Central Lancashire
+    validations:
+      required: true
+  - type: input
+    id: uni-short-name
+    attributes:
+      label: Short name or abbreviation
+      description: If your university has a common abbreviation or short name, enter it here.
+      placeholder: ex. UCLan
+    validations:
+      required: false
+  - type: input
+    id: portal-url
+    attributes:
+      label: Link to Blackboard instance
+      description: What is the URL you visit when you want to access Blackboard?
+      placeholder: ex. https://portal.uclan.ac.uk
+    validations:
+      required: true
+  - type: input
+    id: portal-loggedin-url
+    attributes:
+      label: Landing URL after logging in
+      description: What is the URL you are redirected to after successfully logging in to Blackboard?
+      placeholder: ex. https://portal.uclan.ac.uk/ultra
+    validations:
+      required: true
+  - type: textarea
+    id: data-sources
+    attributes:
+      label: Valid Blackboard data sources
+      description: Please follow the procedure depicted in UNIVERSITIES.md, and provide the valid data source(s) of your university.
+      placeholder: __00_0
+    validations:
+      required: true
+  - type: textarea
+    id: isp
+    attributes:
+      label: University ISP name
+      description: ISP name for the universities network provider. Check UNIVERSITIES.md for more details.
+      placeholder: University of Central Lancashire
+    validations:
+      required: false
+  - type: textarea
+    id: other-details
+    attributes:
+      label: Anything else to add?
+      description: If there is anything else needed to know about the login process for your university, say so here.
+      placeholder: ...
+    validations:
+      required: false
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: License
+      description: By submitting this issue, you agree that your contribution may be licensed under GPL v2.
+      options:
+        - label: I agree to follow this project's License
+          required: true
+
