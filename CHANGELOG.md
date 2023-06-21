@@ -2,9 +2,27 @@
 All notable changes to this project will be documented in this file.
 
 
+
+## 0.9.0 - 2023-06-21
+
+### Changed
+- Finally change data source approach to follow institutional rules
+
+
+### Added
+- Add basic support for 10 universities: Westminster, Reading,
+  East Anglia, Durham, Salford, South Wales, Leicester, ICL, Bristol,
+  Sheffield
+
+
+### Removed
+- User setting for data source
+
+
+
 ## 0.8.3 - 2023-06-16
 
-## Fixes
+### Fixed
 - Opening preferences window would previously crash the program
 - WebDav filepaths are now sanitised
 - Package workflow not triggering on CI

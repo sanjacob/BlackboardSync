@@ -64,11 +64,26 @@ Please create an issue using [the following form][support-issue].
 
 
 
-## List of Supported Universities
+## Fully Supported Universities
 
 - University of Central Lancashire
 
+## Universities with Basic Support
 
+These universities are supported, but may be lacking
+a few features.
 
+- University of Westminster
+- University of Reading
+- University of West Anglia
+- Durham University
+- University of Salford
+- University of South Wales
+- University of Leicester
+- Imperial College London
+- University of Bristol
+- University of Sheffield
+
+If any information here seems wrong, please let me know in the issues.
 
 [support-issue]: https://github.com/jacobszpz/BlackboardSync/issues/new?assignees=jacobszpz&labels=uni-support&projects=&template=unisupport.yml&title=%5BUniversity+Support%5D%3A+
