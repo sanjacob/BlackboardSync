@@ -405,15 +405,6 @@ class SettingsWindow(QWidget):
         self.download_location_hint.setText(str(self._download_location))
 
     @property
-    def data_source(self) -> str:
-        """Filter which Blackboard source to download."""
-        return self.data_source_edit.text()
-
-    @data_source.setter
-    def data_source(self, data_source: str) -> None:
-        self.data_source_edit.setText(data_source)
-
-    @property
     def sync_frequency(self) -> int:
         """Seconds to wait between each sync job."""
         return int([*SyncPeriod][self.frequency_combo.currentIndex()])

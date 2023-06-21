@@ -40,14 +40,13 @@ class BlackboardDownload:
     """Blackboard download job."""
 
     _last_downloaded = datetime.fromtimestamp(0, tz=timezone.utc)
-    _data_source = "_21_1"
 
     _logger = logging.getLogger(__name__)
     _logger.setLevel(logging.DEBUG)
     _logger.addHandler(logging.StreamHandler())
 
     def __init__(self, sess: BlackboardSession, download_location: Path,
-                 last_downloaded: datetime = None):
+                 last_downloaded: datetime = None, data_sources: list[str] = []):
         """BlackboardDownload constructor
 
         Download all files in blackboard recursively to download_location,
@@ -63,6 +62,7 @@ class BlackboardDownload:
         self._sess = sess
         self._user_id = sess.username
         self._download_location = download_location
+        self._data_sources = data_sources
         self._files_processed = 0
         self.executor = ThreadPoolExecutor(max_workers=8)
         self.cancelled = False
@@ -192,10 +192,13 @@ class BlackboardDownload:
         start_time = datetime.now(timezone.utc)
 
         self.logger.info("Fetching user memberships")
-        memberships = self._sess.fetch_user_memberships(user_id=self.user_id,
-                                                        dataSourceId=self._data_source)
-        for ms in memberships:
 
+        memberships = self._sess.fetch_user_memberships(user_id=self.user_id)
+
+        if self._data_sources:
+            memberships = [m for m in memberships if m.dataSourceId in self._data_sources]
+
+        for ms in memberships:
             if self.cancelled:
                 break
 
@@ -237,13 +240,13 @@ class BlackboardDownload:
         return self._download_location
 
     @property
-    def data_source(self) -> str:
+    def data_sources(self) -> list[str]:
         """Filter for courses."""
-        return self._data_source
+        return self._data_sources
 
-    @data_source.setter
-    def data_source(self, source: str) -> None:
-        self._data_source = source
+    @data_sources.setter
+    def data_sources(self, sources: list[str]) -> None:
+        self._data_sources = sources
 
     @property
     def user_id(self) -> str:

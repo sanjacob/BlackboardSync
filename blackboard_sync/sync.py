@@ -41,9 +41,6 @@ class BlackboardSync:
     _log_directory = "log"
     _app_name = 'blackboard_sync'
 
-    # Filters out non-subjects from blackboard (may need more testing)
-    _data_source = "_21_1"
-
     # Seconds between each check of time elapsed since last sync
     _check_sleep_time = 10
     # Sync thread max retries
@@ -147,7 +144,7 @@ class BlackboardSync:
                 self._is_syncing = True
 
                 # Download from last datetime
-                self._download = BlackboardDownload(self.sess, self.download_location / '', self.last_sync_time)
+                self._download = BlackboardDownload(self.sess, self.download_location / '', self.last_sync_time, self.university.data_sources)
 
                 try:
                     if not self._is_active:
@@ -247,17 +244,6 @@ class BlackboardSync:
         if self._config.last_sync_time is None:
             return True
         return datetime.now(timezone.utc) >= self.next_sync
-
-    @property
-    def data_source(self) -> str:
-        """Filter the modules to download."""
-        # The default works in my testing. However, this might need tweaking for other users,
-        # specially if used for different institutions than UCLan.
-        return self._data_source
-
-    @data_source.setter
-    def data_source(self, d: str) -> None:
-        self._data_source = d
 
     @property
     def university_index(self):
