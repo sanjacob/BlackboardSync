@@ -105,10 +105,6 @@ def test_download_location(mock_session, tmp_path):
     assert download.download_location == tmp_path
     assert tmp_path.exists()
 
-def test_default_data_source(mock_session, tmp_path):
-    download = BlackboardDownload(mock_session, tmp_path)
-    assert download.data_source == '_21_1'
-
 def test_logger(mock_session, tmp_path):
     download = BlackboardDownload(mock_session, tmp_path)
     assert isinstance(download.logger, logging.Logger)
@@ -119,7 +115,7 @@ def test_download_method_call_fetch_user_memberships_with_username(mock_session,
     mock_session.username = expected_user
     download = BlackboardDownload(mock_session, tmp_path)
     download.download()
-    mock_session.fetch_user_memberships.assert_called_once_with(user_id=expected_user, dataSourceId=ANY)
+    mock_session.fetch_user_memberships.assert_called_once_with(user_id=expected_user)
 
 def test_download_method_call_fetch_courses_skip_private(mock_session, tmp_path):
     expected_course_id = 'TEST_BBC_ID'
