@@ -152,5 +152,411 @@
       "org": ["University of Sheffield"]
     },
     "data_sources": []
+  },
+  {
+    "name": "University of Arkansas",
+    "short_name": "UARK",
+    "login": {
+      "start_url": "https://learn.uark.edu",
+      "target_url": "https://learn.uark.edu/ultra/"
+    },
+    "api_url": "https://learn.uark.edu/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Universidad del Valle de Mexico",
+    "short_name": "UVM",
+    "login": {
+      "start_url": "https://uvmonline.blackboard.com",
+      "target_url": "https://uvmonline.blackboard.com/ultra/"
+    },
+    "api_url": "https://uvmonline.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Universidad Europea Madrid",
+    "short_name": "UEM",
+    "login": {
+      "start_url": "https://uem.blackboard.com",
+      "target_url": "https://uem.blackboard.com/ultra/"
+    },
+    "api_url": "https://uem.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Universidad Tecnologica ECOTEC",
+    "short_name": "ECOTEC",
+    "login": {
+      "start_url": "https://ecotec.blackboard.com",
+      "target_url": "https://ecotec.blackboard.com/ultra/"
+    },
+    "api_url": "https://ecotec.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Universidad Regional del Sureste",
+    "short_name": "URSE",
+    "login": {
+      "start_url": "https://urse.blackboard.com",
+      "target_url": "https://urse.blackboard.com/ultra/"
+    },
+    "api_url": "https://urse.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Universidad de Palermo",
+    "short_name": "UP",
+    "login": {
+      "start_url": "https://palermo.blackboard.com",
+      "target_url": "https://palermo.blackboard.com/ultra/"
+    },
+    "api_url": "https://palermo.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Universidad Tecnologica del Salvador",
+    "short_name": "UTEC",
+    "login": {
+      "start_url": "https://utecvirtual.blackboard.com",
+      "target_url": "https://utecvirtual.blackboard.com/ultra/"
+    },
+    "api_url": "https://utecvirtual.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Universidad de Alcala",
+    "short_name": "UAH",
+    "login": {
+      "start_url": "https://uah.blackboard.com",
+      "target_url": "https://uah.blackboard.com/ultra/"
+    },
+    "api_url": "https://uah.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "The George Washington University",
+    "short_name": "GWU",
+    "login": {
+      "start_url": "https://blackboard.gwu.edu",
+      "target_url": "https://blackboard.gwu.edu/ultra/"
+    },
+    "api_url": "https://blackboard.gwu.edu/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Alaska Pacific University",
+    "short_name": "APU",
+    "login": {
+      "start_url": "https://apu.blackboard.com",
+      "target_url": "https://apu.blackboard.com/ultra/"
+    },
+    "api_url": "https://apu.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Buckinghamshire New University",
+    "short_name": "Bucks",
+    "login": {
+      "start_url": "https://my.bucks.ac.uk",
+      "target_url": "https://my.bucks.ac.uk/webapps/portal/"
+    },
+    "api_url": "https://my.bucks.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of Northampton",
+    "short_name": "UoN",
+    "login": {
+      "start_url": "https://nile.northampton.ac.uk",
+      "target_url": "https://nile.northampton.ac.uk/ultra/"
+    },
+    "api_url": "https://nile.northampton.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of Bedfordshire",
+    "short_name": "Beds",
+    "login": {
+      "start_url": "https://breo.beds.ac.uk",
+      "target_url": "https://breo.beds.ac.uk/ultra/"
+    },
+    "api_url": "https://breo.beds.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Youngstown State University",
+    "short_name": "YSU",
+    "login": {
+      "start_url": "https://ysu.blackboard.com",
+      "target_url": "https://ysu.blackboard.com/ultra/"
+    },
+    "api_url": "https://ysu.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Ohio University",
+    "short_name": "Ohio",
+    "login": {
+      "start_url": "https://blackboard.ohio.edu",
+      "target_url": "https://blackboard.ohio.edu/ultra/"
+    },
+    "api_url": "https://blackboard.ohio.edu/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Princess Nourah Bint Abdulrahman University",
+    "short_name": "PNU",
+    "login": {
+      "start_url": "https://lms2.pnu.edu.sa",
+      "target_url": "https://lms2.pnu.edu.sa/webapps/portal/"
+    },
+    "api_url": "https://lms2.pnu.edu.sa/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Leeds Beckett University",
+    "short_name": "LBU",
+    "login": {
+      "start_url": "https://my.leedsbeckett.ac.uk",
+      "target_url": "https://my.leedsbeckett.ac.uk/ultra/"
+    },
+    "api_url": "https://my.leedsbeckett.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Post University",
+    "short_name": "Post",
+    "login": {
+      "start_url": "https://post.blackboard.com",
+      "target_url": "https://post.blackboard.com/ultra/"
+    },
+    "api_url": "https://post.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Universidad Ana G. Mendez",
+    "short_name": "UAGM",
+    "login": {
+      "start_url": "https://uagm.blackboard.com/webapps/login",
+      "target_url": "https://uagm.blackboard.com/webapps/portal/"
+    },
+    "api_url": "https://uagm.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "The University of Alabama",
+    "short_name": "UA",
+    "login": {
+      "start_url": "https://ualearn.blackboard.com/webapps/login",
+      "target_url": "https://ualearn.blackboard.com/webapps/portal/"
+    },
+    "api_url": "https://ualearn.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Torrens University Australia",
+    "short_name": "Torrens",
+    "login": {
+      "start_url": "https://torrens.blackboard.com/webapps/login",
+      "target_url": "https://torrens.blackboard.com/webapps/portal"
+    },
+    "api_url": "https://torrens.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Holmes Institute",
+    "short_name": "Holmes",
+    "login": {
+      "start_url": "https://holmes.blackboard.com",
+      "target_url": "https://holmes.blackboard.com/ultra/"
+    },
+    "api_url": "https://holmes.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Trinity College Dublin",
+    "short_name": "TCD",
+    "login": {
+      "start_url": "https://tcd.blackboard.com/webapps/login",
+      "target_url": "https://tcd.blackboard.com/webapps/portal/"
+    },
+    "api_url": "https://tcd.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Georgian College",
+    "short_name": "GC",
+    "login": {
+      "start_url": "https://gc.blackboard.com/webapps/login",
+      "target_url": "https://gc.blackboard.com/webapps/portal/"
+    },
+    "api_url": "https://gc.blackboard.com/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Cardiff University",
+    "short_name": "CF",
+    "login": {
+      "start_url": "https://learningcentral.cf.ac.uk",
+      "target_url": "https://learningcentral.cf.ac.uk/ultra/"
+    },
+    "api_url": "https://learningcentral.cf.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Sheffield Hallam University",
+    "short_name": "SHU",
+    "login": {
+      "start_url": "https://www.shu.ac.uk/myhallam",
+      "target_url": "https://shuspace.shu.ac.uk/ultra/"
+    },
+    "api_url": "https://www.shu.ac.uk/myhallam/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "University of the West of England",
+    "short_name": "UWE",
+    "login": {
+      "start_url": "https://blackboard.uwe.ac.uk",
+      "target_url": "https://blackboard.uwe.ac.uk/ultra/"
+    },
+    "api_url": "https://blackboard.uwe.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Northumbria University",
+    "short_name": "Northumbria",
+    "login": {
+      "start_url": "https://elp.northumbria.ac.uk",
+      "target_url": "https://elp.northumbria.ac.uk/ultra/"
+    },
+    "api_url": "https://elp.northumbria.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
+  },
+  {
+    "name": "Ulster University",
+    "short_name": "Ulster",
+    "login": {
+      "start_url": "https://learning.ulster.ac.uk",
+      "target_url": "https://learning.ulster.ac.uk/ultra/"
+    },
+    "api_url": "https://learning.ulster.ac.uk/",
+    "network": {
+      "isp": [],
+      "org": []
+    },
+    "data_sources": []
   }
 ]

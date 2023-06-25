@@ -70,8 +70,12 @@ Please create an issue using [the following form][support-issue].
 
 ## Universities with Basic Support
 
-These universities are supported, but may be lacking
+These universities should be supported, but may be lacking
 a few features.
+
+### Europe
+
+#### British Isles
 
 - University of Westminster
 - University of Reading
@@ -83,6 +87,51 @@ a few features.
 - Imperial College London
 - University of Bristol
 - University of Sheffield
+- Buckinghamshire New University
+- University of Northampton
+- University of Bedfordshire
+- Leeds Beckett University
+- Trinity College Dublin
+- Cardiff University
+- Sheffield Hallam University
+- University of the West of England
+- Northumbria University
+- Ulster University
+
+#### Mainland Europe
+
+- Universidad Europea Madrid
+- Universidad de Alcala
+
+### North America
+
+- University of Arkansas
+- The George Washington University
+- Alaska Pacific University
+- Youngstown State University
+- Ohio University
+- Post University
+- The University of Alabama
+- Georgian College
+
+### South America
+
+- Universidad del Valle de Mexico
+- Universidad Tecnologica ECOTEC
+- Universidad Regional del Sureste
+- Universidad de Palermo
+- Universidad Tecnologica del Salvador
+- Universidad Ana G. Mendez
+
+### Asia
+
+- Princess Nourah Bint Abdulrahman University
+
+
+## Australia
+
+- Torrens University
+- Holmes Institute
 
 If any information here seems wrong, please let me know in the issues.
 
