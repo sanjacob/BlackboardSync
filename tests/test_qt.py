@@ -263,7 +263,7 @@ class TestSyncTrayIcon:
     def test_tray_icon_currently_syncing(self, qtbot, tray_icon):
         tray_icon.set_logged_in(True)
         tray_icon.toggle_currently_syncing(True)
-        assert tray_icon._menu._status.text() == 'Syncing...'
+        assert tray_icon._menu._status.text() == 'Downloading now...'
         assert not tray_icon._menu.refresh.isEnabled()
 
         tray_icon.toggle_currently_syncing(False)
