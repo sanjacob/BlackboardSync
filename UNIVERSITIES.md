@@ -128,7 +128,7 @@ a few features.
 - Princess Nourah Bint Abdulrahman University
 
 
-## Australia
+### Australia
 
 - Torrens University
 - Holmes Institute
