@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file.
 
 
+## 0.9.3 - 2023-06-25
+
+### Added
+- Add basic support for 29 universities: Arkansas, UVM, Europea Madrid, ECOTEC, URSE, Palermo,
+  Tecnologica del Salvador, Alcala, GWU, APU, Bucks, Northampton, Beds, YSU, Ohio, Princess Nourah,
+  Leeds Beckett, Post, UAGM, Alabama, Torrens Australia, Holmes Institute, Trinity College Dublin,
+  Georgian College, Cardiff, Sheffield Hallam, West of England, Northumbria, Ulster
+
+### Fixed
+- Prereleases are marked correctly on Github
+
+### Changed
+- Small tweak to initial desktop notification on first download
 
 ## 0.9.0 - 2023-06-21
 
