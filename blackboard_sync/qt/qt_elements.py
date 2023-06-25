@@ -190,7 +190,7 @@ class SyncTrayMenu(QMenu):
         self.refresh.setEnabled(not syncing)
 
         if syncing:
-            self._status.setText("Syncing...")
+            self._status.setText("Downloading now...")
 
 
 class SyncTrayIcon(QSystemTrayIcon):
