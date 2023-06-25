@@ -100,7 +100,7 @@ class BBSyncController:
         self.login_window.setVisible(False)
         self.app.restoreOverrideCursor()
         self._check_for_updates()
-        self.tray.show_msg('BlackboardSync is running', 'You can always find it in the system tray')
+        self.tray.show_msg('The download has started', 'BlackboardSync is running in the background. Find it in the system tray.')
 
     def _check_for_updates(self) -> None:
         if (html_url := check_for_updates()) is not None:
