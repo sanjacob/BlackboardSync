@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 0.9.4 - 2023-06-26
+
+### Added
+- Option to limit the courses downloaded by earliest creation date
+
+### Fixed
+- App no longer crashes when downloading internet links on Linux
+
 
 ## 0.9.3 - 2023-06-25
 
