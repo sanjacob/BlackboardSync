@@ -160,8 +160,10 @@ class BlackboardDownload:
                         self.executor.submit(self._download_file, course_id, content.id, attachment.id, download_path)
 
         elif res == BBResourceType.externallink and has_changed:
+            # Place link under folder of its own, in case it has a body
             file_path.mkdir(exist_ok=True, parents=True)
-            self._create_desktop_link(file_path, res.url)
+            link_path = file_path / content.title_path_safe
+            self._create_desktop_link(link_path, res.url)
 
         elif not res.is_not_handled and has_changed:
             self.logger.warning(f"Not handled, {content.title}")
