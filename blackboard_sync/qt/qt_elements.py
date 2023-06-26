@@ -519,7 +519,7 @@ class SetupWizard(QWizard):
         INTRO = 0
         INSTITUTION = 1
         DOWNLOAD_LOCATION = 2
-        ANALYTICS = 3
+        DOWNLOAD_SINCE = 3
         LAST = 3
 
     _help_website = 'https://github.com/jacobszpz/BlackboardSync'
@@ -548,6 +548,11 @@ class SetupWizard(QWizard):
         self.file_chooser = QFileDialog()
         self.file_chooser.setFileMode(QFileDialog.Directory)
         self.sync_location_button.clicked.connect(self._choose_location)
+        self.date_spinbox.setEnabled(False)
+
+        self.since_all_checkbox.stateChanged.connect(
+            lambda state: self.date_spinbox.setEnabled(state != Qt.Checked)
+        )
 
         self.uni_selection_page.registerField(
             "userInstitution*",
@@ -611,6 +616,12 @@ class SetupWizard(QWizard):
     def download_location(self) -> Path:
         """Sync location path selected by user."""
         return Path(self.file_chooser.directory().path())
+
+    @property
+    def min_year(self) -> Optional[int]:
+        """Courses from this year onward will be downloaded."""
+        if not self.since_all_checkbox.isChecked():
+            return self.date_spinbox.value()
 
 
 class UniNotSupportedDialog(QDialog):

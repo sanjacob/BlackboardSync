@@ -82,7 +82,9 @@ class BBSyncController:
 
     def _setup_complete(self) -> None:
         self.setup_window.setVisible(False)
-        self.model.setup(self.setup_window.institution_index, self.setup_window.download_location)
+        self.model.setup(self.setup_window.institution_index,
+                         self.setup_window.download_location,
+                         self.setup_window.min_year)
         self._build_login_window(self.model.university.login)
         self._show_login_window()
 

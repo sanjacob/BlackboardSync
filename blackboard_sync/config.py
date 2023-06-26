@@ -108,3 +108,12 @@ class SyncConfig(Config):
     @Config.persist
     def university_index(self, university: int) -> None:
         self._sync['university'] = str(university)
+
+    @property
+    def min_year(self) -> Optional[int]:
+        return self._sync.getint('min_year')
+
+    @min_year.setter
+    @Config.persist
+    def min_year(self, year: int) -> None:
+        self._sync['min_year'] = str(year)
