@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## 0.9.4 - 2023-06-26
+## [0.9.4] - 2023-06-26
 
 ### Added
 - Option to limit the courses downloaded by earliest creation date
@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - App no longer crashes when downloading internet links on Linux
 
 
-## 0.9.3 - 2023-06-25
+## [0.9.3] - 2023-06-25
 
 ### Added
 - Add basic support for 29 universities: Arkansas, UVM, Europea Madrid, ECOTEC, URSE, Palermo,
@@ -30,7 +30,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Small tweak to initial desktop notification on first download
 
-## 0.9.0 - 2023-06-21
+## [0.9.0] - 2023-06-21
 
 ### Changed
 - Finally change data source approach to follow institutional rules
@@ -47,7 +47,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-## 0.8.3 - 2023-06-16
+## [0.8.3] - 2023-06-16
 
 ### Fixed
 - Opening preferences window would previously crash the program
@@ -56,7 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-## 0.8.0 - 2023-06-04
+## [0.8.0] - 2023-06-04
 
 ### Features
 - User must now login in a webview instead, to support 2FA and arbitrary redirects
@@ -68,7 +68,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-## 0.7.0 - 2021-03-03
+## [0.7.0] - 2021-03-03
 
 ### Features
 - New option to choose whether files should be re-downloaded upon changing the sync location.
@@ -86,7 +86,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-## 0.5.0 - 2021-02-10
+## [0.5.0] - 2021-02-10
 
 ### Features
 - Added GUI
