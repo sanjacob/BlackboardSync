@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.5] - 2023-06-27
+
+### Added
+- Option to go over setup wizard again after initial setup
+
+### Fixed
+- Issue with session logging back in immediately after logout
+
+### Changed
+- Uninstalling the program in Windows will also delete user configuration
+
+
 ## [0.9.4] - 2023-06-26
 
 ### Added
