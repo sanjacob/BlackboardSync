@@ -24,6 +24,7 @@ What I was looking for in such an application was:
 - Cross-platform compatibility
 - It would make use of the [Blackboard REST API][blackboard-api]
 
+### 30+ Universities Supported Around the World
 
 
 **Why is my university not supported?**

@@ -98,10 +98,12 @@ class BlackboardSync:
             self._update_next_sync()
 
     def setup(self, university_index: int, download_location: Path,
-              share_errors: bool = False, share_stats: bool = False):
+              min_year: int = None):
         """Setup the university information."""
         self.university_index = university_index
         self._config.download_location = download_location
+        if min_year is not None:
+            self._config.min_year = min_year
 
     def auth(self, cookie_jar: RequestsCookieJar) -> bool:
         """Create a new Blackboard session with the given credentials.
@@ -144,7 +146,11 @@ class BlackboardSync:
                 self._is_syncing = True
 
                 # Download from last datetime
-                self._download = BlackboardDownload(self.sess, self.download_location / '', self.last_sync_time, self.university.data_sources)
+                self._download = BlackboardDownload(self.sess,
+                                                    self.download_location / '',
+                                                    self.last_sync_time,
+                                                    self.university.data_sources,
+                                                    self.min_year)
 
                 try:
                     if not self._is_active:
@@ -244,6 +250,10 @@ class BlackboardSync:
         if self._config.last_sync_time is None:
             return True
         return datetime.now(timezone.utc) >= self.next_sync
+
+    @property
+    def min_year(self):
+        return self._config.min_year
 
     @property
     def university_index(self):

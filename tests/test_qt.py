@@ -230,6 +230,14 @@ class TestSettingsWindow:
             qtbot.mouseClick(settings_window.log_out_button, QtCore.Qt.LeftButton)
 
         assert blocker.signal_triggered
+    
+    def test_settings_window_setup_wizard_signal(self, qtbot, settings_window):
+        qtbot.addWidget(settings_window)
+
+        with qtbot.waitSignal(settings_window.setup_wiz_signal) as blocker:
+            qtbot.mouseClick(settings_window.setup_button, QtCore.Qt.LeftButton)
+
+        assert blocker.signal_triggered
 
     def test_settings_window_save_signal(self, qtbot, settings_window):
         qtbot.addWidget(settings_window)
@@ -272,6 +280,12 @@ class TestSyncTrayIcon:
     def test_tray_icon_login_signal(self, qtbot, tray_icon):
         with qtbot.waitSignal(tray_icon.login_signal) as blocker:
             tray_icon._menu.log_in.trigger()
+
+        assert blocker.signal_triggered
+
+    def test_tray_icon_setupwiz_signal(self, qtbot, tray_icon):
+        with qtbot.waitSignal(tray_icon.reset_setup_signal) as blocker:
+            tray_icon._menu.reset_setup.trigger()
 
         assert blocker.signal_triggered
 

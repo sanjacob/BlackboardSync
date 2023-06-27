@@ -46,7 +46,7 @@ class BlackboardDownload:
     _logger.addHandler(logging.StreamHandler())
 
     def __init__(self, sess: BlackboardSession, download_location: Path,
-                 last_downloaded: datetime = None, data_sources: list[str] = []):
+                 last_downloaded: datetime = None, data_sources: list[str] = [], min_year: int = None):
         """BlackboardDownload constructor
 
         Download all files in blackboard recursively to download_location,
@@ -57,12 +57,15 @@ class BlackboardDownload:
         :param BlackboardSession sess: UCLan BB user session
         :param (str / Path) download_location: Where files will be stored
         :param str last_downloaded: Files modified before this will not be downloaded
+        :param data_sources: List of valid data sources
+        :param min_year: Only courses created on or after this year will be downloaded
         """
 
         self._sess = sess
         self._user_id = sess.username
         self._download_location = download_location
         self._data_sources = data_sources
+        self._min_year = min_year
         self._files_processed = 0
         self.executor = ThreadPoolExecutor(max_workers=8)
         self.cancelled = False
@@ -160,8 +163,10 @@ class BlackboardDownload:
                         self.executor.submit(self._download_file, course_id, content.id, attachment.id, download_path)
 
         elif res == BBResourceType.externallink and has_changed:
+            # Place link under folder of its own, in case it has a body
             file_path.mkdir(exist_ok=True, parents=True)
-            self._create_desktop_link(file_path, res.url)
+            link_path = file_path / content.title_path_safe
+            self._create_desktop_link(link_path, res.url)
 
         elif not res.is_not_handled and has_changed:
             self.logger.warning(f"Not handled, {content.title}")
@@ -195,8 +200,13 @@ class BlackboardDownload:
 
         memberships = self._sess.fetch_user_memberships(user_id=self.user_id)
 
+        # Filter courses by data source
         if self._data_sources:
             memberships = [m for m in memberships if m.dataSourceId in self._data_sources]
+
+        # Filter courses by creation year
+        if self._min_year is not None:
+            memberships = [m for m in memberships if m.created.year >= self._min_year]
 
         for ms in memberships:
             if self.cancelled:

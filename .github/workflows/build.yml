@@ -130,10 +130,14 @@ jobs:
           packaging/pkg_macos.sh "blackboard_sync-$GITHUB_REF_NAME"
 
       # Save Packages
+      - name: Extract release notes
+        id: extract-release-notes
+        uses: ffurrer2/extract-release-notes@v1
 
       - name: Upload as release - only tagged commits
         uses: softprops/action-gh-release@v1
         with:
+          body: ${{ steps.extract-release-notes.outputs.release_notes }}
           prerelease: ${{ contains(github.ref_name, '-') }}
           files: |
             dist/*.exe

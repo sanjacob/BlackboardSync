@@ -67,12 +67,14 @@ class BBSyncController:
         self.config_window = SettingsWindow()
 
         self.config_window.log_out_signal.connect(self._log_out)
+        self.config_window.setup_wiz_signal.connect(self._reset_setup)
         self.config_window.save_signal.connect(self._save_setting_changes)
 
         self.tray = SyncTrayIcon()
         self.tray.quit_signal.connect(self._stop)
         self.tray.login_signal.connect(self._show_login_window)
         self.tray.settings_signal.connect(self._show_config_window)
+        self.tray.reset_setup_signal.connect(self._reset_setup)
         self.tray.sync_signal.connect(self._force_sync)
         self.tray.activated.connect(self._tray_icon_activated)
         self.tray.open_dir_signal.connect(self._open_download_dir)
@@ -82,7 +84,9 @@ class BBSyncController:
 
     def _setup_complete(self) -> None:
         self.setup_window.setVisible(False)
-        self.model.setup(self.setup_window.institution_index, self.setup_window.download_location)
+        self.model.setup(self.setup_window.institution_index,
+                         self.setup_window.download_location,
+                         self.setup_window.min_year)
         self._build_login_window(self.model.university.login)
         self._show_login_window()
 
@@ -101,6 +105,13 @@ class BBSyncController:
         self.app.restoreOverrideCursor()
         self._check_for_updates()
         self.tray.show_msg('The download has started', 'BlackboardSync is running in the background. Find it in the system tray.')
+
+    def _reset_setup(self) -> None:
+        # Hide login window and show setup wizard
+        if self.login_window is not None:
+            self._log_out()
+            self.login_window.setVisible(False)
+        self._show_setup_window()
 
     def _check_for_updates(self) -> None:
         if (html_url := check_for_updates()) is not None:
@@ -139,6 +150,9 @@ class BBSyncController:
                 self._show_login_window()
 
     def _log_out(self) -> None:
+        if self.model.is_active:
+            self.model.stop_sync()
+
         self.model.log_out()
         self.tray.set_logged_in(False)
         self.login_window.restore()
