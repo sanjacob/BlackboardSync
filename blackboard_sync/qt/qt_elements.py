@@ -164,6 +164,9 @@ class SyncTrayMenu(QMenu):
         self.log_in = QAction("Log In")
         self.addAction(self.log_in)
 
+        self.reset_setup = QAction("Redo Setup")
+        self.addAction(self.reset_setup)
+
         self.quit = QAction("Quit")
         self.quit.setIcon(close_icon)
         self.addAction(self.quit)
@@ -172,6 +175,7 @@ class SyncTrayMenu(QMenu):
         """Set the UI to reflect logged-in status."""
         self.refresh.setVisible(logged)
         self.preferences.setVisible(logged)
+        self.reset_setup.setVisible(not logged)
         self.open_dir.setVisible(logged)
         self.log_in.setVisible(not logged)
 
@@ -200,6 +204,7 @@ class SyncTrayIcon(QSystemTrayIcon):
     _sync_signal = pyqtSignal()
     _login_signal = pyqtSignal()
     _settings_signal = pyqtSignal()
+    _reset_setup_signal = pyqtSignal()
     _quit_signal = pyqtSignal()
     _open_dir_signal = pyqtSignal()
     _show_menu_signal = pyqtSignal()
@@ -223,6 +228,7 @@ class SyncTrayIcon(QSystemTrayIcon):
         self._sync_signal = self._menu.refresh.triggered
         self._login_signal = self._menu.log_in.triggered
         self._settings_signal = self._menu.preferences.triggered
+        self._reset_setup_signal = self._menu.reset_setup.triggered
         self._quit_signal = self._menu.quit.triggered
         self._open_dir_signal = self._menu.open_dir.triggered
         self._show_menu_signal = self._menu.aboutToShow
@@ -267,6 +273,11 @@ class SyncTrayIcon(QSystemTrayIcon):
     def settings_signal(self):
         """Fire when the settings menu is opened."""
         return self._settings_signal
+
+    @property
+    def reset_setup_signal(self):
+        """Fire when the user wants to reset the initial setup."""
+        return self._reset_setup_signal
 
     @property
     def quit_signal(self):
@@ -363,6 +374,7 @@ class SettingsWindow(QWidget):
     _window_title = "Settings"
     _initial_position = (300, 300)
     _log_out_signal = pyqtSignal()
+    _setup_wiz_signal = pyqtSignal()
     _save_signal = pyqtSignal()
 
     def __init__(self):
@@ -378,6 +390,7 @@ class SettingsWindow(QWidget):
 
         self.select_download_location.clicked.connect(self._choose_location)
         self._log_out_signal = self.log_out_button.clicked
+        self._setup_wiz_signal = self.setup_button.clicked
         self._save_signal = self.button_box.accepted
 
     def _choose_location(self) -> None:
@@ -431,6 +444,11 @@ class SettingsWindow(QWidget):
         return self._log_out_signal
 
     @property
+    def setup_wiz_signal(self):
+        """Fire when user wants to redo initial setup."""
+        return self._setup_wiz_signal
+
+    @property
     def save_signal(self):
         """Fire when settings are saved."""
         return self._save_signal
@@ -474,6 +492,7 @@ class LoginWebView(QWidget):
         )
 
     def restore(self) -> None:
+        self.web_view.setPage(None)
         self.clear_cookie_store()
         self.web_view.load(QUrl.fromUserInput(self.start_url))
 
