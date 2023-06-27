@@ -71,7 +71,7 @@ SectionEnd
 
 
 Section "Uninstall"
-  # TODO: Add User Data if Chosen
+  Delete "$APPDATA\blackboard_sync"
 
   ; Remove Application
   RMDir /r $INSTDIR
