@@ -37,7 +37,7 @@
                 "sha256:0f0d56dc5a6ad56fd4ba36484d6cc34451e1c6548c61daad8c320169f91eddc7",
                 "sha256:c6c2e98f5c7869efca1f8916fed228dd91539f9f1b444c314c06eef02980c716"
             ],
-            "markers": "python_version >= '3.6'",
+            "markers": "python_full_version >= '3.6.0'",
             "version": "==2023.5.7"
         },
         "charset-normalizer": {
@@ -493,7 +493,7 @@
                 "sha256:0f0d56dc5a6ad56fd4ba36484d6cc34451e1c6548c61daad8c320169f91eddc7",
                 "sha256:c6c2e98f5c7869efca1f8916fed228dd91539f9f1b444c314c06eef02980c716"
             ],
-            "markers": "python_version >= '3.6'",
+            "markers": "python_full_version >= '3.6.0'",
             "version": "==2023.5.7"
         },
         "cffi": {
@@ -876,11 +876,11 @@
         },
         "keyring": {
             "hashes": [
-                "sha256:ade5e1e7710a7579d7c01e64a712926270239aba48055b1cdc6c022dd6d789b5",
-                "sha256:bd48a36612ef55505bf70e563528e3e66ba93267e344b6780cf6151f9c1eda6d"
+                "sha256:4901caaf597bfd3bbd78c9a0c7c4c29fcd8310dab2cffefe749e916b6527acd6",
+                "sha256:ca0746a19ec421219f4d713f848fa297a661a8a8c1504867e55bfb5e09091509"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==24.1.0"
+            "markers": "python_version >= '3.8'",
+            "version": "==24.2.0"
         },
         "lazy-object-proxy": {
             "hashes": [
@@ -1311,11 +1311,11 @@
         },
         "pywin32-ctypes": {
             "hashes": [
-                "sha256:934a2def1e5cbc472b2b6bf80680c0f03cd87df65dfd58bfd1846969de095b03",
-                "sha256:b9a53ef754c894a525469933ab2a447c74ec1ea6b9d2ef446f40ec50d3dcec9f"
+                "sha256:3426e063bdd5fd4df74a14fa3cf80a0b42845a87e1d1e81f6549f9daec593a60",
+                "sha256:bf490a1a709baf35d688fe0ecf980ed4de11d2b3e37b51e5442587a75d9957e7"
             ],
             "index": "pypi",
-            "version": "==0.2.1"
+            "version": "==0.2.2"
         },
         "readme-renderer": {
             "hashes": [
