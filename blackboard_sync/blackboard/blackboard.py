@@ -49,11 +49,11 @@ class BBDurationType(str, Enum):
 
 
 class BBDuration(ImmutableModel):
-    type: str = None
+    type: Optional[str] = None
 
 
 class BBEnrollment(ImmutableModel):
-    type: str = None
+    type: Optional[str] = None
 
 
 class BBProctoring(ImmutableModel):
@@ -65,46 +65,46 @@ class BBProctoring(ImmutableModel):
 class BBFile(ImmutableModel):
     """Blackboard File."""
 
-    fileName: str = None
+    fileName: Optional[str] = None
 
 
 class BBAttachment(ImmutableModel):
     """Blackboard File Attachment."""
 
-    id: str = None
-    fileName: str = None
-    mimeType: str = None
+    id: Optional[str] = None
+    fileName: Optional[str] = None
+    mimeType: Optional[str] = None
 
 
 class BBLink(ImmutableModel):
     """Blackboard Link."""
 
-    href: str = None
-    rel: str = None
-    title: str = None
-    type: str = None
+    href: Optional[str] = None
+    rel: Optional[str] = None
+    title: Optional[str] = None
+    type: Optional[str] = None
 
 
 class BBAvailability(ImmutableModel):
-    available: bool = None
+    available: Optional[bool] = None
     allowGuests: bool = False
     adaptiveRelease: dict = {}
-    duration: BBDuration = None
+    duration: Optional[BBDuration] = None
 
 
 class BBMembership(ImmutableModel):
     """Blackboard Membership. Represents relation between student and course."""
 
-    id: str = None
-    userId: str = None
-    courseId: str = None
-    dataSourceId: str = None
-    created: datetime = None
-    modified: datetime = None
-    availability: BBAvailability = None
-    courseRoleId: str = None
-    lastAccessed: datetime = None
-    childCourseId: str = None
+    id: Optional[str] = None
+    userId: Optional[str] = None
+    courseId: Optional[str] = None
+    dataSourceId: Optional[str] = None
+    created: Optional[datetime] = None
+    modified: Optional[datetime] = None
+    availability: Optional[BBAvailability] = None
+    courseRoleId: Optional[str] = None
+    lastAccessed: Optional[datetime] = None
+    childCourseId: Optional[str] = None
 
 
 class BBResourceType(str, Enum):
@@ -125,16 +125,16 @@ class BBResourceType(str, Enum):
 
 
 class BBContentHandler(ImmutableModel):
-    id: Union[BBResourceType, str] = None
-    url: str = None
-    file: BBFile = None
-    gradeColumnId: str = None
-    groupContent: str = None
-    targetId: str = None
-    targetType: str = None
-    placementHandle: str = None
-    assessmentId: str = None
-    proctoring: BBProctoring = None
+    id: Union[BBResourceType, str, None] = None
+    url: Optional[str] = None
+    file: Optional[BBFile] = None
+    gradeColumnId: Optional[str] = None
+    groupContent: Optional[str] = None
+    targetId: Optional[str] = None
+    targetType: Optional[str] = None
+    placementHandle: Optional[str] = None
+    assessmentId: Optional[str] = None
+    proctoring: Optional[BBProctoring] = None
 
     @validator('id')
     def resource_parser(cls, v: Union[BBResourceType, str]):
@@ -147,7 +147,7 @@ class BBContentHandler(ImmutableModel):
         return self.id not in (BBResourceType.folder, BBResourceType.file,
                                BBResourceType.document, BBResourceType.externallink)
 
-    def __eq__(self, other: Union[BBResourceType, str]) -> bool:
+    def __eq__(self, other: object) -> bool:
         if isinstance(other, BBResourceType):
             return self.id == other
         elif isinstance(other, str):
@@ -158,17 +158,17 @@ class BBContentHandler(ImmutableModel):
 class BBCourseContent(ImmutableModel):
     """Blackboard Content."""
 
-    id: str = None
-    title: str = None
-    body: str = None
-    created: datetime = None
-    modified: datetime = None
+    id: Optional[str] = None
+    title: Optional[str] = None
+    body: Optional[str] = None
+    created: Optional[datetime] = None
+    modified: Optional[datetime] = None
     position: int = 0
     hasChildren: bool = False
     launchInNewWindow: bool = False
     reviewable: bool = False
-    availability: BBAvailability = None
-    contentHandler: BBContentHandler = None
+    availability: Optional[BBAvailability] = None
+    contentHandler: Optional[BBContentHandler] = None
     links: list[BBLink] = []
     hasGradebookColumns: bool = False
     hasAssociatedGroups: bool = False
@@ -180,14 +180,15 @@ class BBCourseContent(ImmutableModel):
     @property
     def title_path_safe(self) -> str:
         """Return a path safe version of the title."""
-        return sanitize_filename(self.title, replacement_text='_')
+        return sanitize_filename(self.title or 'Title missing',
+                                 replacement_text='_') or ''
 
 
 class BBContentChild(BBCourseContent):
     """Blackboard Content Child."""
 
-    body: str = None
-    parentId: str = None
+    body: Optional[str] = None
+    parentId: Optional[str] = None
 
 
 class BBCourse(ImmutableModel):
@@ -195,18 +196,18 @@ class BBCourse(ImmutableModel):
 
     _parse_name = True
 
-    id: str = None
-    courseId: str = None
-    name: str = None
-    description: str = None
-    modified: datetime = None
+    id: Optional[str] = None
+    courseId: Optional[str] = None
+    name: Optional[str] = None
+    description: Optional[str] = None
+    modified: Optional[datetime] = None
     organization: bool = False
-    ultraStatus: str = None
+    ultraStatus: Optional[str] = None
     closedComplete: bool = False
-    availability: BBAvailability = None
-    enrollment: BBEnrollment = None
-    locale: BBLocale = None
-    externalAccessUrl: str = None
+    availability: Optional[BBAvailability] = None
+    enrollment: Optional[BBEnrollment] = None
+    locale: Optional[BBLocale] = None
+    externalAccessUrl: Optional[str] = None
 
     @property
     def code(self) -> Optional[str]:
@@ -214,6 +215,7 @@ class BBCourse(ImmutableModel):
         if self.name:
             code_split = self.name.split(' : ', 1)
             return code_split[0]
+        return None
 
     @property
     def title(self) -> Optional[str]:
@@ -221,3 +223,4 @@ class BBCourse(ImmutableModel):
         if self.name:
             name_split = self.name.split(' : ', 1)[-1].split(',')
             return sanitize_filename(name_split[0], replacement_text='_')
+        return None
