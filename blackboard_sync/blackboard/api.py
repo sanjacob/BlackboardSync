@@ -21,7 +21,7 @@ an interface to make Blackboard REST API calls on a session basis
 # Boston, MA  02110-1301, USA.
 
 import logging
-from typing import Union
+from typing import Union, Optional
 from functools import wraps
 from collections.abc import Callable
 
@@ -58,7 +58,7 @@ class BlackboardSession:
         self._bb_session = requests.Session()
         self._bb_session.cookies = cookies
         # Obtain username by calling self
-        self._username = None
+        self._username : Optional[str] = None
         self._timeout = 12
 
     def get(endpoint: str, version: int = 1, use_api: bool = True, json: bool = True, **g_kwargs):
@@ -260,7 +260,7 @@ class BlackboardSession:
 
     # Get File Attachment(s)
     @get("/courses/{course_id}/contents/{content_id}/attachments/{attachment_id}")
-    def fetch_file_attachments(self, response) -> list[BBAttachment]:
+    def fetch_file_attachments(self, response) -> list[BBAttachment] | BBAttachment:
         """Get the file attachment meta data associated to the Content Item.
 
         or Get the file attachment meta data by an attachment ID.
