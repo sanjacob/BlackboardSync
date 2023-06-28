@@ -51,10 +51,10 @@ class ContentParser:
     def body(self) -> str:
         return str(self.soup)
 
-def validate_webdav_response(response, link: Link, base_url: str):
+def validate_webdav_response(response, link: str, base_url: str):
     if response.status_code == 200:
         h = response.headers
-        content_type = h.get('Content-Type')
+        content_type = h.get('Content-Type', '')
         content_len = int(h.get('Content-Length', 0))
 
         # TODO: feature: select mime types
