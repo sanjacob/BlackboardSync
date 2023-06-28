@@ -104,6 +104,10 @@ class BlackboardSync:
         self._config.download_location = download_location
         self._config.min_year = min_year
 
+        # If min_year has decreased, redownload
+        if (self._config.min_year or 0) > (min_year or 0):
+            self.last_sync_time = None
+
     def auth(self, cookie_jar: RequestsCookieJar) -> bool:
         """Create a new Blackboard session with the given credentials.
 
