@@ -108,7 +108,6 @@ pipenv install
 To start the program
 
 ```bash
-cd blackboard_sync
 pipenv run python -m blackboard_sync
 ```
 

@@ -115,5 +115,8 @@ class SyncConfig(Config):
 
     @min_year.setter
     @Config.persist
-    def min_year(self, year: int) -> None:
-        self._sync['min_year'] = str(year)
+    def min_year(self, year: Optional[int])-> None:
+        if year is None:
+            self._sync['min_year'] = '0'
+        else:
+            self._sync['min_year'] = str(year)
