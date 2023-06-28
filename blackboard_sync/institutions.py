@@ -137,3 +137,4 @@ def get_index_by_ip() -> Optional[int]:
                     found = True
         if found:
             return i
+    return None
