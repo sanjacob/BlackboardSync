@@ -17,6 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import os
+import sys
 import json
 import platform
 import subprocess
@@ -67,13 +68,11 @@ class Assets:
         return (Path(__file__).parent.parent / 'assets' / icon).resolve()
 
     @classmethod
-    @property
     def icon(cls) -> QIcon:
         """`QIcon` of application logo."""
         return QIcon(str(cls._get_asset_path(cls._icon_filename)))
 
     @classmethod
-    @property
     def watermark(cls) -> QPixmap:
         """`QPixmap` of application watermark."""
         wm = QPixmap(str(cls._get_asset_path(cls._watermark_filename)))
@@ -85,7 +84,7 @@ class OSUtils:
     @staticmethod
     def open_dir_in_file_browser(dir_to_open: Path) -> None:
         """Start a subprocess to open the default file explorer at the given location."""
-        if platform.system() == "Windows":
+        if sys.platform == "win32":
             os.startfile(dir_to_open)
         elif platform.system() == "Darwin":
             subprocess.Popen(["open", dir_to_open])
@@ -216,7 +215,7 @@ class SyncTrayIcon(QSystemTrayIcon):
 
     def _init_ui(self) -> None:
         # Create the icon
-        icon = Assets.icon
+        icon = Assets.icon()
 
         # Create the tray
         self.setIcon(icon)
@@ -318,7 +317,7 @@ class RedownloadDialog(QMessageBox):
         self.setDefaultButton(QMessageBox.No)
         self.setWindowTitle(self._window_title)
         self.setIcon(QMessageBox.Question)
-        self.setWindowIcon(Assets.icon)
+        self.setWindowIcon(Assets.icon())
 
     @property
     def redownload(self) -> bool:
@@ -345,10 +344,10 @@ class UpdateFoundDialog(QMessageBox):
         self.setDefaultButton(QMessageBox.Open)
         self.setWindowTitle(self._window_title)
         self.setIcon(QMessageBox.Information)
-        self.setWindowIcon(Assets.icon)
+        self.setWindowIcon(Assets.icon())
 
     @property
-    def update(self) -> bool:
+    def should_update(self) -> bool:
         """Indicate if BBSync should be updated."""
         return self.exec() == QMessageBox.Open
 
@@ -585,7 +584,8 @@ class SetupWizard(QWizard):
             changedSignal=self.sync_location_button.clicked
         )
 
-        self.intro_page.setPixmap(QWizard.WatermarkPixmap, Assets.watermark)
+        self.intro_page.setPixmap(QWizard.WatermarkPixmap,
+                                  Assets.watermark())
 
     def initializePage(self, id) -> None:
         if id == self.Pages.DOWNLOAD_LOCATION:
@@ -641,6 +641,7 @@ class SetupWizard(QWizard):
         """Courses from this year onward will be downloaded."""
         if not self.since_all_checkbox.isChecked():
             return self.date_spinbox.value()
+        return None
 
 
 class UniNotSupportedDialog(QDialog):
