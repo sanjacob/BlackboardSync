@@ -45,8 +45,11 @@ class BlackboardDownload:
     _logger.setLevel(logging.DEBUG)
     _logger.addHandler(logging.StreamHandler())
 
-    def __init__(self, sess: BlackboardSession, download_location: Path,
-                 last_downloaded: datetime = None, data_sources: list[str] = [], min_year: int = None):
+    def __init__(self, sess: BlackboardSession,
+                 download_location: Path,
+                 last_downloaded: Optional[datetime] = None,
+                 data_sources: list[str] = [],
+                 min_year: Optional[int] = None):
         """BlackboardDownload constructor
 
         Download all files in blackboard recursively to download_location,
@@ -97,7 +100,7 @@ class BlackboardDownload:
                                        attachment_id=attachment_id)
             self._download_stream(d_stream, file_path)
         except RequestException as e:
-            self.logger.warn(f"Error while downloading file {link}")
+            self.logger.warn(f"Error while downloading file {content_id}")
 
     def _download_webdav_file(self, link: str, file_path: Path) -> None:
         try:
@@ -120,17 +123,25 @@ class BlackboardDownload:
     def _handle_file(self, content: BBCourseContent, parent_path: Path,
                      course_id: str, depth: int = 0) -> None:
         """Download BBContent recursively, depending on filetype"""
-        self.logger.info(f"{'    ' * depth}{content.title}[{content.contentHandler.id}]")
-
         if self.cancelled:
             return
 
         res = content.contentHandler
+
+        handler_id = res.id if res is not None else '?'
+        self.logger.info(f"{'    ' * depth}{content.title}[{handler_id}]")
+
         body_path = parent_path
         file_path = Path(parent_path, content.title_path_safe)
-        has_changed = (content.modified >= self._last_downloaded)
+        has_changed = True
 
-        if res == BBResourceType.folder:
+        if content.modified is not None:
+            has_changed = (content.modified >= self._last_downloaded)
+
+        if res is None:
+            pass
+
+        elif res == BBResourceType.folder:
             try:
                 body_path = file_path
                 children = self._sess.fetch_content_children(course_id=course_id,
@@ -159,14 +170,17 @@ class BlackboardDownload:
                 if attachment.mimeType.startswith('video/'):
                     self.logger.info(f'Not downloading {attachment.fileName}')
                 else:
-                    if not self.cancelled:
-                        self.executor.submit(self._download_file, course_id, content.id, attachment.id, download_path)
+                    if not self.cancelled and content.id is not None:
+                        self.executor.submit(self._download_file,
+                                             course_id, content.id,
+                                             attachment.id, download_path)
 
         elif res == BBResourceType.externallink and has_changed:
             # Place link under folder of its own, in case it has a body
             file_path.mkdir(exist_ok=True, parents=True)
             link_path = file_path / content.title_path_safe
-            self._create_desktop_link(link_path, res.url)
+            if res.url is not None:
+                self._create_desktop_link(link_path, res.url)
 
         elif not res.is_not_handled and has_changed:
             self.logger.warning(f"Not handled, {content.title}")
@@ -245,7 +259,7 @@ class BlackboardDownload:
         self.cancelled = True
 
     @property
-    def download_location(self) -> str:
+    def download_location(self) -> Path:
         """The location where files will be downloaded to."""
         return self._download_location
 
