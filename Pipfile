@@ -35,6 +35,7 @@ setuptools-scm = {version = ">=6.2", extras = ["toml"]}
 pillow = "*"
 hypothesis = "*"
 pefile = "*"
+types-requests = "*"
 
 [requires]
 python_version = "3.10"
