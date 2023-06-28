@@ -37,7 +37,7 @@
                 "sha256:0f0d56dc5a6ad56fd4ba36484d6cc34451e1c6548c61daad8c320169f91eddc7",
                 "sha256:c6c2e98f5c7869efca1f8916fed228dd91539f9f1b444c314c06eef02980c716"
             ],
-            "markers": "python_version >= '3.6'",
+            "markers": "python_full_version >= '3.6.0'",
             "version": "==2023.5.7"
         },
         "charset-normalizer": {
@@ -493,7 +493,7 @@
                 "sha256:0f0d56dc5a6ad56fd4ba36484d6cc34451e1c6548c61daad8c320169f91eddc7",
                 "sha256:c6c2e98f5c7869efca1f8916fed228dd91539f9f1b444c314c06eef02980c716"
             ],
-            "markers": "python_version >= '3.6'",
+            "markers": "python_full_version >= '3.6.0'",
             "version": "==2023.5.7"
         },
         "cffi": {
@@ -793,11 +793,11 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:51fb2259489dc446d3edc04cbc8ebd5848d7d3f238121183bee5449b91f7a8d8",
-                "sha256:564d9860ed5e09b0434b7bafea392b0da8f67131190202c6002e58c2c96b7596"
+                "sha256:63dc6b094b52da6180ca50edd63bf08184bc96810f8624fdbe66578aaf377993",
+                "sha256:75d74da36fd3837b5b3fe15211dabc7389e78d882bf2c91bab2184ccf91fe64c"
             ],
             "index": "pypi",
-            "version": "==6.79.2"
+            "version": "==6.80.0"
         },
         "idna": {
             "hashes": [
@@ -876,11 +876,11 @@
         },
         "keyring": {
             "hashes": [
-                "sha256:ade5e1e7710a7579d7c01e64a712926270239aba48055b1cdc6c022dd6d789b5",
-                "sha256:bd48a36612ef55505bf70e563528e3e66ba93267e344b6780cf6151f9c1eda6d"
+                "sha256:4901caaf597bfd3bbd78c9a0c7c4c29fcd8310dab2cffefe749e916b6527acd6",
+                "sha256:ca0746a19ec421219f4d713f848fa297a661a8a8c1504867e55bfb5e09091509"
             ],
-            "markers": "python_version >= '3.7'",
-            "version": "==24.1.0"
+            "markers": "python_version >= '3.8'",
+            "version": "==24.2.0"
         },
         "lazy-object-proxy": {
             "hashes": [
@@ -1235,11 +1235,11 @@
         },
         "pyinstaller-hooks-contrib": {
             "hashes": [
-                "sha256:062ad7a1746e1cfc24d3a8c4be4e606fced3b123bda7d419f14fcf7507804b07",
-                "sha256:bb39e1038e3e0972420455e0b39cd9dce73f3d80acaf4bf2b3615fea766ff370"
+                "sha256:9c11197653de9605a81975325a60b9369e9cdc37c009b6aeb0221a57211f9388",
+                "sha256:fc9892e46fa19d05725205413fb21a764f2f6ff1e70ba95322fb02420a665a45"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2023.3"
+            "version": "==2023.4"
         },
         "pylint": {
             "hashes": [
