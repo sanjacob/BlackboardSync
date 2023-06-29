@@ -24,6 +24,7 @@ import time
 import logging
 import threading
 from pathlib import Path
+from typing import Optional
 from datetime import datetime, timezone, timedelta
 
 from requests.cookies import RequestsCookieJar
@@ -85,7 +86,8 @@ class BlackboardSync:
         self.sess_logger = sess_logger
         self.download_logger = download_logger
 
-        self.university = None
+        self.university : Optional[Institution] = None
+        self.sess : Optional[BlackboardSession] = None
 
         # Attempt to load existing configuration
         self._config = SyncConfig()
@@ -98,7 +100,7 @@ class BlackboardSync:
             self._update_next_sync()
 
     def setup(self, university_index: int, download_location: Path,
-              min_year: int = None):
+              min_year: Optional[int] = None) -> None:
         """Setup the university information."""
         self.university_index = university_index
         self._config.download_location = download_location
@@ -115,6 +117,9 @@ class BlackboardSync:
 
         :param bool persistence: If true, login will be saved in the OS designated keyring.
         """
+        if self.university is None:
+            return False
+
         self._cookies = cookie_jar
 
         try:
@@ -149,11 +154,14 @@ class BlackboardSync:
                 self._is_syncing = True
 
                 # Download from last datetime
-                self._download = BlackboardDownload(self.sess,
-                                                    self.download_location / '',
-                                                    self.last_sync_time,
-                                                    self.university.data_sources,
-                                                    self.min_year)
+                user_session = self.sess
+
+                if user_session is not None and self.university is not None:
+                    self._download = BlackboardDownload(user_session,
+                                                        self.download_location / '',
+                                                        self.last_sync_time,
+                                                        self.university.data_sources,
+                                                        self.min_year)
 
                 try:
                     if not self._is_active:
@@ -214,8 +222,8 @@ class BlackboardSync:
         self._force_sync = True
 
     @property
-    def username(self) -> str:
-        return self.sess.username
+    def username(self) -> Optional[str]:
+        return self.sess.username if self.sess is not None else None
 
     @property
     def _log_path(self) -> Path:
@@ -227,12 +235,12 @@ class BlackboardSync:
         return Path(self.download_location / self._log_directory)
 
     @property
-    def last_sync_time(self) -> datetime:
+    def last_sync_time(self) -> Optional[datetime]:
         """Datetime right before last download job started."""
         return self._config.last_sync_time
 
     @last_sync_time.setter
-    def last_sync_time(self, last_time: datetime):
+    def last_sync_time(self, last_time: Optional[datetime]):
         """Updates the last sync time recorded."""
         self._config.last_sync_time = last_time
         self._update_next_sync()
@@ -255,7 +263,7 @@ class BlackboardSync:
         return datetime.now(timezone.utc) >= self.next_sync
 
     @property
-    def min_year(self):
+    def min_year(self) -> int:
         return self._config.min_year
 
     @property

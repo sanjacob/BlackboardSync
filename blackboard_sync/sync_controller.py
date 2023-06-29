@@ -20,10 +20,11 @@
 
 import sys
 import webbrowser
+from typing import Optional
 
 from PyQt5.QtGui import QWindow
 from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon
+from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon, QWidget
 
 from .sync import BlackboardSync
 from .institutions import Institution, get_names, InstitutionLogin
@@ -62,7 +63,7 @@ class BBSyncController:
         self.setup_window = SetupWizard(get_names())
         self.setup_window.accepted.connect(self._setup_complete)
 
-        self.login_window = None
+        self.login_window : Optional[LoginWebView] = None
 
         self.config_window = SettingsWindow()
 
@@ -97,6 +98,9 @@ class BBSyncController:
         self.login_window.login_complete_signal.connect(self._login_complete)
 
     def _login_complete(self) -> None:
+        if self.login_window is None:
+            return
+
         self.app.setOverrideCursor(Qt.WaitCursor)
         # Call login function on sync
         auth = self.model.auth(self.login_window.cookie_jar)
@@ -132,7 +136,7 @@ class BBSyncController:
         self.config_window.sync_frequency = self.model.sync_interval
         self._show_window(self.config_window)
 
-    def _show_window(self, window: QWindow) -> None:
+    def _show_window(self, window: QWidget) -> None:
         window.setWindowState(Qt.WindowNoState)
         window.show()
         window.setFocus()
@@ -155,8 +159,11 @@ class BBSyncController:
 
         self.model.log_out()
         self.tray.set_logged_in(False)
-        self.login_window.restore()
-        self.login_window.setVisible(True)
+        
+        if self.login_window is not None:
+            self.login_window.restore()
+            self.login_window.setVisible(True)
+
         self.config_window.setVisible(False)
 
     def _save_setting_changes(self) -> None:
