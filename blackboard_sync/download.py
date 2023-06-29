@@ -248,7 +248,7 @@ class BlackboardDownload:
                         break
 
                     self._handle_file(content, course_path, course.id, 1)
-        self.executor.shutdown(wait=True, cancel_futures=True)
+        self.executor.shutdown(wait=True, cancel_futures=self.cancelled)
 
         if self.cancelled:
             return None
