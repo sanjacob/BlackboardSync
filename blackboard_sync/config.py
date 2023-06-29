@@ -86,8 +86,11 @@ class SyncConfig(Config):
 
     @last_sync_time.setter
     @Config.persist
-    def last_sync_time(self, last: datetime) -> None:
-        self._sync['last_sync_time'] = last.isoformat()
+    def last_sync_time(self, last: Optional[datetime]) -> None:
+        if last is None:
+            self.remove_option('Sync', 'last_sync_time')
+        else:
+            self._sync['last_sync_time'] = last.isoformat()
 
     @property
     def download_location(self) -> Optional[Path]:
