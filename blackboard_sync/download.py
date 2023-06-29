@@ -195,7 +195,7 @@ class BlackboardDownload:
             for body_link in parser.links:
                 safe_title = sanitize_filename(body_link.text, replacement_text='_')
                 download_path = Path(file_path / safe_title)
-                self._download_webdav_file(body_link.href, download_path)
+                self.executor.submit(self._download_webdav_file, body_link.href, download_path)
 
             with Path(file_path, f"{content.title_path_safe}.html").open('w') as html_content:
                 html_content.write(parser.body)
