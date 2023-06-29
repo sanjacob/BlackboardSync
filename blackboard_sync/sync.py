@@ -248,8 +248,9 @@ class BlackboardSync:
 
     def _update_next_sync(self) -> None:
         """Store a calculated datetime when next sync should take place."""
-        self._next_sync = (self._config.last_sync_time +
-                           timedelta(seconds=self._sync_interval))
+        if self.last_sync_time is not None:
+            self._next_sync = (self._config.last_sync_time +
+                               timedelta(seconds=self._sync_interval))
 
     @property
     def next_sync(self) -> datetime:
