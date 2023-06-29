@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.7] - 2023-06-30
+
+### Fixed
+- Issues with redownloading all files after changing download location
+
+### Changed
+- WebDav downloads are now also multithreaded
+
 ## [0.9.6] - 2023-06-29
 
 ### Changed
