@@ -158,8 +158,14 @@ class BlackboardDownload:
 
         # Omit file if it hasn't been modified since last sync
         elif res in (BBResourceType.file, BBResourceType.document) and has_changed:
-            attachments = self._sess.fetch_file_attachments(course_id=course_id,
-                                                            content_id=content.id)
+            attachments = []
+
+            try:
+                attachments = self._sess.fetch_file_attachments(course_id=course_id,
+                                                                content_id=content.id)
+
+            except RequestException:
+                self.logger.warn(f"Error while getting attachments for {course_id}")
 
             if len(attachments) > 1:
                 file_path.mkdir(exist_ok=True, parents=True)
