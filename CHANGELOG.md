@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.6] - 2023-06-29
+
+### Changed
+- Changing download since to an earlier year will cause a redownload
+- PyInstaller has been upgraded to 5.13, and other dependencies have also been upgraded
+
+### Fixed
+- Bug where resetting download since to 'all' would not take effect
+- Type hints were improved
+
 ## [0.9.5] - 2023-06-27
 
 ### Added
