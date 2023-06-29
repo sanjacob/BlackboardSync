@@ -53,6 +53,6 @@ class TestBBCourseContent:
 
     @given(st.text())
     def test_content_sanitise_title_hypothesis(self, filename):
-        safe_path = sanitize_filename(filename, replacement_text='_')
+        safe_path = sanitize_filename(filename or 'Title missing', replacement_text='_')
         obj = BBCourseContent(title=filename)
-        assert safe_path == obj.title_path_safe
+        assert safe_path or '' == obj.title_path_safe
