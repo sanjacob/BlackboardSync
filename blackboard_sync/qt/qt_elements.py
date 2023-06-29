@@ -31,11 +31,11 @@ from PyQt5.QtGui import QIcon, QPixmap
 from PyQt5.QtCore import Qt, QSettings, QUrl, pyqtSlot, pyqtSignal
 from PyQt5.QtNetwork import QNetworkCookie
 from PyQt5.QtWidgets import (QMenu, QStyle, QAction, QDialog, QWidget, QWizard,
-                             QCompleter, QFileDialog, QMessageBox,
-                             QApplication, QSystemTrayIcon)
+                             QCompleter, QFileDialog, QMessageBox, QApplication,
+                             QSystemTrayIcon, QComboBox, QLabel, QCheckBox, QSpinBox)
 from requests.cookies import RequestsCookieJar
 from PyQt5.QtWebEngineCore import QWebEngineCookieStore
-from PyQt5.QtWebEngineWidgets import QWebEnginePage, QWebEngineProfile
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage, QWebEngineProfile
 
 
 class SyncPeriod(IntEnum):
@@ -379,6 +379,9 @@ class SettingsWindow(QWidget):
     def __init__(self):
         """Create instance of SettingsWindow."""
         super().__init__()
+        self.frequency_combo: QComboBox
+        self.current_session_label: QLabel
+        self.download_location_hint: QLabel
         self._init_ui()
 
     def _init_ui(self):
@@ -468,6 +471,7 @@ class LoginWebView(QWidget):
         self.start_url = start_url
         self.target_url = target_url
 
+        self.web_view : QWebEngineView
         self._init_ui()
         self._cookie_jar = RequestsCookieJar()
 
@@ -549,6 +553,9 @@ class SetupWizard(QWizard):
         """
         super().__init__()
 
+        self.uni_selection_box: QComboBox
+        self.since_all_checkbox: QCheckBox
+        self.date_spinbox: QSpinBox
         self.institutions = institutions
         self._init_ui()
         self._has_chosen_location = False
