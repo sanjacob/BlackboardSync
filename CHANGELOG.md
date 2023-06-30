@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Issues with redownloading all files after changing download location
+- Potential issue where remaining downloads would be cancelled at the end of sync
 
 ### Changed
 - WebDav downloads are now also multithreaded
