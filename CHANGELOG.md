@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 
+## [0.9.10] - 2023-09-17
+
+### Fixed
+- Other issues when migrating to pydantic v2
+
 ## [0.9.9] - 2023-09-17
 
 ### Fixed
