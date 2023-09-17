@@ -22,17 +22,13 @@ from enum import Enum
 from datetime import datetime
 from typing import Union, Optional
 
-from pydantic import BaseModel, validator
+from pydantic import BaseModel, field_validator, ConfigDict
 from pathvalidate import sanitize_filename
 
 
 class ImmutableModel(BaseModel):
     """Model with const attributes."""
-
-    class Config:
-        """Modify default configuration."""
-
-        allow_mutation = False
+    model_config = ConfigDict(frozen=True)
 
 
 class BBLocale(ImmutableModel):
@@ -136,7 +132,7 @@ class BBContentHandler(ImmutableModel):
     assessmentId: Optional[str] = None
     proctoring: Optional[BBProctoring] = None
 
-    @validator('id')
+    @field_validator('id')
     def resource_parser(cls, v: Union[BBResourceType, str]):
         """Validate and parse an id resource type."""
         return BBResourceType(v.replace('resource/', ''))

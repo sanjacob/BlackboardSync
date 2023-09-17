@@ -912,7 +912,7 @@ class BlackboardSession:
         return response
 
     @property
-    def base_url(self):
+    def base_url(self) -> str:
         """API base URL."""
         return self._base_url
 
