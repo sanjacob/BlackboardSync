@@ -93,8 +93,8 @@ class BBSyncController:
 
     def _build_login_window(self, uni_login_info: InstitutionLogin) -> None:
         # Get login url from uni DB
-        self.login_window = LoginWebView(start_url=uni_login_info.start_url,
-                                         target_url=uni_login_info.target_url)
+        self.login_window = LoginWebView(start_url=str(uni_login_info.start_url),
+                                         target_url=str(uni_login_info.target_url))
         self.login_window.login_complete_signal.connect(self._login_complete)
 
     def _login_complete(self) -> None:
