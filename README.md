@@ -70,6 +70,7 @@ been notarised by Apple. A workaround can be found [here][apple-dev].
 
 ```bash
 python3 -m pip install blackboardsync
+python3 -m blackboard_sync # notice the underscore
 ```
 
 

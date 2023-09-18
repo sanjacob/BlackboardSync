@@ -15,18 +15,21 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     "Operating System :: OS Independent",
+    "Intended Audience :: Education",
+    "Intended Audience :: End Users/Desktop",
+    "Topic :: Education"
 ]
 dependencies = [
     "pyqt5>=5.15.9",
-    "pyqtwebengine",
-    "beautifulsoup4",
-    "pydantic",
-    "pathvalidate",
-    "python-dateutil",
-    "appdirs",
-    "lxml",
-    "requests",
-    "packaging"
+    "pyqtwebengine>=5.15.6",
+    "beautifulsoup4>=4.12.2",
+    "pydantic>=2.1.1",
+    "pathvalidate>=3.1.0",
+    "python-dateutil==2.8.2",
+    "appdirs==1.4.4",
+    "lxml>=4.7.1",
+    "requests>=2.25.0",
+    "packaging>=23.1"
 ]
 
 [tool.setuptools.dynamic]
@@ -34,7 +37,7 @@ version = {attr = "blackboard_sync.__version__"}
 
 [project.optional-dependencies]
 test = ["pytest", "hypothesis", "coverage", "pytest-qt", "pytest-mock"]
-package = ["pyinstaller", "build", "twine"]
+package = ["pyinstaller>=5.13.2", "build", "twine"]
 
 [project.urls]
 "Homepage" = "https://bbsync.app"
