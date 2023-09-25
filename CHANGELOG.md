@@ -8,6 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.9.11] - 2023-09-25
 
+### Fixed
+- Bug introduced with the upgrade to Pydantic v2 where
+  course content with the 'groupContent' attribute
+  set would cause related content to not be downloaded
+
 ### Changed
 - Pin dependencies in Pipfile and pyproject.toml for improved stability
 - Add some classifiers to show in PyPI

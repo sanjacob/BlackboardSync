@@ -125,7 +125,7 @@ class BBContentHandler(ImmutableModel):
     url: Optional[str] = None
     file: Optional[BBFile] = None
     gradeColumnId: Optional[str] = None
-    groupContent: Optional[str] = None
+    groupContent: Optional[bool] = None
     targetId: Optional[str] = None
     targetType: Optional[str] = None
     placementHandle: Optional[str] = None
