@@ -27,7 +27,7 @@ twine = "*"
 mypy = "*"
 pytest-qt = ">=4.2.0"
 python-lsp-server = {extras = ["all"], version = "*"}
-isort = {extras = ["pipfile_deprecated_finder"], version = "*"}
+isort = "*"
 black = "*"
 pytest-mock = "*"
 build = "*"
