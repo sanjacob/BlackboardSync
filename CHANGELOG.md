@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- Pin dependencies in Pipfile and pyproject.toml for improved stability
+- Add some classifiers to show in PyPI
 
 ## [0.9.10] - 2023-09-17
 
