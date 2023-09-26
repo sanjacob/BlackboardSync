@@ -46,15 +46,15 @@ body:
   - type: textarea
     id: data-sources
     attributes:
-      label: Valid Blackboard data sources
+      label: Valid Blackboard data sources (optional)
       description: Please follow the procedure depicted in UNIVERSITIES.md, and provide the valid data source(s) of your university.
       placeholder: __00_0
     validations:
-      required: true
+      required: false
   - type: textarea
     id: isp
     attributes:
-      label: University ISP name
+      label: University ISP name (optional)
       description: ISP name for the universities network provider. Check UNIVERSITIES.md for more details.
       placeholder: University of Central Lancashire
     validations:

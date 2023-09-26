@@ -1,5 +1,7 @@
 # Universities
 
+[Jump to supported universities](#fully-supported-universities)
+
 
 
 ## Adding support for your university
@@ -15,52 +17,20 @@ In summary, the following information is needed:
 - **University name** (e.g. *University of Central Lancashire*).
 - **Short name** or abbreviation (e.g. *UCLan*).
 
-
-
-For the login process:
-
 - **Link to Blackboard portal** (e.g. *https://portal.uclan.ac.uk*).
 - **Landing URL** after successfully logging in (e.g. *https://portal.uclan.ac.uk/ultra*).
 
 
 
-For downloading files:
-
-- **Valid Blackboard data sources**
-
-To know this, you'll need to login to blackboard on a browser, and then visit the
-endpoint "/learn/api/public/v1/users/me/courses" on your university blackboard page.
-For instance, this might be: "https://portal.uclan.ac.uk/learn/api/public/v1/users/me/courses".
-
-Once on this page, you will see the list of courses you are registered for. Entries are of this form:
-
-```json
-{
-  "id":"...",
-  "userId":"...",
-  "courseId":"...",
-  "dataSourceId":"_21_1",
-  "created":"...",
-  "modified":"...",
-  "availability":{"available":"Yes"},
-  "courseRoleId":"Student",
-  "lastAccessed":"..."
-}
-```
-
-Check the dataSourceId for all the entries returned and note down the one that appears most.
-
-
-For the automatic institution detection based on IP:
-
-- **Possible `isp` and `org` fields** that would indicate a connection from an IP that belongs to the university.
-   - Visit http://ip-api.com/json?fields=org,isp from an IP belonging to the institution and record those values.
+> There are [other fields](#advanced-fields) you can collect but I strongly suggest you skip these
 
 
 
 ### Ready to contribute?
 
-Please create an issue using [the following form][support-issue].
+Please create an issue using [the following form][support-issue]. You will need a GitHub account to do so.
+
+If you'd rather not create one, feel free to reach me at bbsync@san.contact with these details.
 
 
 
@@ -68,10 +38,11 @@ Please create an issue using [the following form][support-issue].
 
 - University of Central Lancashire
 
+
+
 ## Universities with Basic Support
 
-These universities should be supported, but may be lacking
-a few features.
+These universities should be supported, but may be unstable in rare cases.
 
 ### Europe
 
@@ -134,5 +105,55 @@ a few features.
 - Holmes Institute
 
 If any information here seems wrong, please let me know in the issues.
+
+
+
+------
+
+
+
+## Footnotes
+
+
+
+#### Advanced fields
+
+- **Valid Blackboard data sources**
+
+This is a tricky one because it can potentially help filter out dummy courses and other folders with no user content.
+
+However, its usage may vary per institution, ultimately is not necessary, and if set incorrectly it may cause other users to not see any course at all.
+
+You are fine without it and it is suggested to be skipped. If you have more information about how these are set internally, please let me know.
+
+> To know this, you'll need to login to blackboard on a browser, and then visit the
+> endpoint "/learn/api/public/v1/users/me/courses" on your university blackboard page.
+> For instance, this might be: "https://portal.uclan.ac.uk/learn/api/public/v1/users/me/courses".
+>
+> Once on this page, you will see the list of courses you are registered for. Entries are of this form:
+
+> ```json
+> {
+>   "id":"...",
+>   "userId":"...",
+>   "courseId":"...",
+>   "dataSourceId":"_21_1",
+>   "created":"...",
+>   "modified":"...",
+>   "availability":{"available":"Yes"},
+>   "courseRoleId":"Student",
+>   "lastAccessed":"..."
+> }
+> ```
+
+>  Check the dataSourceId for all the entries returned and note down the one that appears most.
+
+- **Possible `isp` and `org` fields** that would indicate a connection from an IP that belongs to the university.
+
+In future releases, it might be possible to optimise the setup process by automatically detecting connections from a university ISP.
+
+This, however, is yet to be implemented, and I would like to know your thoughts about it.
+
+> Visit http://ip-api.com/json?fields=org,isp from an IP belonging to the institution and record those values.
 
 [support-issue]: https://github.com/jacobszpz/BlackboardSync/issues/new?assignees=jacobszpz&labels=uni-support&projects=&template=unisupport.yml&title=%5BUniversity+Support%5D%3A+
