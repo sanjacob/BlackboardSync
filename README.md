@@ -60,11 +60,16 @@ Only MacOS (.dmg) and Windows (.exe) are supported at the moment.
 
 Note: These releases are automatically built on GitHub Actions from source.
 
-**⚠️ ATTENTION MACOS USERS **
+**MacOS Installation**
 
-On MacOS, you will face an issue when trying to open the application, since it has not
-been notarised by Apple. A workaround can be found [here][apple-dev].
+You will need to confirm the installation in System Preferences > Security and Privacy.
+You can see the specific steps in the GIF below. After the program has been installed, you may eject the mounted disk.
 
+![MacOSInstall][MacOSInstall]
+
+**Windows Installation**
+
+You will first need to get around Microsoft SmartScreen by clicking in More Details > Run Anyway.
 
 #### From PyPI
 
@@ -210,3 +215,7 @@ README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], a
 [actions]: https://github.com/jacobszpz/BlackboardSync/actions
 [kofi]: https://ko-fi.com/Q5Q17XN36
 [liberapay]: https://liberapay.com/BlackboardSync
+
+<!-- GIFS -->
+[MacOSInstall]: https://github.com/jacobszpz/BlackboardSync/assets/52013991/6be5e390-3f66-4eb4-b8d5-6f3230ae52ef
+
