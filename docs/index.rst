@@ -3,7 +3,7 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-BlackboardSync
+Blackboard Sync
 ==========================================
 
 .. image:: https://img.shields.io/github/license/jacobszpz/BlackboardSync
@@ -22,20 +22,36 @@ Features
 
   - Attachments of any type (e.g. .docx, .pptx, .pdf, etc.)
   - Internet links
-  - Content descriptions (saved as markdown files [1]_)
+  - Content descriptions (saved as html)
 
 - Cross-platform
 
   - Linux, Windows, and macOS ready
 
+Installation
+------------
 
-.. [1]  List of `markdown editors`_. Personally, I like to use `Typora`_.
+You can find all releases on GitHub_.
+Only MacOS (.dmg) and Windows (.exe) are supported at the moment.
+
+.. _GitHub: https://github.com/jacobszpz/BlackboardSync/releases/
+
+
+From PyPI
+^^^^^^^^^
+
+.. code-block:: bash
+
+   $ python3 -m pip install blackboardsync
+   $ python3 -m blackboard_sync # notice the underscore
+
 
 
 API Documentation
 -----------------
 
-Information about the internal APIs.
+If you are interested about contributing, or if you just want
+to understand the internals of BlackboardSync more.
 
 .. toctree::
    :maxdepth: 2
@@ -43,18 +59,3 @@ Information about the internal APIs.
    dev/bb_api
    dev/sync_api
    dev/qt_api
-
-
-Contributing
-------------
-
-If you intend to contribute to this project, this may be of interest.
-
-.. toctree::
-  :maxdepth: 2
-
-  dev/bb_api
-
-
-.. _Typora: https://typora.io
-.. _markdown editors: https://www.markdownguide.org/tools/
