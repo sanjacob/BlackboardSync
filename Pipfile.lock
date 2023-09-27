@@ -518,11 +518,11 @@
         },
         "astroid": {
             "hashes": [
-                "sha256:958f280532e36ca84a13023f15cb1556fb6792d193acb87e1f3ca536b6fa6bd2",
-                "sha256:c522f2832a900e27a7d284b9b6ef670d2495f760ede3c8c0b004a5641d3c5987"
+                "sha256:1aa149fc5c6589e3d0ece885b4491acd80af4f087baafa3fb5203b113e68cd3c",
+                "sha256:6c107453dffee9055899705de3c9ead36e74119cee151e5a9aaf7f0b0e020a6a"
             ],
             "markers": "python_full_version >= '3.7.2'",
-            "version": "==2.15.7"
+            "version": "==2.15.8"
         },
         "attrs": {
             "hashes": [
@@ -1356,11 +1356,11 @@
         },
         "pyinstaller-hooks-contrib": {
             "hashes": [
-                "sha256:318ccc316fb2b8c0bbdff2456b444bf1ce0e94cb3948a0f4dd48f6fc33d41c01",
-                "sha256:d091a52fbeed71cde0359aa9ad66288521a8441cfba163d9446606c5136c72a8"
+                "sha256:76084b5988e3957a9df169d2a935d65500136967e710ddebf57263f1a909cd80",
+                "sha256:f34f4c6807210025c8073ebe665f422a3aa2ac5f4c7ebf4c2a26cc77bebf63b5"
             ],
             "markers": "python_version >= '3.7'",
-            "version": "==2023.8"
+            "version": "==2023.9"
         },
         "pylint": {
             "hashes": [
@@ -1682,11 +1682,12 @@
         },
         "types-requests": {
             "hashes": [
-                "sha256:e2523825754b2832e04cdc1e731423390e731457890113a201ebca8ad9b40427",
-                "sha256:e4153c2a4e48dcc661600fa5f199b483cdcbd21965de0b5e2df26e93343c0f57"
+                "sha256:a2db9cb228a81da8348b49ad6db3f5519452dd20a9c1e1a868c83c5fe88fd1a9",
+                "sha256:cd74ce3b53c461f1228a9b783929ac73a666658f223e28ed29753771477b3bd0"
             ],
             "index": "pypi",
-            "version": "==2.31.0.5"
+            "markers": "python_version >= '3.7'",
+            "version": "==2.31.0.6"
         },
         "types-urllib3": {
             "hashes": [
