@@ -107,6 +107,7 @@ jobs:
           sparse-checkout: |
             pip/flatpak-pip-generator
             cargo/flatpak-cargo-generator.py
+          sparse-checkout-cone-mode: false
           path: tools
 
       - name: Enable execution of flatpak builder tools
@@ -134,6 +135,7 @@ jobs:
           path: flathub/pydantic-core
           sparse-checkout: |
             Cargo.lock
+          sparse-checkout-cone-mode: false
 
       - name: Obtain Cargo.lock for maturin
         uses: actions/checkout@v4
@@ -143,6 +145,7 @@ jobs:
           path: flathub/python-maturin
           sparse-checkout: |
             Cargo.lock
+          sparse-checkout-cone-mode: false
 
       - name: Obtain sources for pydantic-core
         run: |
