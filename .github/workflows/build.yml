@@ -148,13 +148,13 @@ jobs:
       - name: Obtain sources for pydantic-core
         run: |
           ../../tools/cargo/flatpak* Cargo.lock
-        working_directory: flathub/pydantic-core
+        working-directory: flathub/pydantic-core
 
       - name: Obtain sources for maturin
         run: |
           ../../tools/cargo/flatpak* Cargo.lock
           ../../tools/pip/flatpak* setuptools-rust
-        working_directory: flathub/python-maturin
+        working-directory: flathub/python-maturin
 
       - name: Print tree
         run: |
