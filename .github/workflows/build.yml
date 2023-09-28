@@ -84,9 +84,6 @@ jobs:
 
   flatpak:
     runs-on: ${{ matrix.os }}
-    container:
-      image: bilelmoussaoui/flatpak-github-actions:gnome-44
-      options: --privileged
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ pypi ]
     steps:
@@ -162,14 +159,6 @@ jobs:
       - name: Print tree
         run: |
           tree . -L 2
-        working-directory: flathub
-
-      - name: Run flatpak builder to test configuration
-        uses: flatpak/flatpak-github-actions/flatpak-builder@v6
-        with:
-          bundle: bbsync.flatpak
-          manifest-path: app.bbsync.BlackboardSync.yml
-          cache-key: flatpak-builder-${{ github.sha }}
         working-directory: flathub
 
   pyinstaller:

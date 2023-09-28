@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.12] - 2023-09-28
+
+### Added
+- Now you can invoke the python module directly from the terminal
+  as `blackboardsync` (when installing via pip)
+- The app will soon be available as a flatpak package
+
 ## [0.9.11] - 2023-09-25
 
 ### Fixed
