@@ -82,7 +82,7 @@ jobs:
           twine upload dist/*
 
   flatpak:
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ pypi ]
     steps:
