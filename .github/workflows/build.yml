@@ -103,7 +103,7 @@ jobs:
       - name: Obtain flatpak builder tools
         uses: actions/checkout@v4
         with:
-          repository: 'flatpak/flatpak-builder-tools'
+          repository: 'jacobszpz/flatpak-builder-tools'
           sparse-checkout: |
             pip/flatpak-pip-generator
             cargo/flatpak-cargo-generator.py
@@ -125,6 +125,7 @@ jobs:
           sed -i '/^pyqt/d' requirements.txt
           sed -i '/^pydantic-core/d' requirements.txt
           tools/pip/flatpak* -r requirements.txt
+          tools/pip/flatpak* "blackboardsync==$GITHUB_REF_NAME" --no-deps
           mv python3-requirements.json flathub/
 
       - name: Obtain Cargo.lock for pydantic-core
