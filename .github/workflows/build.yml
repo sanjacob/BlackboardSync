@@ -164,7 +164,7 @@ jobs:
         run: |
           mv python-maturin-tmp/* python-maturin/
           mv pydantic-core-tmp/* pydantic-core/
-          rmdir pydantic-core-tmp python-maturin-tmp
+          rm -rf *-tmp
         working-directory: flathub
 
       - name: Obtain sources for pydantic-core
