@@ -107,9 +107,10 @@ jobs:
         with:
           repository: 'jacobszpz/flatpak-builder-tools'
           sparse-checkout: |
-            pip/flatpak-pip-generator
+            pip/flatpak_pip_generator.py
             cargo/flatpak-cargo-generator.py
           path: tools
+          sparse-checkout-cone-mode: false
 
       - name: Enable execution of flatpak builder tools
         run: |
