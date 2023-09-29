@@ -97,6 +97,7 @@ jobs:
           repository: 'jacobszpz/flathub'
           ref: 'blackboardsync'
           path: flathub
+          clean: false
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -169,11 +170,38 @@ jobs:
           ../../tools/pip/flatpak* setuptools-rust
         working-directory: flathub/python-maturin
 
+      - name: Cleanup
+        run: |
+          rm **/Cargo.lock
+          rm -rf **/test-crates
+        working-directory: flathub
+
       - name: Print tree
         run: |
           tree . -L 2
           cat python-maturin/python-maturin-source.json
           cat pydantic-core/pydantic-core-source.json
+        working-directory: flathub
+
+      - name: Set up github user and email
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+        working-directory: flathub
+
+      - name: Checkout beta branch
+        if: ${{ contains(github.ref_name, '-') }}
+        run: |
+          echo "In the future, the worflow"
+          echo "should first checkout the beta branch"
+          #git checkout beta
+        working-directory: flathub
+
+      - name: Create new commit in flathub repository
+        run: |
+          git add .
+          git commit -m "Generated from $GITHUB_REF_NAME"
+          git push
         working-directory: flathub
 
   pyinstaller:
