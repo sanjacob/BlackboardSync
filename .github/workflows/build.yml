@@ -135,7 +135,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'pydantic/pydantic-core'
-          ref: "$PYDANTIC_CORE_REF"
+          ref: ${{ env.PYDANTIC_CORE_REF }}
           path: flathub/pydantic-core
           sparse-checkout: |
             Cargo.lock
@@ -145,7 +145,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'PyO3/maturin'
-          ref: "$MATURIN_REF"
+          ref: ${{ env.MATURIN_REF }}
           path: flathub/python-maturin
           sparse-checkout: |
             Cargo.lock
