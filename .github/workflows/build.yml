@@ -84,7 +84,6 @@ jobs:
   flatpak:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
-    needs: [ pypi ]
     env:
       MATURIN_REF: v1.2.3
     steps:
@@ -133,7 +132,7 @@ jobs:
 
       - name: Update other sources manually
         run: |
-          sed -i "s,\"v[^\"]*\",\"$GITHUB_REF_NAME\"," blackboardsync-source.json
+          sed -i "s,g\": \"[^\"]*\",g\": \"$GITHUB_REF_NAME\"," blackboardsync-source.json
           sed -i "s,\"v[^\"]*\",\"$MATURIN_REF\"," python-maturin/python-maturin-source.json
           sed -i "s,\"v[^\"]*\",\"$PYDANTIC_CORE_REF\"," pydantic-core/pydantic-core-source.json
         working-directory: flathub
