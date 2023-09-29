@@ -90,13 +90,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          ref: 'blackboardsync'
 
       - name: Clone flathub dist branch
         uses: actions/checkout@v4
         with:
           repository: 'jacobszpz/flathub'
+          ref: 'blackboardsync'
           path: flathub
 
       - name: Set up Python
