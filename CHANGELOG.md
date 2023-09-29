@@ -6,12 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.9.12] - 2023-09-28
+## [0.9.12] - 2023-09-29
 
-### Added
+### Changed
+- Made it easier to request support for a university
 - Now you can invoke the python module directly from the terminal
   as `blackboardsync` (when installing via pip)
-- The app will soon be available as a flatpak package
+
+### Added
+- The app will now also be available as a flatpak application,
+  providing another option for installation on Linux
+- A GIF in the README showing how to install on macOS
+
+## Fixed
+- The readthedocs documentation will now build the API reference correctly
 
 ## [0.9.11] - 2023-09-25
 
