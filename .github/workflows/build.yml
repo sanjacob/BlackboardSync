@@ -84,6 +84,7 @@ jobs:
   flatpak:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
+    needs: [ test, version-check ]
     env:
       MATURIN_REF: v1.2.3
     steps:
@@ -96,6 +97,7 @@ jobs:
           repository: 'jacobszpz/flathub'
           ref: 'blackboardsync'
           path: flathub
+          token: ${{ secrets.FLATHUB_PAT }}
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -188,6 +190,7 @@ jobs:
           tree . -L 2
           cat python-maturin/python-maturin-source.json
           cat pydantic-core/pydantic-core-source.json
+          cat blackboardsync-source.json
         working-directory: flathub
 
       - name: Set up github user and email
@@ -208,7 +211,7 @@ jobs:
         run: |
           git add .
           git commit -m "Generated from $GITHUB_REF_NAME"
-          git push
+          git push origin blackboardsync
         working-directory: flathub
 
   pyinstaller:
