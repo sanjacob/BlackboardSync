@@ -29,5 +29,10 @@
     </screenshot>
   <screenshots/>
 
-  <url type="homepage">https://github.com/jacobszpz/BlackboardSync</url>
+  <releases>
+    <release version="0.9.11" date="2023-09-25" />
+    <release version="0.9.7" date="2023-06-30" />
+  <releases/>
+
+  <url type="homepage">https://bbsync.app</url>
 </component>
