@@ -134,9 +134,9 @@ jobs:
 
       - name: Update other sources manually
         run: |
-          sed -i "s,g\": \"[^\"]*\",g\": \"$GITHUB_REF_NAME\"," blackboardsync-source.json
-          sed -i "s,\"v[^\"]*\",\"$MATURIN_REF\"," python-maturin/python-maturin-source.json
-          sed -i "s,\"v[^\"]*\",\"$PYDANTIC_CORE_REF\"," pydantic-core/pydantic-core-source.json
+          sed -i "s,tag: \"[^\"]*\",tag: \"$GITHUB_REF_NAME\"," app.bbsync.BlackboardSync.yml
+          sed -i "s,tag\": \"v[^\"]*\",tag\": \"$MATURIN_REF\"," python-maturin/python-maturin.json
+          sed -i "s,tag\": \"v[^\"]*\",tag\": \"$PYDANTIC_CORE_REF\"," pydantic-core/pydantic-core.json
         working-directory: flathub
 
       - name: Obtain Cargo.lock for pydantic-core
@@ -183,14 +183,6 @@ jobs:
         run: |
           rm **/Cargo.lock
           rm -rf **/test-crates
-        working-directory: flathub
-
-      - name: Print tree
-        run: |
-          tree . -L 2
-          cat python-maturin/python-maturin-source.json
-          cat pydantic-core/pydantic-core-source.json
-          cat blackboardsync-source.json
         working-directory: flathub
 
       - name: Set up github user and email
