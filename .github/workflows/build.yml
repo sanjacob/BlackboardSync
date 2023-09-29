@@ -85,6 +85,8 @@ jobs:
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ pypi ]
+    env:
+      MATURIN_REF: v1.2.3
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -122,8 +124,9 @@ jobs:
 
       - name: Obtain base python requirement sources
         run: |
+          echo "PYDANTIC_CORE_REF=$(grep -oP 'pydantic-core==\K[^;]+' requirements.txt | sed 's/^/v/')" >> "$GITHUB_ENV"
           sed -i '/^pyqt/d' requirements.txt
-          sed -i '/^pydantic-core/d' requirements.txt
+          sed -i '/^pydantic-core/d' requirements.txt # Make sure to obtain version first
           tools/pip/flatpak* -r requirements.txt
           tools/pip/flatpak* "blackboardsync==$GITHUB_REF_NAME" --no-deps
           mv python3-requirements.json flathub/
@@ -132,7 +135,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'pydantic/pydantic-core'
-          ref: 'v2.4.0'
+          ref: "$PYDANTIC_CORE_REF"
           path: flathub/pydantic-core
           sparse-checkout: |
             Cargo.lock
@@ -142,7 +145,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'PyO3/maturin'
-          ref: 'v1.2.3'
+          ref: "$MATURIN_REF"
           path: flathub/python-maturin
           sparse-checkout: |
             Cargo.lock
@@ -159,9 +162,16 @@ jobs:
           ../../tools/pip/flatpak* setuptools-rust
         working-directory: flathub/python-maturin
 
+      - name: au
+        run: |
+          sed -i "s,\"v[^\"]*\",$MATURIN_REF," python-maturin/python-maturin-source.json
+          sed -i "s,\"v[^\"]*\",$PYDANTIC_CORE_REF," pydantic-core/pydantic-core-source.json
+
       - name: Print tree
         run: |
           tree . -L 2
+          cat python-maturin/python-maturin-source.json
+          cat pydantic-core/pydantic-core-source.json
         working-directory: flathub
 
   pyinstaller:
