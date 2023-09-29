@@ -143,7 +143,7 @@ jobs:
         with:
           repository: 'pydantic/pydantic-core'
           ref: ${{ env.PYDANTIC_CORE_REF }}
-          path: flathub/pydantic-core
+          path: flathub/pydantic-core-tmp
           sparse-checkout: |
             Cargo.lock
           sparse-checkout-cone-mode: false
@@ -154,11 +154,18 @@ jobs:
         with:
           repository: 'PyO3/maturin'
           ref: ${{ env.MATURIN_REF }}
-          path: flathub/python-maturin
+          path: flathub/python-maturin-tmp
           sparse-checkout: |
             Cargo.lock
           sparse-checkout-cone-mode: false
           clean: false
+
+      - name: Move temp Cargo.lock to actual dir
+        run: |
+          mv python-maturin-tmp/* python-maturin/
+          mv pydantic-core-tmp/* pydantic-core/
+          rmdir pydantic-core-tmp python-maturin-tmp
+        working-directory: flathub
 
       - name: Obtain sources for pydantic-core
         run: |
