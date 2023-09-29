@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   providing another option for installation on Linux
 - A GIF in the README showing how to install on macOS
 
-## Fixed
+### Fixed
 - The readthedocs documentation will now build the API reference correctly
 
 ## [0.9.11] - 2023-09-25
