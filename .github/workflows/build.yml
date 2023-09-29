@@ -166,6 +166,7 @@ jobs:
         run: |
           sed -i "s,\"v[^\"]*\",$MATURIN_REF," python-maturin/python-maturin-source.json
           sed -i "s,\"v[^\"]*\",$PYDANTIC_CORE_REF," pydantic-core/pydantic-core-source.json
+        working-directory: flathub
 
       - name: Print tree
         run: |
