@@ -33,7 +33,7 @@ __title__ = "BlackboardSync"
 __summary__ = "Automatic Syncing Of Your Blackboard Content"
 __uri__ = "https://github.com/jacobszpz/BlackboardSync"
 
-__version__ = "0.9.12-beta.20"
+__version__ = "0.9.12-beta.21"
 
 __author__ = "Jacob Sánchez"
 __email__ = "jacobszpz@protonmail.com"

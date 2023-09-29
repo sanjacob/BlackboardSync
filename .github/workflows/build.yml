@@ -129,11 +129,11 @@ jobs:
           sed -i '/^pyqt/d' requirements.txt
           sed -i '/^pydantic-core/d' requirements.txt # Make sure to obtain version first
           tools/pip/flatpak* -r requirements.txt
-          tools/pip/flatpak* "blackboardsync==$GITHUB_REF_NAME" --no-deps
           mv python3-requirements.json flathub/
 
       - name: Update other sources manually
         run: |
+          sed -i "s,\"v[^\"]*\",\"$GITHUB_REF_NAME\"," blackboardsync-source.json
           sed -i "s,\"v[^\"]*\",\"$MATURIN_REF\"," python-maturin/python-maturin-source.json
           sed -i "s,\"v[^\"]*\",\"$PYDANTIC_CORE_REF\"," pydantic-core/pydantic-core-source.json
         working-directory: flathub
