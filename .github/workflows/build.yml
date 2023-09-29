@@ -132,6 +132,12 @@ jobs:
           tools/pip/flatpak* "blackboardsync==$GITHUB_REF_NAME" --no-deps
           mv python3-requirements.json flathub/
 
+      - name: Update other sources manually
+        run: |
+          sed -i "s,\"v[^\"]*\",\"$MATURIN_REF\"," python-maturin/python-maturin-source.json
+          sed -i "s,\"v[^\"]*\",\"$PYDANTIC_CORE_REF\"," pydantic-core/pydantic-core-source.json
+        working-directory: flathub
+
       - name: Obtain Cargo.lock for pydantic-core
         uses: actions/checkout@v4
         with:
@@ -162,12 +168,6 @@ jobs:
           ../../tools/cargo/flatpak* Cargo.lock
           ../../tools/pip/flatpak* setuptools-rust
         working-directory: flathub/python-maturin
-
-      - name: Update other sources manually
-        run: |
-          sed -i "s,\"v[^\"]*\",\"$MATURIN_REF\"," python-maturin/python-maturin-source.json
-          sed -i "s,\"v[^\"]*\",\"$PYDANTIC_CORE_REF\"," pydantic-core/pydantic-core-source.json
-        working-directory: flathub
 
       - name: Print tree
         run: |
