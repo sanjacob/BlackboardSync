@@ -97,7 +97,6 @@ jobs:
           repository: 'jacobszpz/flathub'
           ref: 'blackboardsync'
           path: flathub
-          clean: false
 
       - name: Set up Python
         uses: actions/setup-python@v4
@@ -148,6 +147,7 @@ jobs:
           sparse-checkout: |
             Cargo.lock
           sparse-checkout-cone-mode: false
+          clean: false
 
       - name: Obtain Cargo.lock for maturin
         uses: actions/checkout@v4
@@ -158,6 +158,7 @@ jobs:
           sparse-checkout: |
             Cargo.lock
           sparse-checkout-cone-mode: false
+          clean: false
 
       - name: Obtain sources for pydantic-core
         run: |
