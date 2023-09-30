@@ -111,6 +111,7 @@ jobs:
           sparse-checkout: |
             pip/flatpak_pip_generator.py
             cargo/flatpak-cargo-generator.py
+            git_source_update.py
           path: tools
           sparse-checkout-cone-mode: false
 
@@ -121,7 +122,7 @@ jobs:
       - name: Generate requirements.txt
         run: |
           python -m pip install --upgrade pip
-          pip install pipenv requirements-parser aiohttp toml
+          pip install pipenv requirements-parser aiohttp toml pyyaml
           pipenv requirements > requirements.txt
 
       - name: Obtain base python requirement sources
@@ -134,10 +135,10 @@ jobs:
 
       - name: Update other sources manually
         run: |
-          sed -i "s,tag: \"[^\"]*\",tag: \"$GITHUB_REF_NAME\"," app.bbsync.BlackboardSync.yml
-          sed -i "s,tag\": \"v[^\"]*\",tag\": \"$MATURIN_REF\"," python-maturin/python-maturin.json
-          sed -i "s,tag\": \"v[^\"]*\",tag\": \"$PYDANTIC_CORE_REF\"," pydantic-core/pydantic-core.json
+          ../tools/git*.py *.yml --update PyO3/maturin $MATURIN_REF --update pydantic/pydantic-core $PYDANTIC_CORE_REF --update jacobszpz/BlackboardSync $GITHUB_REF_NAME
         working-directory: flathub
+
+        # pydantic-core
 
       - name: Obtain Cargo.lock for pydantic-core
         uses: actions/checkout@v4
@@ -150,6 +151,8 @@ jobs:
           sparse-checkout-cone-mode: false
           clean: false
 
+        # python-maturin
+
       - name: Obtain Cargo.lock for maturin
         uses: actions/checkout@v4
         with:
@@ -161,29 +164,24 @@ jobs:
           sparse-checkout-cone-mode: false
           clean: false
 
-      - name: Move temp Cargo.lock to actual dir
+      - name: Generate sources for python-maturin and pydantic-core
         run: |
-          mv python-maturin-tmp/* python-maturin/
-          mv pydantic-core-tmp/* pydantic-core/
-          rm -rf *-tmp
+          # pydantic-core
+          mv pydantic-core-tmp/Cargo.lock .
+          ../tools/cargo/flatpak* Cargo.lock
+          mv generated-sources.json pydantic-core-generated-sources.json
+          rm Cargo.lock
+          # python-maturin
+          mv python-maturin-tmp/Cargo.lock .
+          ../tools/cargo/flatpak* Cargo.lock
+          ../tools/pip/flatpak* setuptools-rust
+          mv generated-sources.json python-maturin-generated-sources.json
+          rm Cargo.lock
+          # Cleanup
+          rm -rf test-crates pydantic-core-tmp python-maturin-tmp
         working-directory: flathub
 
-      - name: Obtain sources for pydantic-core
-        run: |
-          ../../tools/cargo/flatpak* Cargo.lock
-        working-directory: flathub/pydantic-core
-
-      - name: Obtain sources for maturin
-        run: |
-          ../../tools/cargo/flatpak* Cargo.lock
-          ../../tools/pip/flatpak* setuptools-rust
-        working-directory: flathub/python-maturin
-
-      - name: Cleanup
-        run: |
-          rm **/Cargo.lock
-          rm -rf **/test-crates
-        working-directory: flathub
+        # Deploy to GitHub
 
       - name: Set up github user and email
         run: |
