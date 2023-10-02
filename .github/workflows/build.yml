@@ -87,104 +87,33 @@ jobs:
     needs: [ test, version-check ]
     env:
       MATURIN_REF: v1.2.3
+      SETUPTOOLS_RUST_REF: v1.7.0
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Clone flathub dist branch
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+      - uses: jacobszpz/python-flatpak-generator-action@v1
         with:
-          repository: 'jacobszpz/flathub'
-          ref: 'blackboardsync'
-          path: flathub
-          token: ${{ secrets.FLATHUB_PAT }}
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.10.10"
-
-      - name: Obtain flatpak builder tools
-        uses: actions/checkout@v4
-        with:
-          repository: 'jacobszpz/flatpak-builder-tools'
-          sparse-checkout: |
-            pip/flatpak_pip_generator.py
-            cargo/flatpak-cargo-generator.py
-            git_source_update.py
-          path: tools
-          sparse-checkout-cone-mode: false
-
-      - name: Enable execution of flatpak builder tools
-        run: |
-          chmod +x tools/**/*
-
-      - name: Generate requirements.txt
-        run: |
-          python -m pip install --upgrade pip
-          pip install pipenv requirements-parser aiohttp toml pyyaml
-          pipenv requirements > requirements.txt
-
-      - name: Obtain base python requirement sources
-        run: |
-          echo "PYDANTIC_CORE_REF=$(grep -oP 'pydantic-core==\K[^;]+' requirements.txt | sed 's/^/v/')" >> "$GITHUB_ENV"
-          sed -i '/^pyqt/d' requirements.txt
-          sed -i '/^pydantic-core/d' requirements.txt # Make sure to obtain version first
-          tools/pip/flatpak* -r requirements.txt
-          mv python3-requirements.json flathub/
+          flatpak-repo: 'jacobszpz/flathub'
+          flatpak-repo-branch: 'blackboardsync'
+          flatpak-repo-secret: ${{ secrets.FLATHUB_PAT }}
+          use-pipfile: true
+          python-version: '3.10.10'
+          maturin-version: ${{ env.MATURIN_REF }}
+          setuptools-rust-version: ${{ env.SETUPTOOLS_RUST_REF }}
 
       - name: Update other sources manually
         run: |
-          ../tools/git*.py *.yml --update PyO3/maturin $MATURIN_REF --update pydantic/pydantic-core $PYDANTIC_CORE_REF --update jacobszpz/BlackboardSync $GITHUB_REF_NAME
-        working-directory: flathub
+          mkdir my-tools
+          git clone https://gist.github.com/b0ed4ff1be1e4d13ac47e21132b92dbd.git my-tools
+          chmod +x my-tools/*.py
 
-        # pydantic-core
-
-      - name: Obtain Cargo.lock for pydantic-core
-        uses: actions/checkout@v4
-        with:
-          repository: 'pydantic/pydantic-core'
-          ref: ${{ env.PYDANTIC_CORE_REF }}
-          path: flathub/pydantic-core-tmp
-          sparse-checkout: |
-            Cargo.lock
-          sparse-checkout-cone-mode: false
-          clean: false
-
-        # python-maturin
-
-      - name: Obtain Cargo.lock for maturin
-        uses: actions/checkout@v4
-        with:
-          repository: 'PyO3/maturin'
-          ref: ${{ env.MATURIN_REF }}
-          path: flathub/python-maturin-tmp
-          sparse-checkout: |
-            Cargo.lock
-          sparse-checkout-cone-mode: false
-          clean: false
-
-      - name: Generate sources for python-maturin and pydantic-core
+      - name: Update other sources manually
         run: |
-          # pydantic-core
-          mv pydantic-core-tmp/Cargo.lock .
-          ../tools/cargo/flatpak* Cargo.lock
-          mv generated-sources.json pydantic-core-generated-sources.json
-          rm Cargo.lock
-          # python-maturin
-          mv python-maturin-tmp/Cargo.lock .
-          ../tools/cargo/flatpak* Cargo.lock
-          ../tools/pip/flatpak* setuptools-rust
-          mv generated-sources.json python-maturin-generated-sources.json
-          rm Cargo.lock
-          # Cleanup
-          rm -rf test-crates pydantic-core-tmp python-maturin-tmp
+          ../my-tools/*.py *.yml --update PyO3/maturin $MATURIN_REF --update pydantic/pydantic-core $PYDANTIC_CORE_REF --update jacobszpz/BlackboardSync $GITHUB_REF_NAME
         working-directory: flathub
 
         # Deploy to GitHub
 
-      - name: Set up github user and email
-        run: |
+      - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
         working-directory: flathub
@@ -197,8 +126,7 @@ jobs:
           #git checkout beta
         working-directory: flathub
 
-      - name: Create new commit in flathub repository
-        run: |
+      - run: |
           git add .
           git commit -m "Generated from $GITHUB_REF_NAME"
           git push origin blackboardsync
