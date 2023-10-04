@@ -1,14 +1,14 @@
 # BlackboardSync
-### Automatic Syncing Of Your Blackboard Content
+### Automatic Downloads Of Your Blackboard Content
 
 [![Get on PyPI][pypi-shield]][pypi] [![License: GPL  v2][license-shield]][gnu] [![Build][build-shield]][actions]
 
 **BlackboardSync** performs a periodic, incremental download of all your Blackboard content, such as lecture slides, lab sheets, and other attachments.
 
-
 <div align="center">
-	<img src="https://raw.githubusercontent.com/jacobszpz/BlackboardSync/main/blackboard_sync/assets/logo.png" height="auto" width="25%" />
+	<img src="https://github.com/jacobszpz/BlackboardSync/assets/52013991/b7414212-034a-42a6-ab20-bb51394d885e" height="auto" width="75%" />
 </div>
+
 
 
 ## About
@@ -24,8 +24,7 @@ What I was looking for in such an application was:
 - Cross-platform compatibility
 - It would make use of the [Blackboard REST API][blackboard-api]
 
-### 30+ Universities Supported Around the World
-
+### [30+ Universities](UNIVERSITIES.md) Supported Around the World
 
 **Why is my university not supported?**
 
@@ -33,7 +32,7 @@ Simply put, some information is necessary to make the login process compatible w
 
 
 
-Built with:
+**Built with:**
 
 - [Python 3.10][python]
 - [PyQt5][pyqt]
@@ -43,81 +42,73 @@ Built with:
 ## Features
 
 - Supported content:
-  - Attachments of any type (e.g. .docx, .pptx, .pdf, etc.)
+  - Attachments of any* type (e.g. .docx, .pptx, .pdf, etc.)
   - Internet links
   - Content descriptions (saved as html files)
 - Cross-platform
   - Linux, Windows, and macOS ready
 
+*: Except videos
+
 
 
 ## Installation
 
-#### Binaries
+#### Windows (.exe) and MacOS (.dmg)
 
-You can find all releases on [GitHub][releases].
-Only MacOS (.dmg) and Windows (.exe) are supported at the moment.
+Please first download the [latest release][stable].
 
-Note: These releases are automatically built on GitHub Actions from source.
+
+
+**Windows Installation**
+
+You will first need to get around Microsoft SmartScreen by clicking in `More Details > Run Anyway`.
 
 **MacOS Installation**
 
-You will need to confirm the installation in System Preferences > Security and Privacy.
+You will need to confirm the installation in `System Preferences > Security and Privacy`.
 You can see the specific steps in the GIF below. After the program has been installed, you may eject the mounted disk.
 
 ![MacOSInstall][MacOSInstall]
 
-**Windows Installation**
 
-You will first need to get around Microsoft SmartScreen by clicking in More Details > Run Anyway.
 
-#### From PyPI
+#### Linux via Flatpak
+
+<a href='https://flathub.org/apps/app.bbsync.BlackboardSync'><img width='240' alt='Download on Flathub' src='https://dl.flathub.org/assets/badges/flathub-badge-en.png'/></a>
+
+
+
+Help in creating additional distributions is always welcome.
+
+
+
+#### PyPI
 
 ```bash
 python3 -m pip install blackboardsync
-python3 -m blackboard_sync # notice the underscore
+python3 -m blackboard_sync # notice the underscore (0.9.11 and below)
+blackboardsync # from 0.9.12 onwards
 ```
 
 
 
 #### From source
 
-##### Requirements
-
-[Python 3.10 & pip][python]
-
-[Pipenv][pipenv]
-
-[Git][git]
-
-
-
-From your command line:
-
-Clone the repository
+##### Requires [Python >=3.10, pip][python], [pipenv][pipenv], [git][git]
 
 ```bash
 git clone https://github.com/jacobszpz/BlackboardSync.git
 cd BlackboardSync
-```
-
-
-
-To fetch the dependencies, run
-
-```bash
 pipenv install
-```
-
-
-
-To start the program
-
-```bash
 pipenv run python -m blackboard_sync
 ```
 
 
+
+#### Previous Releases
+
+You can find all releases on [GitHub][releases].
 
 
 
@@ -150,6 +141,10 @@ Open a GitHub issue [here][issues].
 
 
 
+If you wish to contribute in a different way, please inquire.
+
+
+
 ## License
 
 [![License: GPL  v2][license-shield]][gnu]
@@ -165,6 +160,8 @@ This software is distributed under the [General Public License v2.0][license], m
 [PyInstaller][pyinstaller]
 
 README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], and [Rita Łyczywek][bulldogjob]
+
+Flathub team for their quick work in approving the app :heart:
 
 
 
@@ -189,7 +186,9 @@ README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], a
 <!-- RELEASES -->
 
 [releases]: https://github.com/jacobszpz/BlackboardSync/releases/
-[apple-dev]: https://support.apple.com/en-gb/guide/mac-help/mh40616/mac
+[stable]: https://github.com/jacobszpz/BlackboardSync/releases/latest
+
+
 
 
 <!-- README TEMPLATES -->
@@ -216,6 +215,8 @@ README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], a
 [kofi]: https://ko-fi.com/Q5Q17XN36
 [liberapay]: https://liberapay.com/BlackboardSync
 
-<!-- GIFS -->
-[MacOSInstall]: https://github.com/jacobszpz/BlackboardSync/assets/52013991/6be5e390-3f66-4eb4-b8d5-6f3230ae52ef
 
+
+<!-- GIFS -->
+
+[MacOSInstall]: https://github.com/jacobszpz/BlackboardSync/assets/52013991/6be5e390-3f66-4eb4-b8d5-6f3230ae52ef
