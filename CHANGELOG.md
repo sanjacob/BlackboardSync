@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.10.0] - 2023-10-05
+
+### Changed
+- When a new version is detected and the app is running inside Flatpak,
+  the user will only receive a notification
+- App is now available on Flathub
+- University data file has been optimised to reduce it in size and make
+  it easier to add new universities
+
 ## [0.9.12] - 2023-09-29
 
 ### Changed
