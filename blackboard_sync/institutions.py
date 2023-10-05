@@ -58,8 +58,8 @@ class InstitutionNetwork(BaseModel):
     :param list[str] isp: Possible values for the ISP field.
     """
 
-    org: list[str]
-    isp: list[str]
+    org: list[str] = []
+    isp: list[str] = []
 
 
 class Institution(BaseModel):
@@ -73,11 +73,11 @@ class Institution(BaseModel):
     """
 
     name: str
-    short_name: str
-    data_sources: list[str]
+    short_name: Optional[str] = None
+    data_sources: list[str] = []
     api_url: HttpUrl
     login: InstitutionLogin
-    network: InstitutionNetwork
+    network: Optional[InstitutionNetwork] = None
 
 
 def load() -> list[Institution]:
@@ -109,8 +109,8 @@ def get_by_index(i: int) -> Institution:
 
 def get_names() -> list[str]:
     """Get institution names."""
-    return [f"{ins.name} ({ins.short_name})" for ins in _institutions]
-
+    return [f"{ins.name} ({ins.short_name})" if ins.short_name is not None
+            else ins.name for ins in _institutions]
 
 def get_index_by_ip() -> Optional[int]:
     """Attempt to detect the user's institution by IP address data."""
@@ -125,6 +125,9 @@ def get_index_by_ip() -> Optional[int]:
     ip_isp = ip_info.get('isp')
 
     for i, uni in enumerate(_institutions):
+        if uni.network is None:
+            continue
+
         found = False
 
         if ip_org:
