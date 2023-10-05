@@ -19,14 +19,17 @@ Checks for updates in GitHub.
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import requests
+from pathlib import Path
 from typing import Optional
 from packaging import version
 from .__about__ import __version__
 
 
+def is_inside_container() -> bool:
+    return Path('/.flatpak-info').exists()
+
 def check_for_updates() -> Optional[str]:
     """Checks if there is a newer release than the current on Github."""
-
     url = 'https://api.github.com/repos/jacobszpz/BlackboardSync/releases/latest'
     response = requests.get(url)
     if response.status_code == 200:
@@ -34,7 +37,7 @@ def check_for_updates() -> Optional[str]:
         tag = json_response['tag_name']
         tag = tag[1:] if tag[0] == 'v' else tag
         if version.parse(tag) > version.parse(__version__):
-            return json_response['html_url']
+            return 'container' if is_inside_container() else json_response['html_url']
 
     return None
 

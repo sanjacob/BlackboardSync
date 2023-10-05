@@ -119,7 +119,9 @@ class BBSyncController:
 
     def _check_for_updates(self) -> None:
         if (html_url := check_for_updates()) is not None:
-            if UpdateFoundDialog().should_update:
+            if html_url == 'container':
+                self.tray.show_msg('Updates available', 'You can update BlackboardSync from the Software Center', 1, 3)
+            elif UpdateFoundDialog().should_update:
                 webbrowser.open(html_url)
 
     def _show_login_window(self) -> None:
