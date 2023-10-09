@@ -73,6 +73,7 @@ These universities should be supported, but may be unstable in rare cases.
 
 - Universidad Europea Madrid
 - Universidad de Alcala
+- University of Antwerp
 
 ### North America
 
@@ -84,6 +85,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Post University
 - The University of Alabama
 - Georgian College
+- Concordia University Wisconsin & Ann Arbor
 
 ### South America
 
@@ -97,7 +99,7 @@ These universities should be supported, but may be unstable in rare cases.
 ### Asia
 
 - Princess Nourah Bint Abdulrahman University
-
+- The Chinese University of Hong Kong
 
 ### Australia
 

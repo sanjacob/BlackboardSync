@@ -15,6 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - University data file has been optimised to reduce it in size and make
   it easier to add new universities
 
+### Added
+- Add basic support for 3 universities: Antwerp, CUHK, Concordia Ann Arbor
+
 ## [0.9.12] - 2023-09-29
 
 ### Changed
