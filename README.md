@@ -118,6 +118,8 @@ Contributions are welcome.
 
 More details available at [CONTRIBUTING.md](CONTRIBUTING.md)
 
+**We are looking for beta testers for all platforms!**
+
 
 
 ##### Bugs, issues or feature requests?
