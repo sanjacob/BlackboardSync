@@ -128,6 +128,7 @@ jobs:
         working-directory: flathub
 
       - run: |
+          git pull || true
           git add .
           git commit -m "Generated from $GITHUB_REF_NAME"
           git push origin HEAD
