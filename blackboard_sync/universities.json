@@ -348,5 +348,31 @@
       "target_url": "https://learning.ulster.ac.uk/ultra/"
     },
     "api_url": "https://learning.ulster.ac.uk/"
+  },
+  {
+    "name": "University of Antwerp",
+    "short_name": "Universiteit Antwerpen",
+    "login": {
+      "start_url": "https://blackboard.uantwerpen.be",
+      "target_url": "https://blackboard.uantwerpen.be/webapps/portal/"
+    },
+    "api_url": "https://blackboard.uantwerpen.be/"
+  },
+  {
+    "name": "The Chinese University of Hong Kong",
+    "short_name": "CUHK",
+    "login": {
+      "start_url": "https://blackboard.cuhk.edu.hk",
+      "target_url": "https://blackboard.cuhk.edu.hk/ultra/"
+    },
+    "api_url": "https://blackboard.cuhk.edu.hk/"
+  },
+  {
+    "name": "Concordia University Wisconsin & Ann Arbor",
+    "login": {
+      "start_url": "https://concordia.blackboard.com",
+      "target_url": "https://concordia.blackboard.com/ultra/"
+    },
+    "api_url": "https://concordia.blackboard.com/"
   }
 ]
