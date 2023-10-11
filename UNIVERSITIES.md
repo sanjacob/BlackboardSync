@@ -68,6 +68,7 @@ These universities should be supported, but may be unstable in rare cases.
 - University of the West of England
 - Northumbria University
 - Ulster University
+- Edge Hill University
 
 #### Mainland Europe
 

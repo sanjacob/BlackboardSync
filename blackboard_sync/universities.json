@@ -374,5 +374,13 @@
       "target_url": "https://concordia.blackboard.com/ultra/"
     },
     "api_url": "https://concordia.blackboard.com/"
+  },
+  {
+    "name": "Edge Hill University",
+    "login": {
+      "start_url": "https://www.edgehill.ac.uk/service/learning-edge/go",
+      "target_url": "https://learningedge.edgehill.ac.uk/ultra/"
+    },
+    "api_url": "https://learningedge.edgehill.ac.uk/"
   }
 ]

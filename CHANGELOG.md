@@ -16,7 +16,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   it easier to add new universities
 
 ### Added
-- Add basic support for 3 universities: Antwerp, CUHK, Concordia Ann Arbor
+- Add basic support for 4 universities:
+  Antwerp, CUHK, Concordia Ann Arbor, Edge Hill University
 
 ## [0.9.12] - 2023-09-29
 
