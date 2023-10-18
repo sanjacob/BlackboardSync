@@ -29,6 +29,7 @@ from datetime import datetime, timezone, timedelta
 
 from requests.cookies import RequestsCookieJar
 from requests.exceptions import ConnectionError
+from pydantic import ValidationError
 
 from .config import SyncConfig
 from .download import BlackboardDownload
@@ -69,6 +70,8 @@ class BlackboardSync:
         self._is_syncing = False
         # Flag to know if syncing is on
         self._is_active = False
+        # Flag to know if download thread has errors
+        self._has_error = False
 
         # Set up logging
         self._logger.setLevel(logging.INFO)
@@ -171,8 +174,14 @@ class BlackboardSync:
                     if job_start_time is not None:
                         self.last_sync_time = job_start_time
                     failed_attempts = 0
-                except ValueError as ve:
-                    # Session expired, log out and attempt to reload config
+                except ValidationError as e:
+                    self._log_exception(e)
+                    self.logger.warning("Blackboard API validation failed")
+                    self._has_error = True
+                    self.stop_sync()
+                except ValueError as e:
+                    # Session (probably) expired, log out and attempt to reload config
+                    self._log_exception(e)
                     self.logger.warning("User session expired")
                     reload_session = True
                     self.log_out()
@@ -194,12 +203,15 @@ class BlackboardSync:
         if reload_session:
             self.auth(self._cookies)
 
-    def start_sync(self) -> None:
-        """Stars Sync thread."""
+    def start_sync(self) -> bool:
+        """Starts Sync thread or returns False if not possible."""
+        if self._has_error:
+            return False
         self.logger.info("Starting sync thread")
         self._is_active = True
         self.sync_thread = threading.Thread(target=self._sync_task)
         self.sync_thread.start()
+        return True
 
     def stop_sync(self) -> None:
         """Stop Sync thread."""
@@ -319,6 +331,11 @@ class BlackboardSync:
     def is_syncing(self) -> bool:
         """Flag raised everytime a download job is running."""
         return self._is_syncing
+
+    @property
+    def has_error(self) -> bool:
+        """Flag indicates an error resulting in no downloads."""
+        return self._has_error
 
     @property
     def logger(self) -> logging.Logger:
