@@ -82,7 +82,7 @@ class BBLink(ImmutableModel):
 
 
 class BBAvailability(ImmutableModel):
-    available: Optional[bool] = None
+    available: Union[bool, str, None] = None
     allowGuests: bool = False
     adaptiveRelease: dict = {}
     duration: Optional[BBDuration] = None
@@ -118,6 +118,7 @@ class BBResourceType(str, Enum):
     syllabus = 'x-bb-syllabus'
     courselink = 'x-bb-courselink'
     blankpage = 'x-bb-blankpage'
+    lesson = 'x-bb-lesson'
 
 
 class BBContentHandler(ImmutableModel):
