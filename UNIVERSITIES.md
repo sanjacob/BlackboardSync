@@ -87,6 +87,7 @@ These universities should be supported, but may be unstable in rare cases.
 - The University of Alabama
 - Georgian College
 - Concordia University Wisconsin & Ann Arbor
+- Sam Houston State University
 
 ### South America
 

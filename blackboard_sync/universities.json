@@ -382,5 +382,14 @@
       "target_url": "https://learningedge.edgehill.ac.uk/ultra/"
     },
     "api_url": "https://learningedge.edgehill.ac.uk/"
+  },
+  {
+    "name": "Sam Houston State University",
+    "short_name": "SHSU",
+    "login": {
+      "start_url": "https://shsu.blackboard.com",
+      "target_url": "https://shsu.blackboard.com/ultra/"
+    },
+    "api_url": "https://shsu.blackboard.com/"
   }
 ]
