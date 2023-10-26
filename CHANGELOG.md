@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.0] - 2023-10-26
+
+### Added
+- Add support for Sam Houston State University (@cainanmahar)
+
+### Changed
+- The app will now catch API validation issues and inform the user about them
+
+### Fixed
+- Improve Blackboard API data validation (@cainanmahar)
+
 ## [0.10.0] - 2023-10-05
 
 ### Changed
