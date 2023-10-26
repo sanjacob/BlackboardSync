@@ -125,10 +125,10 @@ jobs:
           echo "should first checkout the beta branch"
           git branch beta || true
           git checkout beta
+          git pull origin checkout || true
         working-directory: flathub
 
       - run: |
-          git pull || true
           git add .
           git commit -m "Generated from $GITHUB_REF_NAME"
           git push origin HEAD
