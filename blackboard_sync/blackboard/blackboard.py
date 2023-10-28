@@ -81,11 +81,30 @@ class BBLink(ImmutableModel):
     type: Optional[str] = None
 
 
+class BBAvailable(str, Enum):
+    Yes = 'Yes'
+    Term = 'Term'
+    No = 'No'
+    Disabled = 'Disabled'
+    
+    def __bool__(self) -> bool:
+        return not self in (BBAvailable.No, BBAvailable.Disabled)
+
+
 class BBAvailability(ImmutableModel):
-    available: Union[bool, str, None] = None
+    available: Union[BBAvailable, str, None]
     allowGuests: bool = False
     adaptiveRelease: dict = {}
     duration: Optional[BBDuration] = None
+    
+    @field_validator('available')
+    def available_parser(cls, v: Union[BBAvailable, str]):
+        if isinstance(v, BBAvailable) or v in BBAvailable.__members__:
+            return BBAvailable(v)
+        else:
+            # Unrecognized string contents
+            # TODO: Log, suggest issue when encountered
+            return v
 
 
 class BBMembership(ImmutableModel):
