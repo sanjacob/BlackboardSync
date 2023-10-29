@@ -22,7 +22,7 @@ from enum import Enum
 from datetime import datetime
 from typing import Union, Optional
 
-from pydantic import BaseModel, field_validator, ConfigDict
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from pathvalidate import sanitize_filename
 
 
@@ -93,17 +93,18 @@ class BBAvailable(str, Enum):
 
 
 class BBAvailability(ImmutableModel):
-    available: Union[BBAvailable, str, None]
+    available: Union[BBAvailable, bool, str, None]
     allowGuests: bool = False
     adaptiveRelease: dict = {}
     duration: Optional[BBDuration] = None
     
     @field_validator('available')
-    def available_parser(cls, v: Union[BBAvailable, str]):
+    def available_parser(cls, v: Union[BBAvailable, bool, str]):
         if isinstance(v, BBAvailable) or v in BBAvailable.__members__:
+            # v is BBAvailable or a string matching a variant
             return BBAvailable(v)
         else:
-            # Unrecognized string contents
+            # Unrecognized string contents or a bool
             # TODO: Log, suggest issue when encountered
             return v
 
