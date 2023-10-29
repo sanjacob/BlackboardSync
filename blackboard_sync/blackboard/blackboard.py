@@ -82,10 +82,11 @@ class BBLink(ImmutableModel):
 
 
 class BBAvailable(str, Enum):
-    Yes = 'Yes'
-    Term = 'Term'
-    No = 'No'
-    Disabled = 'Disabled'
+    yes = 'Yes'
+    term = 'Term'
+    no = 'No'
+    disabled = 'Disabled'
+    partially_visible = 'PartiallyVisible'
     
     def __bool__(self) -> bool:
         return not self in (BBAvailable.No, BBAvailable.Disabled)
