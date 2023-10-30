@@ -353,10 +353,10 @@
     "name": "University of Antwerp",
     "short_name": "Universiteit Antwerpen",
     "login": {
-      "start_url": "https://blackboard.uantwerpen.be",
-      "target_url": "https://blackboard.uantwerpen.be/webapps/portal/"
+      "start_url": "https://lms.uantwerpen.be",
+      "target_url": "https://lms.uantwerpen.be/ultra/"
     },
-    "api_url": "https://blackboard.uantwerpen.be/"
+    "api_url": "https://lms.uantwerpen.be/"
   },
   {
     "name": "The Chinese University of Hong Kong",
