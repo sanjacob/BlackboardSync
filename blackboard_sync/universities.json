@@ -354,7 +354,7 @@
     "short_name": "Universiteit Antwerpen",
     "login": {
       "start_url": "https://lms.uantwerpen.be",
-      "target_url": "https://lms.uantwerpen.be/ultra"
+      "target_url": "https://lms.uantwerpen.be/ultra/"
     },
     "api_url": "https://lms.uantwerpen.be/"
   },
