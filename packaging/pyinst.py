@@ -40,6 +40,7 @@ PyInstaller.__main__.run([
     f'--add-data={assets}',
     f'--add-data={qt}',
     f'--add-data={uni}',
+    '--noconfirm',
     '--clean',
     '--windowed',
     '--name=BBSync',

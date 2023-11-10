@@ -13,9 +13,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 - The app will now catch API validation issues and inform the user about them
+- Updated PyInstaller version which brings improvements for packaging on macOS
 
 ### Fixed
 - Improve Blackboard API data validation (@cainanmahar)
+- PyQt5 has been updated due to a security issue
 
 ## [0.10.0] - 2023-10-05
 

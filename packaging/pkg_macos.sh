@@ -3,15 +3,6 @@
 # Extract the first argument as the DMG filename
 DMG_FILENAME="$1"
 
-# Fix issue with PyQt WebView code signing
-# See pyinstaller/pyinstaller#6612 and thanks to @rokm
-cd dist/BBSync.app/Contents/MacOS
-mv PyQt5/ ../Resources/
-ln -s ../Resources/PyQt5 .
-cd ../Resources/
-ln -s ../MacOS/Qt* .
-cd ../../../..
-
 # Sign App
 codesign --sign "BlackboardSync" --force --deep dist/BBSync.app
 

@@ -20,7 +20,7 @@ classifiers = [
     "Topic :: Education"
 ]
 dependencies = [
-    "pyqt5>=5.15.9",
+    "pyqt5>=5.15.10",
     "pyqtwebengine>=5.15.6",
     "beautifulsoup4>=4.12.2",
     "pydantic>=2.1.1",
