@@ -479,6 +479,7 @@ class LoginWebView(QWidget):
         Assets.load_ui(self)
         self.web_view.load(QUrl.fromUserInput(self.start_url))
         self.web_view.loadFinished.connect(self._page_load_handler)
+        self.done_button.clicked.connect(self._login_complete_signal)
         self._cookie_store.cookieAdded.connect(self._cookie_added_handler)
 
     def _page_load_handler(self) -> None:
