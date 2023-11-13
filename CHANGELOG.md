@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.11.0] - 2023-10-26
+## [0.11.1] - 2023-11-13
 
 ### Added
 - Add support for Sam Houston State University (@cainanmahar)
@@ -18,6 +18,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Improve Blackboard API data validation (@cainanmahar)
 - PyQt5 has been updated due to a security issue
+- Content body is now UTF-8 encoded explicitly (@arnodeceuninck)
+- Support for University of Antwerp fixed (@arnodeceuninck)
 
 ## [0.10.0] - 2023-10-05
 
