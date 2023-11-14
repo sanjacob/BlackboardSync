@@ -1,0 +1,70 @@
+name: Report a Problem
+description: Report a problem when downloading content or with the general working of the application
+title: "[Bug Report]: "
+labels: ["bug-report"]
+assignees:
+  - jacobszpz
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **Thank you for helping BlackboardSync become more stable**
+        I will review your bug report soon
+  - type: input
+    id: bbs-version
+    attributes:
+      label: BlackboardSync Version
+      description: What version of BlackboardSync did you last install (before the problem)?
+      placeholder: ex. v0.9.11 (or commit hash)
+    validations:
+      required: true
+  - type: input
+    id: bbs-release
+    attributes:
+      label: BlackboardSync Release
+      description: How did you install BlackboardSync?
+      placeholder: ex. Windows release, from source, etc.
+    validations:
+      required: true
+  - type: input
+    id: user-python
+    attributes:
+      label: Python Version
+      description: If installed from source or PyPI, please input your Python version
+      placeholder: ex. Python 3.10
+    validations:
+      required: false
+  - type: input
+    id: user-platform
+    attributes:
+      label: Operating System and Version
+      description: Please input your operating system and version number
+      placeholder: ex. Windows 10, macOS, etc.
+    validations:
+      required: true
+  - type: input
+    id: user-university
+    attributes:
+      label: University Name
+      description: What university did you configure BlackboardSync for?
+      placeholder: ex. University of Central Lancashire
+    validations:
+      required: true
+  - type: textarea
+    id: bug-details
+    attributes:
+      label: Problem Description
+      description: Please describe the problem here, in as much detail as possible
+      placeholder: ...
+    validations:
+      required: true
+  - type: textarea
+    id: bug-logs
+    attributes:
+      label: Log File Contents
+      description: |
+        Please paste the contents of the log files (if any)
+        these can be found within a folder inside the download folder
+      placeholder: ...
+    validations:
+      required: false

@@ -1,7 +1,7 @@
-name: Add Support for a University or College
-description: File a request to officially support the blackboard instance of your university or college
-title: "[University Support]: "
-labels: ["uni-support"]
+name: New University or College
+description: File a request to add the blackboard instance of your university or college to BlackboardSync
+title: "[New University]: "
+labels: ["uni-new"]
 assignees:
   - jacobszpz
 body:
@@ -11,6 +11,7 @@ body:
         **Please make sure to read UNIVERSITIES.md first**
         Thanks for taking the time to fill this request form!
         I will verify this data and add this to the project shortly.
+        Please do not use this form to report a bug.
   - type: input
     id: uni-name
     attributes:
