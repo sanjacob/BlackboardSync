@@ -119,10 +119,15 @@ class BBResourceType(str, Enum):
     courselink = 'x-bb-courselink'
     blankpage = 'x-bb-blankpage'
     lesson = 'x-bb-lesson'
+    other = '__blackboardsync_other'
+
+    @classmethod
+    def _missing_(cls, value):
+        return cls.other
 
 
 class BBContentHandler(ImmutableModel):
-    id: Union[BBResourceType, str, None] = None
+    id: Optional[BBResourceType] = None
     url: Optional[str] = None
     file: Optional[BBFile] = None
     gradeColumnId: Optional[str] = None
@@ -133,10 +138,10 @@ class BBContentHandler(ImmutableModel):
     assessmentId: Optional[str] = None
     proctoring: Optional[BBProctoring] = None
 
-    @field_validator('id')
-    def resource_parser(cls, v: Union[BBResourceType, str]):
-        """Validate and parse an id resource type."""
-        return BBResourceType(v.replace('resource/', ''))
+    @field_validator('id', mode='before')
+    @classmethod
+    def trim_resource_type(cls, v: str) -> str:
+        return v.replace('resource/', '')
 
     @property
     def is_not_handled(self) -> bool:

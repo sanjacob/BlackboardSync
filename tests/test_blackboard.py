@@ -23,10 +23,10 @@ from pathvalidate import sanitize_filename
 
 from blackboard_sync.blackboard import (BBFile, BBLink, BBCourse, BBLocale,
                                         BBDuration, BBAttachment, BBEnrollment,
-                                        BBMembership, BBProctoring,
-                                        BBContentChild, BBCourseContent)
+                                        BBMembership, BBProctoring, BBResourceType,
+                                        BBContentChild, BBCourseContent, BBContentHandler)
 
-from .strategies import bb_resource_type
+from .strategies import bb_unhandled_resource_type, bb_handled_resource_type, bb_resource_type
 
 
 class TestBBCourseContent:
@@ -56,3 +56,15 @@ class TestBBCourseContent:
         safe_path = sanitize_filename(filename or 'Title missing', replacement_text='_')
         obj = BBCourseContent(title=filename)
         assert safe_path or '' == obj.title_path_safe
+
+    @given(bb_resource_type())
+    def test_content_handler(self, res_type: str):
+        assert BBContentHandler(id=res_type).id in (res_type.split('/')[-1], BBResourceType.other)
+
+    @given(bb_handled_resource_type())
+    def test_content_handler_handled(self, res_type: str):
+        assert not (BBContentHandler(id=res_type).is_not_handled)
+
+    @given(bb_unhandled_resource_type())
+    def test_content_handler_unhandled(self, res_type: str):
+        assert BBContentHandler(id=res_type).is_not_handled
