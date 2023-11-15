@@ -10,11 +10,11 @@ from blackboard_sync.blackboard import (
     BBCourseContent, BBAvailability)
 
 
-resource_types = ('x-bb-folder', 'x-bb-file', 'x-bb-document', 'x-bb-blankpage',
-                  'x-bb-externallink', 'x-bb-courselink', 'x-bb-syllabus', 'x-bb-toollink',
-                  'x-bb-assignment', 'x-turnitin-assignment',
-                  'x-bb-asmt-test-link', 'x-bb-bltiplacement-Portal')
-
+handled_resource_types = ('x-bb-folder', 'x-bb-file', 'x-bb-document', 'x-bb-externallink')
+unhandled_resource_types = ('x-bb-blankpage', 'x-bb-courselink', 'x-bb-syllabus', 'x-bb-toollink',
+                            'x-bb-assignment', 'x-turnitin-assignment', 'x-bb-asmt-test-link',
+                            'x-bb-bltiplacement-Portal', 'x-bb-bltiplacement-mediasite.lesopnames')
+resource_types = handled_resource_types + unhandled_resource_types
 
 class BlackboardCourseName(BaseModel):
     code: str
@@ -24,6 +24,18 @@ class BlackboardCourseName(BaseModel):
     @property
     def name(self):
         return f"{self.code} : {self.title}, {self.details}"
+
+
+@composite
+def bb_unhandled_resource_type(draw: DrawFn) -> str:
+    res_type = draw(st.sampled_from(unhandled_resource_types))
+    return f"resource/{res_type}"
+
+
+@composite
+def bb_handled_resource_type(draw: DrawFn) -> str:
+    res_type = draw(st.sampled_from(handled_resource_types))
+    return f"resource/{res_type}"
 
 
 @composite
