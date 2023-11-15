@@ -456,10 +456,6 @@ class SettingsWindow(QWidget):
         return self._save_signal
 
 
-class LoginWindow(QWidget):
-    """Deprecated widget previously used to login."""
-
-
 class LoginWebView(QWidget):
     """Blackboard login widget."""
 

@@ -6,8 +6,8 @@ BlackboardSync Qt GUI.
 A graphical interface using Qt for BlackboardSync.
 
 Basic usage:
-    >>> from qt import LoginWindow
-    >>> w = LoginWindow()
+    >>> from qt import LoginWebView
+    >>> w = LoginWebView(start_url=..., target_url=...)
 
 
 Full documentation available at <https://blackboardsync.readthedocs.io>.
