@@ -81,8 +81,24 @@ class BBLink(ImmutableModel):
     type: Optional[str] = None
 
 
+class BBAvailable(str, Enum):
+    Yes = 'Yes'
+    Term = 'Term'
+    No = 'No'
+    Disabled = 'Disabled'
+    PartiallyVisible = 'PartiallyVisible'
+    Other = '__blackboardsync_other'
+
+    @classmethod
+    def _missing_(cls, value: str) -> 'BBAvailable':
+        return cls.Other
+
+    def __bool__(self) -> bool:
+        return not self in (BBAvailable.No, BBAvailable.Disabled)
+
+
 class BBAvailability(ImmutableModel):
-    available: Union[bool, str, None] = None
+    available: Optional[BBAvailable] = None
     allowGuests: bool = False
     adaptiveRelease: dict = {}
     duration: Optional[BBDuration] = None

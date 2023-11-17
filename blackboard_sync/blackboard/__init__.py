@@ -7,7 +7,7 @@ A python interface for the Blackboard REST APIs.
 
 Basic usage:
     >>> from blackboard import BlackboardSession
-    >>> s = BlackboardSession(user='example', password='password')
+    >>> s = BlackboardSession(base_url='https://...', cookies=...)
     >>> s.fetch_version()
 
 
@@ -37,9 +37,10 @@ from .api import BlackboardSession
 from .blackboard import (BBFile, BBLink, BBCourse, BBLocale, BBDuration,
                          BBAttachment, BBEnrollment, BBMembership,
                          BBProctoring, BBAvailability, BBContentChild,
-                         BBCourseContent, BBContentHandler, BBResourceType)
+                         BBCourseContent, BBContentHandler, BBResourceType,
+                         BBAvailable)
 
 __all__ = ['BBLocale', 'BBDuration', 'BBEnrollment', 'BBProctoring', 'BBFile',
            'BBAttachment', 'BBLink', 'BBContentHandler', 'BBAvailability',
            'BBCourseContent', 'BBContentChild', 'BBMembership', 'BBCourse',
-           'BlackboardSession', 'BBResourceType']
+           'BlackboardSession', 'BBResourceType', 'BBAvailable']
