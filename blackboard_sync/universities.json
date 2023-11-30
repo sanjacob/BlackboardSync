@@ -391,5 +391,14 @@
       "target_url": "https://shsu.blackboard.com/ultra/"
     },
     "api_url": "https://shsu.blackboard.com/"
+  },
+  {
+    "name": "University of Lincoln",
+    "short_name": "UoL",
+    "login": {
+      "start_url": "https://blackboard.lincoln.ac.uk",
+      "target_url": "https://blackboard.lincoln.ac.uk/ultra/"
+    },
+    "api_url": "https://blackboard.lincoln.ac.uk/"
   }
 ]

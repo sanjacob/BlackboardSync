@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add support for University of Lincoln (@nashgabs)
+
 ## [0.11.1] - 2023-11-13
 
 ### Added

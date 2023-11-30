@@ -69,6 +69,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Northumbria University
 - Ulster University
 - Edge Hill University
+- University of Lincoln
 
 #### Mainland Europe
 
