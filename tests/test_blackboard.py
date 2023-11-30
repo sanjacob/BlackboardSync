@@ -17,6 +17,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 import pytest
+from pydantic import ValidationError
 from hypothesis import given, infer
 from hypothesis import strategies as st
 from pathvalidate import sanitize_filename
@@ -24,7 +25,8 @@ from pathvalidate import sanitize_filename
 from blackboard_sync.blackboard import (BBFile, BBLink, BBCourse, BBLocale,
                                         BBDuration, BBAttachment, BBEnrollment,
                                         BBMembership, BBProctoring, BBResourceType,
-                                        BBContentChild, BBCourseContent, BBContentHandler)
+                                        BBContentChild, BBCourseContent, BBContentHandler,
+                                        BBAvailable, BBAvailability)
 
 from .strategies import bb_unhandled_resource_type, bb_handled_resource_type, bb_resource_type
 
@@ -68,3 +70,24 @@ class TestBBCourseContent:
     @given(bb_unhandled_resource_type())
     def test_content_handler_unhandled(self, res_type: str):
         assert BBContentHandler(id=res_type).is_not_handled
+
+    @pytest.mark.parametrize('available', ('Yes', 'No', 'Disabled'))
+    def test_bb_available_not_other(self, available: str):
+        assert BBAvailable(available) != BBAvailable.Other
+
+    @pytest.mark.parametrize('available', ('UnexpectedValue', 'NotReal'))
+    def test_bb_available_other(self, available: str):
+        assert BBAvailable(available) == BBAvailable.Other
+
+    @pytest.mark.parametrize('available', ('Yes', 'Term', 'PartiallyVisible' 'UnexpectedValue'))
+    def test_bb_available_yes(self, available: str):
+        assert BBAvailable(available)
+
+    @pytest.mark.parametrize('available', ('No', 'Disabled'))
+    def test_bb_available_no(self, available: str):
+        assert not BBAvailable(available)
+
+    @pytest.mark.parametrize('available', (True, False))
+    def test_bb_available_bool(self, available: bool):
+        with pytest.raises(ValidationError):
+            BBAvailability(available=available)
