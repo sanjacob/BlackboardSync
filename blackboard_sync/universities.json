@@ -436,5 +436,14 @@
       "target_url": "https://huskyct.uconn.edu/ultra/"
     },
     "api_url": "https://huskyct.uconn.edu/"
+  },
+  {
+    "name": "Hanze University of Applied Sciences",
+    "short_name": "Hanze UAS",
+    "login": {
+      "start_url": "https://blackboard.hanze.nl",
+      "target_url": "https://blackboard.hanze.nl/ultra/"
+    },
+    "api_url": "https://blackboard.hanze.nl/"
   }
 ]
