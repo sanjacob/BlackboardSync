@@ -91,6 +91,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Georgian College
 - Concordia University Wisconsin & Ann Arbor
 - Sam Houston State University
+- University of Connecticut
 
 ### South America
 

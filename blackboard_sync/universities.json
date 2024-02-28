@@ -427,5 +427,14 @@
       "target_url": "https://elearning.uminho.pt/ultra/"
     },
     "api_url": "https://elearning.uminho.pt/"
+  },
+  {
+    "name": "University of Connecticut",
+    "short_name": "UCONN",
+    "login": {
+      "start_url": "https://huskyct.uconn.edu",
+      "target_url": "https://huskyct.uconn.edu/ultra/"
+    },
+    "api_url": "https://huskyct.uconn.edu/"
   }
 ]
