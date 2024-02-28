@@ -78,6 +78,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Universidad de Alcala
 - University of Antwerp
 - Universidade do Minho
+- Hanze University of Applied Sciences
 
 ### North America
 
