@@ -70,12 +70,14 @@ These universities should be supported, but may be unstable in rare cases.
 - Ulster University
 - Edge Hill University
 - University of Lincoln
+- University of Aberdeen
 
 #### Mainland Europe
 
 - Universidad Europea Madrid
 - Universidad de Alcala
 - University of Antwerp
+- Universidade do Minho
 
 ### North America
 
@@ -108,6 +110,7 @@ These universities should be supported, but may be unstable in rare cases.
 
 - Torrens University
 - Holmes Institute
+- University of Western Australia
 
 If any information here seems wrong, please let me know in the issues.
 
