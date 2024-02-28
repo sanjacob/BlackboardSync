@@ -409,5 +409,14 @@
       "target_url": "https://abdn.blackboard.com/ultra/"
     },
     "api_url": "https://abdn.blackboard.com/"
+  },
+  {
+    "name": "University of Western Australia",
+    "short_name": "UWA",
+    "login": {
+      "start_url": "https://lms.uwa.edu.au",
+      "target_url": "https://lms.uwa.edu.au/ultra/"
+    },
+    "api_url": "https://lms.uwa.edu.au/"
   }
 ]
