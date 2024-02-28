@@ -400,5 +400,14 @@
       "target_url": "https://blackboard.lincoln.ac.uk/ultra/"
     },
     "api_url": "https://blackboard.lincoln.ac.uk/"
+  },
+  {
+    "name": "University of Aberdeen",
+    "short_name": "UoA",
+    "login": {
+      "start_url": "https://abdn.blackboard.com",
+      "target_url": "https://abdn.blackboard.com/ultra/"
+    },
+    "api_url": "https://abdn.blackboard.com/"
   }
 ]
