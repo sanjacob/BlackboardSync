@@ -123,8 +123,7 @@ class BlackboardSession:
     def username(self) -> str:
         """Username field used for API requests."""
         if self._username is None:
-            username = self.fetch_users(user_id='me')['userName']
-            self._username = f'userName:{username}'
+            self._username = self.fetch_users(user_id='me')['id']
         return self._username
 
     @property
