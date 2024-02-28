@@ -79,6 +79,7 @@ These universities should be supported, but may be unstable in rare cases.
 - University of Antwerp
 - Universidade do Minho
 - Hanze University of Applied Sciences
+- Centro Universitario de Tecnología y Arte Digital
 
 ### North America
 

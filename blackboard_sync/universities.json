@@ -445,5 +445,14 @@
       "target_url": "https://blackboard.hanze.nl/ultra/"
     },
     "api_url": "https://blackboard.hanze.nl/"
+  },
+  {
+    "name": "Centro Universitario de Tecnologia y Arte Digital",
+    "short_name": "U-tad",
+    "login": {
+      "start_url": "https://u-tad.blackboard.com",
+      "target_url": "https://u-tad.blackboard.com/ultra/"
+    },
+    "api_url": "https://u-tad.blackboard.com/"
   }
 ]
