@@ -122,6 +122,15 @@
     "api_url": "https://uem.blackboard.com/"
   },
   {
+    "name": "Universidad de Sevilla",
+    "short_name": "US",
+    "login": {
+      "start_url": "https://ev.us.es",
+      "target_url": "https://ev.us.es/ultra/"
+    },
+    "api_url": "https://ev.us.es/"
+  },
+  {
     "name": "Universidad Tecnologica ECOTEC",
     "short_name": "ECOTEC",
     "login": {
