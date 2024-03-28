@@ -90,6 +90,8 @@ jobs:
       SETUPTOOLS_RUST_REF: v1.7.0
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: jacobszpz/python-flatpak-generator-action@v1
         with:
           flatpak-repo: 'flathub/app.bbsync.BlackboardSync'
@@ -121,11 +123,7 @@ jobs:
       - name: Checkout beta branch
         if: ${{ contains(github.ref_name, '-') }}
         run: |
-          echo "In the future, the worflow"
-          echo "should first checkout the beta branch"
-          git branch beta || true
           git checkout beta
-          git pull origin checkout || true
         working-directory: flathub
 
       - run: |
