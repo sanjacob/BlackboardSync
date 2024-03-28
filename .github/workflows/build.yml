@@ -91,11 +91,11 @@ jobs:
       FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
     steps:
       - uses: actions/checkout@v4
-      - uses: jacobszpz/python-flatpak-generator-action@v1
+      - uses: sanjacob/python-flatpak-generator-action@v1
         with:
-          flatpak-repo: 'flathub/app.bbsync.BlackboardSync'
+          flatpak-repo: 'sanjacob/app.bbsync.BlackboardSync'
           flatpak-repo-branch: ${{ env.FLATHUB_BRANCH }}
-          flatpak-repo-secret: ${{ secrets.FLATHUB_OFFICIAL_PAT }}
+          flatpak-repo-secret: ${{ secrets.FLATHUB_PAT }}
           use-pipfile: true
           python-version: '3.10.10'
           maturin-version: ${{ env.MATURIN_REF }}
@@ -109,7 +109,7 @@ jobs:
 
       - name: Update other sources manually
         run: |
-          ../my-tools/*.py *.yml --update PyO3/maturin $MATURIN_REF --update pydantic/pydantic-core $PYDANTIC_CORE_REF --update jacobszpz/BlackboardSync $GITHUB_REF_NAME
+          ../my-tools/*.py *.yml --update PyO3/maturin $MATURIN_REF --update pydantic/pydantic-core $PYDANTIC_CORE_REF --update sanjacob/BlackboardSync $GITHUB_REF_NAME
         working-directory: flathub
 
         # Deploy to GitHub
