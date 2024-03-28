@@ -94,6 +94,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Concordia University Wisconsin & Ann Arbor
 - Sam Houston State University
 - University of Connecticut
+- Schoolcraft College
 
 ### South America
 
@@ -114,6 +115,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Torrens University
 - Holmes Institute
 - University of Western Australia
+- University of Otago
 
 If any information here seems wrong, please let me know in the issues.
 

@@ -6,8 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.2] - 2024-03-28
+
+### Changed
+- The app now uses the user id, rather than the userName, to fetch the API
+
 ### Added
 - Add support for University of Lincoln (@nashgabs)
+- Add support for University of Aberdeen (@cbraidwood)
+- Add support for University of Western Australia (@ziyuanding)
+- Add support for Universidade do Minho (@Darguima)
+- Add support for University of Connecticut (@kingcavespider1)
+- Add support for Hanze University of Applied Sciences (@Dougley)
+- Add support for Centro Universitario de Tecnologia y Arte Digital (@Mr-ConQueso)
+- Add support for Universidad de Sevilla (@amoraschi)
+- Add support for University of Otago (@nzspider)
+- Add support for Schoolcraft College (@jackjack21-pixel)
 
 ## [0.11.1] - 2023-11-13
 

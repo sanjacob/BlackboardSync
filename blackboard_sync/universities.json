@@ -463,5 +463,22 @@
       "target_url": "https://ev.us.es/ultra/"
     },
     "api_url": "https://ev.us.es/"
+  },
+  {
+    "name": "University of Otago",
+    "short_name": "UoO",
+    "login": {
+      "start_url": "https://blackboard.otago.ac.nz",
+      "target_url": "https://blackboard.otago.ac.nz/ultra/"
+    },
+    "api_url": "https://blackboard.otago.ac.nz/"
+  },
+  {
+    "name": "Schoolcraft College",
+    "login": {
+      "start_url": "https://bb.schoolcraft.edu",
+      "target_url": "https://bb.schoolcraft.edu/ultra/"
+    },
+    "api_url": "https://bb.schoolcraft.edu/"
   }
 ]
