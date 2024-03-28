@@ -88,14 +88,13 @@ jobs:
     env:
       MATURIN_REF: v1.2.3
       SETUPTOOLS_RUST_REF: v1.7.0
+      FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
     steps:
       - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
       - uses: jacobszpz/python-flatpak-generator-action@v1
         with:
           flatpak-repo: 'flathub/app.bbsync.BlackboardSync'
-          flatpak-repo-branch: 'master'
+          flatpak-repo-branch: ${{ env.FLATHUB_BRANCH }}
           flatpak-repo-secret: ${{ secrets.FLATHUB_OFFICIAL_PAT }}
           use-pipfile: true
           python-version: '3.10.10'
@@ -118,12 +117,6 @@ jobs:
       - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
-        working-directory: flathub
-
-      - name: Checkout beta branch
-        if: ${{ contains(github.ref_name, '-') }}
-        run: |
-          git checkout beta
         working-directory: flathub
 
       - run: |
