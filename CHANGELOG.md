@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for University of Otago (@nzspider)
 - Add support for Schoolcraft College (@jackjack21-pixel)
 
+### Fixed
+- Sort out issues with flatpak distribution, update appstream
+
 ## [0.11.1] - 2023-11-13
 
 ### Added
