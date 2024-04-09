@@ -352,21 +352,6 @@ class UpdateFoundDialog(QMessageBox):
         return self.exec() == QMessageBox.Open
 
 
-class PersistenceWarning(QDialog):
-    """QDialog shown if user chooses to store their login details on their device."""
-
-    _window_title = "Do you wish to stay logged in?"
-
-    def __init__(self):
-        """Create instance of PersistenceWarning Dialog."""
-        super().__init__()
-        self._init_ui()
-
-    def _init_ui(self):
-        Assets.load_ui(self)
-        self.setWindowTitle(self._window_title)
-
-
 class SettingsWindow(QWidget):
     """Settings windown UI element."""
 
