@@ -154,7 +154,7 @@ class BlackboardDownload:
                     if child.contentHandler is not None:
                         self._handle_file(child, file_path, course_id, depth + 1)
             except ValueError:
-                pass
+                self.logger.warn(f"Error while getting children for {course_id}")
 
         # Omit file if it hasn't been modified since last sync
         elif res in (BBResourceType.file, BBResourceType.document) and has_changed:
@@ -165,6 +165,8 @@ class BlackboardDownload:
                                                                 content_id=content.id)
 
             except RequestException:
+                self.logger.warn(f"Net error while getting attachments for {course_id}")
+            except ValueError:
                 self.logger.warn(f"Error while getting attachments for {course_id}")
 
             if len(attachments) > 1:
