@@ -203,8 +203,8 @@ Flathub team for their quick work in approving the app :heart:
 
 <!-- SHIELDS -->
 
-[pypi-shield]: https://img.shields.io/pypi/v/BlackboardSync?color=black
-[license-shield]: https://img.shields.io/github/license/jacobszpz/BlackboardSync?color=black
+[pypi-shield]: https://img.shields.io/pypi/v/BlackboardSync?color=%23241F21
+[license-shield]: https://img.shields.io/github/license/jacobszpz/BlackboardSync?color=%23241F21
 [build-shield]: https://img.shields.io/github/actions/workflow/status/jacobszpz/BlackboardSync/build.yml?branch=main
 [kofi-shield]: https://ko-fi.com/img/githubbutton_sm.svg
 [lp-shield]: https://img.shields.io/liberapay/receives/BlackboardSync.svg?logo=liberapay
