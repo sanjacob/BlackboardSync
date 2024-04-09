@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.3] - 2024-04-09
+
+### Fixed
+- More logging statements were added
+- Catch ValueError when fetching attachments
+
+### Changed
+- Some assets were optimised or discarded
+
 ## [0.11.2] - 2024-03-28
 
 ### Changed

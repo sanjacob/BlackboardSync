@@ -34,11 +34,11 @@
   </screenshots>
 
   <releases>
-    <release version="0.10.0" date="2023-10-05">
-      <url>https://github.com/jacobszpz/blackboardsync/releases/tag/0.10.0-alpha.1</url>
+    <release version="0.11.3" date="2024-04-09">
+      <url>https://github.com/jacobszpz/blackboardsync/releases/tag/0.11.3</url>
     </release>
-    <release version="0.9.12" date="2023-09-29">
-      <url>https://github.com/jacobszpz/blackboardsync/releases/tag/0.9.12-alpha.4</url>
+    <release version="0.11.2" date="2024-03-28">
+      <url>https://github.com/jacobszpz/blackboardsync/releases/tag/0.11.2</url>
     </release>
     <release version="0.9.11" date="2023-09-25">
       <url>https://github.com/jacobszpz/blackboardsync/releases/tag/0.9.11</url>
