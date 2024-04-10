@@ -480,5 +480,13 @@
       "target_url": "https://bb.schoolcraft.edu/ultra/"
     },
     "api_url": "https://bb.schoolcraft.edu/"
+  },
+  {
+    "name": "Griffith University",
+    "login": {
+      "start_url": "http://bblearn.griffith.edu.au",
+      "target_url": "https://bblearn.griffith.edu.au/webapps/portal/"
+    },
+    "api_url": "https://bblearn.griffith.edu.au/"
   }
 ]
