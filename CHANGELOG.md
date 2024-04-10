@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.11.4] - 2024-04-10
+
+### Changed
+- Minor updates to some development dependencies
+
+### Added
+- Add support for Griffith University (@KR3dwood)
+
 ## [0.11.3] - 2024-04-09
 
 ### Fixed
