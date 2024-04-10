@@ -526,7 +526,7 @@ class SetupWizard(QWizard):
         DOWNLOAD_SINCE = 3
         LAST = 3
 
-    _help_website = 'https://github.com/jacobszpz/BlackboardSync'
+    _help_website = 'https://github.com/sanjacob/BlackboardSync'
 
     def __init__(self, institutions: list[str]):
         """Create a `SetupWizard`.
