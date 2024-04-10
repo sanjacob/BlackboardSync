@@ -116,6 +116,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Holmes Institute
 - University of Western Australia
 - University of Otago
+- Griffith University
 
 If any information here seems wrong, please let me know in the issues.
 
