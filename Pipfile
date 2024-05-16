@@ -19,7 +19,7 @@ beautifulsoup4 = "==4.12.2"
 
 [dev-packages]
 coverage = "*"
-pyinstaller = "==6.1.0"
+pyinstaller = "==6.6.0"
 pywin32-ctypes = "==0.2.2"
 sphinx = "*"
 recommonmark = "*"
