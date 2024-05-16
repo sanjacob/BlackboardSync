@@ -25,6 +25,7 @@ import webbrowser
 from enum import IntEnum
 from typing import Optional
 from pathlib import Path
+from datetime import datetime
 
 from PyQt5 import uic
 from PyQt5.QtGui import QIcon, QPixmap
@@ -555,6 +556,10 @@ class SetupWizard(QWizard):
         self.file_chooser = QFileDialog()
         self.file_chooser.setFileMode(QFileDialog.Directory)
         self.sync_location_button.clicked.connect(self._choose_location)
+
+        year = datetime.today().year
+        self.date_spinbox.setRange(2000, year)
+        self.date_spinbox.setValue(year)
         self.date_spinbox.setEnabled(False)
 
         self.since_all_checkbox.stateChanged.connect(
