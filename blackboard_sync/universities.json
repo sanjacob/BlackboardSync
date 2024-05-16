@@ -488,5 +488,14 @@
       "target_url": "https://bblearn.griffith.edu.au/webapps/portal/"
     },
     "api_url": "https://bblearn.griffith.edu.au/"
+  },
+  {
+    "name": "University of Pretoria",
+    "short_name": "UP",
+    "login": {
+      "start_url": "https://clickup.up.ac.za",
+      "target_url": "https://clickup.up.ac.za/ultra/"
+    },
+    "api_url": "https://clickup.up.ac.za/"
   }
 ]
