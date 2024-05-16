@@ -230,15 +230,6 @@
       <property name="prefix">
        <string> </string>
       </property>
-      <property name="minimum">
-       <number>2000</number>
-      </property>
-      <property name="maximum">
-       <number>2023</number>
-      </property>
-      <property name="value">
-       <number>2020</number>
-      </property>
      </widget>
     </item>
     <item>
