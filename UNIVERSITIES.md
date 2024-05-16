@@ -1,6 +1,6 @@
 # Universities
 
-[Jump to supported universities](#fully-supported-universities)
+[Jump to supported universities](#supported-universities)
 
 
 
@@ -33,7 +33,7 @@ Please create an issue using [the following form][support-issue]. You will need 
 If you'd rather not create one, feel free to reach me at bbsync@san.contact with these details.
 
 
-## Universities with Basic Support
+## Supported Universities
 
 These universities should be supported, but may be unstable in rare cases.
 
