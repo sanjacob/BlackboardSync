@@ -33,13 +33,6 @@ Please create an issue using [the following form][support-issue]. You will need 
 If you'd rather not create one, feel free to reach me at bbsync@san.contact with these details.
 
 
-
-## Fully Supported Universities
-
-- University of Central Lancashire
-
-
-
 ## Universities with Basic Support
 
 These universities should be supported, but may be unstable in rare cases.
@@ -48,6 +41,7 @@ These universities should be supported, but may be unstable in rare cases.
 
 #### British Isles
 
+- University of Central Lancashire
 - University of Westminster
 - University of Reading
 - University of West Anglia
@@ -117,6 +111,10 @@ These universities should be supported, but may be unstable in rare cases.
 - University of Western Australia
 - University of Otago
 - Griffith University
+
+### Africa
+
+- University of Pretoria
 
 If any information here seems wrong, please let me know in the issues.
 
