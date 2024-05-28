@@ -65,6 +65,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Edge Hill University
 - University of Lincoln
 - University of Aberdeen
+- University of Derby
 
 #### Mainland Europe
 
