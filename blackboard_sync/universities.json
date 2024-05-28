@@ -497,5 +497,14 @@
       "target_url": "https://clickup.up.ac.za/ultra/"
     },
     "api_url": "https://clickup.up.ac.za/"
+  },
+  {
+    "name": "The Chinese University of Hong Kong, Shenzhen",
+    "short_name": "CUHKSZ",
+    "login": {
+      "start_url": "https://bb.cuhk.edu.cn",
+      "target_url": "https://bb.cuhk.edu.cn/webapps/portal/"
+    },
+    "api_url": "https://bb.cuhk.edu.cn/"
   }
 ]
