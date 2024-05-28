@@ -515,5 +515,14 @@
       "target_url": "https://courseresources.derby.ac.uk/ultra/"
     },
     "api_url": "https://courseresources.derby.ac.uk/"
+  },
+  {
+    "name": "Texas Tech University",
+    "short_name": "TTU",
+    "login": {
+      "start_url": "https://ttu.blackboard.com",
+      "target_url": "https://ttu.blackboard.com/ultra/"
+    },
+    "api_url": "https://ttu.blackboard.com/"
   }
 ]
