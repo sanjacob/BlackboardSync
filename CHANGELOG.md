@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add support for University of Pretoria (@whipped-cream)
+
 ## [0.11.4] - 2024-04-10
 
 ### Changed
