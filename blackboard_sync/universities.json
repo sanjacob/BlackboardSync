@@ -506,5 +506,14 @@
       "target_url": "https://bb.cuhk.edu.cn/webapps/portal/"
     },
     "api_url": "https://bb.cuhk.edu.cn/"
+  },
+  {
+    "name": "University of Derby",
+    "short_name": "UDo",
+    "login": {
+      "start_url": "https://courseresources.derby.ac.uk",
+      "target_url": "https://courseresources.derby.ac.uk/ultra/"
+    },
+    "api_url": "https://courseresources.derby.ac.uk/"
   }
 ]
