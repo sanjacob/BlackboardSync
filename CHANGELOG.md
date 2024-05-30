@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for University of Pretoria (@whipped-cream)
 - Add support for CUHK-Shenzhen (@Hyle33ies)
 - Add support for University of Derby
+- Add support for Texas Tech University (@kktrum)
 
 ## [0.11.4] - 2024-04-10
 

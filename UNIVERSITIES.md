@@ -90,6 +90,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Sam Houston State University
 - University of Connecticut
 - Schoolcraft College
+- Texas Tech University
 
 ### South America
 
