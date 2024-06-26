@@ -919,12 +919,12 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:42ba2cc2d1fe04a65124fadfc6a305dbf62607aa9f8f94a10efadee9cfa1c4dd",
-                "sha256:746b5316da2c7af4c3816c34af675909fcb1a6a0e5c7af5cfc36c450be2dca34"
+                "sha256:4033898019a6149823d2feeb8d214921b4ac2d342a05d6b02e40a3ca4be07eea",
+                "sha256:a0a898fa78ecaefe76ad248901dc274e598f29198c6015b3053f7f7827670e0e"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==6.98.13"
+            "version": "==6.104.1"
         },
         "idna": {
             "hashes": [
