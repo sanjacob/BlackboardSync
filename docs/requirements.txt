@@ -7,5 +7,5 @@ pyqt5==5.15.10
 appdirs==1.4.4
 python-dateutil==2.8.2
 beautifulsoup4==4.12.2
-pathvalidate==3.1.0
+pathvalidate==3.2.0
 pyqtwebengine==5.15.6
