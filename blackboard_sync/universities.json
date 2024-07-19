@@ -524,5 +524,17 @@
       "target_url": "https://ttu.blackboard.com/ultra/"
     },
     "api_url": "https://ttu.blackboard.com/"
+  },
+  {
+    "name": "Seneca Polytechnic",
+    "short_name": "Seneca",
+    "login": {
+      "start_url": "https://learn.senecapolytechnic.ca",
+      "target_url": "https://learn.senecapolytechnic.ca/ultra/"
+    },
+    "api_url": "https://learn.senecapolytechnic.ca/",
+    "network": {
+      "org": ["Seneca Polytechnic"]
+    }
   }
 ]
