@@ -91,6 +91,7 @@ These universities should be supported, but may be unstable in rare cases.
 - University of Connecticut
 - Schoolcraft College
 - Texas Tech University
+- Seneca Polytechnic
 
 ### South America
 
