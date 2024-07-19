@@ -536,5 +536,14 @@
     "network": {
       "org": ["Seneca Polytechnic"]
     }
+  },
+  {
+    "name": "University of Manchester",
+    "short_name": "UoM",
+    "login": {
+      "start_url": "https://online.manchester.ac.uk",
+      "target_url": "https://online.manchester.ac.uk/ultra/"
+    },
+    "api_url": "https://online.manchester.ac.uk/"
   }
 ]
