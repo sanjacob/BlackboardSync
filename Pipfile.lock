@@ -452,13 +452,12 @@
         },
         "pyqt5-qt5": {
             "hashes": [
-                "sha256:1988f364ec8caf87a6ee5d5a3a5210d57539988bf8e84714c7d60972692e2f4a",
-                "sha256:750b78e4dba6bdf1607febedc08738e318ea09e9b10aea9ff0d73073f11f6962",
-                "sha256:76980cd3d7ae87e3c7a33bfebfaee84448fd650bad6840471d6cae199b56e154",
-                "sha256:9cc7a768b1921f4b982ebc00a318ccb38578e44e45316c7a4a850e953e1dd327"
+                "sha256:730da7e6a97f6bad1b6df21082fe625647730418bc83e20cbc2ff6401ed0a8be",
+                "sha256:aa3911276b1a1aa9b5b9cba687ef905faddd706980d34e234312591c3d3cbef8",
+                "sha256:c89b35b2aaf24d2805cc76fe31880c77b7f7557db8aafb26f1015f1bba7031d6"
             ],
             "index": "pypi",
-            "version": "==5.15.2"
+            "version": "==5.15.14"
         },
         "pyqt5-sip": {
             "hashes": [
