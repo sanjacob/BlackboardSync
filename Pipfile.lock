@@ -1763,19 +1763,20 @@
         },
         "types-beautifulsoup4": {
             "hashes": [
-                "sha256:59980028d29bf55d0db359efa305b75bacf0cb92e3f3f6b3fd408f2531df274c",
-                "sha256:8b03b054cb2e62abf82bbbeda57a07257026f4ed9010ef17d8f8eff43bb1f9b7"
+                "sha256:004f6096fdd83b19cdbf6cb10e4eae57b10205eccc365d0a69d77da836012e28",
+                "sha256:7ceda66a93ba28d759d5046d7fec9f4cad2f563a77b3a789efc90bcadafeefd1"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.7'",
-            "version": "==4.12.0.7"
+            "markers": "python_version >= '3.8'",
+            "version": "==4.12.0.20240511"
         },
         "types-html5lib": {
             "hashes": [
-                "sha256:16fe936d99b9f7fc210e2e21a2aed1b6bbbc554ad8242a6ef75f6f2bddb27e58",
-                "sha256:80e1a2062d22a3affe5c28d97da30bffbf3a076d393c80fc6f1671216c1bd492"
+                "sha256:22736b7299e605ec4ba539d48691e905fd0c61c3ea610acc59922232dc84cede",
+                "sha256:af5de0125cb0fe5667543b158db83849b22e25c0e36c9149836b095548bf1020"
             ],
-            "version": "==1.1.11.15"
+            "markers": "python_version >= '3.8'",
+            "version": "==1.1.11.20240228"
         },
         "types-python-dateutil": {
             "hashes": [
