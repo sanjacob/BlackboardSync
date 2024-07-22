@@ -13,7 +13,7 @@ pyqt5-qt5 = ">=5.15.2"
 setuptools = "==70.3.0"
 pathvalidate = "==3.2.0"
 pydantic = "==2.1.1"
-pyqtwebengine = "==5.15.6"
+pyqtwebengine = "==5.15.7"
 packaging = "==23.2"
 beautifulsoup4 = "==4.12.2"
 
