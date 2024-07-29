@@ -14,7 +14,7 @@ setuptools = "==71.1.0"
 pathvalidate = "==3.2.0"
 pydantic = "==2.1.1"
 pyqtwebengine = "==5.15.7"
-packaging = "==23.2"
+packaging = "==24.1"
 beautifulsoup4 = "==4.12.3"
 
 [dev-packages]
