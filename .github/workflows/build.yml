@@ -149,6 +149,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install pipenv
           pipenv requirements --dev > requirements.txt
+
+      - name: Unfuck pyqt5-qt5
+        run: |
+          sed -i 's/pyqt5-qt5==/pyqt5-qt5>=/g' requirements.txt
+
+      - name: Continue Python environment setup
+        run: |
           pip install -r requirements.txt
           python packaging/pyinst.py
 
