@@ -33,10 +33,10 @@ __title__ = "BlackboardSync"
 __summary__ = "Automatic Syncing Of Your Blackboard Content"
 __uri__ = "https://github.com/jacobszpz/BlackboardSync"
 
-__version__ = "0.11.4-alpha.1"
+__version__ = "0.11.5-alpha.1"
 
 __author__ = "Jacob Sánchez"
 __email__ = "jacobszpz@protonmail.com"
 
 __license__ = "GNU General Public License v2"
-__copyright__ = f"2023, {__author__}"
+__copyright__ = f"2024, {__author__}"
