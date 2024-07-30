@@ -151,9 +151,8 @@ jobs:
           pipenv requirements --dev > requirements.txt
 
       - name: Unfuck pyqt5-qt5
-        if: ${{ startsWith(matrix.target, 'macos') }}
         run: |
-          sed -i '' 's/pyqt5-qt5==/pyqt5-qt5>=/g' requirements.txt
+          sed -i '' 's/pyqt5-qt5==/pyqt5-qt5>=/g' requirements.txt | true
 
       - name: Continue Python environment setup
         run: |
