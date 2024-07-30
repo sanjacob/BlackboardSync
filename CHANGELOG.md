@@ -6,8 +6,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.11.5] - 2024-07-30
-
 ### Added
 - Add support for University of Pretoria (@whipped-cream)
 - Add support for CUHK-Shenzhen (@Hyle33ies)
