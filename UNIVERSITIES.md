@@ -111,6 +111,7 @@ These universities should be supported, but may be unstable in rare cases.
 
 ### Australia
 
+- Curtin University
 - Torrens University
 - Holmes Institute
 - University of Western Australia
