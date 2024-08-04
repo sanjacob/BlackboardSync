@@ -23,7 +23,7 @@ pywin32-ctypes = "==0.2.2"
 sphinx = "*"
 recommonmark = "*"
 pytest = "*"
-twine = "*"
+twine = ">=5.1.1"
 mypy = "*"
 pytest-qt = ">=4.2.0"
 python-lsp-server = {extras = ["all"], version = "*"}
