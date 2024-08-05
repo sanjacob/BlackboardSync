@@ -877,12 +877,12 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:0907074adf46758f77b045f356e569f4a4f7298ba993bdfc59f5e361e6e1b89c",
-                "sha256:abea56a3cb0df2f3dba3cbc76a8bb2f7640b6b7140be585b0a80ff0f82456992"
+                "sha256:310eb6ce1ae7cbb34195ec76b054572c182d008564a42069883920f4ab3c80ac",
+                "sha256:33e8bbc25c2f40d931327b210e9de5639eb954743c97984bcc19bdc7ef21a625"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==6.108.7"
+            "version": "==6.108.8"
         },
         "idna": {
             "hashes": [
