@@ -141,7 +141,7 @@ class BBSyncController:
     def _show_config_window(self) -> None:
         # Update displayed settings
         self.config_window.download_location = self.model.download_location
-        self.config_window.username = self.model.username.split(':')[1]
+        self.config_window.username = self.model.username
         self.config_window.sync_frequency = self.model.sync_interval
         self._show_window(self.config_window)
 
