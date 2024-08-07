@@ -89,5 +89,4 @@ class TestBBCourseContent:
 
     @pytest.mark.parametrize('available', (True, False))
     def test_bb_available_bool(self, available: bool):
-        with pytest.raises(ValidationError):
-            BBAvailability(available=available)
+        assert BBAvailability(available=available).available == BBAvailable.Other
