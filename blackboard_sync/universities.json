@@ -553,5 +553,14 @@
       "target_url": "https://vle.york.ac.uk/ultra/"
     },
     "api_url": "https://vle.york.ac.uk/"
+  },
+  {
+    "name": "Fakeboard",
+    "short_name": "dev",
+    "login": {
+      "start_url": "https://api.bbsync.app",
+      "target_url": "https://api.bbsync.app/ultra/"
+    },
+    "api_url": "https://api.bbsync.app/"
   }
 ]
