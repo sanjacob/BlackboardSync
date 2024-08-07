@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Texas Tech University (@kktrum)
 - Add support for Seneca Polytechnic (@weihuang)
 - Add support for University of Manchester (@d-dahir)
+- Add support for University of York (@Laura7089)
 
 ## [0.11.4] - 2024-04-10
 

@@ -545,5 +545,13 @@
       "target_url": "https://online.manchester.ac.uk/ultra/"
     },
     "api_url": "https://online.manchester.ac.uk/"
+  },
+  {
+    "name": "University of York",
+    "login": {
+      "start_url": "https://vle.york.ac.uk",
+      "target_url": "https://vle.york.ac.uk/ultra/"
+    },
+    "api_url": "https://vle.york.ac.uk/"
   }
 ]
