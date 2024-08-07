@@ -109,6 +109,7 @@ These universities should be supported, but may be unstable in rare cases.
 - Princess Nourah Bint Abdulrahman University
 - The Chinese University of Hong Kong
 - The Chinese University of Hong Kong, Shenzhen
+- Hong Kong Community College
 
 ### Australia
 

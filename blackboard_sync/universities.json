@@ -553,5 +553,14 @@
       "target_url": "https://vle.york.ac.uk/ultra/"
     },
     "api_url": "https://vle.york.ac.uk/"
+  },
+  {
+    "name": "Hong Kong Community College",
+    "short_name": "HKCC",
+    "login": {
+      "start_url": "https://lms.cpce-polyu.edu.hk",
+      "target_url": "https://lms.cpce-polyu.edu.hk/ultra"
+    },
+    "api_url": "https://lms.cpce-polyu.edu.hk"
   }
 ]
