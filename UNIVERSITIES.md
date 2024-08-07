@@ -67,6 +67,7 @@ These universities should be supported, but may be unstable in rare cases.
 - University of Aberdeen
 - University of Derby
 - University of Manchester
+- University of York
 
 #### Mainland Europe
 
