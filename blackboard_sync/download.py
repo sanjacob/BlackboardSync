@@ -34,6 +34,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from .blackboard import BlackboardSession, BBCourseContent, BBResourceType
 from .webdav import ContentParser, Link, validate_webdav_response
+from .content import ExternalLink
 
 
 class BlackboardDownload:
@@ -79,18 +80,6 @@ class BlackboardDownload:
         if not self.download_location.exists():
             self.download_location.mkdir(parents=True)
             self.logger.info("Created download folder")
-
-    def _create_desktop_link(self, path: Path, url: str, comment: str = "") -> None:
-        """Creates a platform-aware internet shortcut"""
-        if platform.system() in ["Windows", "Darwin"]:
-            contents = f"[InternetShortcut]\nURL={url}"
-            path = path.with_suffix(".url")
-        else:
-            contents = f"[Desktop Entry]\nIcon=text-html\nType=Link\nURL[$e]={url}"
-
-        with path.open("w") as f:
-            f.write(contents)
-            self.logger.info(f"Created internet link file at {path}")
 
     def _download_file(self, course_id: str, content_id: str, attachment_id: str, file_path: Path) -> None:
         """Get stream for blackboard file and download."""
@@ -186,9 +175,9 @@ class BlackboardDownload:
         elif res == BBResourceType.externallink and has_changed:
             # Place link under folder of its own, in case it has a body
             file_path.mkdir(exist_ok=True, parents=True)
-            link_path = file_path / content.title_path_safe
-            if res.url is not None:
-                self._create_desktop_link(link_path, res.url)
+
+            ext_link = ExternalLink(content, None, self._sess)
+            ext_link.write(file_path, self.executor)
 
         elif not res.is_not_handled and has_changed:
             self.logger.warning(f"Not handled, {content.title}")

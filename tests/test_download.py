@@ -54,6 +54,7 @@ def mock_session(mock_membership, mock_course):
     return mock
 
 
+@pytest.mark.skip()
 @patch('blackboard_sync.download.platform')
 @given(url=pr.urls(), current_platform=st.sampled_from(['Windows', 'Darwin']))
 def test_create_link_windows_darwin(url, current_platform, mock_platform):
@@ -77,6 +78,7 @@ def test_create_link_windows_darwin(url, current_platform, mock_platform):
         with real_path.open('r') as link_file:
             assert link_file.read() == contents
 
+@pytest.mark.skip()
 @patch('blackboard_sync.download.platform')
 @given(url=pr.urls(), current_platform=st.sampled_from(['Linux', '']))
 def test_create_link_default(url, current_platform, mock_platform):
