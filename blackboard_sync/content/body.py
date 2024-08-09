@@ -13,7 +13,7 @@ class ContentBody(FStream):
 
     def __init__(self, content: BBCourseContent, _,
                  session: BlackboardExtended):
-        parser = ContentParser(content.body, session.url)
+        parser = ContentParser(content.body, session.instance_url)
         self.body = parser.body
         self.children = [WebDavFile(ln, session) for ln in parser.links]
 
