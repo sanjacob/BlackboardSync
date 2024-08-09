@@ -2,13 +2,17 @@ import platform
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
+from blackboard.api_extended import BlackboardExtended
+from blackboard.blackboard import BBCourseContent
+
 from .base import FStream
 
 
 class ExternalLink(FStream):
-    """Creates a platform-aware internet shortcut"""
+    """Creates a platform-aware internet shortcut."""
 
-    def __init__(self, content, _, session):
+    def __init__(self, content: BBCourseContent, _,
+                 session: BlackboardExtended):
         self.url = content.contentHandler.url
 
     def write(self, path: Path, executor: ThreadPoolExecutor):

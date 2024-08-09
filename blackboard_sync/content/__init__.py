@@ -15,5 +15,6 @@
 # Also available at https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 from .externallink import ExternalLink
+from .body import ContentBody
 
 __all__ = ['ExternalLink']

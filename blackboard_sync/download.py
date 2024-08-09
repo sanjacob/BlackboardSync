@@ -34,8 +34,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.api import BlackboardSession
 from blackboard.blackboard import BBCourseContent, BBResourceType
-from .webdav import ContentParser, Link, validate_webdav_response
-from .content import ExternalLink
+from .content import ExternalLink, ContentBody
 
 
 class BlackboardDownload:
@@ -92,17 +91,6 @@ class BlackboardDownload:
         except RequestException as e:
             self.logger.warn(f"Error while downloading file {content_id}")
 
-    def _download_webdav_file(self, link: str, file_path: Path) -> None:
-        try:
-            response = self._sess.download_webdav(webdav_url=link)
-            if validate_webdav_response(response, link, self._sess.url):
-                self._download_stream(response, file_path)
-            else:
-                self.logger.info(f"Not downloading webdav/ext file {link}")
-        except RequestException as e:
-            self.logger.warn(f"Error while downloading webdav/ext file {link}")
-
-
     def _download_stream(self, stream, file_path):
         """Generic stream download function."""
         with file_path.open("wb") as f:
@@ -143,7 +131,8 @@ class BlackboardDownload:
                 for child in children:
                     if child.contentHandler is not None:
                         self._handle_file(child, file_path, course_id, depth + 1)
-            except ValueError:
+            except ValueError as e:
+                print(e)
                 self.logger.warn(f"Error while getting children for {course_id}")
 
         # Omit file if it hasn't been modified since last sync
@@ -180,23 +169,14 @@ class BlackboardDownload:
             ext_link = ExternalLink(content, None, self._sess)
             ext_link.write(file_path, self.executor)
 
-        elif not res.is_not_handled and has_changed:
+        elif has_changed:
             self.logger.warning(f"Not handled, {content.title}")
 
         # If item has body, write in markdown file
         if content.body and has_changed:
             file_path.mkdir(exist_ok=True, parents=True)
-
-            # Parse content.body for more attachments
-            parser = ContentParser(content.body, self._sess.url)
-
-            for body_link in parser.links:
-                safe_title = sanitize_filename(body_link.text, replacement_text='_')
-                download_path = Path(file_path / safe_title)
-                self.executor.submit(self._download_webdav_file, body_link.href, download_path)
-
-            with Path(file_path, f"{content.title_path_safe}.html").open('w', encoding='utf-8') as html_content:
-                html_content.write(parser.body)
+            c_body = ContentBody(content, None, self._sess)
+            c_body.write(file_path, self.executor)
 
     def download(self) -> Optional[datetime]:
         """Retrieve the user's courses, and start download of all contents

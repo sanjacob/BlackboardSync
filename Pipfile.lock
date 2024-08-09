@@ -34,12 +34,12 @@
         },
         "bblearn": {
             "hashes": [
-                "sha256:104cd9e89d21bc2db83d9f8897909676c7a52e0e4a99ef38f5df0cfa9df51808",
-                "sha256:3db55852d000202d80881bc6d3209fc974d2080e007aed4deb16a7b23efa9a46"
+                "sha256:d29b0793db5ae014388f152d80ea5a03a3dc777b614429df37c314bb28ec79b3",
+                "sha256:ef1e9cd15f8d049c81f1f6656a3a6498557671decc3a39a24eb142a9067c8a71"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==0.2.8"
+            "version": "==0.2.9"
         },
         "beautifulsoup4": {
             "hashes": [
