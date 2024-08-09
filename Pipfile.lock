@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "46dd160148779c518bb193b329665d77cdf56d40f5bd6a7eb077059393b4bf14"
+            "sha256": "4426e632549331ccedf28c080e74b91c77bd2d41df0095d8c859ed0741938dcd"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,6 +31,15 @@
             ],
             "index": "pypi",
             "version": "==1.4.4"
+        },
+        "bblearn": {
+            "hashes": [
+                "sha256:104cd9e89d21bc2db83d9f8897909676c7a52e0e4a99ef38f5df0cfa9df51808",
+                "sha256:3db55852d000202d80881bc6d3209fc974d2080e007aed4deb16a7b23efa9a46"
+            ],
+            "index": "pypi",
+            "markers": "python_version >= '3.10'",
+            "version": "==0.2.8"
         },
         "beautifulsoup4": {
             "hashes": [
@@ -536,6 +545,14 @@
             "markers": "python_version >= '3.8'",
             "version": "==2.5"
         },
+        "tiny-api-client": {
+            "hashes": [
+                "sha256:1c41f2c36d1527729e2d1143acf403d36c4340758aeb7e0e5fd494aeaf669d15",
+                "sha256:9d068dc63afed94f98a3b12f53bd2829b38f7e4a74e64d664ed15a7978cb3a9f"
+            ],
+            "markers": "python_version >= '3.10'",
+            "version": "==1.2.2"
+        },
         "typing-extensions": {
             "hashes": [
                 "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d",
@@ -594,11 +611,11 @@
         },
         "babel": {
             "hashes": [
-                "sha256:08706bdad8d0a3413266ab61bd6c34d0c28d6e1e7badf40a2cebe67644e2e1fb",
-                "sha256:8daf0e265d05768bc6c7a314cf1321e9a123afc328cc635c18622a2f30a04413"
+                "sha256:368b5b98b37c06b7daf6696391c3240c938b37767d4584413e8438c5c435fa8b",
+                "sha256:d1f3554ca26605fe173f3de0c65f750f5a42f924499bf134de6423582298e316"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==2.15.0"
+            "version": "==2.16.0"
         },
         "backports.tarfile": {
             "hashes": [
@@ -991,12 +1008,12 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:6731bc652806406eff5aa5cc3429517c061642eb4472a02a845361faf431c318",
-                "sha256:a97c4ee0c967d92cd450fb70ea68b2cec49fda0f824738767bccec3ecb14a646"
+                "sha256:4b54a4ed3385c53b247b99e7b3c9630e7b665ef3cfdb2c557dd1c0b34d090481",
+                "sha256:a138bfaea11aba6daadf8effd9065251a6fec1549f25b7d72ac9881a413f76b0"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==6.109.0"
+            "version": "==6.110.1"
         },
         "idna": {
             "hashes": [
@@ -1186,11 +1203,11 @@
         },
         "more-itertools": {
             "hashes": [
-                "sha256:e5d93ef411224fbcef366a6e8ddc4c5781bc6359d43412a65dd5964e46111463",
-                "sha256:ea6a02e24a9161e51faad17a8782b92a0df82c12c1c8886fec7f0c3fa1a1b320"
+                "sha256:0f7d9f83a0a8dcfa8a2694a770590d98a67ea943e3d9f5298309a484758c4e27",
+                "sha256:fe0e63c4ab068eac62410ab05cccca2dc71ec44ba8ef29916a0090df061cf923"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==10.3.0"
+            "version": "==10.4.0"
         },
         "mypy": {
             "hashes": [
@@ -1620,12 +1637,12 @@
         },
         "setuptools": {
             "hashes": [
-                "sha256:032d42ee9fb536e33087fb66cac5f840eb9391ed05637b3f2a76a7c8fb477936",
-                "sha256:33874fdc59b3188304b2e7c80d9029097ea31627180896fb549c578ceb8a0855"
+                "sha256:5a03e1860cf56bb6ef48ce186b0e557fdba433237481a9a625176c2831be15d1",
+                "sha256:8d243eff56d095e5817f796ede6ae32941278f542e0f941867cc05ae52b162ec"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.8'",
-            "version": "==71.1.0"
+            "version": "==72.1.0"
         },
         "setuptools-scm": {
             "extras": [

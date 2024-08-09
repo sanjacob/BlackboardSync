@@ -26,9 +26,9 @@ from hypothesis import given, assume
 from hypothesis import strategies as st
 from hypothesis import provisional as pr
 
-from blackboard_sync.blackboard.api import BlackboardSession
+from blackboard.api import BlackboardSession
 from blackboard_sync.download import BlackboardDownload
-from blackboard_sync.blackboard.blackboard import BBMembership, BBCourse
+from blackboard.blackboard import BBMembership, BBCourse
 
 
 @pytest.fixture
@@ -114,7 +114,7 @@ def test_logger(mock_session, tmp_path):
 def test_download_method_call_fetch_user_memberships_with_username(mock_session, tmp_path):
     expected_user = "test_username"
     mock_session.fetch_user_memberships.return_value = []
-    mock_session.username = expected_user
+    mock_session.user_id = expected_user
     download = BlackboardDownload(mock_session, tmp_path)
     download.download()
     mock_session.fetch_user_memberships.assert_called_once_with(user_id=expected_user)
