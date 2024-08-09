@@ -26,9 +26,9 @@ from hypothesis import given, assume
 from hypothesis import strategies as st
 from hypothesis import provisional as pr
 
-from blackboard_sync.blackboard.api import BlackboardSession
+from blackboard.api import BlackboardSession
 from blackboard_sync.download import BlackboardDownload
-from blackboard_sync.blackboard.blackboard import BBMembership, BBCourse
+from blackboard.blackboard import BBMembership, BBCourse
 
 
 @pytest.fixture

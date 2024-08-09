@@ -32,7 +32,8 @@ from datetime import datetime, timezone
 from pathvalidate import sanitize_filename
 from concurrent.futures import ThreadPoolExecutor
 
-from .blackboard import BlackboardSession, BBCourseContent, BBResourceType
+from blackboard.api import BlackboardSession
+from blackboard.blackboard import BBCourseContent, BBResourceType
 from .webdav import ContentParser, Link, validate_webdav_response
 from .content import ExternalLink
 
@@ -66,7 +67,7 @@ class BlackboardDownload:
         """
 
         self._sess = sess
-        self._user_id = sess.username
+        self._user_id = sess.user_id
         self._download_location = download_location
         self._data_sources = data_sources
         self._min_year = min_year
@@ -94,7 +95,7 @@ class BlackboardDownload:
     def _download_webdav_file(self, link: str, file_path: Path) -> None:
         try:
             response = self._sess.download_webdav(webdav_url=link)
-            if validate_webdav_response(response, link, self._sess.base_url):
+            if validate_webdav_response(response, link, self._sess.url):
                 self._download_stream(response, file_path)
             else:
                 self.logger.info(f"Not downloading webdav/ext file {link}")
@@ -130,7 +131,7 @@ class BlackboardDownload:
         if res is None:
             pass
 
-        elif res == BBResourceType.folder:
+        elif res == BBResourceType.Folder:
             try:
                 body_path = file_path
                 children = self._sess.fetch_content_children(course_id=course_id,
@@ -146,7 +147,7 @@ class BlackboardDownload:
                 self.logger.warn(f"Error while getting children for {course_id}")
 
         # Omit file if it hasn't been modified since last sync
-        elif res in (BBResourceType.file, BBResourceType.document) and has_changed:
+        elif res in (BBResourceType.File, BBResourceType.Document) and has_changed:
             attachments = []
 
             try:
@@ -172,7 +173,7 @@ class BlackboardDownload:
                                              course_id, content.id,
                                              attachment.id, download_path)
 
-        elif res == BBResourceType.externallink and has_changed:
+        elif res == BBResourceType.ExternalLink and has_changed:
             # Place link under folder of its own, in case it has a body
             file_path.mkdir(exist_ok=True, parents=True)
 
@@ -187,7 +188,7 @@ class BlackboardDownload:
             file_path.mkdir(exist_ok=True, parents=True)
 
             # Parse content.body for more attachments
-            parser = ContentParser(content.body, self._sess.base_url)
+            parser = ContentParser(content.body, self._sess.url)
 
             for body_link in parser.links:
                 safe_title = sanitize_filename(body_link.text, replacement_text='_')

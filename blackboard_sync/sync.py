@@ -33,7 +33,7 @@ from pydantic import ValidationError
 
 from .config import SyncConfig
 from .download import BlackboardDownload
-from .blackboard import BlackboardSession
+from blackboard.api import BlackboardSession
 from .institutions import Institution, get_by_index
 
 
@@ -127,7 +127,7 @@ class BlackboardSync:
         self._cookies = cookie_jar
 
         try:
-            u_sess = BlackboardSession(str(self.university.api_url), cookie_jar)
+            u_sess = BlackboardSession(str(self.university.api_url), cookies=cookie_jar)
         except ValueError:
             self.logger.warning("Credentials are incorrect")
         else:
