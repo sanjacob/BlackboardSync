@@ -163,7 +163,7 @@ class BBSyncController:
                 self._show_login_window()
         if self.model.has_error and not self._has_notified_error:
             self.tray.show_msg(*(self.tray_msg["download_error"]))
-            webbrowser.open("https://github.com/jacobszpz/BlackboardSync/issues")
+            webbrowser.open("https://github.com/sanjacob/BlackboardSync/issues")
             self._has_notified_error = True
 
     def _log_out(self) -> None:

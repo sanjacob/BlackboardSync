@@ -30,7 +30,7 @@ def is_inside_container() -> bool:
 
 def check_for_updates() -> Optional[str]:
     """Checks if there is a newer release than the current on Github."""
-    url = 'https://api.github.com/repos/jacobszpz/BlackboardSync/releases/latest'
+    url = 'https://api.github.com/repos/sanjacob/BlackboardSync/releases/latest'
     response = requests.get(url, timeout=2000)
     if response.status_code == 200:
         json_response = response.json()

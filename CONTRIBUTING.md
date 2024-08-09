@@ -15,7 +15,7 @@ All changes happen through pull requests,
 Pull requests are the best way to propose changes.
 We actively welcome your pull requests and invite you to
 submit pull requests directly
-[here](https://github.com/jacobszpz/BlackboardSync/pulls)
+[here](https://github.com/sanjacob/BlackboardSync/pulls)
 and, after review, these can be merged into the project.
 
 
@@ -58,4 +58,4 @@ By contributing to BlackboardSync, you agree that your
 contributions will be licensed under the LICENSE file in
 the root directory of this source tree.
 
-[new-issue]: https://github.com/jacobszpz/BlackboardSync/issues/new
+[new-issue]: https://github.com/sanjacob/BlackboardSync/issues/new

@@ -31,7 +31,7 @@ __all__ = [
 
 __title__ = "BlackboardSync"
 __summary__ = "Automatic Syncing Of Your Blackboard Content"
-__uri__ = "https://github.com/jacobszpz/BlackboardSync"
+__uri__ = "https://github.com/sanjacob/BlackboardSync"
 
 __version__ = "0.11.5-alpha.8"
 

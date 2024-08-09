@@ -44,8 +44,8 @@ package = ["pyinstaller>=5.13.2", "build", "twine"]
 
 [project.urls]
 "Homepage" = "https://bbsync.app"
-"Repository" = "https://github.com/jacobszpz/BlackboardSync"
-"Bug Tracker" = "https://github.com/jacobszpz/BlackboardSync/issues"
+"Repository" = "https://github.com/sanjacob/BlackboardSync"
+"Bug Tracker" = "https://github.com/sanjacob/BlackboardSync/issues"
 
 [tool.setuptools]
 packages = ["blackboard_sync", "blackboard_sync.qt", "blackboard_sync.blackboard", "blackboard_sync.assets"]

@@ -6,7 +6,7 @@
 Blackboard Sync
 ==========================================
 
-.. image:: https://img.shields.io/github/license/jacobszpz/BlackboardSync
+.. image:: https://img.shields.io/github/license/sanjacob/BlackboardSync
     :target: https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 
@@ -34,7 +34,7 @@ Installation
 You can find all releases on GitHub_.
 Only MacOS (.dmg) and Windows (.exe) are supported at the moment.
 
-.. _GitHub: https://github.com/jacobszpz/BlackboardSync/releases/
+.. _GitHub: https://github.com/sanjacob/BlackboardSync/releases/
 
 
 From PyPI

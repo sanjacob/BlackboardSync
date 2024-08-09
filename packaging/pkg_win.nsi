@@ -63,7 +63,7 @@ Section "Installation" SecInstall
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "InstallLocation" $INSTDIR
 	WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayIcon" "$INSTDIR\blackboard_sync\assets\logo.ico"
 	WriteRegStr HKCU ${UNINSTALL_REGKEY} "Publisher" "BBSync"
-	WriteRegStr HKCU ${UNINSTALL_REGKEY} "HelpLink" "https://github.com/jacobszpz/BlackboardSync"
+	WriteRegStr HKCU ${UNINSTALL_REGKEY} "HelpLink" "https://github.com/sanjacob/BlackboardSync"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayVersion" ${VERSION}
 
     WriteUninstaller "$INSTDIR\Uninstall.exe"
