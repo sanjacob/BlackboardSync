@@ -6,7 +6,7 @@
 **BlackboardSync** performs a periodic, incremental download of all your Blackboard content, such as lecture slides, lab sheets, and other attachments.
 
 <div align="center">
-	<img src="https://github.com/jacobszpz/BlackboardSync/assets/52013991/b7414212-034a-42a6-ab20-bb51394d885e" height="auto" width="75%" />
+	<img src="https://github.com/sanjacob/BlackboardSync/assets/52013991/b7414212-034a-42a6-ab20-bb51394d885e" height="auto" width="75%" />
 </div>
 
 
@@ -98,7 +98,7 @@ blackboardsync # from 0.9.12 onwards
 ##### Requires [Python >=3.10, pip][python], [pipenv][pipenv], [git][git]
 
 ```bash
-git clone https://github.com/jacobszpz/BlackboardSync.git
+git clone https://github.com/sanjacob/BlackboardSync.git
 cd BlackboardSync
 pipenv install
 pipenv run python -m blackboard_sync
@@ -169,12 +169,12 @@ Flathub team for their quick work in approving the app :heart:
 
 <!-- LINK REFERENCES -->
 
-[universal-login]: https://github.com/jacobszpz/BlackboardSync/issues/3	"BBSync login"
+[universal-login]: https://github.com/sanjacob/BlackboardSync/issues/3	"BBSync login"
 [pyqt]: https://pypi.org/project/PyQt5/5.15.1/	"Python Bindings for Qt 5"
 [pypi]: https://pypi.org/project/blackboardsync
 [typora]: https://typora.io/ "Typora"
-[releases]: https://github.com/jacobszpz/BlackboardSync/releases "BlackboardSync Releases"
-[issues]: https://github.com/jacobszpz/BlackboardSync/issues/new "BlackboardSync Issues"
+[releases]: https://github.com/sanjacob/BlackboardSync/releases "BlackboardSync Releases"
+[issues]: https://github.com/sanjacob/BlackboardSync/issues/new "BlackboardSync Issues"
 [git]: https://git-scm.com/	"Git"
 [python]: https://www.python.org/ "Python.org"
 [pipenv]: https://pipenv.pypa.io/en/latest/ "Pipenv"
@@ -187,8 +187,8 @@ Flathub team for their quick work in approving the app :heart:
 
 <!-- RELEASES -->
 
-[releases]: https://github.com/jacobszpz/BlackboardSync/releases/
-[stable]: https://github.com/jacobszpz/BlackboardSync/releases/latest
+[releases]: https://github.com/sanjacob/BlackboardSync/releases/
+[stable]: https://github.com/sanjacob/BlackboardSync/releases/latest
 
 
 
@@ -204,8 +204,8 @@ Flathub team for their quick work in approving the app :heart:
 <!-- SHIELDS -->
 
 [pypi-shield]: https://img.shields.io/pypi/v/BlackboardSync?color=%23241F21
-[license-shield]: https://img.shields.io/github/license/jacobszpz/BlackboardSync?color=%23241F21
-[build-shield]: https://img.shields.io/github/actions/workflow/status/jacobszpz/BlackboardSync/build.yml?branch=main
+[license-shield]: https://img.shields.io/github/license/sanjacob/BlackboardSync?color=%23241F21
+[build-shield]: https://img.shields.io/github/actions/workflow/status/sanjacob/BlackboardSync/build.yml?branch=main
 [kofi-shield]: https://ko-fi.com/img/githubbutton_sm.svg
 [lp-shield]: https://img.shields.io/liberapay/receives/BlackboardSync.svg?logo=liberapay
 
@@ -213,7 +213,7 @@ Flathub team for their quick work in approving the app :heart:
 
 <!-- SHIELD LINKS -->
 
-[actions]: https://github.com/jacobszpz/BlackboardSync/actions
+[actions]: https://github.com/sanjacob/BlackboardSync/actions
 [kofi]: https://ko-fi.com/Q5Q17XN36
 [liberapay]: https://liberapay.com/BlackboardSync
 
@@ -221,4 +221,4 @@ Flathub team for their quick work in approving the app :heart:
 
 <!-- GIFS -->
 
-[MacOSInstall]: https://github.com/jacobszpz/BlackboardSync/assets/52013991/6be5e390-3f66-4eb4-b8d5-6f3230ae52ef
+[MacOSInstall]: https://github.com/sanjacob/BlackboardSync/assets/52013991/6be5e390-3f66-4eb4-b8d5-6f3230ae52ef

@@ -35,20 +35,20 @@
 
   <releases>
     <release version="0.11.4" date="2024-04-10">
-      <url>https://github.com/jacobszpz/blackboardsync/releases/tag/0.11.4</url>
+      <url>https://github.com/sanjacob/blackboardsync/releases/tag/0.11.4</url>
     </release>
     <release version="0.11.2" date="2024-03-28">
-      <url>https://github.com/jacobszpz/blackboardsync/releases/tag/0.11.2</url>
+      <url>https://github.com/sanjacob/blackboardsync/releases/tag/0.11.2</url>
     </release>
     <release version="0.9.11" date="2023-09-25">
-      <url>https://github.com/jacobszpz/blackboardsync/releases/tag/0.9.11</url>
+      <url>https://github.com/sanjacob/blackboardsync/releases/tag/0.9.11</url>
     </release>
     <release version="0.9.7" date="2023-06-30">
-      <url>https://github.com/jacobszpz/blackboardsync/releases/tag/0.9.7</url>
+      <url>https://github.com/sanjacob/blackboardsync/releases/tag/0.9.7</url>
     </release>
   </releases>
 
   <url type="homepage">https://bbsync.app</url>
-  <url type="bugtracker">https://github.com/jacobszpz/BlackboardSync/issues/new</url>
-  <url type="donation">https://github.com/jacobszpz/BlackboardSync#show-your-support</url>
+  <url type="bugtracker">https://github.com/sanjacob/BlackboardSync/issues/new</url>
+  <url type="donation">https://github.com/sanjacob/BlackboardSync#show-your-support</url>
 </component>
