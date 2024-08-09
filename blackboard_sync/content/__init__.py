@@ -16,5 +16,7 @@
 
 from .externallink import ExternalLink
 from .body import ContentBody
+from .document import Document
+from .api_path import BBContentPath
 
-__all__ = ['ExternalLink']
+__all__ = ['ExternalLink', 'ContentBody', 'Document', 'BBContentPath']

@@ -34,7 +34,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.api import BlackboardSession
 from blackboard.blackboard import BBCourseContent, BBResourceType
-from .content import ExternalLink, ContentBody
+from .content import ExternalLink, ContentBody, Document, BBContentPath
 
 
 class BlackboardDownload:
@@ -81,23 +81,6 @@ class BlackboardDownload:
             self.download_location.mkdir(parents=True)
             self.logger.info("Created download folder")
 
-    def _download_file(self, course_id: str, content_id: str, attachment_id: str, file_path: Path) -> None:
-        """Get stream for blackboard file and download."""
-        try:
-            d_stream = self._sess.download(course_id=course_id,
-                                       content_id=content_id,
-                                       attachment_id=attachment_id)
-            self._download_stream(d_stream, file_path)
-        except RequestException as e:
-            self.logger.warn(f"Error while downloading file {content_id}")
-
-    def _download_stream(self, stream, file_path):
-        """Generic stream download function."""
-        with file_path.open("wb") as f:
-            self.logger.info(f"Writing to {file_path}")
-            for chunk in stream.iter_content(chunk_size=1024):
-                f.write(chunk)
-
     def _handle_file(self, content: BBCourseContent, parent_path: Path,
                      course_id: str, depth: int = 0) -> None:
         """Download BBContent recursively, depending on filetype"""
@@ -137,30 +120,9 @@ class BlackboardDownload:
 
         # Omit file if it hasn't been modified since last sync
         elif res in (BBResourceType.File, BBResourceType.Document) and has_changed:
-            attachments = []
-
-            try:
-                attachments = self._sess.fetch_file_attachments(course_id=course_id,
-                                                                content_id=content.id)
-
-            except RequestException:
-                self.logger.warn(f"Net error while getting attachments for {course_id}")
-            except ValueError:
-                self.logger.warn(f"Error while getting attachments for {course_id}")
-
-            if len(attachments) > 1:
-                file_path.mkdir(exist_ok=True, parents=True)
-                body_path = file_path
-
-            for attachment in attachments:
-                download_path = Path(body_path / attachment.fileName)
-                if attachment.mimeType.startswith('video/'):
-                    self.logger.info(f'Not downloading {attachment.fileName}')
-                else:
-                    if not self.cancelled and content.id is not None:
-                        self.executor.submit(self._download_file,
-                                             course_id, content.id,
-                                             attachment.id, download_path)
+            api_path = BBContentPath(course_id=course_id, content_id=content.id)
+            doc = Document(content, api_path, self._sess)
+            doc.write(file_path, self.executor)
 
         elif res == BBResourceType.ExternalLink and has_changed:
             # Place link under folder of its own, in case it has a body
