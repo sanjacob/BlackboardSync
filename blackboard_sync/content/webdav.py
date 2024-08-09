@@ -19,8 +19,17 @@ Parse an html to look for links
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 
-from typing import List, NamedTuple
+import mimetypes
+from pathlib import Path
 from bs4 import BeautifulSoup
+from typing import List, NamedTuple
+from pathvalidate import sanitize_filename
+from concurrent.futures import ThreadPoolExecutor
+
+from blackboard.api_extended import BlackboardExtended
+from blackboard.blackboard import BBCourseContent
+
+from .base import BStream
 
 class Link(NamedTuple):
     href: str
@@ -61,3 +70,17 @@ def validate_webdav_response(response, link: str, base_url: str):
         len_limit = 1024 * 1024 * 20 # 20 MB
         return link.startswith(base_url) and 'video' not in content_type and content_len < len_limit
     return False
+
+class WebDavFile(BStream):
+    """A Blackboard WebDav file which can be downloaded directly"""
+    def __init__(self, link, session: BlackboardExtended):
+        self.title = sanitize_filename(link.text, replacement_text="_")
+        self.stream = session.download_webdav(webdav_url=link.href)
+        content_type = self.stream.headers.get('Content-Type', 'text/plain')
+        self.extension = mimetypes.guess_extension(content_type)
+        self.valid = validate_webdav_response(self.stream, link.href, session.instance_url)
+
+    def write(self, path: Path, executor: ThreadPoolExecutor):
+        if self.valid:
+            path = Path(path, self.title).with_suffix(self.extension)
+            super().write(path, self.stream, executor)
