@@ -12,11 +12,15 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor,
 # Boston, MA  02110-1301, USA.
-# Also available at https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
 
 from .externallink import ExternalLink
 from .body import ContentBody
 from .document import Document
 from .api_path import BBContentPath
+from .folder import Folder
+from .content import Content
 
-__all__ = ['ExternalLink', 'ContentBody', 'Document', 'BBContentPath']
+__all__ = [
+    'ExternalLink', 'ContentBody', 'Document', 'Folder',
+    'BBContentPath', 'Content'
+]

@@ -25,16 +25,16 @@ import logging
 import platform
 from requests.exceptions import RequestException
 from pathlib import Path
-from getpass import getpass
 from typing import Optional
 from dateutil.parser import parse
 from datetime import datetime, timezone
-from pathvalidate import sanitize_filename
 from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.api import BlackboardSession
 from blackboard.blackboard import BBCourseContent, BBResourceType
-from .content import ExternalLink, ContentBody, Document, BBContentPath
+from .content import ExternalLink, ContentBody, Document, Folder, Content
+from .content import BBContentPath
+from .content.job import DownloadJob
 
 
 class BlackboardDownload:
@@ -81,65 +81,6 @@ class BlackboardDownload:
             self.download_location.mkdir(parents=True)
             self.logger.info("Created download folder")
 
-    def _handle_file(self, content: BBCourseContent, parent_path: Path,
-                     course_id: str, depth: int = 0) -> None:
-        """Download BBContent recursively, depending on filetype"""
-        if self.cancelled:
-            return
-
-        res = content.contentHandler
-
-        handler_id = res.id if res is not None else '?'
-        self.logger.info(f"{'    ' * depth}{content.title}[{handler_id}]")
-
-        body_path = parent_path
-        file_path = Path(parent_path, content.title_path_safe)
-        has_changed = True
-
-        if content.modified is not None:
-            has_changed = (content.modified >= self._last_downloaded)
-
-        if res is None:
-            pass
-
-        elif res == BBResourceType.Folder:
-            try:
-                body_path = file_path
-                children = self._sess.fetch_content_children(course_id=course_id,
-                                                             content_id=content.id)
-
-                if children or content.body:
-                    file_path.mkdir(exist_ok=True, parents=True)
-
-                for child in children:
-                    if child.contentHandler is not None:
-                        self._handle_file(child, file_path, course_id, depth + 1)
-            except ValueError as e:
-                print(e)
-                self.logger.warn(f"Error while getting children for {course_id}")
-
-        # Omit file if it hasn't been modified since last sync
-        elif res in (BBResourceType.File, BBResourceType.Document) and has_changed:
-            api_path = BBContentPath(course_id=course_id, content_id=content.id)
-            doc = Document(content, api_path, self._sess)
-            doc.write(file_path, self.executor)
-
-        elif res == BBResourceType.ExternalLink and has_changed:
-            # Place link under folder of its own, in case it has a body
-            file_path.mkdir(exist_ok=True, parents=True)
-
-            ext_link = ExternalLink(content, None, self._sess)
-            ext_link.write(file_path, self.executor)
-
-        elif has_changed:
-            self.logger.warning(f"Not handled, {content.title}")
-
-        # If item has body, write in markdown file
-        if content.body and has_changed:
-            file_path.mkdir(exist_ok=True, parents=True)
-            c_body = ContentBody(content, None, self._sess)
-            c_body.write(file_path, self.executor)
-
     def download(self) -> Optional[datetime]:
         """Retrieve the user's courses, and start download of all contents
 
@@ -183,11 +124,12 @@ class BlackboardDownload:
                     course_path = Path(self.download_location / str(ms.created.year) / course.title)
 
                 for content in course_contents:
-
                     if self.cancelled:
                         break
-
-                    self._handle_file(content, course_path, course.id, 1)
+                    api_path = BBContentPath(course_id=course.id, content_id=content.id)
+                    job = DownloadJob(session=self._sess, last_downloaded=self._last_downloaded)
+                    handler = Content(content, api_path, job)
+                    handler.write(course_path, self.executor)
         self.executor.shutdown(wait=True, cancel_futures=self.cancelled)
 
         if self.cancelled:

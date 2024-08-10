@@ -6,13 +6,13 @@ from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBCourseContent
 
 from .base import FStream
+from .job import DownloadJob
 
 
 class ExternalLink(FStream):
     """Creates a platform-aware internet shortcut."""
 
-    def __init__(self, content: BBCourseContent, _,
-                 session: BlackboardExtended):
+    def __init__(self, content: BBCourseContent, _, job: DownloadJob):
         self.url = content.contentHandler.url
 
     def write(self, path: Path, executor: ThreadPoolExecutor):

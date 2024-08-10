@@ -30,6 +30,7 @@ from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBCourseContent
 
 from .base import BStream
+from .job import DownloadJob
 
 class Link(NamedTuple):
     href: str
@@ -73,12 +74,12 @@ def validate_webdav_response(response, link: str, base_url: str):
 
 class WebDavFile(BStream):
     """A Blackboard WebDav file which can be downloaded directly"""
-    def __init__(self, link, session: BlackboardExtended):
+    def __init__(self, link, job: DownloadJob):
         self.title = sanitize_filename(link.text, replacement_text="_")
-        self.stream = session.download_webdav(webdav_url=link.href)
+        self.stream = job.session.download_webdav(webdav_url=link.href)
         content_type = self.stream.headers.get('Content-Type', 'text/plain')
         self.extension = mimetypes.guess_extension(content_type)
-        self.valid = validate_webdav_response(self.stream, link.href, session.instance_url)
+        self.valid = validate_webdav_response(self.stream, link.href, job.session.instance_url)
 
     def write(self, path: Path, executor: ThreadPoolExecutor):
         if self.valid:

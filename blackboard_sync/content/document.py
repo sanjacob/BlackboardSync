@@ -12,13 +12,14 @@ from blackboard.filters import (
 
 from .attachment import Attachment
 from .api_path import BBContentPath
+from .job import DownloadJob
 
 
 class Document:
     """Represents a file with attachments in the Blackboard API"""
     def __init__(self, content: BBCourseContent, api_path: BBContentPath,
-                 session: BlackboardExtended):
-        attachments = session.fetch_file_attachments(**api_path._asdict())
+                 job: DownloadJob):
+        attachments = job.session.fetch_file_attachments(**api_path)
         assert isinstance(attachments, list)
 
         att_filter = BBAttachmentFilter(mime_types=BWFilter(['video/*']))
@@ -28,7 +29,7 @@ class Document:
 
         for i, attachment in enumerate(filtered_attachments):
             self.attachments.append(
-                Attachment(attachment, api_path, session)
+                Attachment(attachment, api_path, job)
             )
 
     def write(self, path: Path, executor: ThreadPoolExecutor):
