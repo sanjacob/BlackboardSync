@@ -1,0 +1,37 @@
+import logging
+from pathlib import Path
+from datetime import datetime
+from concurrent.futures import ThreadPoolExecutor
+
+from blackboard.blackboard import BBCourse
+
+from .api_path import BBContentPath
+from .job import DownloadJob
+from .content import Content
+
+logger = logging.getLogger(__name__)
+
+
+class Course:
+    def __init__(self, course: BBCourse, job: DownloadJob):
+        logger.info(f"<{course.code}> - <{course.title}>")
+
+        self.year = self.get_year(course.created)
+        self.title = course.title or 'Untitled Course'
+
+        contents = job.session.fetch_contents(course_id=course.id)
+        self.children = []
+
+        for content in contents:
+            api_path = BBContentPath(course_id=course.id, content_id=content.id)
+            self.children.append(Content(content, api_path, job))
+
+    def write(self, path: Path, executor: ThreadPoolExecutor):
+        path = path / self.year / self.title
+
+        for child in self.children:
+            child.write(path, executor)
+
+    @staticmethod
+    def get_year(created: datetime | None) -> str:
+        return str(created.year) if created is not None else 'No Date'
