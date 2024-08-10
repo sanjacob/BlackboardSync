@@ -30,11 +30,12 @@ from appdirs import user_config_dir
 
 from .__about__ import __author__
 
+logger = logging.getLogger(__name__)
+
 
 class Config(configparser.ConfigParser):
     """Base configuration manager class, which wraps a ConfigParser."""
 
-    _logger = logging.getLogger(__name__)
 
     def __init__(self, config_file: Path, *args, **kwargs):
         super().__init__(converters={'path': Path, 'date': datetime.fromisoformat},
@@ -43,8 +44,8 @@ class Config(configparser.ConfigParser):
         self.read(self._config_file)
 
         # Set up logging
-        self._logger.setLevel(logging.WARN)
-        self._logger.addHandler(logging.StreamHandler())
+        logger.setLevel(logging.WARN)
+        logger.addHandler(logging.StreamHandler())
 
     def save(self) -> None:
         """Save the current configuration to disk."""
@@ -58,13 +59,8 @@ class Config(configparser.ConfigParser):
         def save_wrapper(self, *args: Any, **kwargs: Any) -> None:
             func(self, *args, **kwargs)
             self.save()
-            self._logger.info("Updated configuration file")
+            logger.info("Updated configuration file")
         return save_wrapper
-
-    @property
-    def logger(self) -> logging.Logger:
-        """Logger for BlackboardSync Configuration, set at level WARN."""
-        return self._logger
 
 
 class SyncConfig(Config):
