@@ -38,14 +38,13 @@ from .content.job import DownloadJob
 from .content.course import Course
 
 
+logger = logging.getLogger(__name__)
+
+
 class BlackboardDownload:
     """Blackboard download job."""
 
     _last_downloaded = datetime.fromtimestamp(0, tz=timezone.utc)
-
-    _logger = logging.getLogger(__name__)
-    _logger.setLevel(logging.DEBUG)
-    _logger.addHandler(logging.StreamHandler())
 
     def __init__(self, sess: BlackboardSession,
                  download_location: Path,
@@ -80,7 +79,7 @@ class BlackboardDownload:
 
         if not self.download_location.exists():
             self.download_location.mkdir(parents=True)
-            self.logger.info("Created download folder")
+            logger.info("Created download folder")
 
     def download(self) -> Optional[datetime]:
         """Retrieve the user's courses, and start download of all contents
@@ -92,7 +91,7 @@ class BlackboardDownload:
 
         start_time = datetime.now(timezone.utc)
 
-        self.logger.info("Fetching user memberships")
+        logger.info("Fetching user memberships")
 
         memberships = self._sess.fetch_user_memberships(user_id=self.user_id)
 
@@ -111,7 +110,7 @@ class BlackboardDownload:
                 break
 
             private = False
-            self.logger.debug("Fetching course")
+            logger.debug("Fetching course")
             try:
                 course = self._sess.fetch_courses(course_id=ms.courseId)
                 course = course.model_copy(update={'created': ms.created})
@@ -155,9 +154,3 @@ class BlackboardDownload:
     def files_processed(self) -> int:
         """Number of files that have been downloaded."""
         return self._files_processed
-
-    @property
-    def logger(self) -> logging.Logger:
-        """Logger for BlackboardDownload, set at level DEBUG."""
-        return self._logger
-

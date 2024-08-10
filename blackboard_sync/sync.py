@@ -36,6 +36,8 @@ from .download import BlackboardDownload
 from blackboard.api import BlackboardSession
 from .institutions import Institution, get_by_index
 
+logger = logging.getLogger(__name__)
+
 
 class BlackboardSync:
     """Represents an instance of the BlackboardSync application."""
@@ -48,7 +50,6 @@ class BlackboardSync:
     # Sync thread max retries
     _max_retries = 3
 
-    _logger = logging.getLogger(__name__)
 
     def __init__(self):
         """Create an instance of the program."""
@@ -73,17 +74,14 @@ class BlackboardSync:
         # Flag to know if download thread has errors
         self._has_error = False
 
-        # Set up logging
-        self._logger.setLevel(logging.INFO)
-        self._logger.addHandler(logging.StreamHandler())
-        self._logger.debug("Initialising BlackboardSync")
+        logger.debug("Initialising BlackboardSync")
 
         self.university : Optional[Institution] = None
         self.sess : Optional[BlackboardSession] = None
 
         # Attempt to load existing configuration
         self._config = SyncConfig()
-        self.logger.info("Loading preexisting configuration")
+        logger.info("Loading preexisting configuration")
 
         if self._config.university_index is not None:
             self.university = get_by_index(self._config.university_index)
@@ -118,9 +116,9 @@ class BlackboardSync:
         try:
             u_sess = BlackboardSession(str(self.university.api_url), cookies=cookie_jar)
         except ValueError:
-            self.logger.warning("Credentials are incorrect")
+            logger.warning("Credentials are incorrect")
         else:
-            self.logger.info("Logged in successfully")
+            logger.info("Logged in successfully")
             self.sess = u_sess
             self._is_logged_in = True
             self.start_sync()
@@ -143,7 +141,7 @@ class BlackboardSync:
 
         while self._is_active:
             if self.outdated or self._force_sync:
-                self.logger.debug("Syncing now")
+                logger.debug("Syncing now")
                 self._is_syncing = True
 
                 # Download from last datetime
@@ -165,13 +163,13 @@ class BlackboardSync:
                     failed_attempts = 0
                 except ValidationError as e:
                     self._log_exception(e)
-                    self.logger.warning("Blackboard API validation failed")
+                    logger.warning("Blackboard API validation failed")
                     self._has_error = True
                     self.stop_sync()
                 except ValueError as e:
                     # Session (probably) expired, log out and attempt to reload config
                     self._log_exception(e)
-                    self.logger.warning("User session expired")
+                    logger.warning("User session expired")
                     reload_session = True
                     self.log_out()
                 except ConnectionError as e:
@@ -196,7 +194,7 @@ class BlackboardSync:
         """Starts Sync thread or returns False if not possible."""
         if self._has_error:
             return False
-        self.logger.info("Starting sync thread")
+        logger.info("Starting sync thread")
         self._is_active = True
         self.sync_thread = threading.Thread(target=self._sync_task)
         self.sync_thread.start()
@@ -204,7 +202,7 @@ class BlackboardSync:
 
     def stop_sync(self) -> None:
         """Stop Sync thread."""
-        self.logger.info("Stopping sync thread")
+        logger.info("Stopping sync thread")
         self._is_active = False
 
         if self._download is not None:
@@ -214,13 +212,13 @@ class BlackboardSync:
         """Log exception to log file inside sync location."""
         self._log_dir.mkdir(exist_ok=True, parents=True)
         exception_log = logging.FileHandler(self._log_path)
-        self.logger.addHandler(exception_log)
-        self.logger.exception("Exception in sync thread")
-        self.logger.removeHandler(exception_log)
+        logger.addHandler(exception_log)
+        logger.exception("Exception in sync thread")
+        logger.removeHandler(exception_log)
 
     def force_sync(self) -> None:
         """Force Sync thread to start download job ASAP."""
-        self.logger.debug("Forced syncing")
+        logger.debug("Forced syncing")
         self._force_sync = True
 
     @property
@@ -325,8 +323,3 @@ class BlackboardSync:
     def has_error(self) -> bool:
         """Flag indicates an error resulting in no downloads."""
         return self._has_error
-
-    @property
-    def logger(self) -> logging.Logger:
-        """Logger for BlackboardSync, set at level WARN."""
-        return self._logger

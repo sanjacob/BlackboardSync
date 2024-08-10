@@ -28,7 +28,7 @@ __all__ = ['InstitutionLogin', 'InstitutionNetwork', 'Institution',
            'get_by_index', 'get_index_by_ip', 'get_names']
 
 
-# logger = logging.getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 # Local institution data fallback in case of no server
 _local_data = 'universities.json'
