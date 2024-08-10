@@ -78,17 +78,6 @@ class BlackboardSync:
         self._logger.addHandler(logging.StreamHandler())
         self._logger.debug("Initialising BlackboardSync")
 
-        sess_logger = logging.getLogger("BlackboardSession")
-        sess_logger.setLevel(logging.WARN)
-        sess_logger.addHandler(logging.StreamHandler())
-
-        download_logger = logging.getLogger("BlackboardDownload")
-        download_logger.setLevel(logging.DEBUG)
-        download_logger.addHandler(logging.StreamHandler())
-
-        self.sess_logger = sess_logger
-        self.download_logger = download_logger
-
         self.university : Optional[Institution] = None
         self.sess : Optional[BlackboardSession] = None
 
