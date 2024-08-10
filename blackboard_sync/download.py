@@ -114,13 +114,14 @@ class BlackboardDownload:
             self.logger.debug("Fetching course")
             try:
                 course = self._sess.fetch_courses(course_id=ms.courseId)
+                course = course.model_copy(update={'created': ms.created})
             except ValueError as e:
                 if not (private := (str(e) == 'Private course')):
                     raise e
-
-            if not private:
-                handler = Course(course, job)
-                handler.write(self.download_location, self.executor)
+            else:
+                if not private:
+                    handler = Course(course, job)
+                    handler.write(self.download_location, self.executor)
         self.executor.shutdown(wait=True, cancel_futures=self.cancelled)
 
         if self.cancelled:
