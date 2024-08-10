@@ -1,5 +1,5 @@
-from typing import NamedTuple
+from typing import TypedDict
 
-class BBContentPath(NamedTuple):
+class BBContentPath(TypedDict):
     course_id: str
     content_id: str
