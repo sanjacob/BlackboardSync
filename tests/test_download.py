@@ -37,12 +37,17 @@ def mock_course():
     mock.code = 'TEST_BBC_CODE'
     mock.title = 'TEST_BBC_TITLE'
     mock.id = 'TEST_BBC_ID'
+    mock.model_copy.return_value = Mock(title='TEST_BBC_CODE',
+                                        code='TEST_BBC_CODE',
+                                        id='TEST_BBC_ID',
+                                        created=Mock(year=2022))
     return mock
 
 @pytest.fixture
 def mock_membership(mock_course):
     mock = Mock(spec=BBMembership)
     mock.courseId = mock_course.id
+    mock.created = Mock(year=2022)
     return mock
 
 @pytest.fixture

@@ -35,6 +35,7 @@ from blackboard.blackboard import BBCourseContent, BBResourceType
 from .content import ExternalLink, ContentBody, Document, Folder, Content
 from .content import BBContentPath
 from .content.job import DownloadJob
+from .content.course import Course
 
 
 class BlackboardDownload:
@@ -103,6 +104,8 @@ class BlackboardDownload:
         if self._min_year is not None:
             memberships = [m for m in memberships if m.created.year >= self._min_year]
 
+        job = DownloadJob(session=self._sess, last_downloaded=self._last_downloaded)
+
         for ms in memberships:
             if self.cancelled:
                 break
@@ -111,25 +114,14 @@ class BlackboardDownload:
             self.logger.debug("Fetching course")
             try:
                 course = self._sess.fetch_courses(course_id=ms.courseId)
+                course = course.model_copy(update={'created': ms.created})
             except ValueError as e:
                 if not (private := (str(e) == 'Private course')):
                     raise e
-
-            if not private:
-                self.logger.info(f"<{course.code}> - <{course.title}>")
-
-                course_contents = self._sess.fetch_contents(course_id=course.id)
-
-                if course_contents:
-                    course_path = Path(self.download_location / str(ms.created.year) / course.title)
-
-                for content in course_contents:
-                    if self.cancelled:
-                        break
-                    api_path = BBContentPath(course_id=course.id, content_id=content.id)
-                    job = DownloadJob(session=self._sess, last_downloaded=self._last_downloaded)
-                    handler = Content(content, api_path, job)
-                    handler.write(course_path, self.executor)
+            else:
+                if not private:
+                    handler = Course(course, job)
+                    handler.write(self.download_location, self.executor)
         self.executor.shutdown(wait=True, cancel_futures=self.cancelled)
 
         if self.cancelled:
