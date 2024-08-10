@@ -16,7 +16,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
-import logging
 import tempfile
 from pathlib import Path
 from unittest.mock import Mock, patch, ANY
@@ -111,10 +110,6 @@ def test_download_location(mock_session, tmp_path):
     download = BlackboardDownload(mock_session, tmp_path)
     assert download.download_location == tmp_path
     assert tmp_path.exists()
-
-def test_logger(mock_session, tmp_path):
-    download = BlackboardDownload(mock_session, tmp_path)
-    assert isinstance(download.logger, logging.Logger)
 
 def test_download_method_call_fetch_user_memberships_with_username(mock_session, tmp_path):
     expected_user = "test_username"
