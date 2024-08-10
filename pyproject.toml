@@ -25,7 +25,7 @@ dependencies = [
     "beautifulsoup4>=4.12.2",
     "pydantic>=2.1.1",
     "pathvalidate>=3.1.0",
-    "python-dateutil==2.8.2",
+    "python-dateutil==2.9.0.post0",
     "appdirs==1.4.4",
     "lxml>=4.7.1",
     "requests>=2.25.0",
