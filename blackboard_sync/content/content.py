@@ -22,10 +22,9 @@ class Content:
                  job: DownloadJob):
 
         logger.info(f"{content.title}[{content.contentHandler}]")
-        self.ignore = False
+        self.ignore = not Content.should_download(content, job)
 
-        if not (job.has_changed(content.modified) or content.hasChildren):
-            self.ignore = True
+        if self.ignore:
             return
 
         course_id = api_path.get('course_id')
@@ -58,6 +57,15 @@ class Content:
 
         if self.body is not None:
             self.body.write(path, executor)
+
+    @staticmethod
+    def should_download(content: BBCourseContent, job: DownloadJob):
+        or_guards = [
+            job.has_changed(content.modified),
+            content.hasChildren,
+        ]
+
+        return any(or_guards) and content.availability
 
     @staticmethod
     def get_handler(content_handler):
