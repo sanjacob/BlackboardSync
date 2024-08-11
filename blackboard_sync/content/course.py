@@ -16,6 +16,11 @@ class Course:
     def __init__(self, course: BBCourse, job: DownloadJob):
         logger.info(f"<{course.code}> - <{course.title}>")
 
+        self.ignore = not course.availability
+
+        if self.ignore:
+            return
+
         self.year = self.get_year(course.created)
         self.title = course.title or 'Untitled Course'
 
@@ -27,6 +32,9 @@ class Course:
             self.children.append(Content(content, api_path, job))
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
+        if self.ignore:
+            return
+
         path = path / self.year / self.title
 
         for child in self.children:
