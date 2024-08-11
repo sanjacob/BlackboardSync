@@ -70,7 +70,6 @@ class BlackboardDownload:
         self._download_location = download_location
         self._data_sources = data_sources
         self._min_year = min_year
-        self._files_processed = 0
         self.executor = ThreadPoolExecutor(max_workers=8)
         self.cancelled = False
 
@@ -149,8 +148,3 @@ class BlackboardDownload:
     def user_id(self) -> str:
         """User ID used for API calls."""
         return self._user_id
-
-    @property
-    def files_processed(self) -> int:
-        """Number of files that have been downloaded."""
-        return self._files_processed
