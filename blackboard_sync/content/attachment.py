@@ -10,7 +10,7 @@ from .job import DownloadJob
 
 
 class Attachment(BStream):
-    """A single Blackboard attachment obtained from the API"""
+    """File attached to a content."""
 
     def __init__(self, attachment: BBAttachment, api_path: BBContentPath,
                  job: DownloadJob):

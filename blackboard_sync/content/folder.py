@@ -29,3 +29,7 @@ class Folder:
 
         for child in self.children:
             child.write(path, executor)
+
+    @property
+    def create_dir(self) -> bool:
+        return False

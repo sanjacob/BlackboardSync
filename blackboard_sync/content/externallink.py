@@ -28,3 +28,7 @@ class ExternalLink(FStream):
             body = f"[Desktop Entry]\nIcon=text-html\nType=Link\nURL[$e]={self.url}"
 
         super().write(path, body, executor)
+
+    @property
+    def create_dir(self) -> bool:
+        return True

@@ -21,6 +21,7 @@ class Content:
     def __init__(self, content: BBCourseContent, api_path: BBContentPath,
                  job: DownloadJob):
 
+        logger.info(f"{content.title}[{content.contentHandler}]")
         self.ignore = False
 
         if not (job.has_changed(content.modified) or content.hasChildren):
@@ -49,7 +50,9 @@ class Content:
 
         # Build nested path with content title
         path = path / self.title
-        path.mkdir(exist_ok=True, parents=True)
+
+        if self.handler.create_dir or self.body:
+            path.mkdir(exist_ok=True, parents=True)
 
         self.handler.write(path, executor)
 

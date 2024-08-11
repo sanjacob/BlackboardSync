@@ -15,3 +15,7 @@ class Other:
 
     def write(self, path: Path, executor: ThreadPoolExecutor):
         pass
+
+    @property
+    def create_dir(self) -> bool:
+        return False

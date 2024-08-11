@@ -41,3 +41,7 @@ class Document:
 
         for attachment in self.attachments:
             attachment.write(path, executor)
+
+    @property
+    def create_dir(self) -> bool:
+        return False
