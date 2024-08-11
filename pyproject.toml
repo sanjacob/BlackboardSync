@@ -29,7 +29,8 @@ dependencies = [
     "appdirs==1.4.4",
     "lxml>=4.7.1",
     "requests>=2.25.0",
-    "packaging>=23.1"
+    "packaging>=23.1",
+    "bblearn>=0.3.0"
 ]
 
 [project.scripts]
