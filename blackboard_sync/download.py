@@ -49,7 +49,6 @@ class BlackboardDownload:
     def __init__(self, sess: BlackboardSession,
                  download_location: Path,
                  last_downloaded: Optional[datetime] = None,
-                 data_sources: list[str] = [],
                  min_year: Optional[int] = None):
         """BlackboardDownload constructor
 
@@ -61,14 +60,12 @@ class BlackboardDownload:
         :param BlackboardSession sess: UCLan BB user session
         :param (str / Path) download_location: Where files will be stored
         :param str last_downloaded: Files modified before this will not be downloaded
-        :param data_sources: List of valid data sources
         :param min_year: Only courses created on or after this year will be downloaded
         """
 
         self._sess = sess
         self._user_id = sess.user_id
         self._download_location = download_location
-        self._data_sources = data_sources
         self._min_year = min_year
         self.executor = ThreadPoolExecutor(max_workers=8)
         self.cancelled = False
@@ -93,10 +90,6 @@ class BlackboardDownload:
         logger.info("Fetching user memberships")
 
         memberships = self._sess.fetch_user_memberships(user_id=self.user_id)
-
-        # Filter courses by data source
-        if self._data_sources:
-            memberships = [m for m in memberships if m.dataSourceId in self._data_sources]
 
         # Filter courses by creation year
         if self._min_year is not None:
@@ -134,15 +127,6 @@ class BlackboardDownload:
     def download_location(self) -> Path:
         """The location where files will be downloaded to."""
         return self._download_location
-
-    @property
-    def data_sources(self) -> list[str]:
-        """Filter for courses."""
-        return self._data_sources
-
-    @data_sources.setter
-    def data_sources(self, sources: list[str]) -> None:
-        self._data_sources = sources
 
     @property
     def user_id(self) -> str:

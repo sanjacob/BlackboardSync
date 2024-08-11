@@ -151,7 +151,6 @@ class BlackboardSync:
                     self._download = BlackboardDownload(user_session,
                                                         self.download_location / '',
                                                         self.last_sync_time,
-                                                        self.university.data_sources,
                                                         self.min_year)
 
                 try:
