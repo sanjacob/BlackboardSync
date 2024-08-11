@@ -42,6 +42,7 @@ types-appdirs = "*"
 types-python-dateutil = "*"
 pyqt5-stubs = "*"
 sphinx-rtd-theme = "*"
+toml = "*"
 
 [requires]
 python_version = "3.10"

@@ -1,21 +1,23 @@
+import logging
 from pathlib import Path
+from json import JSONDecodeError
+from requests import RequestException
 from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBCourseContent, BBResourceType
 
-from . import folder
-from .document import Document
-from .externallink import ExternalLink
-from .body import ContentBody
-from .other import Other
+from . import folder, document, externallink, body, other
 
 from .api_path import BBContentPath
 from .job import DownloadJob
 
+logger = logging.getLogger(__name__)
+
 
 class Content:
-    """Invokes the right class to handle Blackboard content"""
+    """Content factory for all types."""
+
     def __init__(self, content: BBCourseContent, api_path: BBContentPath,
                  job: DownloadJob):
 
@@ -35,11 +37,11 @@ class Content:
 
         try:
             self.handler = Handler(content, api_path, job)
-        except RequestException:
-            _logger.exception(f"Error while preparing {child_path}")
+        except (RequestException, JSONDecodeError):
+            logger.exception(f"Error while preparing {child_path}")
 
         if content.body:
-            self.body = ContentBody(content, None, job)
+            self.body = body.ContentBody(content, None, job)
 
     def write(self, path: Path, executor: ThreadPoolExecutor):
         if self.ignore:
@@ -60,8 +62,8 @@ class Content:
             case BBResourceType.Folder:
                 return folder.Folder
             case BBResourceType.File | BBResourceType.Document:
-                return Document
+                return document.Document
             case BBResourceType.ExternalLink:
-                return ExternalLink
+                return externallink.ExternalLink
             case _:
-                return Other
+                return other.Other

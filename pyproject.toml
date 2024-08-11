@@ -49,3 +49,6 @@ package = ["pyinstaller>=5.13.2", "build", "twine"]
 
 [tool.setuptools]
 packages = ["blackboard_sync", "blackboard_sync.qt", "blackboard_sync.blackboard", "blackboard_sync.assets"]
+
+[tool.mypy]
+plugins = ["pydantic.mypy", "tiny_api_client.mypy"]
