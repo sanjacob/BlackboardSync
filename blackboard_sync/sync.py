@@ -223,7 +223,7 @@ class BlackboardSync:
 
     @property
     def username(self) -> Optional[str]:
-        return self.sess.username if self.sess is not None else None
+        return self.sess.user_id if self.sess is not None else None
 
     @property
     def _log_path(self) -> Path:
