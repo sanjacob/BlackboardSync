@@ -7,7 +7,7 @@ from concurrent.futures import ThreadPoolExecutor
 from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBCourseContent, BBResourceType
 
-from . import folder, document, externallink, body, other
+from . import folder, document, externallink, body, unhandled
 
 from .api_path import BBContentPath
 from .job import DownloadJob
@@ -27,10 +27,7 @@ class Content:
         if self.ignore:
             return
 
-        course_id = api_path.get('course_id')
-
         Handler = Content.get_handler(content.contentHandler)
-        api_path = {'course_id': course_id, 'content_id': content.id}
 
         self.title = content.title_path_safe
         self.body = None
@@ -77,4 +74,4 @@ class Content:
             case BBResourceType.ExternalLink:
                 return externallink.ExternalLink
             case _:
-                return other.Other
+                return unhandled.Unhandled

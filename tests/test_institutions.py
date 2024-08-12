@@ -4,4 +4,3 @@ def test_institutions():
     """Test that the universities.json file has the expected format
     and is correctly loaded."""
     get_names()
-

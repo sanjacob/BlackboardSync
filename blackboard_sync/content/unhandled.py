@@ -7,7 +7,7 @@ from blackboard.blackboard import BBCourseContent
 from .job import DownloadJob
 
 
-class Other:
+class Unhandled:
     """Content which we cannot handle yet, or at all."""
 
     def __init__(self, content: BBCourseContent, _, job: DownloadJob):
