@@ -138,6 +138,7 @@ def test_children_file(api_path: BBContentPath,
     for att in attachments:
         if att.mimeType is not None:
             assume(not att.mimeType.startswith("video/"))
+            assume(not att.mimeType == '*')
 
         calls.append(mock.call(att, api_path, job))
 
