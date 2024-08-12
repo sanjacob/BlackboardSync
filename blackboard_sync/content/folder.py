@@ -6,22 +6,21 @@ from blackboard.blackboard import BBCourseContent
 
 from .api_path import BBContentPath
 from .job import DownloadJob
-from .content import Content
+from . import content
 
 
 class Folder:
     """Content of type `x-bb-folder`."""
 
-    def __init__(self, content: BBCourseContent, api_path: BBContentPath,
+    def __init__(self, _: BBCourseContent, api_path: BBContentPath,
                  job: DownloadJob):
         self.children = []
         course_id = api_path.get('course_id')
 
         for child in job.session.fetch_content_children(**api_path):
-            if child.contentHandler is not None:
-                self.children.append(
-                    Content(child, {'content_id': child.id, 'course_id': course_id}, job)
-                )
+            self.children.append(
+                content.Content(child, {'content_id': child.id, 'course_id': course_id}, job)
+            )
 
     def write(self, path: Path, executor: ThreadPoolExecutor):
         if self.children:

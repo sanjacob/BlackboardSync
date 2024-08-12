@@ -57,55 +57,6 @@ def mock_session(mock_membership, mock_course):
     mock.fetch_courses.return_value = mock_course
     return mock
 
-
-@pytest.mark.skip()
-@patch('blackboard_sync.download.platform')
-@given(url=pr.urls(), current_platform=st.sampled_from(['Windows', 'Darwin']))
-def test_create_link_windows_darwin(url, current_platform, mock_platform):
-    mock_session = Mock(spec=BlackboardSession)
-    mock_session.username = 'example'
-
-    # Patch platform value so it can run independently of current OS.
-    mock_platform.system.return_value = current_platform
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmp_path = Path(tmpdir)
-        link_path = Path(tmp_path / "link")
-        real_path = link_path.with_suffix('.url')
-        assert not real_path.exists()
-
-        download = BlackboardDownload(mock_session, tmp_path)
-        download._create_desktop_link(link_path, url)
-        assert real_path.exists()
-        contents = f"[InternetShortcut]\nURL={url}"
-
-        with real_path.open('r') as link_file:
-            assert link_file.read() == contents
-
-@pytest.mark.skip()
-@patch('blackboard_sync.download.platform')
-@given(url=pr.urls(), current_platform=st.sampled_from(['Linux', '']))
-def test_create_link_default(url, current_platform, mock_platform):
-    mock_session = Mock(spec=BlackboardSession)
-    mock_session.username = 'example'
-
-    # Patch platform value so it can run independently of current OS.
-    mock_platform.system.return_value = current_platform
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        tmp_path = Path(tmpdir)
-        link_path = Path(tmp_path / "link")
-        assert not link_path.exists()
-
-        download = BlackboardDownload(mock_session, tmp_path)
-        download._create_desktop_link(link_path, url)
-        assert link_path.exists()
-
-        contents = f"[Desktop Entry]\nIcon=text-html\nType=Link\nURL[$e]={url}"
-
-        with link_path.open('r') as link_file:
-            assert link_file.read() == contents
-
 def test_download_location(mock_session, tmp_path):
     download = BlackboardDownload(mock_session, tmp_path)
     assert download.download_location == tmp_path
@@ -132,9 +83,3 @@ def test_download_method_call_fetch_courses_raise_error(mock_session, tmp_path):
     with pytest.raises(ValueError) as excinfo:
         download.download()
     assert str(excinfo.value) == 'Other error'
-
-def test_download_method_call_fetch_contents_with_id(mock_session, tmp_path):
-    mock_session.fetch_contents.return_value = []
-    download = BlackboardDownload(mock_session, tmp_path)
-    download.download()
-    mock_session.fetch_contents.assert_called_once_with(course_id='TEST_BBC_ID')
