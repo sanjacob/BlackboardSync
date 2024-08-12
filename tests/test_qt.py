@@ -19,10 +19,9 @@
 
 import pytest
 import requests
-from PyQt5 import QtCore
-from PyQt5.Qt import QApplication
-from PyQt5.QtTest import QTest
-from PyQt5.QtWidgets import QFileDialog, QDialogButtonBox
+from PyQt6.QtCore import Qt
+from PyQt6.QtTest import QTest
+from PyQt6.QtWidgets import QApplication, QFileDialog, QDialogButtonBox
 
 from blackboard_sync.qt import SyncPeriod, SyncTrayIcon, SettingsWindow
 from blackboard_sync.qt.qt_elements import (SetupWizard, LoginWebView,
@@ -120,7 +119,7 @@ class TestSetupWizard:
         qtbot.addWidget(wizard)
         wizard.next()
         qtbot.keyClicks(wizard.uni_selection_box, self.institutions[2])
-        qtbot.keyClick(wizard.uni_selection_box, QtCore.Qt.Key_Enter)
+        qtbot.keyClick(wizard.uni_selection_box, Qt.Key.Key_Enter)
         assert wizard.currentId() == SetupWizard.Pages.DOWNLOAD_LOCATION
 
     def test_wizard_invalid_institution_enter(self, qtbot, make_setup_wizard, monkeypatch):
@@ -132,7 +131,7 @@ class TestSetupWizard:
 
         wizard.next()
         qtbot.keyClicks(wizard.uni_selection_box, 'Fake')
-        qtbot.keyClick(wizard.uni_selection_box, QtCore.Qt.Key_Enter)
+        qtbot.keyClick(wizard.uni_selection_box, Qt.Key.Key_Enter)
         assert wizard.currentId() == SetupWizard.Pages.INSTITUTION
 
     def test_wizard_invalid_institution(self, qtbot, make_setup_wizard, monkeypatch):
@@ -154,7 +153,7 @@ class TestSetupWizard:
         qtbot.addWidget(wizard)
         wizard.next()
         qtbot.keyClicks(wizard.uni_selection_box, self.institutions[3])
-        qtbot.keyClick(wizard.uni_selection_box, QtCore.Qt.Key_Enter)
+        qtbot.keyClick(wizard.uni_selection_box, Qt.Key.Key_Enter)
         assert wizard.institution_index == 3
 
 
@@ -175,7 +174,7 @@ class TestSettingsWindow:
             settings_window, "_file_chooser_dialog", lambda *args: tmp_path
         )
 
-        qtbot.mouseClick(settings_window.select_download_location, QtCore.Qt.LeftButton)
+        qtbot.mouseClick(settings_window.select_download_location, Qt.MouseButton.LeftButton)
         assert settings_window.download_location == tmp_path
         assert settings_window.download_location_hint.text() == str(tmp_path)
 
@@ -200,13 +199,13 @@ class TestSettingsWindow:
         qtbot.addWidget(settings_window)
 
         assert settings_window.sync_frequency == SyncPeriod.HALF_HOUR
-        qtbot.mouseClick(settings_window.frequency_combo, QtCore.Qt.LeftButton)
-        qtbot.keyEvent(QTest.Click, settings_window.frequency_combo, QtCore.Qt.Key_Down)
-        qtbot.keyEvent(QTest.Click, settings_window.frequency_combo, QtCore.Qt.Key_Enter)
+        qtbot.mouseClick(settings_window.frequency_combo, Qt.MouseButton.LeftButton)
+        qtbot.keyEvent(QTest.KeyAction.Click, settings_window.frequency_combo, Qt.Key.Key_Down)
+        qtbot.keyEvent(QTest.KeyAction.Click, settings_window.frequency_combo, Qt.Key.Key_Enter)
         assert settings_window.sync_frequency == SyncPeriod.ONE_HOUR
-        qtbot.mouseClick(settings_window.frequency_combo, QtCore.Qt.LeftButton)
-        qtbot.keyEvent(QTest.Click, settings_window.frequency_combo, QtCore.Qt.Key_Down)
-        qtbot.keyEvent(QTest.Click, settings_window.frequency_combo, QtCore.Qt.Key_Enter)
+        qtbot.mouseClick(settings_window.frequency_combo, Qt.MouseButton.LeftButton)
+        qtbot.keyEvent(QTest.KeyAction.Click, settings_window.frequency_combo, Qt.Key.Key_Down)
+        qtbot.keyEvent(QTest.KeyAction.Click, settings_window.frequency_combo, Qt.Key.Key_Enter)
         assert settings_window.sync_frequency == SyncPeriod.SIX_HOURS
 
     def test_settings_window_data_source(self, qtbot, settings_window):
@@ -227,7 +226,7 @@ class TestSettingsWindow:
         qtbot.addWidget(settings_window)
 
         with qtbot.waitSignal(settings_window.log_out_signal) as blocker:
-            qtbot.mouseClick(settings_window.log_out_button, QtCore.Qt.LeftButton)
+            qtbot.mouseClick(settings_window.log_out_button, Qt.MouseButton.LeftButton)
 
         assert blocker.signal_triggered
     
@@ -235,7 +234,7 @@ class TestSettingsWindow:
         qtbot.addWidget(settings_window)
 
         with qtbot.waitSignal(settings_window.setup_wiz_signal) as blocker:
-            qtbot.mouseClick(settings_window.setup_button, QtCore.Qt.LeftButton)
+            qtbot.mouseClick(settings_window.setup_button, Qt.MouseButton.LeftButton)
 
         assert blocker.signal_triggered
 
@@ -243,8 +242,8 @@ class TestSettingsWindow:
         qtbot.addWidget(settings_window)
 
         with qtbot.waitSignal(settings_window.save_signal) as blocker:
-            qtbot.mouseClick(settings_window.button_box.button(QDialogButtonBox.Save),
-                             QtCore.Qt.LeftButton)
+            qtbot.mouseClick(settings_window.button_box.button(QDialogButtonBox.StandardButton.Save),
+                             Qt.MouseButton.LeftButton)
 
         assert blocker.signal_triggered
 
