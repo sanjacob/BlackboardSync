@@ -22,7 +22,7 @@ import requests
 from pathlib import Path
 from typing import Optional
 from packaging import version
-from .__about__ import __version__
+from importlib.metadata import version, PackageNotFoundError
 
 
 def is_inside_container() -> bool:
@@ -30,6 +30,12 @@ def is_inside_container() -> bool:
 
 def check_for_updates() -> Optional[str]:
     """Checks if there is a newer release than the current on Github."""
+    # Get version
+    try:
+        __version__ = version("blackboard_sync")
+    except PackageNotFoundError:
+        return None
+
     url = 'https://api.github.com/repos/sanjacob/BlackboardSync/releases/latest'
     response = requests.get(url, timeout=2000)
     if response.status_code == 200:

@@ -21,13 +21,14 @@
 import sys
 import webbrowser
 from typing import Optional
+from importlib.metadata import version, PackageNotFoundError
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon, QWidget
 
 from .sync import BlackboardSync
 from .institutions import Institution, get_names, InstitutionLogin
-from .__about__ import __title__, __version__
+from .__about__ import __title__
 from .updates import check_for_updates
 from .qt.qt_elements import (LoginWebView, SyncTrayIcon, SettingsWindow,
                              RedownloadDialog, OSUtils, SetupWizard, UpdateFoundDialog)
@@ -50,7 +51,13 @@ class BBSyncController:
 
         self.app = QApplication(sys.argv)
         self.app.setApplicationName(__title__)
-        self.app.setApplicationVersion(__version__)
+
+        try:
+            __version__ = version("blackboard_sync")
+        except PackageNotFoundError:
+            pass
+        else:
+            self.app.setApplicationVersion(__version__)
 
         QApplication.setStyle(QStyleFactory.create("Fusion"))
 

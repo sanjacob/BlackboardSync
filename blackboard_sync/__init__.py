@@ -28,7 +28,7 @@ Keep your Blackboard files synced locally
 
 import logging
 
-from .__about__ import __title__, __summary__, __uri__, __version__
+from .__about__ import __title__, __summary__, __uri__
 from .__about__ import __author__, __email__, __license__
 from .__about__ import __copyright__
 

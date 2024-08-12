@@ -22,7 +22,6 @@ __all__ = [
     "__title__",
     "__summary__",
     "__uri__",
-    "__version__",
     "__author__",
     "__email__",
     "__license__",
@@ -32,8 +31,6 @@ __all__ = [
 __title__ = "BlackboardSync"
 __summary__ = "Automatic Syncing Of Your Blackboard Content"
 __uri__ = "https://github.com/sanjacob/BlackboardSync"
-
-__version__ = "0.12.0-alpha.1"
 
 __author__ = "Jacob Sánchez"
 __email__ = "jacobszpz@protonmail.com"
