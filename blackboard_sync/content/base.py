@@ -1,9 +1,14 @@
+import platform
+
 class BStream:
     """Base class for content that can be downloaded as a byte stream."""
     CHUNK_SIZE = 1024
 
     def write(self, path, stream, executor) -> None:
         """Schedule the write operation."""
+
+        if platform.system() == "Windows":
+            path = Path(u'\\\\?\\' + str(path))
 
         def _write():
             with path.open("wb") as f:
@@ -17,6 +22,9 @@ class FStream:
 
     def write(self, path, body, executor) -> None:
         """Schedule the write operation."""
+
+        if platform.system() == "Windows":
+            path = Path(u'\\\\?\\' + str(path))
 
         def _write():
             with path.open('w', encoding='utf-8') as f:
