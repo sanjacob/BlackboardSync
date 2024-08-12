@@ -19,7 +19,7 @@ bblearn = ">=0.3.0"
 
 [dev-packages]
 coverage = "*"
-pyinstaller = "==6.9.0"
+pyinstaller = "==6.10.0"
 pywin32-ctypes = "==0.2.2"
 sphinx = "*"
 recommonmark = "*"
