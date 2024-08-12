@@ -14,6 +14,8 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
+from importlib.metadata import version as get_version
+
 from blackboard_sync import __about__
 
 # -- Project information -----------------------------------------------------
@@ -23,8 +25,8 @@ copyright = __about__.__copyright__
 author = __about__.__author__
 
 # The full version, including alpha/beta/rc tags
-release = __about__.__version__
-
+release = get_version("blackboard_sync")
+version = ".".join(release.split('.')[:2])
 
 # -- General configuration ---------------------------------------------------
 

@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61.0", "setuptools_scm[toml]>=6.2"]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -36,9 +36,6 @@ dependencies = [
 [project.scripts]
 blackboardsync = "blackboard_sync:__main__.main"
 
-[tool.setuptools.dynamic]
-version = {attr = "blackboard_sync.__version__"}
-
 [project.optional-dependencies]
 test = ["pytest", "hypothesis", "coverage", "pytest-qt", "pytest-mock"]
 package = ["pyinstaller>=5.13.2", "build", "twine"]
@@ -47,6 +44,8 @@ package = ["pyinstaller>=5.13.2", "build", "twine"]
 "Homepage" = "https://bbsync.app"
 "Repository" = "https://github.com/sanjacob/BlackboardSync"
 "Bug Tracker" = "https://github.com/sanjacob/BlackboardSync/issues"
+
+[tool.setuptools_scm]
 
 [tool.setuptools]
 packages = [
