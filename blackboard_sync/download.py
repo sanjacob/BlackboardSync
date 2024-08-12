@@ -30,8 +30,10 @@ from dateutil.parser import parse
 from datetime import datetime, timezone
 from concurrent.futures import ThreadPoolExecutor
 
-from blackboard.api import BlackboardSession
+from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBCourseContent, BBResourceType
+from blackboard.filters import BBMembershipFilter, BWFilter
+
 from .content import ExternalLink, ContentBody, Document, Folder, Content
 from .content import BBContentPath
 from .content.job import DownloadJob
@@ -46,7 +48,7 @@ class BlackboardDownload:
 
     _last_downloaded = datetime.fromtimestamp(0, tz=timezone.utc)
 
-    def __init__(self, sess: BlackboardSession,
+    def __init__(self, sess: BlackboardExtended,
                  download_location: Path,
                  last_downloaded: Optional[datetime] = None,
                  min_year: Optional[int] = None):
@@ -57,7 +59,7 @@ class BlackboardDownload:
 
         Keyword arguments:
 
-        :param BlackboardSession sess: UCLan BB user session
+        :param BlackboardExtended sess: UCLan BB user session
         :param (str / Path) download_location: Where files will be stored
         :param str last_downloaded: Files modified before this will not be downloaded
         :param min_year: Only courses created on or after this year will be downloaded
@@ -73,9 +75,6 @@ class BlackboardDownload:
         if last_downloaded is not None:
             self._last_downloaded = last_downloaded
 
-        if not self.download_location.exists():
-            self.download_location.mkdir(parents=True)
-            logger.info("Created download folder")
 
     def download(self) -> Optional[datetime]:
         """Retrieve the user's courses, and start download of all contents
@@ -85,39 +84,35 @@ class BlackboardDownload:
         if self.cancelled:
             return None
 
+        logger.info("Starting Blackboard content download")
+
         start_time = datetime.now(timezone.utc)
 
-        logger.info("Fetching user memberships")
+        if not self.download_location.exists():
+            self.download_location.mkdir(parents=True)
+            logger.info("Created download folder")
 
-        memberships = self._sess.fetch_user_memberships(user_id=self.user_id)
+        logger.info("Fetching user memberships and courses")
 
-        # Filter courses by creation year
-        if self._min_year is not None:
-            memberships = [m for m in memberships if m.created.year >= self._min_year]
+        course_filter = BBMembershipFilter(min_year=self._min_year,
+                                           data_sources=BWFilter())
+        courses = self._sess.ex_fetch_courses(user_id=self.user_id,
+                                              result_filter=course_filter)
 
         job = DownloadJob(session=self._sess, last_downloaded=self._last_downloaded)
 
-        for ms in memberships:
+        for course in courses:
             if self.cancelled:
                 break
 
-            private = False
-            logger.debug("Fetching course")
-            try:
-                course = self._sess.fetch_courses(course_id=ms.courseId)
-                course = course.model_copy(update={'created': ms.created})
-            except ValueError as e:
-                if not (private := (str(e) == 'Private course')):
-                    raise e
-            else:
-                if not private:
-                    handler = Course(course, job)
-                    handler.write(self.download_location, self.executor)
+            logger.info(f"Fetching user course <{course.id}>")
+
+            Course(course, job).write(self.download_location, self.executor)
+
+        logger.info(f"Shutting down download workers")
         self.executor.shutdown(wait=True, cancel_futures=self.cancelled)
 
-        if self.cancelled:
-            return None
-        return start_time
+        return start_time if not self.cancelled else None
 
     def cancel(self) -> None:
         """Cancel the download job."""
