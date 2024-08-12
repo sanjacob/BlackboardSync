@@ -35,7 +35,7 @@ Simply put, some information is necessary to make the login process compatible w
 **Built with:**
 
 - [Python 3.10][python]
-- [PyQt5][pyqt]
+- [PyQt6][pyqt]
 
 
 
@@ -170,7 +170,7 @@ Flathub team for their quick work in approving the app :heart:
 <!-- LINK REFERENCES -->
 
 [universal-login]: https://github.com/sanjacob/BlackboardSync/issues/3	"BBSync login"
-[pyqt]: https://pypi.org/project/PyQt5/5.15.1/	"Python Bindings for Qt 5"
+[pyqt]: https://pypi.org/project/PyQt6/	"Python Bindings for Qt 6"
 [pypi]: https://pypi.org/project/blackboardsync
 [typora]: https://typora.io/ "Typora"
 [releases]: https://github.com/sanjacob/BlackboardSync/releases "BlackboardSync Releases"
