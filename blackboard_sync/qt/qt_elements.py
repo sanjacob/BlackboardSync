@@ -27,16 +27,16 @@ from typing import Optional
 from pathlib import Path
 from datetime import datetime
 
-from PyQt5 import uic
-from PyQt5.QtGui import QIcon, QPixmap
-from PyQt5.QtCore import Qt, QSettings, QUrl, pyqtSlot, pyqtSignal
-from PyQt5.QtNetwork import QNetworkCookie
-from PyQt5.QtWidgets import (QMenu, QStyle, QAction, QDialog, QWidget, QWizard,
+from PyQt6 import uic
+from PyQt6.QtGui import QIcon, QPixmap, QAction
+from PyQt6.QtCore import Qt, QSettings, QUrl, pyqtSlot, pyqtSignal
+from PyQt6.QtNetwork import QNetworkCookie
+from PyQt6.QtWidgets import (QMenu, QStyle, QDialog, QWidget, QWizard,
                              QCompleter, QFileDialog, QMessageBox, QApplication,
                              QSystemTrayIcon, QComboBox, QLabel, QCheckBox, QSpinBox)
 from requests.cookies import RequestsCookieJar
-from PyQt5.QtWebEngineCore import QWebEngineCookieStore
-from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEnginePage, QWebEngineProfile
+from PyQt6.QtWebEngineCore import QWebEngineCookieStore, QWebEnginePage, QWebEngineProfile
+from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 
 class SyncPeriod(IntEnum):
@@ -140,9 +140,9 @@ class SyncTrayMenu(QMenu):
         self.set_logged_in(logged_in)
 
     def _init_ui(self) -> None:
-        sync_icon = QApplication.style().standardIcon(QStyle.SP_BrowserReload)
-        close_icon = QApplication.style().standardIcon(QStyle.SP_DialogCloseButton)
-        open_dir_icon = QApplication.style().standardIcon(QStyle.SP_DirOpenIcon)
+        sync_icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_BrowserReload)
+        close_icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_DialogCloseButton)
+        open_dir_icon = QApplication.style().standardIcon(QStyle.StandardPixmap.SP_DirOpenIcon)
 
         self.refresh = QAction("Sync now")
         self.refresh.setIcon(sync_icon)
@@ -251,10 +251,10 @@ class SyncTrayIcon(QSystemTrayIcon):
 
     def show_msg(self, title: str, msg: str, severity: int = 1, duration: int = 10) -> None:
         """Show the user a message through the tray icon."""
-        icons = { 0: QSystemTrayIcon.NoIcon,
-                  1: QSystemTrayIcon.Information,
-                  2: QSystemTrayIcon.Warning,
-                  3: QSystemTrayIcon.Critical }
+        icons = { 0: QSystemTrayIcon.MessageIcon.NoIcon,
+                  1: QSystemTrayIcon.MessageIcon.Information,
+                  2: QSystemTrayIcon.MessageIcon.Warning,
+                  3: QSystemTrayIcon.MessageIcon.Critical }
         duration = duration * 1000
         severity = 0 if severity < 0 or severity > 3 else severity
         self.showMessage(title, msg, icons[severity], duration)
@@ -387,7 +387,7 @@ class SettingsWindow(QWidget):
 
     def _file_chooser_dialog(self) -> Optional[Path]:
         self.file_chooser = QFileDialog()
-        self.file_chooser.setFileMode(QFileDialog.Directory)
+        self.file_chooser.setFileMode(QFileDialog.FileMode.Directory)
 
         if self.file_chooser.exec():
             new_location = self.file_chooser.directory()
@@ -549,12 +549,12 @@ class SetupWizard(QWizard):
         self.uni_selection_box.clearEditText()
 
         self.completer = QCompleter(self.institutions, self)
-        self.completer.setCaseSensitivity(Qt.CaseInsensitive)
-        self.completer.setFilterMode(Qt.MatchContains)
+        self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
+        self.completer.setFilterMode(Qt.MatchFlag.MatchContains)
         self.uni_selection_box.setCompleter(self.completer)
 
         self.file_chooser = QFileDialog()
-        self.file_chooser.setFileMode(QFileDialog.Directory)
+        self.file_chooser.setFileMode(QFileDialog.FileMode.Directory)
         self.sync_location_button.clicked.connect(self._choose_location)
 
         year = datetime.today().year
@@ -563,7 +563,7 @@ class SetupWizard(QWizard):
         self.date_spinbox.setEnabled(False)
 
         self.since_all_checkbox.stateChanged.connect(
-            lambda state: self.date_spinbox.setEnabled(state != Qt.Checked)
+            lambda state: self.date_spinbox.setEnabled(state != Qt.CheckState.Checked)
         )
 
         self.uni_selection_page.registerField(
@@ -578,7 +578,7 @@ class SetupWizard(QWizard):
             changedSignal=self.sync_location_button.clicked
         )
 
-        self.intro_page.setPixmap(QWizard.WatermarkPixmap,
+        self.intro_page.setPixmap(QWizard.WizardPixmap.WatermarkPixmap,
                                   Assets.watermark())
 
     def initializePage(self, id) -> None:

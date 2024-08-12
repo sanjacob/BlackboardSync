@@ -22,9 +22,8 @@ import sys
 import webbrowser
 from typing import Optional
 
-from PyQt5.QtGui import QWindow
-from PyQt5.QtCore import Qt
-from PyQt5.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon, QWidget
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon, QWidget
 
 from .sync import BlackboardSync
 from .institutions import Institution, get_names, InstitutionLogin
@@ -108,7 +107,7 @@ class BBSyncController:
         if self.login_window is None:
             return
 
-        self.app.setOverrideCursor(Qt.WaitCursor)
+        self.app.setOverrideCursor(Qt.CursorShape.WaitCursor)
         # Call login function on sync
         auth = self.model.auth(self.login_window.cookie_jar)
         self.tray.set_logged_in(auth)
@@ -146,7 +145,7 @@ class BBSyncController:
         self._show_window(self.config_window)
 
     def _show_window(self, window: QWidget) -> None:
-        window.setWindowState(Qt.WindowNoState)
+        window.setWindowState(Qt.WindowState.WindowNoState)
         window.show()
         window.setFocus()
 
