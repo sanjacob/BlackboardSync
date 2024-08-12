@@ -32,6 +32,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBCourseContent, BBResourceType
+from blackboard.filters import BBMembershipFilter, BWFilter
+
 from .content import ExternalLink, ContentBody, Document, Folder, Content
 from .content import BBContentPath
 from .content.job import DownloadJob
@@ -91,12 +93,11 @@ class BlackboardDownload:
             logger.info("Created download folder")
 
         logger.info("Fetching user memberships and courses")
-        courses = self._sess.ex_fetch_courses(user_id=self.user_id,
-                                              result_filter=None)
 
-        # Filter courses by creation year
-        #if self._min_year is not None:
-        #   memberships = [m for m in memberships if m.created.year >= self._min_year]
+        course_filter = BBMembershipFilter(min_year=self._min_year,
+                                           data_sources=BWFilter())
+        courses = self._sess.ex_fetch_courses(user_id=self.user_id,
+                                              result_filter=course_filter)
 
         job = DownloadJob(session=self._sess, last_downloaded=self._last_downloaded)
 
