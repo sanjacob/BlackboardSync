@@ -39,9 +39,9 @@ jobs:
         run: pytest -vvvv
 
   pypi:
-    runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ test ]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -67,9 +67,9 @@ jobs:
           twine upload dist/*
 
   flatpak:
-    runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ test ]
+    runs-on: ubuntu-latest
     env:
       MATURIN_REF: v1.2.3
       SETUPTOOLS_RUST_REF: v1.7.0
@@ -111,15 +111,17 @@ jobs:
         working-directory: flathub
 
   pyinstaller:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [ test ]
     runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest]
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: [ test ]
     env:
       PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
+      MAC_SCRIPT: "packaging/macos/pkg_macos.sh"
+      WIN_SCRIPT: "packaging/windows/pkg_win.nsi"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -135,7 +137,9 @@ jobs:
           pip install pipenv
           pipenv requirements --dev --from-pipfile > requirements.txt
           pip install -r requirements.txt
-          python packaging/pyinst.py
+
+      - name: Run PyInstaller
+        run: python packaging/pyinst.py
 
       # Signing
 
@@ -152,14 +156,14 @@ jobs:
         if: matrix.os == 'windows-latest'
         uses: joncloud/makensis-action@v4
         with:
-          script-file: packaging/pkg_win.nsi
+          script-file: ${{ env.WIN_SCRIPT }}
           arguments: "/V3 /DVERSION=${{github.ref_name}}"
 
       - name: Sign and Package into DMG
         if: matrix.os == 'macos-latest'
         run: |
-          chmod +x packaging/pkg_macos.sh
-          packaging/pkg_macos.sh "blackboard_sync-$GITHUB_REF_NAME"
+          chmod +x $MAC_SCRIPT
+          $MAC_SCRIPT "blackboard_sync-$GITHUB_REF_NAME"
 
       # Save Packages
       - name: Extract release notes
@@ -174,6 +178,5 @@ jobs:
           body: ${{ steps.extract-release-notes.outputs.release_notes }}
           prerelease: ${{ env.PRE_RELEASE }}
           files: |
-            dist/BBSync/**/*.exe
             dist/*.exe
             dist/*.dmg

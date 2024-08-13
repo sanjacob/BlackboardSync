@@ -6,7 +6,7 @@
 
 # Installer File and Name
 Name "Blackboard Sync"
-Outfile "..\dist\BlackboardSync-${VERSION}.exe"
+Outfile "..\..\dist\BlackboardSync-${VERSION}.exe"
 Unicode True
 
 # Installation Dir
@@ -19,12 +19,12 @@ RequestExecutionLevel user
 !define MUI_LICENSEPAGE_TEXT_BOTTOM "You are now aware of your rights. Click next to continue."
 !define MUI_LICENSEPAGE_BUTTON "Next"
 !define MUI_FINISHPAGE_LINK "https://bbsync.app"
-!define MUI_ICON "..\blackboard_sync\assets\logo.ico"
-!define MUI_UNICON "..\blackboard_sync\assets\logo.ico"
+!define MUI_ICON ".\icon.ico"
+!define MUI_UNICON ".\icon.ico"
 
 # Installer Pages
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "..\LICENSE"
+!insertmacro MUI_PAGE_LICENSE "..\..\LICENSE"
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 
@@ -45,7 +45,7 @@ RequestExecutionLevel user
 # default section start; every NSIS script has at least one section.
 Section "Installation" SecInstall
     SetOutPath "$INSTDIR"
-    File /r "..\dist\BBSync\*"
+    File /r "..\..\dist\BBSync\*"
 
     ; Install Directory
     WriteRegStr HKCU "Software\BlackboardSync" "InstallDir" $INSTDIR
