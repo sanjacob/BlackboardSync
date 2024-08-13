@@ -174,5 +174,6 @@ jobs:
           body: ${{ steps.extract-release-notes.outputs.release_notes }}
           prerelease: ${{ env.PRE_RELEASE }}
           files: |
+            dist/BBSync/**/*.exe
             dist/*.exe
             dist/*.dmg
