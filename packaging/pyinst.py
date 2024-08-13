@@ -23,8 +23,9 @@ src = "blackboard_sync"
 is_win = sys.platform.startswith('win')
 sep = ';' if is_win else ':'
 
-icon = f'{src}/assets/logo'
-icon += '.ico' if is_win else '.png'
+icon_win = f'packaging/windows/icon.ico'
+icon_mac = f'{src}/assets/icon.png'
+icon = icon_win if is_win else icon_mac
 
 assets = f'{src}/assets'
 assets = assets + sep + assets
