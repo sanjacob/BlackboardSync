@@ -74,6 +74,7 @@ jobs:
           name: build-windows-latest
           path: ./dist
       - run: ls
+      - run: ls ./dist
 
           #- name: Create windows installer
           #uses: joncloud/makensis-action@v4
@@ -98,6 +99,7 @@ jobs:
           name: build-macos-latest
           path: ./dist
       - run: ls
+      - run: ls ./dist
 
           #- name: Import macOS certificate
           #uses: apple-actions/import-codesign-certs@v2
