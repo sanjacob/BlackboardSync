@@ -18,6 +18,8 @@ permissions:
 
 jobs:
   test:
+    env:
+      PYTHON_VER: "3.11.9"
     uses: ./.github/workflows/pytest.yml
     with:
       python-version: ${{ env.PYTHON_VER }}
