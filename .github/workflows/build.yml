@@ -81,7 +81,7 @@ jobs:
 
       - uses: actions/upload-artifact@v4
         with:
-          name: format('{0}-{1}.exe', env.NAME, github.ref_name)
+          name: ${{ format('{0}-{1}.exe', env.NAME, github.ref_name) }}
           path: dist/*.exe
 
   package-macos:
