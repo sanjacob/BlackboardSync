@@ -23,7 +23,10 @@ jobs:
       python-version: "3.10"
 
   release-notes:
+    needs: [ test ]
+    runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - id: extract-release-notes
         uses: ffurrer2/extract-release-notes@v1
         with:
