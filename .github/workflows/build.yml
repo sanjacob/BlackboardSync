@@ -72,6 +72,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build-windows-latest
+          path: ./dist
       - run: ls
 
           #- name: Create windows installer
@@ -89,13 +90,13 @@ jobs:
     needs: [ pyinstaller ]
     runs-on: macos-latest
     env:
-      PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
       MAC_SCRIPT: "packaging/macos/pkg_macos.sh"
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with:
           name: build-macos-latest
+          path: ./dist
       - run: ls
 
           #- name: Import macOS certificate
