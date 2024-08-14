@@ -58,7 +58,7 @@ jobs:
       matrix:
         os: [macos-latest, windows-latest]
     with:
-      python-version: ${{ env.PYTHON_VER }}
+      python-version: "3.11.9"
       runs-on: ${{ matrix.os }}
 
   package-windows:
