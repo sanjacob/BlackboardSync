@@ -1,182 +1,109 @@
-name: Test and Deploy
+name: Build
 
 on:
   push:
+    tags:
+      - *
   pull_request:
     branches: [ "main" ]
   workflow_dispatch:
+
+env:
+  PYTHON_VER: "3.11.9"
+  NAME: "BlackboardSync"
+  PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
 
 permissions:
   contents: write
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/pytest.yml
+    with:
+      python-version: ${{ env.PYTHON_VER }}
+
+  release-notes:
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up virtual X11
-        run: sudo apt-get install xvfb
-
-      - name: Set up PyQt libs
-        uses: tlambert03/setup-qt-libs@v1
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - id: extract-release-notes
+        uses: ffurrer2/extract-release-notes@v1
         with:
-          python-version: "3.10"
-
-      - name: Set up Python environment
-        run: |
-          python -m pip install --upgrade pip
-          pip install pipenv
-          pipenv requirements --dev --from-pipfile > requirements.txt
-          pip install -r requirements.txt
-          pip install pytest-xvfb
-
-      - name: Run test suite
-        run: pytest -vvvv
-
+          prerelease: ${{ env.PRE_RELEASE }}
   pypi:
-    if: startsWith(github.ref, 'refs/tags/')
     needs: [ test ]
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
-
-      - name: Set up Python environment
-        run: |
-          python -m pip install --upgrade pip
-          pip install pipenv
-          pipenv requirements --dev --from-pipfile > requirements.txt
-          pip install -r requirements.txt
-
-      - name: Build and upload to PyPI
+          python-version: ${{ env.PYTHON_VER }}
+      - uses: sanjacob/pipenv-requirements@v1
+        with:
+          from-pipfile: true
+          dev: true
+      - run: python -m build
+      - name: Deploy to PyPI
+        if: startsWith(github.ref, 'refs/tags/')
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: |
-          python -m build
-          twine upload dist/*
-
-  flatpak:
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: [ test ]
-    runs-on: ubuntu-latest
-    env:
-      MATURIN_REF: v1.2.3
-      SETUPTOOLS_RUST_REF: v1.7.0
-      FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
-    steps:
-      - uses: actions/checkout@v4
-      - uses: sanjacob/python-flatpak-generator-action@v1
-        with:
-          flatpak-repo: 'sanjacob/app.bbsync.BlackboardSync'
-          flatpak-repo-branch: ${{ env.FLATHUB_BRANCH }}
-          flatpak-repo-secret: ${{ secrets.FLATHUB_PAT }}
-          use-pipfile: true
-          python-version: '3.10.10'
-          maturin-version: ${{ env.MATURIN_REF }}
-          setuptools-rust-version: ${{ env.SETUPTOOLS_RUST_REF }}
-
-      - name: Update other sources manually
-        run: |
-          mkdir my-tools
-          git clone https://gist.github.com/b0ed4ff1be1e4d13ac47e21132b92dbd.git my-tools
-          chmod +x my-tools/*.py
-
-      - name: Update other sources manually
-        run: |
-          ../my-tools/*.py *.yml --update PyO3/maturin $MATURIN_REF --update pydantic/pydantic-core $PYDANTIC_CORE_REF --update sanjacob/BlackboardSync $GITHUB_REF_NAME
-        working-directory: flathub
-
-        # Deploy to GitHub
-
-      - run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-        working-directory: flathub
-
-      - run: |
-          git add .
-          git commit -m "Generated from $GITHUB_REF_NAME"
-          git push origin HEAD
-        working-directory: flathub
+        run: twine upload dist/*
 
   pyinstaller:
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: [ test ]
-    runs-on: ${{ matrix.os }}
+    uses: ./.github/workflows/pyinstaller.yml
     strategy:
       fail-fast: false
       matrix:
         os: [macos-latest, windows-latest]
+    with:
+      python-version: ${{ env.PYTHON_VER }}
+      runs-on: ${{ matrix.os }}
+
+  package-windows:
+    if: ${{ false }}
+    needs: [ pyinstaller ]
     env:
-      PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
-      MAC_SCRIPT: "packaging/macos/pkg_macos.sh"
       WIN_SCRIPT: "packaging/windows/pkg_win.nsi"
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
         with:
-          python-version: "3.11.9"
-
-      - name: Set up Python environment
-        run: |
-          python -m pip install --upgrade pip
-          pip install pipenv
-          pipenv requirements --dev --from-pipfile > requirements.txt
-          pip install -r requirements.txt
-
-      - name: Run PyInstaller
-        run: python packaging/pyinst.py
-
-      # Signing
-
-      - name: Import macOS certificate
-        if: matrix.os == 'macos-latest'
-        uses: apple-actions/import-codesign-certs@v2
-        with:
-          p12-file-base64: ${{ secrets.BB_P12 }}
-          p12-password: ${{ secrets.BB_P12_PASSWORD }}
-
-      # Package Application
+          name: build-windows-latest
 
       - name: Create windows installer
-        if: matrix.os == 'windows-latest'
         uses: joncloud/makensis-action@v4
         with:
           script-file: ${{ env.WIN_SCRIPT }}
           arguments: "/V3 /DVERSION=${{github.ref_name}}"
 
+      - uses: actions/upload-artifact@v4
+        with:
+          name: format('{0}-{1}.exe', env.NAME, github.ref_name)
+          path: dist/*.exe
+
+  package-macos:
+    if: ${{ false }}
+    needs: [ pyinstaller ]
+    env:
+      PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
+      MAC_SCRIPT: "packaging/macos/pkg_macos.sh"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-macos-latest
+
+      - name: Import macOS certificate
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.BB_P12 }}
+          p12-password: ${{ secrets.BB_P12_PASSWORD }}
+
       - name: Sign and Package into DMG
-        if: matrix.os == 'macos-latest'
         run: |
           chmod +x $MAC_SCRIPT
           $MAC_SCRIPT "blackboard_sync-$GITHUB_REF_NAME"
 
-      # Save Packages
-      - name: Extract release notes
-        id: extract-release-notes
-        uses: ffurrer2/extract-release-notes@v1
+      - uses: actions/upload-artifact@v4
         with:
-          prerelease: ${{ env.PRE_RELEASE }}
-
-      - name: Upload as release - only tagged commits
-        uses: softprops/action-gh-release@v1
-        with:
-          body: ${{ steps.extract-release-notes.outputs.release_notes }}
-          prerelease: ${{ env.PRE_RELEASE }}
-          files: |
-            dist/*.exe
-            dist/*.dmg
+          name: format('{0}-{1}.exe', env.NAME, github.ref_name)
+          path: dist/*.dmg

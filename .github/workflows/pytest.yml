@@ -1,0 +1,32 @@
+name: Pytest
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        required: true
+        type: string
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: tlambert03/setup-qt-libs@v1
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - uses: sanjacob/pipenv-requirements@v1
+        with:
+          from-pipfile: true
+          dev: true
+
+      - name: Install XVFB for gui testing
+        run: |
+          sudo apt-get install xvfb
+          pip install pytest-xvfb
+
+      - name: Run test suite
+        run: pytest -vvvv
