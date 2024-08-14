@@ -64,6 +64,7 @@ jobs:
   package-windows:
     if: ${{ false }}
     needs: [ pyinstaller ]
+    runs-on: windows-latest
     env:
       WIN_SCRIPT: "packaging/windows/pkg_win.nsi"
     steps:
@@ -86,6 +87,7 @@ jobs:
   package-macos:
     if: ${{ false }}
     needs: [ pyinstaller ]
+    runs-on: macos-latest
     env:
       PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
       MAC_SCRIPT: "packaging/macos/pkg_macos.sh"
