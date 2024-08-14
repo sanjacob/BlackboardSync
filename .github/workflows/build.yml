@@ -36,7 +36,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VER }}
       - uses: sanjacob/pipenv-requirements@v1
@@ -76,11 +76,11 @@ jobs:
       - run: ls
       - run: ls ./dist
 
-          #- name: Create windows installer
-          #uses: joncloud/makensis-action@v4
-          #with:
-          #script-file: ${{ env.WIN_SCRIPT }}
-          #arguments: "/V3 /DVERSION=${{github.ref_name}}"
+      #- name: Create windows installer
+      # uses: joncloud/makensis-action@v4
+      # with:
+      #   script-file: ${{ env.WIN_SCRIPT }}
+      #   arguments: "/V3 /DVERSION=${{github.ref_name}}"
 
           #- uses: actions/upload-artifact@v4
           #with:
