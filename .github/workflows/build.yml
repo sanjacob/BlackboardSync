@@ -52,6 +52,7 @@ jobs:
         run: twine upload dist/*
 
   pyinstaller:
+    needs: [ test ]
     uses: ./.github/workflows/pyinstaller.yml
     strategy:
       fail-fast: false
@@ -62,7 +63,6 @@ jobs:
       runs-on: ${{ matrix.os }}
 
   package-windows:
-    if: ${{ false }}
     needs: [ pyinstaller ]
     runs-on: windows-latest
     env:
@@ -72,20 +72,20 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build-windows-latest
+      - run: ls
 
-      - name: Create windows installer
-        uses: joncloud/makensis-action@v4
-        with:
-          script-file: ${{ env.WIN_SCRIPT }}
-          arguments: "/V3 /DVERSION=${{github.ref_name}}"
+          #- name: Create windows installer
+          #uses: joncloud/makensis-action@v4
+          #with:
+          #script-file: ${{ env.WIN_SCRIPT }}
+          #arguments: "/V3 /DVERSION=${{github.ref_name}}"
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: ${{ format('{0}-{1}.exe', env.NAME, github.ref_name) }}
-          path: dist/*.exe
+          #- uses: actions/upload-artifact@v4
+          #with:
+          #name: ${{ format('{0}-{1}.exe', env.NAME, github.ref_name) }}
+          #path: dist/*.exe
 
   package-macos:
-    if: ${{ false }}
     needs: [ pyinstaller ]
     runs-on: macos-latest
     env:
@@ -96,19 +96,20 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build-macos-latest
+      - run: ls
 
-      - name: Import macOS certificate
-        uses: apple-actions/import-codesign-certs@v2
-        with:
-          p12-file-base64: ${{ secrets.BB_P12 }}
-          p12-password: ${{ secrets.BB_P12_PASSWORD }}
+          #- name: Import macOS certificate
+          #uses: apple-actions/import-codesign-certs@v2
+          #with:
+          #p12-file-base64: ${{ secrets.BB_P12 }}
+          #p12-password: ${{ secrets.BB_P12_PASSWORD }}
 
-      - name: Sign and Package into DMG
-        run: |
-          chmod +x $MAC_SCRIPT
-          $MAC_SCRIPT "blackboard_sync-$GITHUB_REF_NAME"
+          #      - name: Sign and Package into DMG
+          #run: |
+          #chmod +x $MAC_SCRIPT
+          #$MAC_SCRIPT "blackboard_sync-$GITHUB_REF_NAME"
 
-      - uses: actions/upload-artifact@v4
-        with:
-          name: format('{0}-{1}.exe', env.NAME, github.ref_name)
-          path: dist/*.dmg
+          #- uses: actions/upload-artifact@v4
+          #with:
+          #name: ${{ format('{0}-{1}.dmg', env.NAME, github.ref_name) }}
+          #path: dist/*.dmg
