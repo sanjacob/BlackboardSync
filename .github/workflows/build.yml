@@ -203,7 +203,6 @@ jobs:
           p12-password: ${{ secrets.BB_P12_PASSWORD }}
 
       - name: Sign and Package into DMG
-        if: matrix.os == 'macos-latest'
         run: |
           chmod +x packaging/macos/pkg_macos.sh
           packaging/macos/pkg_macos.sh "blackboard_sync-$VERSION"
