@@ -29,6 +29,8 @@ jobs:
       code: ${{ steps.version-check.outputs.code }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-tags: true
       - uses: actions/setup-python@v5
       - run: |
           pip install --upgrade setuptools
