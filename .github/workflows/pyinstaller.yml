@@ -29,14 +29,13 @@ jobs:
 
       - name: Upload macos build
         if: startsWith(inputs.runs-on, 'macos')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4.3.5
         with:
           name: build-macos-latest
           path: dist/BBSync.app
 
       - name: Upload windows build
         if: startsWith(inputs.runs-on, 'windows')
-        uses: actions/upload-artifact@v4.3.5
         with:
           name: build-windows-latest
           path: dist/BBSync/**
