@@ -14,8 +14,8 @@ jobs:
   pyinstaller:
     runs-on: ${{ inputs.runs-on }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
         with:
           python-version: ${{ inputs.python-version }}
 
