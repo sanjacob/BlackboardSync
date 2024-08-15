@@ -97,7 +97,8 @@ jobs:
           name: build-windows-latest
           path: ./dist/
       - run: ls ./dist
-      - run: tar -xvf ./dist/build.tar -C ./dist/BBSync
+      - run: tar -xvf ./dist/build.tar -C ./dist/
+      - run: ls ./dist
       - env:
           OUTPUT1: ${{ needs.version.outputs.code }}
         run: echo $env:OUTPUT1
@@ -130,7 +131,9 @@ jobs:
 
       - run: ls -la ./dist
 
-      - run: tar -xvf ./dist/build.tar -C ./dist/BBSync.app
+      - run: tar -xvf ./dist/build.tar -C ./dist/
+
+      - run: ls -la ./dist
 
       - name: Import signing certificate
         uses: apple-actions/import-codesign-certs@v3
