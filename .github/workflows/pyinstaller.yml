@@ -38,5 +38,5 @@ jobs:
       - name: Upload macos build
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ format('build-{1}', inputs.runs-on) }}
+          name: ${{ format('build-{0}', inputs.runs-on) }}
           path: build.tar
