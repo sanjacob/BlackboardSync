@@ -171,3 +171,46 @@ jobs:
 #         files: |
 #           dist/*.exe
 #           dist/*.dmg
+
+
+  why-macos:
+    runs-on: macos-latest
+    env:
+      VERSION: ${{ needs.version.outputs.code }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11.9"
+
+      - name: Set up Python environment
+        run: |
+          python -m pip install --upgrade pip
+          pip install pipenv
+          pipenv requirements --dev --from-pipfile > requirements.txt
+          pip install -r requirements.txt
+          python packaging/pyinst.py
+
+      - run: ls -la ./dist
+
+      - name: Import macOS certificate
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.BB_P12 }}
+          p12-password: ${{ secrets.BB_P12_PASSWORD }}
+
+      - name: Sign and Package into DMG
+        if: matrix.os == 'macos-latest'
+        run: |
+          chmod +x packaging/macos/pkg_macos.sh
+          packaging/macos/pkg_macos.sh "blackboard_sync-$VERSION"
+
+      - run: ls -la ./dist
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package-macos-old
+          path: dist/*.dmg
