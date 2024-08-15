@@ -30,7 +30,9 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
-      - run: pip install setuptools-scm
+      - run: |
+        pip install --upgrade setuptools
+        pip install setuptools-scm
       - id: version-check
         run: echo "code=$(python -m setuptools_scm)" >> "$GITHUB_OUTPUT"
 
@@ -92,7 +94,7 @@ jobs:
       - run: ls ./dist
       - env:
           OUTPUT1: ${{ needs.version.outputs.code }}
-        run: echo "$OUTPUT1"
+        run: echo $env:OUTPUT1
 
       #- name: Create windows installer
       # uses: joncloud/makensis-action@v4
