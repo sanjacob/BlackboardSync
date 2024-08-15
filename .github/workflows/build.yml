@@ -186,13 +186,12 @@ jobs:
         with:
           python-version: "3.11.9"
 
-      - name: Set up Python environment
-        run: |
-          python -m pip install --upgrade pip
-          pip install pipenv
-          pipenv requirements --dev --from-pipfile > requirements.txt
-          pip install -r requirements.txt
-          python packaging/pyinst.py
+      - uses: sanjacob/pipenv-requirements@v1
+        with:
+          from-pipfile: true
+          dev: true
+
+      - run: python packaging/pyinst.py
 
       - uses: actions/upload-artifact@v4
         with:
