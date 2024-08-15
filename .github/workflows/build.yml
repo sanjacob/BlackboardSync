@@ -95,9 +95,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build-windows-latest
-          path: ./dist
-      - run: ls
+          path: ./dist/BBSync
       - run: ls ./dist
+      - run: ls ./dist/BBSync
       - env:
           OUTPUT1: ${{ needs.version.outputs.code }}
         run: echo $env:OUTPUT1
@@ -129,6 +129,7 @@ jobs:
           path: ./dist/BBSync.app
 
       - run: ls ./dist
+      - run: ls ./dist/BBSync.app
 
       - name: Import signing certificate
         uses: apple-actions/import-codesign-certs@v3
