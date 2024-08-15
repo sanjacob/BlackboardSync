@@ -27,6 +27,10 @@ jobs:
       - name: Run PyInstaller
         run: python packaging/pyinst.py
 
+      - run: ls -R .
+
+      - run: ls -R dist
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
