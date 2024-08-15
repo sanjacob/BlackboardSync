@@ -22,15 +22,30 @@ jobs:
     with:
       python-version: "3.10"
 
+  version:
+    needs: [ test ]
+    runs-on: ubuntu-latest
+    outputs:
+      code: ${{ steps.version-check.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+      - run: pip install setuptools-scm
+      - id: version-check
+        run: echo "code=$(python -m setuptools_scm)" >> "$GITHUB_OUTPUT"
+
   release-notes:
     needs: [ test ]
     runs-on: ubuntu-latest
+    outputs:
+      body: ${{ steps.extract-release-notes.outputs.release_notes }}
     steps:
       - uses: actions/checkout@v4
       - id: extract-release-notes
         uses: ffurrer2/extract-release-notes@v1
         with:
           prerelease: ${{ env.PRE_RELEASE }}
+
   pypi:
     needs: [ test ]
     runs-on: ubuntu-latest
@@ -63,7 +78,7 @@ jobs:
       runs-on: ${{ matrix.os }}
 
   package-windows:
-    needs: [ pyinstaller ]
+    needs: [ pyinstaller, version ]
     runs-on: windows-latest
     env:
       WIN_SCRIPT: "packaging/windows/pkg_win.nsi"
@@ -75,6 +90,9 @@ jobs:
           path: ./dist
       - run: ls
       - run: ls ./dist
+      - env:
+          OUTPUT1: ${{ needs.version.outputs.code }}
+        run: echo "$OUTPUT1"
 
       #- name: Create windows installer
       # uses: joncloud/makensis-action@v4
@@ -88,7 +106,7 @@ jobs:
           #path: dist/*.exe
 
   package-macos:
-    needs: [ pyinstaller ]
+    needs: [ pyinstaller, version ]
     runs-on: macos-latest
     env:
       MAC_SCRIPT: "packaging/macos/pkg_macos.sh"
@@ -97,15 +115,19 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build-macos-latest
-          path: ./dist
-      - run: ls
+          path: ./dist/BBSync.app
+
       - run: ls ./dist
 
-          #- name: Import macOS certificate
-          #uses: apple-actions/import-codesign-certs@v2
-          #with:
-          #p12-file-base64: ${{ secrets.BB_P12 }}
-          #p12-password: ${{ secrets.BB_P12_PASSWORD }}
+      - name: Import signing certificate
+        uses: apple-actions/import-codesign-certs@v2
+        with:
+          p12-file-base64: ${{ secrets.BB_P12 }}
+          p12-password: ${{ secrets.BB_P12_PASSWORD }}
+
+      - env:
+          OUTPUT1: ${{ needs.version.outputs.code }}
+        run: echo "$OUTPUT1"
 
           #      - name: Sign and Package into DMG
           #run: |
@@ -114,5 +136,28 @@ jobs:
 
           #- uses: actions/upload-artifact@v4
           #with:
-          #name: ${{ format('{0}-{1}.dmg', env.NAME, github.ref_name) }}
+          #name: ${{ format('{0}.dmg', env.NAME) }}
           #path: dist/*.dmg
+  
+          # gh-release:
+          # if: startsWith(github.ref, 'refs/tags/')
+          # needs: [ package-windows, package-macos, release-notes ]
+          #runs-on: ubuntu-latest
+          # steps:
+          # - uses: actions/download-artifact@v4
+          #  with:
+          #  name: 
+          #      path: ./dist/BlackboardSync.exe
+          #   - uses: actions/download-artifact@v4
+          #    with:
+          #   name: 
+          #   path: ./dist/BlackboardSync.dmg
+#     - uses: softprops/action-gh-release@v1
+#       with:
+#         body: ${{ needs.release-notes.outputs.body }}
+#         prerelease: ${{ env.PRE_RELEASE }}
+#         files: |
+#           dist/*.exe
+#           dist/*.dmg
+
+
