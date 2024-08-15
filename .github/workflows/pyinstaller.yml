@@ -27,16 +27,16 @@ jobs:
       - name: Run PyInstaller
         run: python packaging/pyinst.py
 
-      - name: Upload macos build
+      - name: Compress macOS build
         if: startsWith(inputs.runs-on, 'macos')
-        uses: actions/upload-artifact@v4.3.5
-        with:
-          name: build-macos-latest
-          path: dist/BBSync.app
+        run: tar -czvf build.tar dist/BBSync.app
 
-      - name: Upload windows build
+      - name: Compress windows build
         if: startsWith(inputs.runs-on, 'windows')
+        run: tar -czvf build.tar dist/BBSync
+
+      - name: Upload macos build
         uses: actions/upload-artifact@v4
         with:
-          name: build-windows-latest
-          path: dist/BBSync/**
+          name: ${{ format('build-{1}', inputs.runs-on) }}
+          path: build.tar
