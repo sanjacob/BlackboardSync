@@ -86,7 +86,8 @@ jobs:
     needs: [ pyinstaller, version ]
     runs-on: windows-latest
     env:
-      WIN_SCRIPT: "packaging/windows/pkg_win.nsi"
+      BUILD_SCRIPT: "packaging/windows/pkg_win.nsi"
+      VERSION: ${{ needs.version.outputs.code }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -99,11 +100,13 @@ jobs:
           OUTPUT1: ${{ needs.version.outputs.code }}
         run: echo $env:OUTPUT1
 
-      #- name: Create windows installer
-      # uses: joncloud/makensis-action@v4
-      # with:
-      #   script-file: ${{ env.WIN_SCRIPT }}
-      #   arguments: "/V3 /DVERSION=${{github.ref_name}}"
+      - name: Create windows installer
+        uses: joncloud/makensis-action@v4
+        with:
+          script-file: ${{ env.BUILD_SCRIPT }}
+          arguments: "/V3 /DVERSION=${{ env.VERSION }}"
+
+      - run: ls ./dist
 
           #- uses: actions/upload-artifact@v4
           #with:
@@ -114,7 +117,8 @@ jobs:
     needs: [ pyinstaller, version ]
     runs-on: macos-latest
     env:
-      MAC_SCRIPT: "packaging/macos/pkg_macos.sh"
+      BUILD_SCRIPT: "packaging/macos/pkg_macos.sh"
+      VERSION: ${{ needs.version.outputs.code }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -130,14 +134,13 @@ jobs:
           p12-file-base64: ${{ secrets.BB_P12 }}
           p12-password: ${{ secrets.BB_P12_PASSWORD }}
 
-      - env:
-          OUTPUT1: ${{ needs.version.outputs.code }}
-        run: echo "$OUTPUT1"
+      - name: Sign and Package into DMG
+        run: |
+          chmod +x $BUILD_SCRIPT
+          $BUILD_SCRIPT "blackboard_sync-$VERSION"
 
-          #      - name: Sign and Package into DMG
-          #run: |
-          #chmod +x $MAC_SCRIPT
-          #$MAC_SCRIPT "blackboard_sync-$GITHUB_REF_NAME"
+      - name: Hi there
+        run: ls ./dist
 
           #- uses: actions/upload-artifact@v4
           #with:
@@ -164,5 +167,3 @@ jobs:
 #         files: |
 #           dist/*.exe
 #           dist/*.dmg
-
-
