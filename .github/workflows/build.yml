@@ -177,6 +177,7 @@ jobs:
     runs-on: macos-latest
     env:
       VERSION: ${{ needs.version.outputs.code }}
+      BUILD_SCRIPT: "packaging/macos/pkg_macos.sh"
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -209,8 +210,9 @@ jobs:
 
       - name: Sign and Package into DMG
         run: |
-          chmod +x packaging/macos/pkg_macos.sh
-          packaging/macos/pkg_macos.sh "blackboard_sync-$VERSION"
+          echo $BUILD_SCRIPT
+          chmod +x $BUILD_SCRIPT
+          $BUILD_SCRIPT "blackboard_sync-$VERSION"
 
       - run: ls -la ./dist
 
