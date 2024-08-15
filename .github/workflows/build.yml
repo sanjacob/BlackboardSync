@@ -97,7 +97,7 @@ jobs:
           name: build-windows-latest
           path: ./dist/
       - run: ls ./dist
-      - run: tar -xvf ./dist/build.tar -C ./dist/
+      - run: tar -xvf ./dist/build.tar
       - run: ls ./dist
       - env:
           OUTPUT1: ${{ needs.version.outputs.code }}
@@ -131,7 +131,7 @@ jobs:
 
       - run: ls -la ./dist
 
-      - run: tar -xvf ./dist/build.tar -C ./dist/
+      - run: tar -xvf ./dist/build.tar
 
       - run: ls -la ./dist
 
