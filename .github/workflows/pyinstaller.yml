@@ -27,14 +27,14 @@ jobs:
       - name: Run PyInstaller
         run: python packaging/pyinst.py
 
-      - run: ls -R .
-
-      - run: ls -R dist
-
-      - name: Upload artifact
+      - if: startsWith(inputs.runs-on, 'macos')
         uses: actions/upload-artifact@v4
         with:
-          name: ${{ format('build-{0}', inputs.runs-on) }}
-          path: |
-            dist/BBSync/**
-            dist/BBSync.app
+          name: build-macos-latest
+          path: dist/BBSync.app
+
+      - if: startsWith(inputs.runs-on, 'windows')
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-windows-latest
+          path: dist/BBSync/**
