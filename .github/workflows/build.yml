@@ -96,20 +96,14 @@ jobs:
         with:
           name: build-windows-latest
           path: ./dist/
-      - run: ls ./dist
+
       - run: tar -xvf ./dist/build.tar
-      - run: ls ./dist
-      - env:
-          OUTPUT1: ${{ needs.version.outputs.code }}
-        run: echo $env:OUTPUT1
 
       - name: Create windows installer
         uses: joncloud/makensis-action@v4.1
         with:
           script-file: ${{ env.BUILD_SCRIPT }}
           arguments: "/V3 /DVERSION=${{ env.VERSION }}"
-
-      - run: ls ./dist
 
       - uses: actions/upload-artifact@v4
         with:
@@ -129,11 +123,7 @@ jobs:
           name: build-macos-latest
           path: ./dist/
 
-      - run: ls -la ./dist
-
       - run: tar -xvf ./dist/build.tar
-
-      - run: ls -la ./dist
 
       - name: Import signing certificate
         uses: apple-actions/import-codesign-certs@v3
@@ -146,32 +136,30 @@ jobs:
           chmod +x $BUILD_SCRIPT
           $BUILD_SCRIPT "blackboard_sync-$VERSION"
 
-      - name: Hi there
-        run: ls -la ./dist
-
       - uses: actions/upload-artifact@v4
         with:
           name: package-macos-latest
           path: dist/*.dmg
   
-          #gh-release:
+  gh-release:
     #if: startsWith(github.ref, 'refs/tags/')
-    #needs: [ package-windows, package-macos, release-notes ]
-    #runs-on: ubuntu-latest
-    #env:
-    # RELEASE_NOTES: ${{ needs.release-notes.outputs.body }}
-    #steps:
-    # - uses: actions/download-artifact@v4
-    #   with:
-    #     path: ./dist
-    #     pattern: package-*
-    #     merge-multiple: true
-    # - run: ls -R ./dist
-    # - run: echo "$RELEASE_NOTES"
-#     - uses: softprops/action-gh-release@v1
-#       with:
-#         body: ${{ needs.release-notes.outputs.body }}
-#         prerelease: ${{ env.PRE_RELEASE }}
-#         files: |
-#           dist/*.exe
-#           dist/*.dmg
+    needs: [ package-windows, package-macos, release-notes ]
+    runs-on: ubuntu-latest
+    env:
+      RELEASE_NOTES: ${{ needs.release-notes.outputs.body }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: ./dist
+          pattern: package-*
+          merge-multiple: true
+      - run: ls -R ./dist
+      - run: echo "$RELEASE_NOTES"
+      - uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          body: ${{ env.RELEASE_NOTES }}
+          prerelease: ${{ env.PRE_RELEASE }}
+          files: |
+            dist/*.exe
+            dist/*.dmg
