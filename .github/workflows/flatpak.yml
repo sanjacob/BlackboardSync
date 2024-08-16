@@ -1,0 +1,68 @@
+name: Build Flatpak
+
+on:
+  push:
+    tags:
+      - '*'
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  test:
+    uses: ./.github/workflows/pytest.yml
+    with:
+      python-version: "3.10"
+
+  flatpak:
+    needs: [ test ]
+    runs-on: ubuntu-latest
+    env:
+      MATURIN_REF: v1.2.3
+      SETUPTOOLS_RUST_REF: v1.7.0
+      FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: sanjacob/python-flatpak-generator-action@v1.1
+        with:
+          flatpak-repo: 'sanjacob/app.bbsync.BlackboardSync'
+          flatpak-repo-branch: ${{ env.FLATHUB_BRANCH }}
+          flatpak-repo-secret: ${{ secrets.FLATHUB_PAT }}
+          use-pipfile: true
+          python-version: '3.10.10'
+          maturin-version: ${{ env.MATURIN_REF }}
+          setuptools-rust-version: ${{ env.SETUPTOOLS_RUST_REF }}
+
+      - name: Update other sources manually
+        run: |
+          mkdir my-tools
+          git clone https://gist.github.com/b0ed4ff1be1e4d13ac47e21132b92dbd.git my-tools
+          chmod +x my-tools/*.py
+
+      - name: Update other sources manually
+        run: |
+          ../my-tools/*.py *.yml --update PyO3/maturin $MATURIN_REF --update pydantic/pydantic-core $PYDANTIC_CORE_REF --update sanjacob/BlackboardSync $GITHUB_REF_NAME
+        working-directory: flathub
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flatpak-repo
+          path: ./flathub
+
+        # Deploy to GitHub
+
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+        if: startsWith(github.ref, 'refs/tags/')
+        working-directory: flathub
+
+      - run: |
+          git add .
+          git commit -m "Generated from $GITHUB_REF_NAME"
+          git push origin HEAD
+        if: startsWith(github.ref, 'refs/tags/')
+        working-directory: flathub

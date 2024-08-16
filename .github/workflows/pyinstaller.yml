@@ -1,0 +1,42 @@
+name: Pytest
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        required: true
+        type: string
+      runs-on:
+        required: true
+        type: string
+
+jobs:
+  pyinstaller:
+    runs-on: ${{ inputs.runs-on }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ inputs.python-version }}
+
+      - uses: sanjacob/pipenv-requirements@v1
+        with:
+          from-pipfile: true
+          dev: true
+
+      - name: Run PyInstaller
+        run: python packaging/pyinst.py
+
+      - name: Compress macOS build
+        if: startsWith(inputs.runs-on, 'macos')
+        run: tar -czvf build.tar dist/BBSync.app
+
+      - name: Compress windows build
+        if: startsWith(inputs.runs-on, 'windows')
+        run: tar -czvf build.tar dist/BBSync
+
+      - name: Upload macos build
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ format('build-{0}', inputs.runs-on) }}
+          path: build.tar

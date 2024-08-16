@@ -14,7 +14,8 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
 import sys
 import PyInstaller.__main__
@@ -24,7 +25,7 @@ is_win = sys.platform.startswith('win')
 sep = ';' if is_win else ':'
 
 icon_win = f'packaging/windows/icon.ico'
-icon_mac = f'{src}/assets/icon.png'
+icon_mac = f'{src}/assets/logo.png'
 icon = icon_win if is_win else icon_mac
 
 assets = f'{src}/assets'
