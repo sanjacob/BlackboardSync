@@ -104,7 +104,7 @@ jobs:
         run: echo $env:OUTPUT1
 
       - name: Create windows installer
-        uses: joncloud/makensis-action@v4
+        uses: joncloud/makensis-action@v4.1
         with:
           script-file: ${{ env.BUILD_SCRIPT }}
           arguments: "/V3 /DVERSION=${{ env.VERSION }}"
