@@ -26,7 +26,7 @@ jobs:
       FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
     steps:
       - uses: actions/checkout@v4
-      - uses: sanjacob/python-flatpak-generator-action@v1
+      - uses: sanjacob/python-flatpak-generator-action@v1.1
         with:
           flatpak-repo: 'sanjacob/app.bbsync.BlackboardSync'
           flatpak-repo-branch: ${{ env.FLATHUB_BRANCH }}
