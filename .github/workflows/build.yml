@@ -63,12 +63,17 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VER }}
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install jinja2 GitPython packaging
-      - name: Run something
+
+      - name: Run jinja2
         run: python packaging/replace.py $VERSION
+
+      - run: cp packaging/windows/*.ico replaced
+
       - uses: actions/upload-artifact@v4
         with:
           name: packaging
@@ -116,8 +121,6 @@ jobs:
         with:
           name: packaging
           path: ./packaging
-
-      - run: ls packaging
 
       - uses: actions/download-artifact@v4
         with:
