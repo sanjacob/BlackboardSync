@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2023 Jacob Sanchez -->
+<!-- Copyright {{ copyright }} -->
 <component type="desktop-application">
-  <id>app.bbsync.BlackboardSync</id>
+  <id>{{ package }}</id>
   <metadata_license>FSFAP</metadata_license>
-  <project_license>GPL-2.0</project_license>
+  <project_license>{{ license_spdx }}</project_license>
   <content_rating type="oars-1.1" />
-  <developer_name>Jacob Sánchez</developer_name>
-  <launchable type="desktop-id">app.bbsync.BlackboardSync.desktop</launchable>
-  <name>BlackboardSync</name>
-  <summary>Download your Blackboard Learn content</summary>
+  <developer_name>{{ author }}</developer_name>
+  <launchable type="desktop-id">{{ package }}.desktop</launchable>
+  <name>{{ title }}</name>
+  <summary>{{ summary }}</summary>
   <summary xml:lang="es">Descarga contenido de Blackboard Learn</summary>
 
   <description>
@@ -21,34 +21,29 @@
   <screenshots>
     <screenshot type="default">
       <caption>Blackboard Sync lives in your system tray.</caption>
-      <image type="source">https://bbsync.app/assets/screenshots/BBS_Tray.png</image>
+      <image type="source">{{ homepage }}/assets/screenshots/BBS_Tray.png</image>
     </screenshot>
     <screenshot>
       <caption>Log in to your university or college.</caption>
-      <image type="source">https://bbsync.app/assets/screenshots/BBS_Login.png</image>
+      <image type="source">{{ homepage }}/assets/screenshots/BBS_Login.png</image>
     </screenshot>
     <screenshot>
       <caption>Be notified of downloads when they start.</caption>
-      <image type="source">https://bbsync.app/assets/screenshots/BBS_Notification.png</image>
+      <image type="source">{{ homepage }}/assets/screenshots/BBS_Notification.png</image>
     </screenshot>
   </screenshots>
 
   <releases>
-    <release version="0.11.4" date="2024-04-10">
-      <url>https://github.com/sanjacob/blackboardsync/releases/tag/0.11.4</url>
+		{% for item in releases %}
+    <release version="{{ item.version }}" date="{{ item.date }}">
+      <url>
+        {{ repository }}/releases/tag/{{item.version}}
+      </url>
     </release>
-    <release version="0.11.2" date="2024-03-28">
-      <url>https://github.com/sanjacob/blackboardsync/releases/tag/0.11.2</url>
-    </release>
-    <release version="0.9.11" date="2023-09-25">
-      <url>https://github.com/sanjacob/blackboardsync/releases/tag/0.9.11</url>
-    </release>
-    <release version="0.9.7" date="2023-06-30">
-      <url>https://github.com/sanjacob/blackboardsync/releases/tag/0.9.7</url>
-    </release>
+		{% endfor %}
   </releases>
 
-  <url type="homepage">https://bbsync.app</url>
-  <url type="bugtracker">https://github.com/sanjacob/BlackboardSync/issues/new</url>
-  <url type="donation">https://github.com/sanjacob/BlackboardSync#show-your-support</url>
+  <url type="homepage">{{ repository }}</url>
+  <url type="bugtracker">{{ repository }}/issues</url>
+  <url type="donation">{{ repository }}#show-your-support</url>
 </component>
