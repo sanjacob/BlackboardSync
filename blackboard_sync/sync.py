@@ -28,12 +28,13 @@ from typing import Optional
 from datetime import datetime, timezone, timedelta
 
 from requests.cookies import RequestsCookieJar
-from requests.exceptions import ConnectionError
-from pydantic import ValidationError
 
 from .config import SyncConfig
 from .download import BlackboardDownload
+
 from blackboard.api_extended import BlackboardExtended
+from blackboard.exceptions import BBUnauthorizedError, BBForbiddenError
+
 from .institutions import Institution, get_by_index
 
 logger = logging.getLogger(__name__)
@@ -89,33 +90,32 @@ class BlackboardSync:
         if self._config.last_sync_time is not None:
             self._update_next_sync()
 
+        if self.download_location is not None:
+            self._add_logger_file_handler()
+
     def setup(self, university_index: int, download_location: Path,
               min_year: Optional[int] = None) -> None:
         """Setup the university information."""
         self.university_index = university_index
-        self._config.download_location = download_location
+        self.download_location = download_location
 
         # If min_year has decreased, redownload
         if (self._config.min_year or 0) > (min_year or 0):
-            self.last_sync_time = None
+            self.redownload()
 
         self._config.min_year = min_year
 
     def auth(self, cookie_jar: RequestsCookieJar) -> bool:
-        """Create a new Blackboard session with the given credentials.
-
-        Will start syncing automatically if login successful.
-
-        :param bool persistence: If true, login will be saved in the OS designated keyring.
-        """
+        """Create a new Blackboard session with the given cookies."""
         if self.university is None:
             return False
 
         self._cookies = cookie_jar
+        api_url = str(self.university.api_url)
 
         try:
-            u_sess = BlackboardExtended(str(self.university.api_url), cookies=cookie_jar)
-        except ValueError:
+            u_sess = BlackboardExtended(api_url, cookies=cookie_jar)
+        except (BBUnauthorizedError, BBForbiddenError):
             logger.warning("Credentials are incorrect")
         else:
             logger.info("Logged in successfully")
@@ -149,9 +149,10 @@ class BlackboardSync:
 
                 if user_session is not None and self.university is not None:
                     self._download = BlackboardDownload(user_session,
-                                                        self.download_location / '',
+                                                        self.download_location,
                                                         self.last_sync_time,
                                                         self.min_year)
+
                 try:
                     if not self._is_active:
                         self._download.cancel()
@@ -159,21 +160,10 @@ class BlackboardSync:
                     if job_start_time is not None:
                         self.last_sync_time = job_start_time
                     failed_attempts = 0
-                except ValidationError as e:
-                    self._log_exception(e)
-                    logger.warning("Blackboard API validation failed")
-                    self._has_error = True
-                    self.stop_sync()
-                except ValueError as e:
-                    # Session (probably) expired, log out and attempt to reload config
-                    self._log_exception(e)
-                    logger.warning("User session expired")
+                except BBUnauthorizedError:
+                    logger.exception("User session expired")
                     reload_session = True
                     self.log_out()
-                except ConnectionError as e:
-                    # Random python connection error
-                    self._log_exception(e)
-                    failed_attempts += 1
 
                 # Could not sync
                 if failed_attempts >= self._max_retries:
@@ -206,31 +196,32 @@ class BlackboardSync:
         if self._download is not None:
             self._download.cancel()
 
-    def _log_exception(self, e: Exception) -> None:
-        """Log exception to log file inside sync location."""
-        self._log_dir.mkdir(exist_ok=True, parents=True)
-        exception_log = logging.FileHandler(self._log_path)
-        logger.addHandler(exception_log)
-        logger.exception("Exception in sync thread")
-        logger.removeHandler(exception_log)
+    def _add_logger_file_handler(self) -> None:
+        filename = f"sync_log_{datetime.now():%Y-%m-%d}.log"
+
+        log_dir = Path(self.download_location / self._log_directory)
+        log_dir.mkdir(exist_ok=True, parents=True)
+
+        log_path = Path(log_dir / filename)
+
+        logger = logging.getLogger(__name__)
+
+        file_handler = logging.FileHandler(log_path)
+        file_handler.setLevel(logging.ERROR)
+
+        logger.addHandler(file_handler)
 
     def force_sync(self) -> None:
         """Force Sync thread to start download job ASAP."""
         logger.debug("Forced syncing")
         self._force_sync = True
 
+    def redownload(self) -> None:
+        self.last_sync_time = None
+
     @property
     def username(self) -> Optional[str]:
         return self.sess.user_id if self.sess is not None else None
-
-    @property
-    def _log_path(self) -> Path:
-        filename = f"sync_error_{datetime.now():%Y-%m-%dT%H_%M_%S_%f}.log"
-        return Path(self._log_dir / filename)
-
-    @property
-    def _log_dir(self) -> Path:
-        return Path(self.download_location / self._log_directory)
 
     @property
     def last_sync_time(self) -> Optional[datetime]:
@@ -279,19 +270,11 @@ class BlackboardSync:
         """Location to where all Blackboard content will be downloaded."""
         return self._config.download_location
 
-    def change_download_location(self, new_dir: Path, redownload: bool = False) -> None:
-        """Set new sync location.
-
-        :param Path dir: The path of the sync dir.
-        :param bool redownload: If true, ALL content will be re-downloaded to the new location.
-        """
-        if new_dir != self._config.download_location:
-            # Update configuration
-            self._config.download_location = new_dir
-
-            if redownload:
-                # Unset last sync time to fully download all files in new location
-                self.last_sync_time = None
+    @download_location.setter
+    def download_location(self, value) -> None:
+        if value != self.download_location:
+            self._config.download_location = value
+            self._add_logger_file_handler()
 
     @property
     def sync_interval(self) -> int:
