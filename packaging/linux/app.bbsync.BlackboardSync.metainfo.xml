@@ -34,13 +34,13 @@
   </screenshots>
 
   <releases>
-		{% for item in releases %}
+  {% for item in releases %}
     <release version="{{ item.version }}" date="{{ item.date }}">
       <url>
         {{ repository }}/releases/tag/{{item.version}}
       </url>
     </release>
-		{% endfor %}
+  {% endfor %}
   </releases>
 
   <url type="homepage">{{ repository }}</url>
