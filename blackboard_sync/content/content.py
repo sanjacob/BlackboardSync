@@ -23,6 +23,10 @@ class Content:
                  job: DownloadJob):
 
         logger.info(f"{content.title}[{content.contentHandler}]")
+
+        self.body = None
+        self.handler = None
+
         self.ignore = not Content.should_download(content, job)
 
         if self.ignore:
@@ -31,10 +35,11 @@ class Content:
         Handler = Content.get_handler(content.contentHandler)
 
         self.title = content.title_path_safe
-        self.body = None
 
         try:
             self.handler = Handler(content, api_path, job)
+            if content.body:
+                self.body = body.ContentBody(content, None, job)
         except (BBBadRequestError, BBForbiddenError):
             logger.exception(f"Server error: {content.title}")
         except RequestException:
@@ -42,11 +47,8 @@ class Content:
         except JSONDecodeError:
             logger.exception(f"Parsing error: {content.title}")
 
-        if content.body:
-            self.body = body.ContentBody(content, None, job)
-
     def write(self, path: Path, executor: ThreadPoolExecutor):
-        if self.ignore:
+        if self.ignore or self.handler is None:
             return
 
         # Build nested path with content title
