@@ -109,7 +109,7 @@ class OSUtils:
         plist_path.touch()
 
         # Create the QSettings object
-        settings = QSettings(str(plist_path), QSettings.NativeFormat)
+        settings = QSettings(str(plist_path), QSettings.Format.NativeFormat)
 
         # Set the launch agent properties
         settings.setValue('Label', 'app.bbsync.BBSync')
