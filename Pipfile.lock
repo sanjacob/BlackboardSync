@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "98202c6261f4dc77aa7f18b5acd23a94f9f93b7c1636350aa5abf1825b595c96"
+            "sha256": "8de9eba4a0e74d6a1f69015a6e0460ab2667894a950dc1c63b4cbff58dc21086"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -34,12 +34,12 @@
         },
         "bblearn": {
             "hashes": [
-                "sha256:b933a95f34cab175415e82740e2c42b48e2ffd29fd20e36917bd4c75e3518c3f",
-                "sha256:f40fa71b181cd88163af43139e4f8ba7488aeaae3ebabe331523d5bdba55c902"
+                "sha256:354d7b8ae301be5007c0e54151e6bdd44bceb1e1dd7c3a8d185ff1eb8ada169a",
+                "sha256:9b028c3c06a2dc0e65a2acfdc0742a837e81ea5068a2606ca322e02e5b0a338a"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.10'",
-            "version": "==0.3.2"
+            "version": "==0.3.3"
         },
         "beautifulsoup4": {
             "hashes": [
