@@ -314,16 +314,16 @@ class RedownloadDialog(QMessageBox):
     def _init_ui(self) -> None:
         self.setText(self._dialog_text)
         self.setInformativeText(self._info_text)
-        self.setStandardButtons(QMessageBox.Yes | QMessageBox.No)
-        self.setDefaultButton(QMessageBox.No)
+        self.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        self.setDefaultButton(QMessageBox.StandardButton.No)
         self.setWindowTitle(self._window_title)
-        self.setIcon(QMessageBox.Question)
+        self.setIcon(QMessageBox.Icon.Question)
         self.setWindowIcon(Assets.icon())
 
     @property
     def redownload(self) -> bool:
         """Indicate if files have to be redownloaded."""
-        return self.exec() == QMessageBox.Yes
+        return self.exec() == QMessageBox.StandardButton.Yes
 
 
 class UpdateFoundDialog(QMessageBox):
@@ -341,16 +341,16 @@ class UpdateFoundDialog(QMessageBox):
     def _init_ui(self) -> None:
         self.setText(self._dialog_text)
         self.setInformativeText(self._info_text)
-        self.setStandardButtons(QMessageBox.Open | QMessageBox.Cancel)
-        self.setDefaultButton(QMessageBox.Open)
+        self.setStandardButtons(QMessageBox.StandardButton.Open | QMessageBox.StandardButton.Cancel)
+        self.setDefaultButton(QMessageBox.StandardButton.Open)
         self.setWindowTitle(self._window_title)
-        self.setIcon(QMessageBox.Information)
+        self.setIcon(QMessageBox.Icon.Information)
         self.setWindowIcon(Assets.icon())
 
     @property
     def should_update(self) -> bool:
         """Indicate if BBSync should be updated."""
-        return self.exec() == QMessageBox.Open
+        return self.exec() == QMessageBox.StandardButton.Open
 
 
 class SettingsWindow(QWidget):

@@ -1,6 +1,7 @@
 import logging
 from pathlib import Path
 from json import JSONDecodeError
+from pydantic import ValidationError
 from requests import RequestException
 from concurrent.futures import ThreadPoolExecutor
 

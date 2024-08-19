@@ -190,7 +190,10 @@ class BBSyncController:
 
         if self.model.download_location != self.config_window.download_location:
             redownload = RedownloadDialog().redownload
-            self.model.change_download_location(self.config_window.download_location, redownload)
+            self.model.download_location = self.config_window.download_location
+
+            if redownload:
+                self.model.redownload()
 
         self.model.sync_interval = self.config_window.sync_frequency
 
