@@ -6,6 +6,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBCourseContent, BBResourceType
+from blackboard.exceptions import BBBadRequestError, BBForbiddenError
 
 from . import folder, document, externallink, body, unhandled
 
@@ -34,8 +35,12 @@ class Content:
 
         try:
             self.handler = Handler(content, api_path, job)
-        except (RequestException, JSONDecodeError):
-            logger.exception(f"Error while preparing {child_path}")
+        except (BBBadRequestError, BBForbiddenError):
+            logger.exception(f"Server error: {child_path}")
+        except RequestException:
+            logger.exception(f"Network error: {child_path}")
+        except JSONDecodeError:
+            logger.exception(f"Parsing error: {child_path}")
 
         if content.body:
             self.body = body.ContentBody(content, None, job)
