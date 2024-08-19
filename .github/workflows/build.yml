@@ -53,6 +53,34 @@ jobs:
         with:
           prerelease: ${{ env.PRE_RELEASE }}
 
+  package-prep:
+    needs: [ version ]
+    runs-on: ubuntu-latest
+    env:
+      VERSION: ${{ needs.version.outputs.code }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VER }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install jinja2 GitPython packaging
+
+      - name: Run jinja2
+        run: python packaging/replace.py $VERSION
+
+      - run: cp LICENSE replaced
+
+      - run: cp packaging/windows/*.ico replaced
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: packaging
+          path: replaced/
+
   pypi:
     needs: [ test ]
     runs-on: ubuntu-latest
@@ -85,13 +113,17 @@ jobs:
       runs-on: ${{ matrix.os }}
 
   package-windows:
-    needs: [ pyinstaller, version ]
+    needs: [ pyinstaller, version, package-prep ]
     runs-on: windows-latest
     env:
-      BUILD_SCRIPT: "packaging/windows/pkg_win.nsi"
+      BUILD_SCRIPT: "packaging/pkg_win.nsi"
       VERSION: ${{ needs.version.outputs.code }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: packaging
+          path: ./packaging
+
       - uses: actions/download-artifact@v4
         with:
           name: build-windows-latest
@@ -111,13 +143,17 @@ jobs:
           path: dist/*.exe
 
   package-macos:
-    needs: [ pyinstaller, version ]
+    needs: [ pyinstaller, version, package-prep ]
     runs-on: macos-latest
     env:
-      BUILD_SCRIPT: "packaging/macos/pkg_macos.sh"
+      BUILD_SCRIPT: "packaging/pkg_macos.sh"
       VERSION: ${{ needs.version.outputs.code }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: packaging
+          path: ./packaging
+
       - uses: actions/download-artifact@v4
         with:
           name: build-macos-latest

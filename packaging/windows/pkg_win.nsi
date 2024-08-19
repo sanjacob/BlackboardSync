@@ -1,30 +1,30 @@
 # NSIS BlackboardSync Installer
-# By Jacob S.P. <jacobszpz@pm.me>
+# Copyright {{ copyright }}
 
 # Include Modern UI
 !include "MUI2.nsh"
 
 # Installer File and Name
-Name "Blackboard Sync"
-Outfile "..\..\dist\BlackboardSync-${VERSION}.exe"
+Name "{{ title }}"
+Outfile "..\dist\{{ title }}-${VERSION}.exe"
 Unicode True
 
 # Installation Dir
-InstallDir "$APPDATA\Blackboard Sync"
-InstallDirRegKey HKCU "Software\BlackboardSync" "InstallDir"
+InstallDir "$APPDATA\{{ title }}"
+InstallDirRegKey HKCU "Software\{{ title }}" "InstallDir"
 # Request Privileges
 RequestExecutionLevel user
 
 # MUI Settings
 !define MUI_LICENSEPAGE_TEXT_BOTTOM "You are now aware of your rights. Click next to continue."
 !define MUI_LICENSEPAGE_BUTTON "Next"
-!define MUI_FINISHPAGE_LINK "https://bbsync.app"
+!define MUI_FINISHPAGE_LINK "{{ homepage }}"
 !define MUI_ICON ".\icon.ico"
 !define MUI_UNICON ".\icon.ico"
 
 # Installer Pages
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE "..\..\LICENSE"
+!insertmacro MUI_PAGE_LICENSE ".\LICENSE"
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 
@@ -39,31 +39,31 @@ RequestExecutionLevel user
 
 # Uninstall Settings
 !define AUTORUN_REGKEY "Software\Microsoft\Windows\CurrentVersion\Run"
-!define UNINSTALL_REGKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\BlackboardSync"
+!define UNINSTALL_REGKEY '"Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ title }}"'
 
 
 # default section start; every NSIS script has at least one section.
 Section "Installation" SecInstall
     SetOutPath "$INSTDIR"
-    File /r "..\..\dist\BBSync\*"
+    File /r "..\dist\BBSync\*"
 
     ; Install Directory
-    WriteRegStr HKCU "Software\BlackboardSync" "InstallDir" $INSTDIR
+    WriteRegStr HKCU '"Software\{{ title }}"' "InstallDir" $INSTDIR
 
     ; Run on Startup
-    WriteRegStr HKCU ${AUTORUN_REGKEY} "BlackboardSync" '"$INSTDIR\BBSync.exe"'
+    WriteRegStr HKCU ${AUTORUN_REGKEY} "{{ title }}" '"$INSTDIR\BBSync.exe"'
 
     ; Shortcut
-    CreateDirectory "$SMPROGRAMS\BBSync"
-    CreateShortCut "$SMPROGRAMS\BBSync\Blackboard Sync.lnk" "$INSTDIR\BBSync.exe"
+    CreateDirectory "$SMPROGRAMS\{{ title }}"
+    CreateShortCut "$SMPROGRAMS\{{ title }}\{{ title }}.lnk" "$INSTDIR\BBSync.exe"
 
     ; Uninstall Menu
-    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayName" "Blackboard Sync"
+    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayName" "{{ title }}"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "UninstallString" "$INSTDIR\Uninstall.exe"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "InstallLocation" $INSTDIR
-	WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayIcon" "$INSTDIR\blackboard_sync\assets\logo.ico"
-	WriteRegStr HKCU ${UNINSTALL_REGKEY} "Publisher" "BBSync"
-	WriteRegStr HKCU ${UNINSTALL_REGKEY} "HelpLink" "https://github.com/sanjacob/BlackboardSync"
+    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayIcon" "$INSTDIR\blackboard_sync\assets\logo.ico"
+    WriteRegStr HKCU ${UNINSTALL_REGKEY} "Publisher" "{{ publisher }}"
+    WriteRegStr HKCU ${UNINSTALL_REGKEY} "HelpLink" "{{ repository }}"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayVersion" ${VERSION}
 
     WriteUninstaller "$INSTDIR\Uninstall.exe"
@@ -77,14 +77,14 @@ Section "Uninstall"
   RMDir /r $INSTDIR
 
   ; Run on Startup
-  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Run\BlackboardSync"
+  DeleteRegKey HKCU '"${AUTORUN_REGKEY}\{{ title }}"'
 
   ; Install Directory
-  DeleteRegKey HKCU "Software\BlackboardSync"
+  DeleteRegKey HKCU '"Software\{{ title }}"'
 
   ; Uninstall Menu Entry
   DeleteRegKey HKLM ${UNINSTALL_REGKEY}
 
   ; Delete Shortcut
-  RMDir /r "$SMPROGRAMS\BBSync"
+  RMDir /r "$SMPROGRAMS\{{ title }}"
 SectionEnd

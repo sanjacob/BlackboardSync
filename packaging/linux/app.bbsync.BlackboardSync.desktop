@@ -1,7 +1,7 @@
 [Desktop Entry]
 Type=Application
-Name=Blackboard Sync
-Comment=Download your Blackboard Learn content to your device
+Name={{ title }}
+Comment={{ summary }}
 Exec=blackboardsync
-Icon=app.bbsync.BlackboardSync
+Icon={{ package }}
 Categories=Education;Network;
