@@ -112,10 +112,6 @@ jobs:
       BUILD_SCRIPT: "packaging/pkg_win.nsi"
       VERSION: ${{ needs.version.outputs.code }}
     steps:
-      - uses: actions/checkout@v4
-      - run: Remove-Item packaging -Recurse -Force
-      - run: ls
-
       - uses: actions/download-artifact@v4
         with:
           name: packaging
@@ -148,9 +144,6 @@ jobs:
       BUILD_SCRIPT: "packaging/pkg_macos.sh"
       VERSION: ${{ needs.version.outputs.code }}
     steps:
-      - uses: actions/checkout@v4
-      - run: rm -rf packaging
-
       - uses: actions/download-artifact@v4
         with:
           name: packaging
