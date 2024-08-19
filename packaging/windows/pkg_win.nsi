@@ -6,7 +6,7 @@
 
 # Installer File and Name
 Name "{{ title }}"
-Outfile "..\..\dist\{{ title }}-${VERSION}.exe"
+Outfile "..\dist\{{ title }}-${VERSION}.exe"
 Unicode True
 
 # Installation Dir
@@ -45,7 +45,7 @@ RequestExecutionLevel user
 # default section start; every NSIS script has at least one section.
 Section "Installation" SecInstall
     SetOutPath "$INSTDIR"
-    File /r "..\..\dist\BBSync\*"
+    File /r "..\dist\BBSync\*"
 
     ; Install Directory
     WriteRegStr HKCU "Software\{{ title }}" "InstallDir" $INSTDIR
