@@ -36,11 +36,11 @@ class Content:
         try:
             self.handler = Handler(content, api_path, job)
         except (BBBadRequestError, BBForbiddenError):
-            logger.exception(f"Server error: {child_path}")
+            logger.exception(f"Server error: {content.title}")
         except RequestException:
-            logger.exception(f"Network error: {child_path}")
+            logger.exception(f"Network error: {content.title}")
         except JSONDecodeError:
-            logger.exception(f"Parsing error: {child_path}")
+            logger.exception(f"Parsing error: {content.title}")
 
         if content.body:
             self.body = body.ContentBody(content, None, job)
