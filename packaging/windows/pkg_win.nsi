@@ -39,7 +39,7 @@ RequestExecutionLevel user
 
 # Uninstall Settings
 !define AUTORUN_REGKEY "Software\Microsoft\Windows\CurrentVersion\Run"
-!define UNINSTALL_REGKEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ title }}"
+!define UNINSTALL_REGKEY '"Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ title }}"'
 
 
 # default section start; every NSIS script has at least one section.
@@ -48,7 +48,7 @@ Section "Installation" SecInstall
     File /r "..\dist\BBSync\*"
 
     ; Install Directory
-    WriteRegStr HKCU "Software\{{ title }}" "InstallDir" $INSTDIR
+    WriteRegStr HKCU '"Software\{{ title }}"' "InstallDir" $INSTDIR
 
     ; Run on Startup
     WriteRegStr HKCU ${AUTORUN_REGKEY} "{{ title }}" '"$INSTDIR\BBSync.exe"'
@@ -77,10 +77,10 @@ Section "Uninstall"
   RMDir /r $INSTDIR
 
   ; Run on Startup
-  DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Run\{{ title }}"
+  DeleteRegKey HKCU '"${AUTORUN_REGKEY}\{{ title }}"'
 
   ; Install Directory
-  DeleteRegKey HKCU "Software\{{ title }}"
+  DeleteRegKey HKCU '"Software\{{ title }}"'
 
   ; Uninstall Menu Entry
   DeleteRegKey HKLM ${UNINSTALL_REGKEY}
