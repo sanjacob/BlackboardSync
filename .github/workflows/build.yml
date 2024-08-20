@@ -293,9 +293,11 @@ jobs:
       - name: Set env path
         run: echo $env:KIT_PATH >> $env:GITHUB_PATH
 
-      - run: MakeAppx.exe build /f packaging\PackagingLayout.xml /op dist\
+      - run: MakeAppx.exe build /f PackagingLayout.xml /op ..\dist\
+        working-directory: packaging
+
       - run: ls dist
-  
+
   gh-release:
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ package-windows, package-macos, release-notes ]
