@@ -278,7 +278,7 @@ jobs:
     runs-on: windows-latest
     env:
       VERSION: ${{ needs.version.outputs.code }}
-      KIT_PATH: 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit\'
+      KIT_PATH: 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit'
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -290,8 +290,8 @@ jobs:
           name: build-windows-latest
           path: ./dist/
 
-      - name: Set environment
-        run: Add-Content $env:GITHUB_PATH $env:KIT_PATH
+      - name: Set env path
+        run: echo $env:KIT_PATH >> $env:GITHUB_PATH
 
       - run: MakeAppx.exe build /f packaging\PackagingLayout.xml /op dist\
       - run: ls dist
