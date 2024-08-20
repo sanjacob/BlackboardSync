@@ -73,10 +73,12 @@ jobs:
       - name: Run jinja2
         run: python packaging/replace.py $VERSION
 
-      - run: cp LICENSE replaced
-
-      - run: cp packaging/windows/*.ico replaced
-      - run: cp packaging/linux/icon.svg replaced
+      - name: Copy icons and license
+        run: |
+          cp LICENSE replaced
+          cp packaging/windows/*.ico replaced
+          cp packaging/windows/*.png replaced
+          cp packaging/linux/icon.svg replaced
 
       - uses: actions/upload-artifact@v4
         with:
@@ -271,6 +273,25 @@ jobs:
           name: ${{ format('package-{0}', matrix.os) }}
           path: dist/*.dmg
 
+  package-windows-msix:
+    needs: [ pyinstaller, version, package-prep ]
+    runs-on: windows-latest
+    env:
+      VERSION: ${{ needs.version.outputs.code }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: packaging
+          path: ./packaging
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-windows-latest
+          path: ./dist/
+
+      - run: MakeAppx.exe build /f packaging\PackagingLayout.xml /op dist\
+      - run: ls dist
+  
   gh-release:
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ package-windows, package-macos, release-notes ]

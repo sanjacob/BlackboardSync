@@ -45,6 +45,10 @@ def main(argv: list[str]) -> int:
     __version__ = argv[1]
 
     template_files = [
+        # Windows (MSIX)
+        "AppXManifest.xml",
+        "PackagingLayout.xml",
+
         # Windows
         "pkg_win.nsi",
 
