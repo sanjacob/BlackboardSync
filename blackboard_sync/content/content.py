@@ -39,28 +39,32 @@ class Content:
 
         try:
             self.handler = Handler(content, api_path, job)
+        except (ValidationError, JSONDecodeError,
+                BBBadRequestError, BBForbiddenError, RequestException):
+            logger.exception(f"Error fetching {content.title}")
+
+        try:
             if content.body:
                 self.body = body.ContentBody(content, None, job)
-        except (BBBadRequestError, BBForbiddenError):
-            logger.exception(f"Server error: {content.title}")
-        except RequestException:
-            logger.exception(f"Network error: {content.title}")
-        except JSONDecodeError:
-            logger.exception(f"Parsing error: {content.title}")
+        except (ValidationError, JSONDecodeError,
+                BBBadRequestError, BBForbiddenError, RequestException):
+            logger.warning(f"Error fetching body of {content.title}")
 
     def write(self, path: Path, executor: ThreadPoolExecutor):
-        if self.ignore or self.handler is None:
+        if self.ignore:
             return
 
         # Build nested path with content title
         path = path / self.title
 
-        if self.handler.create_dir or self.body:
-            path.mkdir(exist_ok=True, parents=True)
+        if self.handler is not None:
+            if self.handler.create_dir:
+                path.mkdir(exist_ok=True, parents=True)
 
-        self.handler.write(path, executor)
+            self.handler.write(path, executor)
 
         if self.body is not None:
+            path.mkdir(exist_ok=True, parents=True)
             self.body.write(path, executor)
 
     @staticmethod
