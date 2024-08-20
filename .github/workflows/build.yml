@@ -290,10 +290,13 @@ jobs:
           name: build-windows-latest
           path: ./dist/
 
-      - name: Set env path
+      - run: tar -xvf ./dist/build.tar
+
+      - name: Add App Certification Kit to path
         run: echo $env:KIT_PATH >> $env:GITHUB_PATH
 
-      - run: MakeAppx.exe build /f PackagingLayout.xml /op ..\dist\
+      - name: Build .msix package
+        run: MakeAppx.exe build /f PackagingLayout.xml /op ..\dist\
         working-directory: packaging
 
       - run: ls dist
