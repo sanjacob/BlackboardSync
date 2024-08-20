@@ -75,7 +75,7 @@ class Content:
     @staticmethod
     def get_handler(content_handler):
         match content_handler:
-            case BBResourceType.Folder:
+            case BBResourceType.Folder | BBResourceType.Lesson:
                 return folder.Folder
             case BBResourceType.File | BBResourceType.Document:
                 return document.Document
