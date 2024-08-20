@@ -214,6 +214,6 @@ def test_content_unhandled(api_path: BBContentPath):
 def test_unhandled():
     executor = mock.Mock()
 
-    content = Unhandled(None, None, mock.Mock())
+    content = Unhandled(mock.Mock(title="Content title"), None, mock.Mock())
     content.write(None, executor)
     executor.submit.assert_not_called()
