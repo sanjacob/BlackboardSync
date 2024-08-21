@@ -199,12 +199,12 @@ class BlackboardSync:
     def _add_logger_file_handler(self) -> None:
         filename = f"sync_log_{datetime.now():%Y-%m-%d}.log"
 
-        log_dir = Path(self.download_location / self._log_directory)
-        log_dir.mkdir(exist_ok=True, parents=True)
+        #log_dir = Path(self.download_location / self._log_directory)
+        #log_dir.mkdir(exist_ok=True, parents=True)
 
-        log_path = Path(log_dir / filename)
+        #log_path = Path(log_dir / filename)
 
-        logger = logging.getLogger(__name__)
+        #logger = logging.getLogger(__name__)
 
         #file_handler = logging.FileHandler(log_path)
         #file_handler.setLevel(logging.ERROR)
