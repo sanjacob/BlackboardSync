@@ -83,5 +83,9 @@ class WebDavFile(BStream):
 
     def write(self, path: Path, executor: ThreadPoolExecutor):
         if self.valid:
-            path = Path(path, self.title).with_suffix(self.extension)
+            path = Path(path, self.title)
+
+            if self.extension:
+                path = path.with_suffix(self.extension)
+
             super().write(path, self.stream, executor)
