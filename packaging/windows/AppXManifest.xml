@@ -29,15 +29,15 @@
 
   <Capabilities>
     <Capability Name="internetClient" />
-    <rescap:Capability Name="broadFileSystemAccess" />
+    <rescap:Capability Name="runFullTrust" />
   </Capabilities>
 
   <Applications>
     <Application Id="{{ package }}"
       Executable="BBSync.exe"
-      EntryPoint="Windows.PartialTrustApplication"
+      EntryPoint="Windows.FullTrustApplication"
       uap10:RuntimeBehavior="packagedClassicApp"
-      uap10:TrustLevel="appContainer">
+      uap10:TrustLevel="mediumIL">
 
       <uap:VisualElements
         DisplayName="{{ title }}"
