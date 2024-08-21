@@ -28,7 +28,8 @@
   </Dependencies>
 
   <Capabilities>
-    <Capability Name="internetClient"/>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="broadFileSystemAccess" />
   </Capabilities>
 
   <Applications>
