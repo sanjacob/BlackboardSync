@@ -206,10 +206,10 @@ class BlackboardSync:
 
         logger = logging.getLogger(__name__)
 
-        file_handler = logging.FileHandler(log_path)
-        file_handler.setLevel(logging.ERROR)
+        #file_handler = logging.FileHandler(log_path)
+        #file_handler.setLevel(logging.ERROR)
 
-        logger.addHandler(file_handler)
+        #logger.addHandler(file_handler)
 
     def force_sync(self) -> None:
         """Force Sync thread to start download job ASAP."""

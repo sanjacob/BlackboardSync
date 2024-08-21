@@ -28,15 +28,15 @@
   </Dependencies>
 
 	<Capabilities>
-    <rescap:Capability Name="runFullTrust"/>
+    <Capability Name="internetClient"/>
   </Capabilities>
 
 	<Applications>
     <Application Id="{{ package }}"
       Executable="BBSync.exe"
-			EntryPoint="Windows.FullTrustApplication"
+      EntryPoint="Windows.PartialTrustApplication"
       uap10:RuntimeBehavior="packagedClassicApp"
-      uap10:TrustLevel="mediumIL">
+      uap10:TrustLevel="appContainer">
 
 			<uap:VisualElements
 				DisplayName="{{ title }}"
@@ -44,7 +44,6 @@
 				Square150x150Logo="Icons\icon-150.png"
 				Square44x44Logo="Icons\icon-44.png"
 				BackgroundColor="transparent" />
-
     </Application>
   </Applications>
 </Package>
