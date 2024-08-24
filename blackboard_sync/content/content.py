@@ -53,21 +53,21 @@ class Content:
 
 
     def write(self, path: Path, executor: ThreadPoolExecutor):
-            if self.ignore and not self.is_ultra_document_body:
-                return
+        if self.ignore and not self.is_ultra_document_body:
+            return
 
-            # Build nested path with content title
-            path = path / self.title if not self.is_ultra_document_body else path
+        # Build nested path with content title
+        path = path / self.title if not self.is_ultra_document_body else path
 
-            if self.handler is not None:
-                if self.handler.create_dir:
-                    path.mkdir(exist_ok=True, parents=True)
-
-                self.handler.write(path, executor)
-
-            if self.body is not None:
+        if self.handler is not None:
+            if self.handler.create_dir:
                 path.mkdir(exist_ok=True, parents=True)
-                self.body.write(path, executor)
+
+            self.handler.write(path, executor)
+
+        if self.body is not None:
+            path.mkdir(exist_ok=True, parents=True)
+            self.body.write(path, executor)
 
     @staticmethod
     def should_download(content: BBCourseContent, job: DownloadJob):
