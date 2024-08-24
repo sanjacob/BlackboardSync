@@ -29,6 +29,15 @@ class Content:
         self.handler = None
 
         self.ignore = not Content.should_download(content, job)
+        self.is_ultra_document_body = content.title == "ultraDocumentBody"
+
+
+        try:
+            if content.body:
+                self.body = body.ContentBody(content, None, job)
+        except (ValidationError, JSONDecodeError,
+                BBBadRequestError, BBForbiddenError, RequestException):
+            logger.warning(f"Error fetching body of {content.title}")
 
         if self.ignore:
             return
@@ -43,19 +52,12 @@ class Content:
                 BBBadRequestError, BBForbiddenError, RequestException):
             logger.exception(f"Error fetching {content.title}")
 
-        try:
-            if content.body:
-                self.body = body.ContentBody(content, None, job)
-        except (ValidationError, JSONDecodeError,
-                BBBadRequestError, BBForbiddenError, RequestException):
-            logger.warning(f"Error fetching body of {content.title}")
-
     def write(self, path: Path, executor: ThreadPoolExecutor):
-        if self.ignore:
+        if self.ignore and not self.is_ultra_document_body:
             return
 
         # Build nested path with content title
-        path = path / self.title
+        path = path / self.title if not self.is_ultra_document_body else path
 
         if self.handler is not None:
             if self.handler.create_dir:
