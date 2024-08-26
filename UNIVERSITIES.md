@@ -30,7 +30,7 @@ In summary, the following information is needed:
 
 Please create an issue using [the following form][support-issue]. You will need a GitHub account to do so.
 
-If you'd rather not create one, feel free to reach me at bbsync@san.contact with these details.
+If you'd rather not create one, feel free to reach me at request@bbsync.app with these details.
 
 
 ## Supported Universities
