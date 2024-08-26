@@ -174,4 +174,4 @@ This, however, is yet to be implemented, and I would like to know your thoughts 
 
 > Visit http://ip-api.com/json?fields=org,isp from an IP belonging to the institution and record those values.
 
-[support-issue]: https://github.com/sanjacob/BlackboardSync/issues/new?assignees=sanjacob&labels=uni-support&projects=&template=unisupport.yml&title=%5BUniversity+Support%5D%3A+
+[support-issue]: https://github.com/sanjacob/BlackboardSync/issues/new?assignees=sanjacob&labels=uni-new&projects=&template=uninew.yml&title=%5BNew+University%5D%3A+
