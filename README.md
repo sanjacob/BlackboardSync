@@ -54,15 +54,21 @@ Simply put, some information is necessary to make the login process compatible w
 
 ## Installation
 
+#### Microsoft Store
+
+<a href="https://apps.microsoft.com/detail/9NSXZGKPNX2H?cid=github-readme&mode=mini">
+	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
+</a>
+
+#### Flathub
+
+<a href="https://flathub.org/apps/app.bbsync.BlackboardSync">
+  <img alt="Download on Flathub" src="https://flathub.org/api/badge?svg&locale=en" width="200"/>
+</a>
+
 #### Windows (.exe) and MacOS (.dmg)
 
 Please first download the [latest release][stable].
-
-
-
-**Windows Installation**
-
-You will first need to get around Microsoft SmartScreen by clicking in `More Details > Run Anyway`.
 
 **MacOS Installation**
 
@@ -72,17 +78,6 @@ You can see the specific steps in the GIF below. After the program has been inst
 ![MacOSInstall][MacOSInstall]
 
 
-
-#### Linux via Flatpak
-
-<a href='https://flathub.org/apps/app.bbsync.BlackboardSync'><img width='240' alt='Download on Flathub' src='https://dl.flathub.org/assets/badges/flathub-badge-en.png'/></a>
-
-
-
-Help in creating additional distributions is always welcome.
-
-
-
 #### PyPI
 
 ```bash
@@ -90,7 +85,6 @@ python3 -m pip install blackboardsync
 python3 -m blackboard_sync # notice the underscore (0.9.11 and below)
 blackboardsync # from 0.9.12 onwards
 ```
-
 
 
 #### From source
@@ -103,7 +97,6 @@ cd BlackboardSync
 pipenv install
 pipenv run python -m blackboard_sync
 ```
-
 
 
 #### Previous Releases
@@ -166,7 +159,6 @@ README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], a
 Flathub team for their quick work in approving the app :heart:
 
 
-
 <!-- LINK REFERENCES -->
 
 [universal-login]: https://github.com/sanjacob/BlackboardSync/issues/3	"BBSync login"
@@ -184,13 +176,10 @@ Flathub team for their quick work in approving the app :heart:
 [pyinstaller]: https://www.pyinstaller.org/	"PyInstaller"
 
 
-
 <!-- RELEASES -->
 
 [releases]: https://github.com/sanjacob/BlackboardSync/releases/
 [stable]: https://github.com/sanjacob/BlackboardSync/releases/latest
-
-
 
 
 <!-- README TEMPLATES -->
@@ -198,7 +187,6 @@ Flathub team for their quick work in approving the app :heart:
 [tonycrosby]: https://gist.github.com/tonycrosby-tech/c18c2b6c74900c6080fc097ca0718839	"tonycrosby-tech README template"
 [neildrew]: https://github.com/othneildrew/Best-README-Template	"othneildrew README template"
 [bulldogjob]: https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project	"bulldogjob README guide"
-
 
 
 <!-- SHIELDS -->
@@ -210,13 +198,11 @@ Flathub team for their quick work in approving the app :heart:
 [lp-shield]: https://img.shields.io/liberapay/receives/BlackboardSync.svg?logo=liberapay
 
 
-
 <!-- SHIELD LINKS -->
 
 [actions]: https://github.com/sanjacob/BlackboardSync/actions
 [kofi]: https://ko-fi.com/Q5Q17XN36
 [liberapay]: https://liberapay.com/BlackboardSync
-
 
 
 <!-- GIFS -->
