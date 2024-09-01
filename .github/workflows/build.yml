@@ -81,6 +81,34 @@ jobs:
           name: packaging
           path: replaced/
 
+  package-metadata:
+    needs: [ package-prep ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone metadata repository
+        uses: actions/checkout@v4
+        with:
+          repository: "sanjacob/app.bbsync.BlackboardSync.metadata"
+          ref: "master"
+          path: metadata
+          token: ${{ secrets.METADATA_PAT }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: packaging
+          path: metadata
+
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+        working-directory: replaced
+
+      - run: |
+          git add .
+          git commit -m "Generated from $GITHUB_REF_NAME"
+          git push origin HEAD
+        working-directory: replaced
+
   pypi:
     needs: [ test ]
     runs-on: ubuntu-latest
