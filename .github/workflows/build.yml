@@ -119,6 +119,7 @@ jobs:
         run: |
           git tag $GITHUB_REF_NAME
           git push --tags
+        working-directory: metadata
 
   pypi:
     needs: [ test ]
