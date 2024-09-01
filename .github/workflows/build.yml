@@ -299,6 +299,17 @@ jobs:
         run: MakeAppx.exe build /f PackagingLayout.xml /op ..\dist\
         working-directory: packaging
 
+      - name: Setup Microsoft Store Developer CLI
+        uses: microsoft/setup-msstore-cli@v1
+
+      - name: Configure Microsoft Store Developer CLI
+        run: >
+          msstore reconfigure
+          --tenantId ${{ secrets.MS_TENANT_ID }}
+          --sellerId ${{ secrets.MS_SELLER_ID }}
+          --clientId ${{ secrets.MS_CLIENT_ID }}
+          --clientSecret ${{ secrets.MS_CLIENT_SECRET }}
+
       - uses: actions/upload-artifact@v4
         with:
           name: package-windows-latest-msix
