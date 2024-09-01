@@ -15,7 +15,7 @@ pydantic = "==2.9.0b2"
 pyqt6-webengine = "==6.7.0"
 packaging = "==24.1"
 beautifulsoup4 = "==4.12.3"
-bblearn = ">=0.3.3"
+bblearn = ">=0.3.4.post0"
 
 [dev-packages]
 coverage = "*"
