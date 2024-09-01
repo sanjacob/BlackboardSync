@@ -110,8 +110,7 @@ jobs:
 
       - run: |
           git add .
-          git commit -m "Generated from $GITHUB_REF_NAME"
-          git push origin HEAD
+          git commit -m "Generated from $GITHUB_REF_NAME" && git push origin HEAD || true
         working-directory: metadata
 
       - name: Create repository tag
