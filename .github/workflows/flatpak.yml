@@ -36,6 +36,10 @@ jobs:
           maturin-version: ${{ env.MATURIN_REF }}
           setuptools-rust-version: ${{ env.SETUPTOOLS_RUST_REF }}
 
+      - run: |
+          ls
+          cat requirements.txt
+
       - name: Update other sources manually
         run: |
           mkdir my-tools
