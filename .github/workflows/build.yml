@@ -60,6 +60,10 @@ jobs:
       VERSION: ${{ needs.version.outputs.code }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VER }}
@@ -80,6 +84,40 @@ jobs:
         with:
           name: packaging
           path: replaced/
+
+  package-metadata:
+    needs: [ package-prep ]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone metadata repository
+        uses: actions/checkout@v4
+        with:
+          repository: "sanjacob/app.bbsync.BlackboardSync.metadata"
+          ref: "master"
+          path: metadata
+          token: ${{ secrets.METADATA_PAT }}
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: packaging
+          path: metadata
+
+      - run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+        working-directory: metadata
+
+      - run: |
+          git add .
+          git commit -m "Generated from $GITHUB_REF_NAME"
+          git push origin HEAD
+        working-directory: metadata
+
+      - name: Create repository tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          git tag $GITHUB_REF_NAME
+          git push --tags
 
   pypi:
     needs: [ test ]
