@@ -60,6 +60,10 @@ jobs:
       VERSION: ${{ needs.version.outputs.code }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VER }}
@@ -108,6 +112,12 @@ jobs:
           git commit -m "Generated from $GITHUB_REF_NAME"
           git push origin HEAD
         working-directory: metadata
+
+      - name: Create repository tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          git tag $GITHUB_REF_NAME
+          git push --tags
 
   pypi:
     needs: [ test ]
