@@ -15,14 +15,14 @@ jobs:
   test:
     uses: ./.github/workflows/pytest.yml
     with:
-      python-version: "3.10"
+      python-version: "3.11.9"
 
   flatpak:
     needs: [ test ]
     runs-on: ubuntu-latest
     env:
-      MATURIN_REF: v1.2.3
-      SETUPTOOLS_RUST_REF: v1.7.0
+      MATURIN_REF: v1.7.1
+      SETUPTOOLS_RUST_REF: v1.10.1
       FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
     steps:
       - uses: actions/checkout@v4
@@ -32,7 +32,7 @@ jobs:
           flatpak-repo-branch: ${{ env.FLATHUB_BRANCH }}
           flatpak-repo-secret: ${{ secrets.FLATHUB_PAT }}
           use-pipfile: true
-          python-version: '3.10.10'
+          python-version: '3.11.9'
           maturin-version: ${{ env.MATURIN_REF }}
           setuptools-rust-version: ${{ env.SETUPTOOLS_RUST_REF }}
 
