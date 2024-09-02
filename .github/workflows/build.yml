@@ -313,7 +313,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: package-msixupload
-          path: *.msixupload
+          path: '*.msixupload'
 
   deploy-msstore:
     runs-on: windows-latest
@@ -360,8 +360,8 @@ jobs:
           body: ${{ env.RELEASE_NOTES }}
           prerelease: ${{ env.PRE_RELEASE }}
           files: |
-            *.exe
-            *.dmg
+            '*.exe'
+            '*.dmg'
 
   pr-comment:
     if: ${{ github.event_name == 'pull_request' }}
