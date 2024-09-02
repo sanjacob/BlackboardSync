@@ -334,9 +334,11 @@ jobs:
           --clientId ${{ secrets.MS_CLIENT_ID }}
           --clientSecret ${{ secrets.MS_CLIENT_KEY }}
 
+      - run: ls
+
       - name: Publish package in Microsoft Store
         run: >
-          msstore publish *.msixupload
+          msstore publish app.bbsync.BlackboardSync.msixupload
           --appId ${{ secrets.MS_APP_ID }}
           --noCommit -v
 
