@@ -336,10 +336,9 @@ jobs:
 
       - name: Publish package in Microsoft Store
         run: >
-          msstore publish -v
+          msstore publish *.msixupload
           --appId ${{ secrets.MS_APP_ID }}
-          --noCommit
-          --inputDirectory .
+          --noCommit -v
 
   deploy-github:
     if: startsWith(github.ref, 'refs/tags/')
