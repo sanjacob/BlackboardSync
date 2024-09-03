@@ -527,7 +527,6 @@
   },
   {
     "name": "Seneca Polytechnic",
-    "short_name": "Seneca",
     "login": {
       "start_url": "https://learn.senecapolytechnic.ca",
       "target_url": "https://learn.senecapolytechnic.ca/ultra/"
