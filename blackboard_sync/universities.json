@@ -6,10 +6,7 @@
       "start_url": "https://portal.uclan.ac.uk",
       "target_url": "https://portal.uclan.ac.uk/ultra/"
     },
-    "api_url": "https://portal.uclan.ac.uk/",
-    "network": {
-      "org": ["University of Central Lancashire"]
-    }
+    "api_url": "https://portal.uclan.ac.uk/"
   },
   {
     "name": "University of Westminster",
@@ -531,10 +528,7 @@
       "start_url": "https://learn.senecapolytechnic.ca",
       "target_url": "https://learn.senecapolytechnic.ca/ultra/"
     },
-    "api_url": "https://learn.senecapolytechnic.ca/",
-    "network": {
-      "org": ["Seneca Polytechnic"]
-    }
+    "api_url": "https://learn.senecapolytechnic.ca/"
   },
   {
     "name": "University of Manchester",

@@ -126,6 +126,13 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QLabel" name="autodetect_label">
+      <property name="text">
+       <string>University auto-detected by internet service provider</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QWizardPage" name="sync_location_page">
@@ -228,7 +235,7 @@
        <string/>
       </property>
       <property name="prefix">
-       <string> </string>
+       <string/>
       </property>
      </widget>
     </item>

@@ -1,6 +1,6 @@
-"""Manages data of supported Blackboard partners."""
+"""Loads and provides data about supported universities."""
 
-# Copyright (C) 2021, Jacob Sánchez Pérez
+# Copyright (C) 2024, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,126 +18,119 @@
 
 import json
 import logging
-from typing import Optional
 from pathlib import Path
 
 import requests
 from pydantic import HttpUrl, BaseModel
 
-__all__ = ['InstitutionLogin', 'InstitutionNetwork', 'Institution',
-           'get_by_index', 'get_index_by_ip', 'get_names']
+from .ip import find_my_ip, find_ip_entity
+
+
+__all__ = [
+    'InstitutionLogin',
+    'InstitutionNetwork',
+    'InstitutionContent',
+    'Institution',
+    'get_names',
+    'get_by_index',
+    'autodetect'
+]
 
 
 logger = logging.getLogger(__name__)
 
-# Local institution data fallback in case of no server
-_local_data = 'universities.json'
-# Frequently updated remote datafile
-# _remote_data = 'https://example.com/universities.json'
-# IP API
-_ip_api_endpoint = 'http://ip-api.com/json?fields=org,isp'
+UNIVERSITY_DB = 'universities.json'
 
 
 class InstitutionLogin(BaseModel):
-    """Elements of login flow for an `Institution`.
-
-    :param `HttpUrl` start_url: Link to the Blackboard portal.
-    :param `HttpUrl` target_url: Landing URL after login is complete.
-    :param str username_input_selector: Selector for username input field.
-    :param str password_input_selector: Selector for password input field.
-    """
-
     start_url: HttpUrl
     target_url: HttpUrl
 
 
 class InstitutionNetwork(BaseModel):
-    """Possible network values for an `Institution`.
+    name: list[str] = []
 
-    :param list[str] org: Possible values for the organization field.
-    :param list[str] isp: Possible values for the ISP field.
-    """
 
-    org: list[str] = []
-    isp: list[str] = []
+class InstitutionContent(BaseModel):
+    data_sources: list[str] = []
 
 
 class Institution(BaseModel):
-    """Institution with a Blackboard portal.
-
-    :param str name: Long-format name of institution.
-    :param str short_name: Most common abbreviation of name.
-    :param list[str] data_sources: List of Blackboard data sources to download by default.
-    :param `InstitutionLogin` login: Login metadata.
-    :param `InstitutionNetwork` network: Network metadata.
-    """
+    """A university/college with a Blackboard Learn instance."""
 
     name: str
-    short_name: Optional[str] = None
-    data_sources: list[str] = []
+    """Official university name."""
+
+    short_name: str | None = None
+    """Abbreviation used to facilitate search."""
+
+    country: str | None = None
+    """Country of university."""
+
     api_url: HttpUrl
+    """URL of the Blackboard Learn REST API instance."""
+
     login: InstitutionLogin
-    network: Optional[InstitutionNetwork] = None
+    """Metadata to make login possible."""
+
+    network: InstitutionNetwork | None = None
+    """Metadata to enable automatic detection."""
+
+    content: InstitutionContent | None = None
+    """Metadata to improve content filtering."""
 
 
 def load() -> list[Institution]:
-    remote_found = False
-    json_data = {}
+    db = []
 
-    # try:
-    #   json_data = requests.get(_remote_data).json()
-    # except (requests.ConnectionError, json.decoder.JSONDecodeError):
-    #   remote_found = False
+    with (Path(__file__).parent / UNIVERSITY_DB).open() as f:
+        db = json.load(f)
 
-    if not remote_found:
-        with (Path(__file__).parent / _local_data).open() as f:
-            json_data = json.load(f)
-
-    return [Institution(**i) for i in json_data]
+    return [Institution(**uni) for uni in db]
 
 
 _institutions = load()
 
 
 def get_by_index(i: int) -> Institution:
-    """Retrieve institution at index specified.
-
-    :param int i: Index of institution.
-    """
+    """Get the institution with the given id."""
     return _institutions[i]
 
 
 def get_names() -> list[str]:
-    """Get institution names."""
-    return [f"{ins.name} ({ins.short_name})" if ins.short_name is not None
-            else ins.name for ins in _institutions]
+    """Get university names for search."""
+    names = []
 
-def get_index_by_ip() -> Optional[int]:
-    """Attempt to detect the user's institution by IP address data."""
-    ip_info = {}
+    for uni in _institutions:
+        tag = f"{uni.name} ({uni.short_name})" if uni.short_name else uni.name
+        names.append(tag)
+    return names
 
-    try:
-        ip_info = requests.get(_ip_api_endpoint).json()
-    except (requests.ConnectionError, json.decoder.JSONDecodeError):
-        pass
 
-    ip_org = ip_info.get('org')
-    ip_isp = ip_info.get('isp')
+def autodetect() -> int | None:
+    """Detect university based on ISP information."""
+
+    my_ip = find_my_ip()
+
+    if my_ip is None:
+        return None
+
+    entity = find_ip_entity(my_ip)
+
+    if entity is None:
+        return None
+
+    name = entity['name']
+    description = entity['description']
 
     for i, uni in enumerate(_institutions):
-        if uni.network is None:
-            continue
+        # First heuristic, network description
+        # Works only with full university name
+        if description and description[0] == uni.name:
+            return i
 
-        found = False
-
-        if ip_org:
-            for org in uni.network.org:
-                if ip_org == org:
-                    found = True
-        if ip_isp:
-            for isp in uni.network.isp:
-                if ip_isp == isp:
-                    found = True
-        if found:
+        # Second heuristic, network name
+        # More specific but must be specified manually
+        if uni.network and any(name == x for x in uni.network.name):
             return i
     return None
