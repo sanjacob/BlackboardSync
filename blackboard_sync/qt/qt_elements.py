@@ -529,7 +529,7 @@ class SetupWizard(QWizard):
 
     _help_website = 'https://github.com/sanjacob/BlackboardSync'
 
-    def __init__(self, institutions: list[str]):
+    def __init__(self, institutions: list[str], selected: int | None = None):
         """Create a `SetupWizard`.
 
         :param list[str] institutions: List of institution names
@@ -540,13 +540,15 @@ class SetupWizard(QWizard):
         self.since_all_checkbox: QCheckBox
         self.date_spinbox: QSpinBox
         self.institutions = institutions
-        self._init_ui()
+        self._init_ui(selected)
         self._has_chosen_location = False
 
-    def _init_ui(self):
+    def _init_ui(self, selected: int | None):
         Assets.load_ui(self)
         self.uni_selection_box.addItems(self.institutions)
         self.uni_selection_box.clearEditText()
+
+        self.autodetect_label.setVisible(selected is not None)
 
         self.completer = QCompleter(self.institutions, self)
         self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
@@ -580,6 +582,10 @@ class SetupWizard(QWizard):
 
         self.intro_page.setPixmap(QWizard.WizardPixmap.WatermarkPixmap,
                                   Assets.watermark())
+
+        if selected is not None:
+            self.uni_selection_box.setCurrentIndex(selected)
+
 
     def initializePage(self, id) -> None:
         if id == self.Pages.DOWNLOAD_LOCATION:

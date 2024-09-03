@@ -27,9 +27,9 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon, QWidget
 
 from .sync import BlackboardSync
-from .institutions import Institution, get_names, InstitutionLogin
 from .__about__ import __title__
 from .updates import check_for_updates
+from .institutions import Institution, InstitutionLogin, get_names, autodetect
 from .qt.qt_elements import (LoginWebView, SyncTrayIcon, SettingsWindow,
                              RedownloadDialog, OSUtils, SetupWizard, UpdateFoundDialog)
 
@@ -73,7 +73,7 @@ class BBSyncController:
         self.app.exec()
 
     def _init_ui(self) -> None:
-        self.setup_window = SetupWizard(get_names())
+        self.setup_window = SetupWizard(get_names(), autodetect())
         self.setup_window.accepted.connect(self._setup_complete)
 
         self.login_window : Optional[LoginWebView] = None
