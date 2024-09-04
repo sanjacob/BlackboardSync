@@ -163,6 +163,7 @@ If this is not something you'd like, please let me know along your request.
 - Holmes Institute
 - University of Western Australia
 - Griffith University
+- Curtin University
 
 ###### New Zealand
 

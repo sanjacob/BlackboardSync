@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Seneca Polytechnic (@weihuang)
 - Add support for University of Manchester (@d-dahir)
 - Add support for University of York (@Laura7089)
+- Add support for Curtin University (@JaydenDownes)
 - Add mock Blackboard instance for manual testing
 - Automatic university detection based on ISP
 

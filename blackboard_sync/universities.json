@@ -548,6 +548,14 @@
     "api_url": "https://vle.york.ac.uk/"
   },
   {
+    "name": "Curtin University",
+    "login": {
+      "start_url": "https://lms.curtin.edu.au",
+      "target_url": "https://lms.curtin.edu.au/ultra/"
+    },
+    "api_url": "https://lms.curtin.edu.au/"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
