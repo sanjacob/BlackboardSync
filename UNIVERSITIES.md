@@ -1,8 +1,9 @@
 # Universities
 
 > [!NOTE]  
-> Even though here only referred to as "university", this includes most
-> types of Blackboard Learn instances, including colleges, schools, etc.
+> Even though here only referred to as "university", you can file a
+> request to suport any type of Blackboard Learn instance,
+> including colleges, schools, etc.
 
 [Jump to supported universities](#supported-universities)
 
