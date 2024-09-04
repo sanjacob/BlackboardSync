@@ -64,7 +64,9 @@ body:
         Read UNIVERSITIES.md for more information.
       placeholder: >
         Name: UNI-CENT-LANCS
+
         Description: University of Central Lancashire
+
         Country: GB
     validations:
       required: false
