@@ -1,11 +1,11 @@
 name: New University or College
 description: >
   File a request to add the blackboard instance
-  of your university or college to BlackboardSync
+  of your university or college to Blackboard Sync
 title: "[New University]: "
 labels: ["uni-new"]
 assignees:
-  - jacobszpz
+  - sanjacob
 body:
   - type: markdown
     attributes:
@@ -18,24 +18,23 @@ body:
     id: uni-name
     attributes:
       label: University name
-      description: What is the name of your university in long form?
+      description: What is the full name of your university?
       placeholder: ex. University of Central Lancashire
     validations:
       required: true
   - type: input
     id: uni-short-name
     attributes:
-      label: Short name or abbreviation
+      label: University abbreviation
       description: >
-        If your university has a common abbreviation
-        or short name, enter it here.
+        If your university has a common abbreviation, please enter it here.
       placeholder: ex. UCLan
     validations:
       required: false
   - type: input
-    id: portal-url
+    id: login-start-url
     attributes:
-      label: Link to Blackboard instance
+      label: URL of university Blackboard instance
       description: >
         What is the URL you visit when you want to
         access Blackboard?
@@ -43,9 +42,9 @@ body:
     validations:
       required: true
   - type: input
-    id: portal-loggedin-url
+    id: login-target-url
     attributes:
-      label: Landing URL after logging in
+      label: URL after logging into Blackboard instance
       description: >
         What is the URL you are redirected to
         after successfully logging in to Blackboard?
@@ -53,26 +52,32 @@ body:
     validations:
       required: true
   - type: textarea
+    id: network
+    attributes:
+      label: University network information
+      description: >
+        Network data used for automatic university detection.
+
+        Simply copy the details shown [here](
+        https://74mxmsvvgqw6t23xycgaauf3cy0vyncw.lambda-url.eu-west-2.on.aws/)
+
+        Read UNIVERSITIES.md for more information.
+      placeholder: >
+        Name: UNI-CENT-LANCS
+        Description: University of Central Lancashire
+        Country: GB
+    validations:
+      required: false
+  - type: textarea
     id: data-sources
     attributes:
       label: Valid Blackboard data sources (optional)
       description: >
         This field is not required unless you have insider
         knowledge of the data sources used in your university.
+
         Read UNIVERSITIES.md for more information.
       placeholder: __00_0
-    validations:
-      required: false
-  - type: textarea
-    id: isp
-    attributes:
-      label: University network information
-      description: >
-        Network data used for automatic university detection.
-        Simply copy the details shown [here](
-        https://74mxmsvvgqw6t23xycgaauf3cy0vyncw.lambda-url.eu-west-2.on.aws/)
-        Read UNIVERSITIES.md for more information.
-      placeholder: University of Central Lancashire
     validations:
       required: false
   - type: textarea
@@ -95,4 +100,3 @@ body:
       options:
         - label: I agree to follow this project's License
           required: true
-
