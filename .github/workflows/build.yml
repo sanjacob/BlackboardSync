@@ -89,6 +89,7 @@ jobs:
   package-metadata:
     needs: [ package-prep ]
     runs-on: ubuntu-latest
+    if: github.event_name == 'push'
     steps:
       - name: Clone metadata repository
         uses: actions/checkout@v4
