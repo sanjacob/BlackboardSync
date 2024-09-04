@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for University of York (@Laura7089)
 - Add support for Curtin University (@JaydenDownes)
 - Add support for Hong Kong Community College (@Benson-mk)
+- Add support for OBS Business School (@luisvinatea)
 - Add mock Blackboard instance for manual testing
 - Automatic university detection based on ISP
 

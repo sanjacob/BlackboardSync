@@ -116,6 +116,7 @@ If this is not something you'd like, please let me know along your request.
 - Universidade do Minho
 - Hanze University of Applied Sciences
 - Centro Universitario de Tecnología y Arte Digital
+- OBS Business School
 
 ### North America
 
