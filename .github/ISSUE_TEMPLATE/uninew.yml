@@ -57,18 +57,21 @@ body:
     attributes:
       label: Valid Blackboard data sources (optional)
       description: >
-        Please follow the procedure depicted in UNIVERSITIES.md,
-        and provide the valid data source(s) of your university.
+        This field is not required unless you have insider
+        knowledge of the data sources used in your university.
+        Read UNIVERSITIES.md for more information.
       placeholder: __00_0
     validations:
       required: false
   - type: textarea
     id: isp
     attributes:
-      label: University network RDAP information
+      label: University network information
       description: >
-        RDAP data used for automatic detection.
-        Check UNIVERSITIES.md for more details.
+        Network data used for automatic university detection.
+        Simply copy the details shown [here](
+        https://74mxmsvvgqw6t23xycgaauf3cy0vyncw.lambda-url.eu-west-2.on.aws/)
+        Read UNIVERSITIES.md for more information.
       placeholder: University of Central Lancashire
     validations:
       required: false
@@ -78,7 +81,7 @@ body:
       label: Anything else to add?
       description: >
         If there is anything else needed to know about
-        the login process for your university, say so here.
+        the login process for your university, you can say so here.
       placeholder: ...
     validations:
       required: false
