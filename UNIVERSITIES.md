@@ -3,27 +3,40 @@
 [Jump to supported universities](#supported-universities)
 
 
-
 ## Adding support for your university
 
 In order to support your university, some information is first needed.
 
 
-
 ### Necessary data to add support
 
-In summary, the following information is needed:
+#### Basic Information
 
 - **University name** (e.g. *University of Central Lancashire*).
-- **Short name** or abbreviation (e.g. *UCLan*).
-
+- **Short name** or abbreviation (e.g. *UCLan*) if one exists.
 - **Link to Blackboard portal** (e.g. *https://portal.uclan.ac.uk*).
 - **Landing URL** after successfully logging in (e.g. *https://portal.uclan.ac.uk/ultra*).
 
+#### Automatic Detection
+
+In order to allow users to complete their setup process faster,
+there is a built-in university detection system based on the
+Internet Service Provider.
+Note that this only works if you are currently connected to the
+university network.
+Fortunately, finding the required information is easy:
+
+a. Visit our [automated checker][rdap-check] and note the result down.
+
+b. **If** the automated checker is not working, follow these steps:
+
+1. Find out your ip by visiting https://api.ipify.org/.
+2. Visit https://rdap.org and enter your ip.
+3. Note down the content of `Network Name`, `Country`, and `Remarks`.
+   You can use `Ctrl+F` to find these fields.
 
 
 > There are [other fields](#advanced-fields) you can collect but I strongly suggest you skip these
-
 
 
 ### Ready to contribute?
@@ -166,12 +179,5 @@ You are fine without it and it is suggested to be skipped. If you have more info
 
 >  Check the dataSourceId for all the entries returned and note down the one that appears most.
 
-- **Possible `isp` and `org` fields** that would indicate a connection from an IP that belongs to the university.
-
-In future releases, it might be possible to optimise the setup process by automatically detecting connections from a university ISP.
-
-This, however, is yet to be implemented, and I would like to know your thoughts about it.
-
-> Visit http://ip-api.com/json?fields=org,isp from an IP belonging to the institution and record those values.
-
 [support-issue]: https://github.com/sanjacob/BlackboardSync/issues/new?assignees=sanjacob&labels=uni-new&projects=&template=uninew.yml&title=%5BNew+University%5D%3A+
+[rdap-check]: https://74mxmsvvgqw6t23xycgaauf3cy0vyncw.lambda-url.eu-west-2.on.aws/

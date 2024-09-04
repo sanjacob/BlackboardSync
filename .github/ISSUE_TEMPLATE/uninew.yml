@@ -1,5 +1,7 @@
 name: New University or College
-description: File a request to add the blackboard instance of your university or college to BlackboardSync
+description: >
+  File a request to add the blackboard instance
+  of your university or college to BlackboardSync
 title: "[New University]: "
 labels: ["uni-new"]
 assignees:
@@ -24,7 +26,9 @@ body:
     id: uni-short-name
     attributes:
       label: Short name or abbreviation
-      description: If your university has a common abbreviation or short name, enter it here.
+      description: >
+        If your university has a common abbreviation
+        or short name, enter it here.
       placeholder: ex. UCLan
     validations:
       required: false
@@ -32,7 +36,9 @@ body:
     id: portal-url
     attributes:
       label: Link to Blackboard instance
-      description: What is the URL you visit when you want to access Blackboard?
+      description: >
+        What is the URL you visit when you want to
+        access Blackboard?
       placeholder: ex. https://portal.uclan.ac.uk
     validations:
       required: true
@@ -40,7 +46,9 @@ body:
     id: portal-loggedin-url
     attributes:
       label: Landing URL after logging in
-      description: What is the URL you are redirected to after successfully logging in to Blackboard?
+      description: >
+        What is the URL you are redirected to
+        after successfully logging in to Blackboard?
       placeholder: ex. https://portal.uclan.ac.uk/ultra
     validations:
       required: true
@@ -48,15 +56,19 @@ body:
     id: data-sources
     attributes:
       label: Valid Blackboard data sources (optional)
-      description: Please follow the procedure depicted in UNIVERSITIES.md, and provide the valid data source(s) of your university.
+      description: >
+        Please follow the procedure depicted in UNIVERSITIES.md,
+        and provide the valid data source(s) of your university.
       placeholder: __00_0
     validations:
       required: false
   - type: textarea
     id: isp
     attributes:
-      label: University ISP name (optional)
-      description: ISP name for the universities network provider. Check UNIVERSITIES.md for more details.
+      label: University network RDAP information
+      description: >
+        RDAP data used for automatic detection.
+        Check UNIVERSITIES.md for more details.
       placeholder: University of Central Lancashire
     validations:
       required: false
@@ -64,7 +76,9 @@ body:
     id: other-details
     attributes:
       label: Anything else to add?
-      description: If there is anything else needed to know about the login process for your university, say so here.
+      description: >
+        If there is anything else needed to know about
+        the login process for your university, say so here.
       placeholder: ...
     validations:
       required: false
@@ -72,7 +86,9 @@ body:
     id: terms
     attributes:
       label: License
-      description: By submitting this issue, you agree that your contribution may be licensed under GPL v2.
+      description: >
+        By submitting this issue, you agree
+        that your contribution may be licensed under GPL v2.
       options:
         - label: I agree to follow this project's License
           required: true
