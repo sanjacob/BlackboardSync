@@ -556,6 +556,15 @@
     "api_url": "https://lms.curtin.edu.au/"
   },
   {
+    "name": "Hong Kong Community College",
+    "short_name": "HKCC",
+    "login": {
+      "start_url": "https://lms.cpce-polyu.edu.hk",
+      "target_url": "https://lms.cpce-polyu.edu.hk/ultra/"
+    },
+    "api_url": "https://lms.cpce-polyu.edu.hk/"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
