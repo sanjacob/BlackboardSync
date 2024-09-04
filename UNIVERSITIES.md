@@ -1,5 +1,9 @@
 # Universities
 
+> [!NOTE]  
+> Even though here only referred to as "university", this includes most
+> types of Blackboard Learn instances, including colleges, schools, etc.
+
 [Jump to supported universities](#supported-universities)
 
 
