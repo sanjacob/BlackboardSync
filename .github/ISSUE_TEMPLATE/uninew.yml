@@ -59,7 +59,8 @@ body:
         Network data used for automatic university detection.
 
         Simply copy the details shown [here](
-        https://74mxmsvvgqw6t23xycgaauf3cy0vyncw.lambda-url.eu-west-2.on.aws/).
+        https://74mxmsvvgqw6t23xycgaauf3cy0vyncw.lambda-url.eu-west-2.on.aws/)
+        as visited from a university network.
 
         Read UNIVERSITIES.md for more information.
       placeholder: >
