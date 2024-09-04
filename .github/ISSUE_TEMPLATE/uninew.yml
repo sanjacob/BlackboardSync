@@ -15,7 +15,7 @@ body:
         I will verify this data and add this to the project shortly.
         Please do not use this form to report a bug.
   - type: input
-    id: uni-name
+    id: name
     attributes:
       label: University name
       description: What is the full name of your university?
@@ -23,7 +23,7 @@ body:
     validations:
       required: true
   - type: input
-    id: uni-short-name
+    id: short-name
     attributes:
       label: University abbreviation
       description: >
@@ -31,6 +31,15 @@ body:
       placeholder: ex. UCLan
     validations:
       required: false
+  - type: input
+    id: country
+    attributes:
+      label: University country
+      description: >
+        Where is your university located?
+      placeholder: ex. United Kingdom
+    validations:
+      required: true
   - type: input
     id: login-start-url
     attributes:
