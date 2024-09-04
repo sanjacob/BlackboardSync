@@ -7,9 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+- Remove hardcoded minimum year in setup wizard
 - Upgrade to PyQt6
-- Remove internal blackboard api module, use bblearn instead
+- Remove internal blackboard api module, use `bblearn` instead
 - Refactor download module into several content classes
+- Improve testing and automated builds pipeline
+- Upgrade multiple modules to latest versions
 
 ### Added
 - Add support for University of Pretoria (@whipped-cream)
@@ -19,9 +22,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Seneca Polytechnic (@weihuang)
 - Add support for University of Manchester (@d-dahir)
 - Add support for University of York (@Laura7089)
+- Add mock Blackboard instance for manual testing
+- Automatic university detection based on ISP
 
 ### Fixed
 - Unicode paths will be used by default on Windows
+- Bug preventing settings window from opening
 
 ## [0.11.4] - 2024-04-10
 
