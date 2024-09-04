@@ -565,6 +565,14 @@
     "api_url": "https://lms.cpce-polyu.edu.hk/"
   },
   {
+    "name": "OBS Business School",
+    "login": {
+      "start_url": "https://learn.obsbusiness.school",
+      "target_url": "https://learn.obsbusiness.school/ultra/"
+    },
+    "api_url": "https://learn.obsbusiness.school/"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
