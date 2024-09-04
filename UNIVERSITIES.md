@@ -1,7 +1,11 @@
 # Universities
 
-[Jump to supported universities](#supported-universities)
+> [!NOTE]  
+> Even though here only referred to as "university", you can file a
+> request to suport any type of Blackboard Learn instance,
+> including colleges, schools, etc.
 
+[Jump to supported universities](#supported-universities)
 
 
 ## Adding support for your university
@@ -9,45 +13,70 @@
 In order to support your university, some information is first needed.
 
 
-
 ### Necessary data to add support
 
-In summary, the following information is needed:
+#### Basic Information
 
 - **University name** (e.g. *University of Central Lancashire*).
-- **Short name** or abbreviation (e.g. *UCLan*).
-
+- **Short name** or abbreviation (e.g. *UCLan*) if one exists.
 - **Link to Blackboard portal** (e.g. *https://portal.uclan.ac.uk*).
-- **Landing URL** after successfully logging in (e.g. *https://portal.uclan.ac.uk/ultra*).
+- **Landing URL** after successfully logging in
+  (e.g. *https://portal.uclan.ac.uk/ultra*).
+
+#### Automatic Detection
+
+In order to allow users to complete their setup process faster,
+there is a built-in university detection system based on the
+Internet Service Provider.
+Note that this only works if you are currently connected to the
+university network.
+Fortunately, finding the required information is easy:
+
+a. Visit our [automated checker][rdap-check] and note the result down.
+
+b. **If the automated checker is not working**, follow these steps:
+
+1. Find out your ip by visiting https://api.ipify.org/.
+2. Visit https://rdap.org and enter your ip.
+3. Note down the content of `Network Name`, `Country`, and `Remarks`.
+   You can use `Ctrl+F` to find these fields.
+4. Let me also know that the checker is down.
 
 
-
-> There are [other fields](#advanced-fields) you can collect but I strongly suggest you skip these
-
+> There are [other fields](#advanced-fields) you can collect but
+  I strongly suggest you skip these
 
 
 ### Ready to contribute?
 
-Please create an issue using [the following form][support-issue]. You will need a GitHub account to do so.
+Please create an issue using [the following form][support-issue].
+You will need a GitHub account to do so.
 
-If you'd rather not create one, feel free to reach me at request@bbsync.app with these details.
+If you'd rather not create one, feel free to reach me at
+request@bbsync.app with these details.
+
+Additionally, you can also post your request in our official
+[`Matrix` space](https://matrix.to/#/#blackboardsync:matrix.org).
+
+In every case, your contribution will be credited to your username and
+in the case of GitHub, you will be made co-author of the final commit.
+If this is not something you'd like, please let me know along your request.
 
 
 ## Supported Universities
 
-These universities should be supported, but may be unstable in rare cases.
-
 ### Europe
 
-#### British Isles
+#### United Kingdom
+
+###### England
 
 - University of Central Lancashire
 - University of Westminster
 - University of Reading
-- University of West Anglia
+- University of East Anglia
 - Durham University
 - University of Salford
-- University of South Wales
 - University of Leicester
 - Imperial College London
 - University of Bristol
@@ -56,29 +85,41 @@ These universities should be supported, but may be unstable in rare cases.
 - University of Northampton
 - University of Bedfordshire
 - Leeds Beckett University
-- Trinity College Dublin
-- Cardiff University
 - Sheffield Hallam University
 - University of the West of England
 - Northumbria University
-- Ulster University
 - Edge Hill University
 - University of Lincoln
-- University of Aberdeen
 - University of Derby
 - University of Manchester
 - University of York
 
-#### Mainland Europe
+###### Scotland
+
+- University of Aberdeen
+
+###### Northern Ireland
+
+- Ulster University
+
+###### Wales
+
+- University of South Wales
+- Cardiff University
+
+#### Rest of Europe
 
 - Universidad Europea Madrid
 - Universidad de Alcala
+- Trinity College Dublin
 - University of Antwerp
 - Universidade do Minho
 - Hanze University of Applied Sciences
 - Centro Universitario de Tecnología y Arte Digital
 
 ### North America
+
+###### United States of America
 
 - University of Arkansas
 - The George Washington University
@@ -87,22 +128,28 @@ These universities should be supported, but may be unstable in rare cases.
 - Ohio University
 - Post University
 - The University of Alabama
-- Georgian College
 - Concordia University Wisconsin & Ann Arbor
 - Sam Houston State University
 - University of Connecticut
 - Schoolcraft College
 - Texas Tech University
+
+###### Canada
+
+- Georgian College
 - Seneca Polytechnic
 
 ### South America
 
-- Universidad del Valle de Mexico
 - Universidad Tecnologica ECOTEC
-- Universidad Regional del Sureste
 - Universidad de Palermo
 - Universidad Tecnologica del Salvador
 - Universidad Ana G. Mendez
+
+###### Mexico
+
+- Universidad del Valle de Mexico
+- Universidad Regional del Sureste
 
 ### Asia
 
@@ -115,8 +162,11 @@ These universities should be supported, but may be unstable in rare cases.
 - Torrens University
 - Holmes Institute
 - University of Western Australia
-- University of Otago
 - Griffith University
+
+###### New Zealand
+
+- University of Otago
 
 ### Africa
 
@@ -166,12 +216,5 @@ You are fine without it and it is suggested to be skipped. If you have more info
 
 >  Check the dataSourceId for all the entries returned and note down the one that appears most.
 
-- **Possible `isp` and `org` fields** that would indicate a connection from an IP that belongs to the university.
-
-In future releases, it might be possible to optimise the setup process by automatically detecting connections from a university ISP.
-
-This, however, is yet to be implemented, and I would like to know your thoughts about it.
-
-> Visit http://ip-api.com/json?fields=org,isp from an IP belonging to the institution and record those values.
-
 [support-issue]: https://github.com/sanjacob/BlackboardSync/issues/new?assignees=sanjacob&labels=uni-new&projects=&template=uninew.yml&title=%5BNew+University%5D%3A+
+[rdap-check]: https://74mxmsvvgqw6t23xycgaauf3cy0vyncw.lambda-url.eu-west-2.on.aws/

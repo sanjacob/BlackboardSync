@@ -1,9 +1,11 @@
 name: New University or College
-description: File a request to add the blackboard instance of your university or college to BlackboardSync
+description: >
+  File a request to add the blackboard instance
+  of your university or college to Blackboard Sync
 title: "[New University]: "
 labels: ["uni-new"]
 assignees:
-  - jacobszpz
+  - sanjacob
 body:
   - type: markdown
     attributes:
@@ -13,58 +15,90 @@ body:
         I will verify this data and add this to the project shortly.
         Please do not use this form to report a bug.
   - type: input
-    id: uni-name
+    id: name
     attributes:
       label: University name
-      description: What is the name of your university in long form?
+      description: What is the full name of your university?
       placeholder: ex. University of Central Lancashire
     validations:
       required: true
   - type: input
-    id: uni-short-name
+    id: short-name
     attributes:
-      label: Short name or abbreviation
-      description: If your university has a common abbreviation or short name, enter it here.
+      label: University abbreviation
+      description: >
+        If your university has a common abbreviation, please enter it here.
       placeholder: ex. UCLan
     validations:
       required: false
   - type: input
-    id: portal-url
+    id: country
     attributes:
-      label: Link to Blackboard instance
-      description: What is the URL you visit when you want to access Blackboard?
+      label: University country
+      description: >
+        Where is your university located?
+      placeholder: ex. United Kingdom
+    validations:
+      required: true
+  - type: input
+    id: login-start-url
+    attributes:
+      label: URL of university Blackboard instance
+      description: >
+        What is the URL you visit when you want to
+        access Blackboard?
       placeholder: ex. https://portal.uclan.ac.uk
     validations:
       required: true
   - type: input
-    id: portal-loggedin-url
+    id: login-target-url
     attributes:
-      label: Landing URL after logging in
-      description: What is the URL you are redirected to after successfully logging in to Blackboard?
+      label: URL after logging in
+      description: >
+        What is the URL you are redirected to
+        after successfully logging in to Blackboard?
       placeholder: ex. https://portal.uclan.ac.uk/ultra
+    validations:
+      required: true
+  - type: textarea
+    id: network
+    attributes:
+      label: University network information
+      description: >
+        Network data used for automatic university detection.
+
+        Simply copy the details shown [here](
+        https://74mxmsvvgqw6t23xycgaauf3cy0vyncw.lambda-url.eu-west-2.on.aws/)
+        as visited from a university network.
+
+        Read UNIVERSITIES.md for more information.
+      placeholder: >
+        Name: UNI-CENT-LANCS
+
+        Description: University of Central Lancashire
+
+        Country: GB
     validations:
       required: true
   - type: textarea
     id: data-sources
     attributes:
       label: Valid Blackboard data sources (optional)
-      description: Please follow the procedure depicted in UNIVERSITIES.md, and provide the valid data source(s) of your university.
+      description: >
+        This field is not required unless you have insider
+        knowledge of the data sources used in your university.
+
+        Read UNIVERSITIES.md for more information.
       placeholder: __00_0
-    validations:
-      required: false
-  - type: textarea
-    id: isp
-    attributes:
-      label: University ISP name (optional)
-      description: ISP name for the universities network provider. Check UNIVERSITIES.md for more details.
-      placeholder: University of Central Lancashire
     validations:
       required: false
   - type: textarea
     id: other-details
     attributes:
       label: Anything else to add?
-      description: If there is anything else needed to know about the login process for your university, say so here.
+      description: >
+        If there is anything else needed to know about
+        the login process for your university, you can say so here.
       placeholder: ...
     validations:
       required: false
@@ -72,8 +106,9 @@ body:
     id: terms
     attributes:
       label: License
-      description: By submitting this issue, you agree that your contribution may be licensed under GPL v2.
+      description: >
+        By submitting this issue, you agree
+        that your contribution may be licensed under GPL v2.
       options:
         - label: I agree to follow this project's License
           required: true
-
