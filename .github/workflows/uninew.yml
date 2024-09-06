@@ -25,6 +25,14 @@ jobs:
         with:
           template-path: .github/ISSUE_TEMPLATE/uninew.yml
 
+      - name: Find country information
+        uses: sanjacob/country-iso@v2
+        id: country
+        env:
+          COUNTRY: ${{ steps.issue.outputs.issueparser_country }}
+        with:
+          name: ${{ env.COUNTRY }}
+
       - name: Set issue environment variables
         env:
           NAME: ${{ steps.issue.outputs.issueparser_name }}
@@ -46,6 +54,7 @@ jobs:
             {
               "name": "${{ env.UNI_NAME }}",
               "short_name": "${{ env.UNI_SHORT_NAME }}",
+              "country": "${{ steps.country.outputs.iso-2 }}",
               "login": {
                 "start_url": "${{ env.UNI_START_URL }}",
                 "target_url": "${{ env.UNI_TARGET_URL }}"
@@ -53,13 +62,6 @@ jobs:
               "api_url": "${{ env.UNI_START_URL }}"
             }
 
-      - name: Find country information
-        uses: sanjacob/country-iso@v2
-        id: country
-        env:
-          COUNTRY: ${{ steps.issue.outputs.issueparser_country }}
-        with:
-          name: ${{ env.COUNTRY }}
 
       - name: Map country code to country section
         uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
