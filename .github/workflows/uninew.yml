@@ -2,7 +2,7 @@ name: New University
 
 on:
   issues:
-    types: [opened]
+    types: [opened, edited]
 
 permissions:
   pull-requests: write
@@ -23,27 +23,39 @@ jobs:
         with:
           template-path: .github/ISSUE_TEMPLATE/uninew.yml
 
+      - name: Set environment variables
+        env:
+          TMP_UNI_NAME: ${{ steps.issue.outputs.issueparser_name }}
+        run: echo "UNI_NAME=$TMP_UNI_NAME" >> $GITHUB_ENV
+
       - name: Insert university into database
         uses: sanjacob/json-insert@v1
+        env:
+          UNI_NAME: ${{ steps.issue.outputs.issueparser_name }}
+          UNI_SHORT_NAME: ${{ steps.issue.outputs.issueparser_short-name }}
+          UNI_START_URL: ${{ steps.issue.outputs.issueparser_login-start-url }}
+          UNI_TARGET_URL: ${{ steps.issue.outputs.issueparser_login-target-url }}
         with:
           file: blackboard_sync/universities.json
           index: -2
           item: |
             {
-              "name": ${{ steps.issue.outputs.name }},
-              "short_name": ${{ steps.issue.outputs.short_name }},
+              "name": $UNI_NAME,
+              "short_name": $UNI_SHORT_NAME,
               "login": {
-                "start_url": ${{ steps.issue.outputs.login-start-url }},
-                "target_url": ${{ steps.issue.outputs.login-target-url }}
+                "start_url": $UNI_START_URL,
+                "target_url": $UNI_TARGET_URL
               },
-              "api_url": ${{ steps.issue.outputs.login-start-url }}
+              "api_url": $UNI_START_URL
             }
 
       - name: Find country information
         uses: sanjacob/country-iso@v2
         id: country
+        env:
+          COUNTRY: ${{ steps.issue.outputs.issueparser_country }}
         with:
-          name: ${{ steps.issue.outputs.name }}
+          name: $COUNTRY
 
       - name: Map country code to country section
         uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
@@ -81,11 +93,13 @@ jobs:
 
       - name: Append university to UNIVERSITIES
         uses: sanjacob/markdown-list@v1
+        env:
+          HEADER_A: ${{ steps.header.outputs.section }}
+          HEADER_B: ${{ steps.header-b.outputs.section }}
         with:
           file: "UNIVERSITIES.md"
-          header: >
-            ${{ steps.header.outputs.section || steps.header-b.outputs.section }}
-          item: ${{ steps.issue.outputs.name }}
+          header: ${{ env.HEADER_A || env.HEADER_B }}
+          item: ${{ env.UNI_NAME }}
 
       - name: Add entry to CHANGELOG
         uses: sanjacob/markdown-list@v1
@@ -93,8 +107,7 @@ jobs:
           file: "CHANGELOG.md"
           header: Added
           item: >
-            Add support for ${{ steps.issue.outputs.name }}
-            (${{ env.USER_NAME }})
+            Add support for ${{ env.UNI_NAME }} (${{ env.USER_NAME }})
 
       - name: Create new branch
         run: |
@@ -104,7 +117,7 @@ jobs:
         run: |
           git add .
           USER_EMAIL="${USER_ID}+${USER_NAME}@noreply.users.github.com"
-          git commit -m "Add support for ${{ steps.issue.outputs.name }}
+          git commit -m "Add support for $UNI_NAME
 
           Co-authored-by: $USER_NAME <$USER_EMAIL>"
 
@@ -114,7 +127,7 @@ jobs:
       - name: Create pull request
         run: >
           gh pr create -B main -H "uni-$ISSUE_ID"
-          --title "Add support for ${{ steps.issue.outputs.name }}"
+          --title "Add support for $UNI_NAME"
           --body "Created on behalf of $USER_NAME"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
