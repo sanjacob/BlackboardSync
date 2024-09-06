@@ -40,13 +40,13 @@ jobs:
           index: -2
           item: |
             {
-              "name": $UNI_NAME,
-              "short_name": $UNI_SHORT_NAME,
+              "name": "\"$UNI_NAME\"",
+              "short_name": "\"$UNI_SHORT_NAME\"",
               "login": {
-                "start_url": $UNI_START_URL,
-                "target_url": $UNI_TARGET_URL
+                "start_url": "\"$UNI_START_URL\"",
+                "target_url": "\"$UNI_TARGET_URL\""
               },
-              "api_url": $UNI_START_URL
+              "api_url": "\"$UNI_START_URL\""
             }
 
       - name: Find country information
