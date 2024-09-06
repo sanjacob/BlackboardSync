@@ -143,6 +143,6 @@ jobs:
           gh pr create -B main -H "uni-$ISSUE_ID" --fill
           --body "Created on behalf of @$USER_LOGIN
 
-          Closes $ISSUE_NUMBER" || true
+          Closes #$ISSUE_NUMBER" || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
