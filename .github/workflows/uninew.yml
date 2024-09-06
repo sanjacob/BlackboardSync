@@ -69,12 +69,12 @@ jobs:
               "CA": { "section": "Canada" },
               "US": { "section": "United States of America" },
               "GB": { "section": "England" },
-              ".*": { "section": null }
+              ".*": { "section": "" }
             }
           export_to: output
 
       - name: Map country code to continent section
-        if: ${{ steps.header.outputs.section == null }}
+        if: ${{ steps.header.outputs.section == "" }}
         uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
         id: header-b
         with:
@@ -87,7 +87,7 @@ jobs:
               "NA": { "section": "United States of America" },
               "OC": { "section": "Australia" },
               "SA": { "section": "South America" },
-              ".*": { "section": null }
+              ".*": { "section": "Not Found" }
             }
           export_to: output
 
