@@ -129,7 +129,7 @@ jobs:
           git commit -m "Add support for $UNI_NAME"
 
       - name: Push new branch to origin
-        run: git push origin "uni-$ISSUE_ID"
+        run: git push origin "uni-$ISSUE_ID" --force
 
       - name: Set GitHub PR author
         run: |
@@ -138,10 +138,9 @@ jobs:
 
       - name: Create pull request
         run: >
-          gh pr create -B main -H "uni-$ISSUE_ID"
-          --title "Add support for $UNI_NAME"
+          gh pr create -B main -H "uni-$ISSUE_ID" --fill
           --body "Created on behalf of @$USER_LOGIN
 
-          Closes $ISSUE_NUMBER"
+          Closes $ISSUE_NUMBER" || true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
