@@ -40,13 +40,13 @@ jobs:
           index: -2
           item: |
             {
-              "name": "\"$UNI_NAME\"",
-              "short_name": "\"$UNI_SHORT_NAME\"",
+              "name": "${{ env.UNI_NAME }}",
+              "short_name": "${{ env.UNI_SHORT_NAME }}",
               "login": {
-                "start_url": "\"$UNI_START_URL\"",
-                "target_url": "\"$UNI_TARGET_URL\""
+                "start_url": "${{ env.UNI_START_URL }}",
+                "target_url": "${{ env.UNI_TARGET_URL }}"
               },
-              "api_url": "\"$UNI_START_URL\""
+              "api_url": "${{ env.UNI_START_URL }}"
             }
 
       - name: Find country information
@@ -55,7 +55,7 @@ jobs:
         env:
           COUNTRY: ${{ steps.issue.outputs.issueparser_country }}
         with:
-          name: $COUNTRY
+          name: ${{ env.COUNTRY }}
 
       - name: Map country code to country section
         uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
