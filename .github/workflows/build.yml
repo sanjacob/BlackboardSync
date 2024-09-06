@@ -295,3 +295,23 @@ jobs:
           files: |
             dist/*.exe
             dist/*.dmg
+
+  pr-comment:
+    needs: [ package-windows, package-macos ]
+    if: ${{ github.event_name == 'pull_request' }}
+    steps:
+      - uses: mshick/add-pr-comment@v2
+        permissions:
+          pull-requests: write
+        with:
+          message: >
+            The build process has succeeded.
+
+            Please test either package-macos-12 (x86_64),
+            package-macos-14 (arm64), or package-windows-latest.
+
+            You can find them [here]
+            (https://github.com/sanjacob/BlackboardSync/actions/runs/${{ github.run_id }})
+            at the bottom of the page.
+
+            Let me know if everything seems fine.
