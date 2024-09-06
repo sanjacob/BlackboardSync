@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   autopr:
-    if: ${{ startsWith(github.event.issue.title, '\[New University\]' }}
+    if: ${{ startsWith(github.event.issue.title, '[New University]') }}
     runs-on: ubuntu-latest
     env:
       USER_NAME: ${{ github.event.issue.user.login }}
