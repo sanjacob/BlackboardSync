@@ -17,6 +17,7 @@ jobs:
       USER_NAME: ${{ github.event.issue.user.name }}
       USER_ID: ${{ github.event.issue.user.id }}
       ISSUE_ID: ${{ github.event.issue.id }}
+      ISSUE_NUMBER: ${{ github.event.issue.number }}
     steps:
       - uses: actions/checkout@v4
       - uses: stefanbuck/github-issue-parser@v3
@@ -139,6 +140,8 @@ jobs:
         run: >
           gh pr create -B main -H "uni-$ISSUE_ID"
           --title "Add support for $UNI_NAME"
-          --body "Created on behalf of @$USER_LOGIN"
+          --body "Created on behalf of @$USER_LOGIN
+
+          Closes $ISSUE_NUMBER"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
