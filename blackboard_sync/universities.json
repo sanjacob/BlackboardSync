@@ -573,6 +573,16 @@
     "api_url": "https://learn.obsbusiness.school/"
   },
   {
+    "name": "University of Testing",
+    "short_name": "UTest",
+    "country": "MM",
+    "login": {
+      "start_url": "https://example.org",
+      "target_url": "https://example.org/ultra/"
+    },
+    "api_url": "https://example.org"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {

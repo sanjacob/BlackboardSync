@@ -158,6 +158,7 @@ If this is not something you'd like, please let me know along your request.
 - The Chinese University of Hong Kong
 - The Chinese University of Hong Kong, Shenzhen
 - Hong Kong Community College
+- University of Testing
 
 ### Australia
 
