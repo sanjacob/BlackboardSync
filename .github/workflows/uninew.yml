@@ -30,7 +30,7 @@ jobs:
         run: echo "UNI_NAME=$TMP_UNI_NAME" >> $GITHUB_ENV
 
       - name: Insert university into database
-        uses: sanjacob/json-insert@v1
+        uses: sanjacob/json-insert@v1.1
         env:
           UNI_NAME: ${{ steps.issue.outputs.issueparser_name }}
           UNI_SHORT_NAME: ${{ steps.issue.outputs.issueparser_short-name }}
@@ -115,22 +115,25 @@ jobs:
           git switch -c "uni-$ISSUE_ID"
 
       - name: Set GitHub commit author
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-
-      - name: Create commit
         env:
           COMMIT_AUTHOR: ${{ env.USER_NAME || env.USER_LOGIN }}
         run: |
-          git add .
           USER_EMAIL="${USER_ID}+${USER_LOGIN}@users.noreply.github.com"
-          git commit -m "Add support for $UNI_NAME
+          git config user.name $COMMIT_AUTHOR
+          git config user.email $USER_EMAIL
 
-          Co-authored-by: $COMMIT_AUTHOR <$USER_EMAIL>"
+      - name: Create commit
+        run: |
+          git add .
+          git commit -m "Add support for $UNI_NAME"
 
       - name: Push new branch to origin
         run: git push origin "uni-$ISSUE_ID"
+
+      - name: Set GitHub PR author
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
 
       - name: Create pull request
         run: >
