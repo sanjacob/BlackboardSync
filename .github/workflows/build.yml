@@ -297,12 +297,13 @@ jobs:
             dist/*.dmg
 
   pr-comment:
-    needs: [ package-windows, package-macos ]
     if: ${{ github.event_name == 'pull_request' }}
+    needs: [ package-windows, package-macos ]
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - uses: mshick/add-pr-comment@v2
-        permissions:
-          pull-requests: write
         with:
           message: >
             The build process has succeeded.
