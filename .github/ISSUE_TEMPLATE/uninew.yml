@@ -31,13 +31,264 @@ body:
       placeholder: ex. UCLan
     validations:
       required: false
-  - type: input
+  - type: dropdown
     id: country
     attributes:
       label: University country
       description: >
         Where is your university located?
-      placeholder: ex. United Kingdom
+      multiple: false
+      options:
+        - Andorra
+        - دولة الإمارات العربية المتحدة
+        - افغانستان
+        - Antigua and Barbuda
+        - Anguilla
+        - Shqipëria
+        - Հայաստան
+        - Angola
+        - Antarctica
+        - Argentina
+        - American Samoa
+        - Österreich
+        - Australia
+        - Aruba
+        - Åland
+        - Azərbaycan
+        - Bosna i Hercegovina
+        - Barbados
+        - Bangladesh
+        - België
+        - Burkina Faso
+        - България
+        - ‏البحرين
+        - Burundi
+        - Bénin
+        - Saint-Barthélemy
+        - Bermuda
+        - Negara Brunei Darussalam
+        - Bolivia
+        - Bonaire
+        - Brasil
+        - Bahamas
+        - ʼbrug-yul
+        - Bouvetøya
+        - Botswana
+        - Белару́сь
+        - Belize
+        - Canada
+        - Cocos (Keeling) Islands
+        - République démocratique du Congo
+        - Ködörösêse tî Bêafrîka
+        - République du Congo
+        - Schweiz
+        - Côte d'Ivoire
+        - Cook Islands
+        - Chile
+        - Cameroon
+        - 中国
+        - Colombia
+        - Costa Rica
+        - Cuba
+        - Cabo Verde
+        - Curaçao
+        - Christmas Island
+        - Κύπρος
+        - Česká republika
+        - Deutschland
+        - Djibouti
+        - Danmark
+        - Dominica
+        - República Dominicana
+        - الجزائر
+        - Ecuador
+        - Eesti
+        - مصر‎
+        - الصحراء الغربية
+        - ኤርትራ
+        - España
+        - ኢትዮጵያ
+        - Suomi
+        - Fiji
+        - Falkland Islands
+        - Micronesia
+        - Føroyar
+        - France
+        - Gabon
+        - United Kingdom
+        - Grenada
+        - საქართველო
+        - Guyane française
+        - Guernsey
+        - Ghana
+        - Gibraltar
+        - Kalaallit Nunaat
+        - Gambia
+        - Guinée
+        - Guadeloupe
+        - Guinea Ecuatorial
+        - Ελλάδα
+        - South Georgia
+        - Guatemala
+        - Guam
+        - Guiné-Bissau
+        - Guyana
+        - 香港
+        - Heard Island and McDonald Islands
+        - Honduras
+        - Hrvatska
+        - Haïti
+        - Magyarország
+        - Indonesia
+        - Éire
+        - יִשְׂרָאֵל
+        - Isle of Man
+        - भारत
+        - British Indian Ocean Territory
+        - العراق
+        - ایران
+        - Ísland
+        - Italia
+        - Jersey
+        - Jamaica
+        - الأردن
+        - 日本
+        - Kenya
+        - Кыргызстан
+        - Kâmpŭchéa
+        - Kiribati
+        - Komori
+        - Saint Kitts and Nevis
+        - 북한
+        - 대한민국
+        - الكويت
+        - Cayman Islands
+        - Қазақстан
+        - ສປປລາວ
+        - لبنان
+        - Saint Lucia
+        - Liechtenstein
+        - śrī laṃkāva
+        - Liberia
+        - Lesotho
+        - Lietuva
+        - Luxembourg
+        - Latvija
+        - ‏ليبيا
+        - المغرب
+        - Monaco
+        - Moldova
+        - Црна Гора
+        - Saint-Martin
+        - Madagasikara
+        - M̧ajeļ
+        - Северна Македонија
+        - Mali
+        - မြန်မာ
+        - Монгол улс
+        - 澳門
+        - Northern Mariana Islands
+        - Martinique
+        - موريتانيا
+        - Montserrat
+        - Malta
+        - Maurice
+        - Maldives
+        - Malawi
+        - México
+        - Malaysia
+        - Moçambique
+        - Namibia
+        - Nouvelle-Calédonie
+        - Niger
+        - Norfolk Island
+        - Nigeria
+        - Nicaragua
+        - Nederland
+        - Norge
+        - नेपाल
+        - Nauru
+        - Niuē
+        - New Zealand
+        - عمان
+        - Panamá
+        - Perú
+        - Polynésie française
+        - Papua Niugini
+        - Pilipinas
+        - Pakistan
+        - Polska
+        - Saint-Pierre-et-Miquelon
+        - Pitcairn Islands
+        - Puerto Rico
+        - فلسطين
+        - Portugal
+        - Palau
+        - Paraguay
+        - قطر
+        - La Réunion
+        - România
+        - Србија
+        - Россия
+        - Rwanda
+        - العربية السعودية
+        - Solomon Islands
+        - Seychelles
+        - السودان
+        - Sverige
+        - Singapore
+        - Saint Helena
+        - Slovenija
+        - Svalbard og Jan Mayen
+        - Slovensko
+        - Sierra Leone
+        - San Marino
+        - Sénégal
+        - Soomaaliya
+        - Suriname
+        - South Sudan
+        - São Tomé e Príncipe
+        - El Salvador
+        - Sint Maarten
+        - سوريا
+        - Eswatini
+        - Turks and Caicos Islands
+        - Tchad
+        - Territoire des Terres australes et antarctiques fr
+        - Togo
+        - ประเทศไทย
+        - Тоҷикистон
+        - Tokelau
+        - Timor-Leste
+        - Türkmenistan
+        - تونس
+        - Tonga
+        - Türkiye
+        - Trinidad and Tobago
+        - Tuvalu
+        - 臺灣
+        - Tanzania
+        - Україна
+        - Uganda
+        - United States Minor Outlying Islands
+        - United States
+        - Uruguay
+        - O'zbekiston
+        - Vaticano
+        - Saint Vincent and the Grenadines
+        - Venezuela
+        - British Virgin Islands
+        - United States Virgin Islands
+        - Việt Nam
+        - Vanuatu
+        - Wallis et Futuna
+        - Samoa
+        - Republika e Kosovës
+        - اليَمَن
+        - Mayotte
+        - South Africa
+        - Zambia
+        - Zimbabwe
     validations:
       required: true
   - type: input
