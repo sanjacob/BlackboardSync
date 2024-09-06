@@ -1,6 +1,6 @@
 # Universities
 
-> [!NOTE]  
+> [!NOTE]
 > Even though here only referred to as "university", you can file a
 > request to suport any type of Blackboard Learn instance,
 > including colleges, schools, etc.
@@ -52,15 +52,19 @@ b. **If the automated checker is not working**, follow these steps:
 Please create an issue using [the following form][support-issue].
 You will need a GitHub account to do so.
 
-If you'd rather not create one, feel free to reach me at
-request@bbsync.app with these details.
+> [!IMPORTANT]
+> Once you create the issue, a Pull Request will be generated
+> automatically for you. Creating one on your own is discouraged.
 
-Additionally, you can also post your request in our official
+If you don't have an account with GitHub, and would rather not
+create one, feel free to reach me at request@bbsync.app instead.
+
+Finally, you can instead post your request in our official
 [`Matrix` space](https://matrix.to/#/#blackboardsync:matrix.org).
 
 In every case, your contribution will be credited to your username and
-in the case of GitHub, you will be made co-author of the final commit.
-If this is not something you'd like, please let me know along your request.
+in the case of GitHub, you will be made author of the final commit.
+If this is not something you'd like, please let me know.
 
 
 ## Supported Universities
