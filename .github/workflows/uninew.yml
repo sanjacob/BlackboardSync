@@ -74,7 +74,7 @@ jobs:
           export_to: output
 
       - name: Map country code to continent section
-        if: ${{ steps.header.outputs.section == "" }}
+        if: ${{ steps.header.outputs.section == '' }}
         uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
         id: header-b
         with:
