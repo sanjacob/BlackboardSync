@@ -199,7 +199,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [macos-12, macos-14, windows-latest]
     with:
       python-version: "3.11.9"
       runs-on: ${{ matrix.os }}
@@ -237,6 +237,10 @@ jobs:
   package-macos:
     needs: [ pyinstaller, version, package-prep ]
     runs-on: macos-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [macos-12, macos-14]
     env:
       BUILD_SCRIPT: "packaging/pkg_macos.sh"
       VERSION: ${{ needs.version.outputs.code }}
@@ -248,7 +252,7 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          name: build-macos-latest
+          name: ${{ format('build-{0}', matrix.os) }}
           path: ./dist/
 
       - run: tar -xvf ./dist/build.tar
@@ -261,13 +265,15 @@ jobs:
           p12-password: ${{ secrets.BB_P12_PASSWORD }}
 
       - name: Sign and Package into DMG
+        env:
+          ARCH: ${{ matrix.os == 'macos-12' && 'x86_64' || 'arm64' }}
         run: |
           chmod +x $BUILD_SCRIPT
-          $BUILD_SCRIPT "blackboard_sync-$VERSION"
+          $BUILD_SCRIPT "blackboard_sync-$VERSION_$ARCH"
 
       - uses: actions/upload-artifact@v4
         with:
-          name: package-macos-latest
+          name: ${{ format('package-{0}', matrix.os) }}
           path: dist/*.dmg
 
   gh-release:
