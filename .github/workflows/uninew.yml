@@ -13,7 +13,8 @@ jobs:
     if: ${{ startsWith(github.event.issue.title, '[New University]') }}
     runs-on: ubuntu-latest
     env:
-      USER_NAME: ${{ github.event.issue.user.login }}
+      USER_LOGIN: ${{ github.event.issue.user.login }}
+      USER_NAME: ${{ github.event.issue.user.name }}
       USER_ID: ${{ github.event.issue.user.id }}
       ISSUE_ID: ${{ github.event.issue.id }}
     steps:
@@ -107,7 +108,7 @@ jobs:
           file: "CHANGELOG.md"
           header: Added
           item: >
-            Add support for ${{ env.UNI_NAME }} (${{ env.USER_NAME }})
+            Add support for ${{ env.UNI_NAME }} (@${{ env.USER_LOGIN }})
 
       - name: Create new branch
         run: |
@@ -119,12 +120,14 @@ jobs:
           git config user.email github-actions@github.com
 
       - name: Create commit
+        env:
+          COMMIT_AUTHOR: ${{ env.USER_NAME || env.USER_LOGIN }}
         run: |
           git add .
-          USER_EMAIL="${USER_ID}+${USER_NAME}@noreply.users.github.com"
+          USER_EMAIL="${USER_ID}+${USER_LOGIN}@users.noreply.github.com"
           git commit -m "Add support for $UNI_NAME
 
-          Co-authored-by: $USER_NAME <$USER_EMAIL>"
+          Co-authored-by: $COMMIT_AUTHOR <$USER_EMAIL>"
 
       - name: Push new branch to origin
         run: git push origin "uni-$ISSUE_ID"
@@ -133,6 +136,6 @@ jobs:
         run: >
           gh pr create -B main -H "uni-$ISSUE_ID"
           --title "Add support for $UNI_NAME"
-          --body "Created on behalf of $USER_NAME"
+          --body "Created on behalf of @$USER_LOGIN"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
