@@ -573,6 +573,16 @@
     "api_url": "https://learn.obsbusiness.school"
   },
   {
+    "name": "Shiv Nadar University",
+    "short_name": "SNU",
+    "country": "IN",
+    "login": {
+      "start_url": "https://blackboard.snu.edu.in",
+      "target_url": "https://blackboard.snu.edu.in/ultra/"
+    },
+    "api_url": "https://blackboard.snu.edu.in"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
