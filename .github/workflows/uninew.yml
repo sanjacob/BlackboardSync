@@ -17,12 +17,11 @@ jobs:
       USER_ID: ${{ github.event.issue.user.id }}
       ISSUE_ID: ${{ github.event.issue.id }}
     steps:
+      - uses: actions/checkout@v4
       - uses: stefanbuck/github-issue-parser@v3
         id: issue
         with:
           template-path: .github/ISSUE_TEMPLATE/uninew.yml
-
-      - uses: actions/checkout@v4
 
       - name: Insert university into database
         uses: sanjacob/json-insert@v1
