@@ -41,7 +41,7 @@ jobs:
             }
 
       - name: Find country information
-        uses: sanjacob/country-iso
+        uses: sanjacob/country-iso@v2
         id: country
         with:
           name: ${{ steps.issue.outputs.name }}
@@ -81,7 +81,7 @@ jobs:
           export_to: output
 
       - name: Append university to UNIVERSITIES
-        uses: sanjacob/markdown-list
+        uses: sanjacob/markdown-list@v1
         with:
           file: "UNIVERSITIES.md"
           header: >
@@ -89,7 +89,7 @@ jobs:
           item: ${{ steps.issue.outputs.name }}
 
       - name: Add entry to CHANGELOG
-        uses: sanjacob/markdown-list
+        uses: sanjacob/markdown-list@v1
         with:
           file: "CHANGELOG.md"
           header: Added
