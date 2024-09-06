@@ -1,0 +1,121 @@
+name: New University
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  pull-requests: write
+  contents: write
+
+jobs:
+  autopr:
+    if: ${{ startsWith(github.event.issue.title, '[New University]' }}
+    runs-on: ubuntu-latest
+    env:
+      USER_NAME: ${{ github.event.issue.user.login }}
+      USER_ID: ${{ github.event.issue.user.id }}
+      ISSUE_ID: ${{ github.event.issue.id }}
+    steps:
+      - uses: stefanbuck/github-issue-parser@v3
+        id: issue
+        with:
+          template-path: .github/ISSUE_TEMPLATE/uninew.yml
+
+      - uses: actions/checkout@v4
+
+      - name: Insert university into database
+        uses: sanjacob/json-insert@v1
+        with:
+          file: blackboard_sync/universities.json
+          index: -2
+          item:
+            {
+              "name": ${{ steps.issue.outputs.name }},
+              "short_name": ${{ steps.issue.outputs.short_name }},
+              "login": {
+                "start_url": ${{ steps.issue.outputs.login-start-url }},
+                "target_url": ${{ steps.issue.outputs.login-target-url }}
+              },
+              "api_url": ${{ steps.issue.outputs.login-start-url }}
+            }
+
+      - name: Find country information
+        uses: sanjacob/country-iso
+        id: country
+        with:
+          name: ${{ steps.issue.outputs.name }}
+
+      - name: Map country code to country section
+        uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
+        id: header
+        with:
+          key: "${{ steps.country.outputs.name }}"
+          map: |
+            {
+              "MX": { "section": "Mexico" },
+              "NZ": { "section": "New Zealand" },
+              "CA": { "section": "Canada" },
+              "US": { "section": "United States of America" },
+              "GB": { "section": "England" },
+              ".*": { "section": null }
+            }
+          export_to: output
+
+      - name: Map country code to continent section
+        if: ${{ steps.header.outputs.section == null }}
+        uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
+        id: header-b
+        with:
+          key: "${{ steps.country.outputs.continent }}"
+          map: |
+            {
+              "AF": { "section": "Africa" },
+              "AS": { "section": "Asia" },
+              "EU": { "section": "Rest of Europe" },
+              "NA": { "section": "United States of America" },
+              "OC": { "section": "Australia" },
+              "SA": { "section": "South America" },
+              ".*": { "section": null }
+            }
+          export_to: output
+
+      - name: Append university to UNIVERSITIES
+        uses: sanjacob/markdown-list
+        with:
+          file: "UNIVERSITIES.md"
+          header: >
+            ${{ steps.header.outputs.section || steps.header-b.outputs.section }}
+          item: ${{ steps.issue.outputs.name }}
+
+      - name: Add entry to CHANGELOG
+        uses: sanjacob/markdown-list
+        with:
+          file: "CHANGELOG.md"
+          header: Added
+          item: >
+            Add support for ${{ steps.issue.outputs.name }}
+            (${{ env.USER_NAME }})
+
+      - name: Create new branch
+        run: |
+          git switch -c "uni-$ISSUE_ID"
+
+      - name: Create commit
+        run: |
+          git add .
+          USER_EMAIL="${USER_ID}+${USER_NAME}@noreply.users.github.com"
+          git commit -m "Add support for ${{ steps.issue.outputs.name }}
+
+          Co-authored-by: $USER_NAME <$USER_EMAIL>"
+
+      - name: Push new branch to origin
+        run: git push origin "uni-$ISSUE_ID"
+
+      - name: Create pull request
+        run: >
+          gh pr create -B main -H "uni-$ISSUE_ID"
+          --title "Add support for ${{ steps.issue.outputs.name }}"
+          --body "Created on behalf of $USER_NAME"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
