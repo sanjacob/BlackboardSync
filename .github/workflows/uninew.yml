@@ -113,6 +113,11 @@ jobs:
         run: |
           git switch -c "uni-$ISSUE_ID"
 
+      - name: Set GitHub commit author
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
       - name: Create commit
         run: |
           git add .
