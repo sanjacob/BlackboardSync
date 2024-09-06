@@ -64,6 +64,7 @@ Finally, you can instead post your request in our official
 
 In every case, your contribution will be credited to your username and
 in the case of GitHub, you will be made author of the final commit.
+
 If this is not something you'd like, please let me know.
 
 

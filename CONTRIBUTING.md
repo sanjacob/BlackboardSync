@@ -28,6 +28,7 @@ within the development roadmap before working on it.
 
 Please ensure your description is clear and has sufficient
 instructions to be able to reproduce the issue.
+
 A bug report form is available to help you with this.
 
 ### Feature Request
@@ -58,7 +59,7 @@ Great feature requests tend to have:
 8. Push your changes to your copy of the repo on GitHub:
    `git push --set-upstream origin some-feature-you-want`.
 9. Create a pull request for your branch:
-   `$sanjacob/main <- USER/some-feature-you-want`.
+   `sanjacob/main <- USER/some-feature-you-want`.
 
 Some extra pointers:
 
