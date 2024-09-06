@@ -25,18 +25,20 @@ jobs:
         with:
           template-path: .github/ISSUE_TEMPLATE/uninew.yml
 
-      - name: Set environment variables
+      - name: Set issue environment variables
         env:
-          TMP_UNI_NAME: ${{ steps.issue.outputs.issueparser_name }}
-        run: echo "UNI_NAME=$TMP_UNI_NAME" >> $GITHUB_ENV
+          NAME: ${{ steps.issue.outputs.issueparser_name }}
+          START_URL: ${{ steps.issue.outputs.issueparser_login-start-url }}
+          TARGET_URL: ${{ steps.issue.outputs.issueparser_login-target-url }}
+        run: |
+          echo "UNI_NAME=$NAME" >> $GITHUB_ENV
+          echo "UNI_START_URL=${START_URL%'/'}" >> $GITHUB_ENV
+          echo "UNI_TARGET_URL=${TARGET_URL%'/'}/" >> $GITHUB_ENV
 
       - name: Insert university into database
         uses: sanjacob/json-insert@v1.1
         env:
-          UNI_NAME: ${{ steps.issue.outputs.issueparser_name }}
           UNI_SHORT_NAME: ${{ steps.issue.outputs.issueparser_short-name }}
-          UNI_START_URL: ${{ steps.issue.outputs.issueparser_login-start-url }}
-          UNI_TARGET_URL: ${{ steps.issue.outputs.issueparser_login-target-url }}
         with:
           file: blackboard_sync/universities.json
           index: -2
