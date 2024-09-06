@@ -6,7 +6,7 @@
       "start_url": "https://portal.uclan.ac.uk",
       "target_url": "https://portal.uclan.ac.uk/ultra/"
     },
-    "api_url": "https://portal.uclan.ac.uk/"
+    "api_url": "https://portal.uclan.ac.uk"
   },
   {
     "name": "University of Westminster",
@@ -14,7 +14,7 @@
       "start_url": "https://learning.westminster.ac.uk",
       "target_url": "https://learning.westminster.ac.uk/ultra/"
     },
-    "api_url": "https://learning.westminster.ac.uk/"
+    "api_url": "https://learning.westminster.ac.uk"
   },
   {
     "name": "University of Reading",
@@ -22,7 +22,7 @@
       "start_url": "https://www.bb.reading.ac.uk",
       "target_url": "https://www.bb.reading.ac.uk/ultra/"
     },
-    "api_url": "https://www.bb.reading.ac.uk/"
+    "api_url": "https://www.bb.reading.ac.uk"
   },
   {
     "name": "University of East Anglia",
@@ -31,7 +31,7 @@
       "start_url": "https://learn.uea.ac.uk",
       "target_url": "https://learn.uea.ac.uk/ultra/"
     },
-    "api_url": "https://learn.uea.ac.uk/"
+    "api_url": "https://learn.uea.ac.uk"
   },
   {
     "name": "Durham University",
@@ -39,7 +39,7 @@
       "start_url": "https://blackboard.durham.ac.uk",
       "target_url": "https://blackboard.durham.ac.uk/ultra/"
     },
-    "api_url": "https://blackboard.durham.ac.uk/"
+    "api_url": "https://blackboard.durham.ac.uk"
   },
   {
     "name": "University of Salford",
@@ -47,7 +47,7 @@
       "start_url": "https://blackboard.salford.ac.uk",
       "target_url": "https://blackboard.salford.ac.uk/ultra/"
     },
-    "api_url": "https://blackboard.salford.ac.uk/"
+    "api_url": "https://blackboard.salford.ac.uk"
   },
   {
     "name": "University of South Wales",
@@ -56,7 +56,7 @@
       "start_url": "https://unilearn.southwales.ac.uk",
       "target_url": "https://unilearn.southwales.ac.uk/ultra/"
     },
-    "api_url": "https://unilearn.southwales.ac.uk/"
+    "api_url": "https://unilearn.southwales.ac.uk"
   },
   {
     "name": "University of Leicester",
@@ -64,7 +64,7 @@
       "start_url": "https://blackboard.le.ac.uk",
       "target_url": "https://blackboard.le.ac.uk/ultra/"
     },
-    "api_url": "https://blackboard.le.ac.uk/"
+    "api_url": "https://blackboard.le.ac.uk"
   },
   {
     "name": "Imperial College London",
@@ -73,7 +73,7 @@
       "start_url": "https://bb.imperial.ac.uk",
       "target_url": "https://bb.imperial.ac.uk/ultra/"
     },
-    "api_url": "https://bb.imperial.ac.uk/"
+    "api_url": "https://bb.imperial.ac.uk"
   },
   {
     "name": "University of Bristol",
@@ -81,7 +81,7 @@
       "start_url": "https://www.ole.bris.ac.uk",
       "target_url": "https://www.ole.bris.ac.uk/ultra/"
     },
-    "api_url": "https://www.ole.bris.ac.uk/"
+    "api_url": "https://www.ole.bris.ac.uk"
   },
   {
     "name": "University of Sheffield",
@@ -89,7 +89,7 @@
       "start_url": "https://vle.shef.ac.uk",
       "target_url": "https://vle.shef.ac.uk/ultra/"
     },
-    "api_url": "https://vle.shef.ac.uk/"
+    "api_url": "https://vle.shef.ac.uk"
   },
   {
     "name": "University of Arkansas",
@@ -98,7 +98,7 @@
       "start_url": "https://learn.uark.edu",
       "target_url": "https://learn.uark.edu/ultra/"
     },
-    "api_url": "https://learn.uark.edu/"
+    "api_url": "https://learn.uark.edu"
   },
   {
     "name": "Universidad del Valle de Mexico",
@@ -107,7 +107,7 @@
       "start_url": "https://uvmonline.blackboard.com",
       "target_url": "https://uvmonline.blackboard.com/ultra/"
     },
-    "api_url": "https://uvmonline.blackboard.com/"
+    "api_url": "https://uvmonline.blackboard.com"
   },
   {
     "name": "Universidad Europea Madrid",
@@ -116,7 +116,7 @@
       "start_url": "https://uem.blackboard.com",
       "target_url": "https://uem.blackboard.com/ultra/"
     },
-    "api_url": "https://uem.blackboard.com/"
+    "api_url": "https://uem.blackboard.com"
   },
   {
     "name": "Universidad Tecnologica ECOTEC",
@@ -125,7 +125,7 @@
       "start_url": "https://ecotec.blackboard.com",
       "target_url": "https://ecotec.blackboard.com/ultra/"
     },
-    "api_url": "https://ecotec.blackboard.com/"
+    "api_url": "https://ecotec.blackboard.com"
   },
   {
     "name": "Universidad Regional del Sureste",
@@ -134,7 +134,7 @@
       "start_url": "https://urse.blackboard.com",
       "target_url": "https://urse.blackboard.com/ultra/"
     },
-    "api_url": "https://urse.blackboard.com/"
+    "api_url": "https://urse.blackboard.com"
   },
   {
     "name": "Universidad de Palermo",
@@ -143,7 +143,7 @@
       "start_url": "https://palermo.blackboard.com",
       "target_url": "https://palermo.blackboard.com/ultra/"
     },
-    "api_url": "https://palermo.blackboard.com/"
+    "api_url": "https://palermo.blackboard.com"
   },
   {
     "name": "Universidad Tecnologica del Salvador",
@@ -152,7 +152,7 @@
       "start_url": "https://utecvirtual.blackboard.com",
       "target_url": "https://utecvirtual.blackboard.com/ultra/"
     },
-    "api_url": "https://utecvirtual.blackboard.com/"
+    "api_url": "https://utecvirtual.blackboard.com"
   },
   {
     "name": "Universidad de Alcala",
@@ -161,7 +161,7 @@
       "start_url": "https://uah.blackboard.com",
       "target_url": "https://uah.blackboard.com/ultra/"
     },
-    "api_url": "https://uah.blackboard.com/"
+    "api_url": "https://uah.blackboard.com"
   },
   {
     "name": "The George Washington University",
@@ -170,7 +170,7 @@
       "start_url": "https://blackboard.gwu.edu",
       "target_url": "https://blackboard.gwu.edu/ultra/"
     },
-    "api_url": "https://blackboard.gwu.edu/"
+    "api_url": "https://blackboard.gwu.edu"
   },
   {
     "name": "Alaska Pacific University",
@@ -179,7 +179,7 @@
       "start_url": "https://apu.blackboard.com",
       "target_url": "https://apu.blackboard.com/ultra/"
     },
-    "api_url": "https://apu.blackboard.com/"
+    "api_url": "https://apu.blackboard.com"
   },
   {
     "name": "Buckinghamshire New University",
@@ -188,7 +188,7 @@
       "start_url": "https://my.bucks.ac.uk",
       "target_url": "https://my.bucks.ac.uk/webapps/portal/"
     },
-    "api_url": "https://my.bucks.ac.uk/"
+    "api_url": "https://my.bucks.ac.uk"
   },
   {
     "name": "University of Northampton",
@@ -197,7 +197,7 @@
       "start_url": "https://nile.northampton.ac.uk",
       "target_url": "https://nile.northampton.ac.uk/ultra/"
     },
-    "api_url": "https://nile.northampton.ac.uk/"
+    "api_url": "https://nile.northampton.ac.uk"
   },
   {
     "name": "University of Bedfordshire",
@@ -206,7 +206,7 @@
       "start_url": "https://breo.beds.ac.uk",
       "target_url": "https://breo.beds.ac.uk/ultra/"
     },
-    "api_url": "https://breo.beds.ac.uk/"
+    "api_url": "https://breo.beds.ac.uk"
   },
   {
     "name": "Youngstown State University",
@@ -215,7 +215,7 @@
       "start_url": "https://ysu.blackboard.com",
       "target_url": "https://ysu.blackboard.com/ultra/"
     },
-    "api_url": "https://ysu.blackboard.com/"
+    "api_url": "https://ysu.blackboard.com"
   },
   {
     "name": "Ohio University",
@@ -223,7 +223,7 @@
       "start_url": "https://blackboard.ohio.edu",
       "target_url": "https://blackboard.ohio.edu/ultra/"
     },
-    "api_url": "https://blackboard.ohio.edu/"
+    "api_url": "https://blackboard.ohio.edu"
   },
   {
     "name": "Princess Nourah Bint Abdulrahman University",
@@ -232,7 +232,7 @@
       "start_url": "https://lms2.pnu.edu.sa",
       "target_url": "https://lms2.pnu.edu.sa/webapps/portal/"
     },
-    "api_url": "https://lms2.pnu.edu.sa/"
+    "api_url": "https://lms2.pnu.edu.sa"
   },
   {
     "name": "Leeds Beckett University",
@@ -241,7 +241,7 @@
       "start_url": "https://my.leedsbeckett.ac.uk",
       "target_url": "https://my.leedsbeckett.ac.uk/ultra/"
     },
-    "api_url": "https://my.leedsbeckett.ac.uk/"
+    "api_url": "https://my.leedsbeckett.ac.uk"
   },
   {
     "name": "Post University",
@@ -249,7 +249,7 @@
       "start_url": "https://post.blackboard.com",
       "target_url": "https://post.blackboard.com/ultra/"
     },
-    "api_url": "https://post.blackboard.com/"
+    "api_url": "https://post.blackboard.com"
   },
   {
     "name": "Universidad Ana G. Mendez",
@@ -258,7 +258,7 @@
       "start_url": "https://uagm.blackboard.com/webapps/login",
       "target_url": "https://uagm.blackboard.com/webapps/portal/"
     },
-    "api_url": "https://uagm.blackboard.com/"
+    "api_url": "https://uagm.blackboard.com"
   },
   {
     "name": "The University of Alabama",
@@ -267,7 +267,7 @@
       "start_url": "https://ualearn.blackboard.com/webapps/login",
       "target_url": "https://ualearn.blackboard.com/webapps/portal/"
     },
-    "api_url": "https://ualearn.blackboard.com/"
+    "api_url": "https://ualearn.blackboard.com"
   },
   {
     "name": "Torrens University Australia",
@@ -275,7 +275,7 @@
       "start_url": "https://torrens.blackboard.com/webapps/login",
       "target_url": "https://torrens.blackboard.com/webapps/portal"
     },
-    "api_url": "https://torrens.blackboard.com/"
+    "api_url": "https://torrens.blackboard.com"
   },
   {
     "name": "Holmes Institute",
@@ -283,7 +283,7 @@
       "start_url": "https://holmes.blackboard.com",
       "target_url": "https://holmes.blackboard.com/ultra/"
     },
-    "api_url": "https://holmes.blackboard.com/"
+    "api_url": "https://holmes.blackboard.com"
   },
   {
     "name": "Trinity College Dublin",
@@ -292,7 +292,7 @@
       "start_url": "https://tcd.blackboard.com/webapps/login",
       "target_url": "https://tcd.blackboard.com/webapps/portal/"
     },
-    "api_url": "https://tcd.blackboard.com/"
+    "api_url": "https://tcd.blackboard.com"
   },
   {
     "name": "Georgian College",
@@ -301,7 +301,7 @@
       "start_url": "https://gc.blackboard.com/webapps/login",
       "target_url": "https://gc.blackboard.com/webapps/portal/"
     },
-    "api_url": "https://gc.blackboard.com/"
+    "api_url": "https://gc.blackboard.com"
   },
   {
     "name": "Cardiff University",
@@ -310,7 +310,7 @@
       "start_url": "https://learningcentral.cf.ac.uk",
       "target_url": "https://learningcentral.cf.ac.uk/ultra/"
     },
-    "api_url": "https://learningcentral.cf.ac.uk/"
+    "api_url": "https://learningcentral.cf.ac.uk"
   },
   {
     "name": "Sheffield Hallam University",
@@ -319,7 +319,7 @@
       "start_url": "https://www.shu.ac.uk/myhallam",
       "target_url": "https://shuspace.shu.ac.uk/ultra/"
     },
-    "api_url": "https://www.shu.ac.uk/myhallam/"
+    "api_url": "https://www.shu.ac.uk/myhallam"
   },
   {
     "name": "University of the West of England",
@@ -328,7 +328,7 @@
       "start_url": "https://blackboard.uwe.ac.uk",
       "target_url": "https://blackboard.uwe.ac.uk/ultra/"
     },
-    "api_url": "https://blackboard.uwe.ac.uk/"
+    "api_url": "https://blackboard.uwe.ac.uk"
   },
   {
     "name": "Northumbria University",
@@ -336,7 +336,7 @@
       "start_url": "https://elp.northumbria.ac.uk",
       "target_url": "https://elp.northumbria.ac.uk/ultra/"
     },
-    "api_url": "https://elp.northumbria.ac.uk/"
+    "api_url": "https://elp.northumbria.ac.uk"
   },
   {
     "name": "Ulster University",
@@ -344,7 +344,7 @@
       "start_url": "https://learning.ulster.ac.uk",
       "target_url": "https://learning.ulster.ac.uk/ultra/"
     },
-    "api_url": "https://learning.ulster.ac.uk/"
+    "api_url": "https://learning.ulster.ac.uk"
   },
   {
     "name": "University of Antwerp",
@@ -353,7 +353,7 @@
       "start_url": "https://lms.uantwerpen.be",
       "target_url": "https://lms.uantwerpen.be/ultra/"
     },
-    "api_url": "https://lms.uantwerpen.be/"
+    "api_url": "https://lms.uantwerpen.be"
   },
   {
     "name": "The Chinese University of Hong Kong",
@@ -362,7 +362,7 @@
       "start_url": "https://blackboard.cuhk.edu.hk",
       "target_url": "https://blackboard.cuhk.edu.hk/ultra/"
     },
-    "api_url": "https://blackboard.cuhk.edu.hk/"
+    "api_url": "https://blackboard.cuhk.edu.hk"
   },
   {
     "name": "Concordia University Wisconsin & Ann Arbor",
@@ -370,7 +370,7 @@
       "start_url": "https://concordia.blackboard.com",
       "target_url": "https://concordia.blackboard.com/ultra/"
     },
-    "api_url": "https://concordia.blackboard.com/"
+    "api_url": "https://concordia.blackboard.com"
   },
   {
     "name": "Edge Hill University",
@@ -378,7 +378,7 @@
       "start_url": "https://www.edgehill.ac.uk/service/learning-edge/go",
       "target_url": "https://learningedge.edgehill.ac.uk/ultra/"
     },
-    "api_url": "https://learningedge.edgehill.ac.uk/"
+    "api_url": "https://learningedge.edgehill.ac.uk"
   },
   {
     "name": "Sam Houston State University",
@@ -387,7 +387,7 @@
       "start_url": "https://shsu.blackboard.com",
       "target_url": "https://shsu.blackboard.com/ultra/"
     },
-    "api_url": "https://shsu.blackboard.com/"
+    "api_url": "https://shsu.blackboard.com"
   },
   {
     "name": "University of Lincoln",
@@ -396,7 +396,7 @@
       "start_url": "https://blackboard.lincoln.ac.uk",
       "target_url": "https://blackboard.lincoln.ac.uk/ultra/"
     },
-    "api_url": "https://blackboard.lincoln.ac.uk/"
+    "api_url": "https://blackboard.lincoln.ac.uk"
   },
   {
     "name": "University of Aberdeen",
@@ -405,7 +405,7 @@
       "start_url": "https://abdn.blackboard.com",
       "target_url": "https://abdn.blackboard.com/ultra/"
     },
-    "api_url": "https://abdn.blackboard.com/"
+    "api_url": "https://abdn.blackboard.com"
   },
   {
     "name": "University of Western Australia",
@@ -414,7 +414,7 @@
       "start_url": "https://lms.uwa.edu.au",
       "target_url": "https://lms.uwa.edu.au/ultra/"
     },
-    "api_url": "https://lms.uwa.edu.au/"
+    "api_url": "https://lms.uwa.edu.au"
   },
   {
     "name": "Universidade do Minho",
@@ -423,7 +423,7 @@
       "start_url": "https://elearning.uminho.pt",
       "target_url": "https://elearning.uminho.pt/ultra/"
     },
-    "api_url": "https://elearning.uminho.pt/"
+    "api_url": "https://elearning.uminho.pt"
   },
   {
     "name": "University of Connecticut",
@@ -432,7 +432,7 @@
       "start_url": "https://huskyct.uconn.edu",
       "target_url": "https://huskyct.uconn.edu/ultra/"
     },
-    "api_url": "https://huskyct.uconn.edu/"
+    "api_url": "https://huskyct.uconn.edu"
   },
   {
     "name": "Hanze University of Applied Sciences",
@@ -441,7 +441,7 @@
       "start_url": "https://blackboard.hanze.nl",
       "target_url": "https://blackboard.hanze.nl/ultra/"
     },
-    "api_url": "https://blackboard.hanze.nl/"
+    "api_url": "https://blackboard.hanze.nl"
   },
   {
     "name": "Centro Universitario de Tecnologia y Arte Digital",
@@ -450,7 +450,7 @@
       "start_url": "https://u-tad.blackboard.com",
       "target_url": "https://u-tad.blackboard.com/ultra/"
     },
-    "api_url": "https://u-tad.blackboard.com/"
+    "api_url": "https://u-tad.blackboard.com"
   },
   {
     "name": "Universidad de Sevilla",
@@ -459,7 +459,7 @@
       "start_url": "https://ev.us.es",
       "target_url": "https://ev.us.es/ultra/"
     },
-    "api_url": "https://ev.us.es/"
+    "api_url": "https://ev.us.es"
   },
   {
     "name": "University of Otago",
@@ -468,7 +468,7 @@
       "start_url": "https://blackboard.otago.ac.nz",
       "target_url": "https://blackboard.otago.ac.nz/ultra/"
     },
-    "api_url": "https://blackboard.otago.ac.nz/"
+    "api_url": "https://blackboard.otago.ac.nz"
   },
   {
     "name": "Schoolcraft College",
@@ -476,7 +476,7 @@
       "start_url": "https://bb.schoolcraft.edu",
       "target_url": "https://bb.schoolcraft.edu/ultra/"
     },
-    "api_url": "https://bb.schoolcraft.edu/"
+    "api_url": "https://bb.schoolcraft.edu"
   },
   {
     "name": "Griffith University",
@@ -484,7 +484,7 @@
       "start_url": "http://bblearn.griffith.edu.au",
       "target_url": "https://bblearn.griffith.edu.au/webapps/portal/"
     },
-    "api_url": "https://bblearn.griffith.edu.au/"
+    "api_url": "https://bblearn.griffith.edu.au"
   },
   {
     "name": "University of Pretoria",
@@ -493,7 +493,7 @@
       "start_url": "https://clickup.up.ac.za",
       "target_url": "https://clickup.up.ac.za/ultra/"
     },
-    "api_url": "https://clickup.up.ac.za/"
+    "api_url": "https://clickup.up.ac.za"
   },
   {
     "name": "The Chinese University of Hong Kong, Shenzhen",
@@ -502,7 +502,7 @@
       "start_url": "https://bb.cuhk.edu.cn",
       "target_url": "https://bb.cuhk.edu.cn/webapps/portal/"
     },
-    "api_url": "https://bb.cuhk.edu.cn/"
+    "api_url": "https://bb.cuhk.edu.cn"
   },
   {
     "name": "University of Derby",
@@ -511,7 +511,7 @@
       "start_url": "https://courseresources.derby.ac.uk",
       "target_url": "https://courseresources.derby.ac.uk/ultra/"
     },
-    "api_url": "https://courseresources.derby.ac.uk/"
+    "api_url": "https://courseresources.derby.ac.uk"
   },
   {
     "name": "Texas Tech University",
@@ -520,7 +520,7 @@
       "start_url": "https://ttu.blackboard.com",
       "target_url": "https://ttu.blackboard.com/ultra/"
     },
-    "api_url": "https://ttu.blackboard.com/"
+    "api_url": "https://ttu.blackboard.com"
   },
   {
     "name": "Seneca Polytechnic",
@@ -528,7 +528,7 @@
       "start_url": "https://learn.senecapolytechnic.ca",
       "target_url": "https://learn.senecapolytechnic.ca/ultra/"
     },
-    "api_url": "https://learn.senecapolytechnic.ca/"
+    "api_url": "https://learn.senecapolytechnic.ca"
   },
   {
     "name": "University of Manchester",
@@ -537,7 +537,7 @@
       "start_url": "https://online.manchester.ac.uk",
       "target_url": "https://online.manchester.ac.uk/ultra/"
     },
-    "api_url": "https://online.manchester.ac.uk/"
+    "api_url": "https://online.manchester.ac.uk"
   },
   {
     "name": "University of York",
@@ -545,7 +545,7 @@
       "start_url": "https://vle.york.ac.uk",
       "target_url": "https://vle.york.ac.uk/ultra/"
     },
-    "api_url": "https://vle.york.ac.uk/"
+    "api_url": "https://vle.york.ac.uk"
   },
   {
     "name": "Curtin University",
@@ -553,7 +553,7 @@
       "start_url": "https://lms.curtin.edu.au",
       "target_url": "https://lms.curtin.edu.au/ultra/"
     },
-    "api_url": "https://lms.curtin.edu.au/"
+    "api_url": "https://lms.curtin.edu.au"
   },
   {
     "name": "Hong Kong Community College",
@@ -562,7 +562,7 @@
       "start_url": "https://lms.cpce-polyu.edu.hk",
       "target_url": "https://lms.cpce-polyu.edu.hk/ultra/"
     },
-    "api_url": "https://lms.cpce-polyu.edu.hk/"
+    "api_url": "https://lms.cpce-polyu.edu.hk"
   },
   {
     "name": "OBS Business School",
@@ -570,7 +570,7 @@
       "start_url": "https://learn.obsbusiness.school",
       "target_url": "https://learn.obsbusiness.school/ultra/"
     },
-    "api_url": "https://learn.obsbusiness.school/"
+    "api_url": "https://learn.obsbusiness.school"
   },
   {
     "name": "Fakeboard",
@@ -579,6 +579,6 @@
       "start_url": "https://api.bbsync.app",
       "target_url": "https://api.bbsync.app/ultra/"
     },
-    "api_url": "https://api.bbsync.app/"
+    "api_url": "https://api.bbsync.app"
   }
 ]

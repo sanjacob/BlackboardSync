@@ -24,7 +24,8 @@ You may invoke this script with the following command from the project root
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
 import sys
 import requests
@@ -73,7 +74,7 @@ def test_fetch_api_versions():
     """Ping many Blackboard API servers concurrently"""
     print("\n\n")
     with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
-        v = lambda url: f"{url}learn/api/public/v1/system/version"
+        v = lambda url: f"{url}/learn/api/public/v1/system/version"
         # Start the load operations and mark each future with its name
         future_to_uni = {executor.submit(fetch_url, v(uni.api_url), 20): uni.name for uni in _institutions}
 
