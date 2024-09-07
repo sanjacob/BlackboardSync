@@ -13,9 +13,6 @@ env:
   NAME: "BlackboardSync"
   PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
 
-permissions:
-  contents: write
-
 jobs:
   test:
     uses: ./.github/workflows/pytest.yml
@@ -280,6 +277,8 @@ jobs:
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ package-windows, package-macos, release-notes ]
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     env:
       RELEASE_NOTES: ${{ needs.release-notes.outputs.body }}
     steps:
@@ -302,6 +301,8 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
+    env:
+      ACTION_RUNS: https://github.com/sanjacob/BlackboardSync/actions/runs/
     steps:
       - uses: mshick/add-pr-comment@v2
         with:
@@ -311,8 +312,8 @@ jobs:
             Please test either package-macos-12 (x86_64),
             package-macos-14 (arm64), or package-windows-latest.
 
-            You can find them [here]
-            (https://github.com/sanjacob/BlackboardSync/actions/runs/${{ github.run_id }})
+            You can find them
+            [here](${{ format('{0}{1}', env.ACTION_RUNS, github.run_id) }})
             at the bottom of the page.
 
             Let me know if everything seems fine.
