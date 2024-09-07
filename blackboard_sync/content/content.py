@@ -83,6 +83,8 @@ class Content:
                 return folder.Folder
             case BBResourceType.File | BBResourceType.Document:
                 return document.Document
+            case BBResourceType.Assignment:
+                return document.Document
             case BBResourceType.ExternalLink:
                 return externallink.ExternalLink
             case _:
