@@ -305,12 +305,13 @@ jobs:
       ACTION_RUNS: https://github.com/sanjacob/BlackboardSync/actions/runs/
     steps:
       - uses: mshick/add-pr-comment@v2
+        continue-on-error: true
         with:
           message: >
             The build process has succeeded.
 
-            Please test either package-macos-12 (x86_64),
-            package-macos-14 (arm64), or package-windows-latest.
+            Please test either `package-macos-12` (x86_64),
+            `package-macos-14` (arm64), or `package-windows-latest`.
 
             You can find them
             [here](${{ format('{0}{1}', env.ACTION_RUNS, github.run_id) }})
