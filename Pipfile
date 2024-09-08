@@ -21,7 +21,7 @@ whoisit = "*"
 [dev-packages]
 coverage = "*"
 pyinstaller = "==6.10.0"
-pywin32-ctypes = "==0.2.2"
+pywin32-ctypes = "==0.2.3"
 sphinx = "*"
 recommonmark = "*"
 pytest = "*"
