@@ -25,15 +25,15 @@ jobs:
           dev: true
 
       - name: Run PyInstaller
-        run: python packaging/pyinst.py
+        run: "pyinstaller BlackboardSync.spec --noconfirm --clean"
 
       - name: Compress macOS build
         if: startsWith(inputs.runs-on, 'macos')
-        run: tar -czvf build.tar dist/BBSync.app
+        run: "tar -czvf build.tar dist/*.app"
 
       - name: Compress windows build
         if: startsWith(inputs.runs-on, 'windows')
-        run: tar -czvf build.tar dist/BBSync
+        run: "tar -czvf build.tar dist/*"
 
       - name: Upload build
         uses: actions/upload-artifact@v4

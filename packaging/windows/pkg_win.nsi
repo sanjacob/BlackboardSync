@@ -38,33 +38,40 @@ RequestExecutionLevel user
 !insertmacro MUI_LANGUAGE "English"
 
 # Uninstall Settings
-!define AUTORUN_REGKEY "Software\Microsoft\Windows\CurrentVersion\Run"
-!define UNINSTALL_REGKEY '"Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ title }}"'
+!define BASE_REGKEY "Software\Microsoft\Windows\CurrentVersion"
+!define AUTORUN_REGKEY '"${BASE_REGKEY}\Run"'
+!define UNINSTALL_REGKEY '"${BASE_REGKEY}\Uninstall\{{ title }}"'
+
+!define SYNC_FILE "..\dist\BlackboardSync\*"
+!define SYNC_EXE "$INSTDIR\BlackboardSync.exe"
+!define SYNC_ICON "$INSTDIR\icon.ico"
+
+!define SYNC_LNK "$SMPROGRAMS\{{ title }}.lnk"
 
 
 # default section start; every NSIS script has at least one section.
 Section "Installation" SecInstall
     SetOutPath "$INSTDIR"
-    File /r "..\dist\BBSync\*"
+    File /r ${SYNC_FILE}
+    File "icon.ico"
 
     ; Install Directory
-    WriteRegStr HKCU '"Software\{{ title }}"' "InstallDir" $INSTDIR
+    WriteRegStr HKCU 'Software\{{ title }}' "InstallDir" $INSTDIR
 
     ; Run on Startup
-    WriteRegStr HKCU ${AUTORUN_REGKEY} "{{ title }}" '"$INSTDIR\BBSync.exe"'
+    WriteRegStr HKCU ${AUTORUN_REGKEY} "{{ title }}" "${SYNC_EXE}"
 
     ; Shortcut
-    CreateDirectory "$SMPROGRAMS\{{ title }}"
-    CreateShortCut "$SMPROGRAMS\{{ title }}\{{ title }}.lnk" "$INSTDIR\BBSync.exe"
+    CreateShortCut "${SYNC_LNK}" "${SYNC_EXE}"
 
     ; Uninstall Menu
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayName" "{{ title }}"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "UninstallString" "$INSTDIR\Uninstall.exe"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "InstallLocation" $INSTDIR
-    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayIcon" "$INSTDIR\blackboard_sync\assets\logo.ico"
+    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayIcon" "${SYNC_ICON}"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "Publisher" "{{ publisher }}"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "HelpLink" "{{ repository }}"
-    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayVersion" ${VERSION}
+    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayVersion" "${VERSION}"
 
     WriteUninstaller "$INSTDIR\Uninstall.exe"
 SectionEnd
@@ -77,14 +84,14 @@ Section "Uninstall"
   RMDir /r $INSTDIR
 
   ; Run on Startup
-  DeleteRegKey HKCU '"${AUTORUN_REGKEY}\{{ title }}"'
+  DeleteRegKey HKCU '${AUTORUN_REGKEY}\{{ title }}'
 
   ; Install Directory
-  DeleteRegKey HKCU '"Software\{{ title }}"'
+  DeleteRegKey HKCU 'Software\{{ title }}'
 
   ; Uninstall Menu Entry
-  DeleteRegKey HKLM ${UNINSTALL_REGKEY}
+  DeleteRegKey HKCU ${UNINSTALL_REGKEY}
 
   ; Delete Shortcut
-  RMDir /r "$SMPROGRAMS\{{ title }}"
+  Delete "${SYNC_LNK}"
 SectionEnd

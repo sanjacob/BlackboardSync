@@ -216,9 +216,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build-windows-latest
-          path: ./dist/
 
-      - run: tar -xvf ./dist/build.tar
+      - run: tar -xvf build.tar
 
       - name: Create windows installer
         uses: joncloud/makensis-action@v4.1
@@ -250,9 +249,8 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: ${{ format('build-{0}', matrix.os) }}
-          path: ./dist/
 
-      - run: tar -xvf ./dist/build.tar
+      - run: tar -xvf build.tar
 
       - name: Import signing certificate
         if: github.event_name == 'push'
