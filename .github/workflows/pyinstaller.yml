@@ -25,7 +25,7 @@ jobs:
           dev: true
 
       - name: Run PyInstaller
-        run: "pyinstaller *.spec --noconfirm --clean"
+        run: "pyinstaller BlackboardSync.spec --noconfirm --clean"
 
       - name: Compress macOS build
         if: startsWith(inputs.runs-on, 'macos')
