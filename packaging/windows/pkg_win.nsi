@@ -93,5 +93,5 @@ Section "Uninstall"
   DeleteRegKey HKCU ${UNINSTALL_REGKEY}
 
   ; Delete Shortcut
-  RMDir /r "$SMPROGRAMS\{{ title }}"
+  Delete "${SYNC_LNK}"
 SectionEnd
