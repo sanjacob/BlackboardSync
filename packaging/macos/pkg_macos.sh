@@ -4,7 +4,7 @@
 DMG_FILENAME="$1"
 
 # Sign App
-codesign --sign "{{ title }}" --force --deep dist/BBSync.app
+codesign --sign "{{ title }}" --force --deep dist/*.app
 
 # Create temporary directory
 mkdir dist/bbsync_dmg
@@ -13,7 +13,7 @@ mkdir dist/bbsync_dmg
 ln -s "/Applications" "dist/bbsync_dmg/Applications"
 
 # Copy app into temp directory
-cp -R dist/BBSync.app dist/bbsync_dmg
+cp -R dist/*.app dist/bbsync_dmg
 
 # Create disk image
 hdiutil create -volname "{{ title }}" -srcfolder dist/bbsync_dmg -ov -format UDZO "dist/${DMG_FILENAME}.dmg"
