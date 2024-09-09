@@ -44,7 +44,7 @@ RequestExecutionLevel user
 
 !define SYNC_FILE "..\dist\BlackboardSync\*"
 !define SYNC_EXE "$INSTDIR\BlackboardSync.exe"
-!define SYNC_ICON "$INSTDIR\blackboard_sync\assets\logo.ico"
+!define SYNC_ICON "$INSTDIR\icon.ico"
 
 !define SYNC_LNK_DIR "$SMPROGRAMS\{{ title }}"
 !define SYNC_LNK "$SMPROGRAMS\{{ title }}\{{ title }}.lnk"
@@ -54,9 +54,10 @@ RequestExecutionLevel user
 Section "Installation" SecInstall
     SetOutPath "$INSTDIR"
     File /r ${SYNC_FILE}
+    File "icon.ico"
 
     ; Install Directory
-    WriteRegStr HKCU '"Software\{{ title }}"' "InstallDir" $INSTDIR
+    WriteRegStr HKCU 'Software\{{ title }}' "InstallDir" $INSTDIR
 
     ; Run on Startup
     WriteRegStr HKCU ${AUTORUN_REGKEY} "{{ title }}" "${SYNC_EXE}"
