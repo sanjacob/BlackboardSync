@@ -59,20 +59,20 @@ Section "Installation" SecInstall
     WriteRegStr HKCU '"Software\{{ title }}"' "InstallDir" $INSTDIR
 
     ; Run on Startup
-    WriteRegStr HKCU ${AUTORUN_REGKEY} "{{ title }}" '${SYNC_EXE}'
+    WriteRegStr HKCU ${AUTORUN_REGKEY} "{{ title }}" "${SYNC_EXE}"
 
     ; Shortcut
-    CreateDirectory ${SYNC_LNK_DIR}
-    CreateShortCut ${SYNC_LNK} ${SYNC_EXE}
+    CreateDirectory "${SYNC_LNK_DIR}"
+    CreateShortCut "${SYNC_LNK}" "${SYNC_EXE}"
 
     ; Uninstall Menu
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayName" "{{ title }}"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "UninstallString" "$INSTDIR\Uninstall.exe"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "InstallLocation" $INSTDIR
-    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayIcon" ${SYNC_ICON}
+    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayIcon" "${SYNC_ICON}"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "Publisher" "{{ publisher }}"
     WriteRegStr HKCU ${UNINSTALL_REGKEY} "HelpLink" "{{ repository }}"
-    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayVersion" ${VERSION}
+    WriteRegStr HKCU ${UNINSTALL_REGKEY} "DisplayVersion" "${VERSION}"
 
     WriteUninstaller "$INSTDIR\Uninstall.exe"
 SectionEnd
