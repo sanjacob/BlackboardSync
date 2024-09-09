@@ -46,8 +46,7 @@ RequestExecutionLevel user
 !define SYNC_EXE "$INSTDIR\BlackboardSync.exe"
 !define SYNC_ICON "$INSTDIR\icon.ico"
 
-!define SYNC_LNK_DIR "$SMPROGRAMS\{{ title }}"
-!define SYNC_LNK "$SMPROGRAMS\{{ title }}\{{ title }}.lnk"
+!define SYNC_LNK "$SMPROGRAMS\{{ title }}.lnk"
 
 
 # default section start; every NSIS script has at least one section.
@@ -63,7 +62,6 @@ Section "Installation" SecInstall
     WriteRegStr HKCU ${AUTORUN_REGKEY} "{{ title }}" "${SYNC_EXE}"
 
     ; Shortcut
-    CreateDirectory "${SYNC_LNK_DIR}"
     CreateShortCut "${SYNC_LNK}" "${SYNC_EXE}"
 
     ; Uninstall Menu
@@ -86,10 +84,10 @@ Section "Uninstall"
   RMDir /r $INSTDIR
 
   ; Run on Startup
-  DeleteRegKey HKCU '"${AUTORUN_REGKEY}\{{ title }}"'
+  DeleteRegKey HKCU '${AUTORUN_REGKEY}\{{ title }}'
 
   ; Install Directory
-  DeleteRegKey HKCU '"Software\{{ title }}"'
+  DeleteRegKey HKCU 'Software\{{ title }}'
 
   ; Uninstall Menu Entry
   DeleteRegKey HKLM ${UNINSTALL_REGKEY}
