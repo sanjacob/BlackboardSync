@@ -90,7 +90,7 @@ Section "Uninstall"
   DeleteRegKey HKCU 'Software\{{ title }}'
 
   ; Uninstall Menu Entry
-  DeleteRegKey HKLM ${UNINSTALL_REGKEY}
+  DeleteRegKey HKCU ${UNINSTALL_REGKEY}
 
   ; Delete Shortcut
   RMDir /r "$SMPROGRAMS\{{ title }}"
