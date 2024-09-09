@@ -66,4 +66,7 @@ app = BUNDLE(
     name="BlackboardSync.app",
     icon='blackboard_sync/assets/logo.png',
     bundle_indentifier='app.bbsync.BlackboardSync',
+    info_plist={
+        'LSUIElement': True
+    },
 )
