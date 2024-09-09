@@ -135,6 +135,11 @@ jobs:
       - name: Push new branch to origin
         run: git push origin "uni-$ISSUE_ID" --force
 
+      - name: Set GitHub PR author
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
       - name: Create pull request
         run: >
           gh pr create -B main -H "uni-$ISSUE_ID" --fill
