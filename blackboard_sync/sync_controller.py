@@ -27,11 +27,12 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon, QWidget
 
 from .sync import BlackboardSync
-from .__about__ import __title__
+from .__about__ import __id__, __title__, __uri__
 from .updates import check_for_updates
 from .institutions import Institution, InstitutionLogin, get_names, autodetect
-from .qt.qt_elements import (LoginWebView, SyncTrayIcon, SettingsWindow,
-                             RedownloadDialog, OSUtils, SetupWizard, UpdateFoundDialog)
+from .qt import LoginWebView, SetupWizard, SettingsWindow, SyncTrayIcon
+from .qt.utils import add_to_startup, open_in_file_browser
+from .qt.dialogs import RedownloadDialog, UpdateFoundDialog
 
 
 class BBSyncController:
@@ -59,13 +60,11 @@ class BBSyncController:
         else:
             self.app.setApplicationVersion(__version__)
 
-        QApplication.setStyle(QStyleFactory.create("Fusion"))
-
         self._init_ui()
         self._has_notified_error = False
 
         if self.model.university is None:
-            OSUtils.add_to_startup()
+            add_to_startup(__id__)
             self._show_setup_window()
         else:
             self._build_login_window(self.model.university.login)
@@ -73,26 +72,26 @@ class BBSyncController:
         self.app.exec()
 
     def _init_ui(self) -> None:
-        self.setup_window = SetupWizard(get_names(), autodetect())
+        self.setup_window = SetupWizard(__uri__, get_names(), autodetect())
         self.setup_window.accepted.connect(self._setup_complete)
 
         self.login_window : Optional[LoginWebView] = None
 
         self.config_window = SettingsWindow()
 
-        self.config_window.log_out_signal.connect(self._log_out)
-        self.config_window.setup_wiz_signal.connect(self._reset_setup)
-        self.config_window.save_signal.connect(self._save_setting_changes)
+        self.config_window.signals.log_out.connect(self._log_out)
+        self.config_window.signals.setup_wiz.connect(self._reset_setup)
+        self.config_window.signals.save.connect(self._save_setting_changes)
 
         self.tray = SyncTrayIcon()
-        self.tray.quit_signal.connect(self._stop)
-        self.tray.login_signal.connect(self._show_login_window)
-        self.tray.settings_signal.connect(self._show_config_window)
-        self.tray.reset_setup_signal.connect(self._reset_setup)
-        self.tray.sync_signal.connect(self._force_sync)
+        self.tray.signals.quit.connect(self._stop)
+        self.tray.signals.login.connect(self._show_login_window)
+        self.tray.signals.settings.connect(self._show_config_window)
+        self.tray.signals.reset_setup.connect(self._reset_setup)
+        self.tray.signals.sync.connect(self._force_sync)
         self.tray.activated.connect(self._tray_icon_activated)
-        self.tray.open_dir_signal.connect(self._open_download_dir)
-        self.tray.show_menu_signal.connect(self._update_tray_menu)
+        self.tray.signals.open_dir.connect(self._open_download_dir)
+        self.tray.signals.show_menu.connect(self._update_tray_menu)
 
         self.app.setQuitOnLastWindowClosed(False)
 
@@ -108,7 +107,7 @@ class BBSyncController:
         # Get login url from uni DB
         self.login_window = LoginWebView(start_url=str(uni_login_info.start_url),
                                          target_url=str(uni_login_info.target_url))
-        self.login_window.login_complete_signal.connect(self._login_complete)
+        self.login_window.signals.login_complete.connect(self._login_complete)
 
     def _login_complete(self) -> None:
         if self.login_window is None:
@@ -121,7 +120,7 @@ class BBSyncController:
         self.login_window.setVisible(False)
         self.app.restoreOverrideCursor()
         self._check_for_updates()
-        self.tray.show_msg(*(self.tray_msg["download_started"]))
+        self.tray.notify(*(self.tray_msg["download_started"]))
 
     def _reset_setup(self) -> None:
         # Hide login window and show setup wizard
@@ -133,7 +132,7 @@ class BBSyncController:
     def _check_for_updates(self) -> None:
         if (html_url := check_for_updates()) is not None:
             if html_url == 'container':
-                self.tray.show_msg(*(self.tray_msg["container_update"]))
+                self.tray.notify(*(self.tray_msg["container_update"]))
             elif UpdateFoundDialog().should_update:
                 webbrowser.open(html_url)
 
@@ -158,7 +157,7 @@ class BBSyncController:
 
     def _open_download_dir(self) -> None:
         # Open folder in browser
-        OSUtils.open_dir_in_file_browser(self.model.download_location)
+        open_in_file_browser(self.model.download_location)
 
     def _tray_icon_activated(self, activation_reason: QSystemTrayIcon.ActivationReason) -> None:
         if activation_reason == QSystemTrayIcon.ActivationReason.Trigger:
@@ -168,7 +167,7 @@ class BBSyncController:
             elif not self.model.is_logged_in:
                 self._show_login_window()
         if self.model.has_error and not self._has_notified_error:
-            self.tray.show_msg(*(self.tray_msg["download_error"]))
+            self.tray.notify(*(self.tray_msg["download_error"]))
             webbrowser.open("https://github.com/sanjacob/BlackboardSync/issues")
             self._has_notified_error = True
 
@@ -202,19 +201,13 @@ class BBSyncController:
 
     def _update_tray_menu(self) -> None:
         # Update last sync time
-        last_sync = self.model.last_sync_time
-        last_sync_str = "Never"
-
-        if last_sync is not None:
-            last_sync_str = last_sync.strftime("%Y-%m-%d %H:%M:%S")
-
-        self.tray.update_last_synced(last_sync_str)
+        self.tray.set_last_synced(self.model.last_sync_time)
         self.tray.set_logged_in(self.model.is_logged_in)
         if self.login_window is not None:
             self.login_window.setVisible(not self.model.is_logged_in)
 
         # Disable button if currently syncing
-        self.tray.toggle_currently_syncing(self.model.is_syncing)
+        self.tray.set_currently_syncing(self.model.is_syncing)
 
     def _stop(self) -> None:
         if self.model.is_active:
