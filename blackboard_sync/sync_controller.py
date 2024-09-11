@@ -24,7 +24,7 @@ from typing import Optional
 from importlib.metadata import version, PackageNotFoundError
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon, QWidget
+from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QWidget
 
 from .sync import BlackboardSync
 from .__about__ import __id__, __title__, __uri__
@@ -33,16 +33,10 @@ from .institutions import Institution, InstitutionLogin, get_names, autodetect
 from .qt import LoginWebView, SetupWizard, SettingsWindow, SyncTrayIcon
 from .qt.utils import add_to_startup, open_in_file_browser
 from .qt.dialogs import RedownloadDialog, UpdateFoundDialog
-
+from .qt.notification import Event
 
 class BBSyncController:
     """Connects an instance of BlackboardSync with the UI module."""
-
-    tray_msg = {
-        "container_update": ('Updates available', 'You can update BlackboardSync from the Software Center', 1, 4),
-        "download_started": ('The download has started', 'BlackboardSync is running in the background. Find it in the system tray.'),
-        "download_error": ('The download cannot be completed', 'There was an error validating your course content. Please report this issue.', 3, 10)
-    }
 
     def __init__(self):
         """Create an instance of the BlackboardSync Desktop App."""
@@ -120,7 +114,7 @@ class BBSyncController:
         self.login_window.setVisible(False)
         self.app.restoreOverrideCursor()
         self._check_for_updates()
-        self.tray.notify(*(self.tray_msg["download_started"]))
+        self.tray.notify(Event.DOWNLOAD_STARTED)
 
     def _reset_setup(self) -> None:
         # Hide login window and show setup wizard
@@ -132,7 +126,7 @@ class BBSyncController:
     def _check_for_updates(self) -> None:
         if (html_url := check_for_updates()) is not None:
             if html_url == 'container':
-                self.tray.notify(*(self.tray_msg["container_update"]))
+                self.tray.notify(Event.UPDATE_AVAILABLE)
             elif UpdateFoundDialog().should_update:
                 webbrowser.open(html_url)
 
@@ -167,7 +161,7 @@ class BBSyncController:
             elif not self.model.is_logged_in:
                 self._show_login_window()
         if self.model.has_error and not self._has_notified_error:
-            self.tray.notify(*(self.tray_msg["download_error"]))
+            self.tray.notify(Event.DOWNLOAD_ERROR)
             webbrowser.open("https://github.com/sanjacob/BlackboardSync/issues")
             self._has_notified_error = True
 

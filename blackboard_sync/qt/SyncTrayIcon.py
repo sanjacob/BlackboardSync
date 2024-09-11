@@ -23,6 +23,7 @@ from PyQt6.QtWidgets import QMenu, QSystemTrayIcon
 
 from .assets import logo, get_theme_icon, AppIcon
 from .utils import time_ago
+from .notification import Event, get_msg
 
 
 class SyncTrayMenu(QMenu):
@@ -141,14 +142,12 @@ class SyncTrayIcon(QSystemTrayIcon):
     def set_currently_syncing(self, syncing: bool) -> None:
         self._menu.set_currently_syncing(syncing)
 
-    def notify(self, title: str, msg: str,
-               severity: int = 1, duration: int = 10) -> None:
-        icons = {
-            0: QSystemTrayIcon.MessageIcon.NoIcon,
-            1: QSystemTrayIcon.MessageIcon.Information,
-            2: QSystemTrayIcon.MessageIcon.Warning,
-            3: QSystemTrayIcon.MessageIcon.Critical
-        }
-        duration = duration * 1000
-        severity = 0 if severity < 0 or severity > 3 else severity
-        self.showMessage(title, msg, icons[severity], duration)
+    def notify(self, evt: Event) -> None:
+        title, msg, icon, duration = get_msg(evt)
+        self._show_msg(title, msg, icon, duration)
+
+    def _show_msg(self, title: str, msg: str,
+                  icon: QSystemTrayIcon.MessageIcon,
+                  duration: int) -> None:
+        duration = int(duration) * 1000
+        self.showMessage(title, msg, icon, duration)
