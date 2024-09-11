@@ -18,8 +18,7 @@
 import webbrowser
 from pathlib import Path
 
-from PyQt6.QtCore import pyqtSlot
-from PyQt6.QtWidgets import QMessageBox, QFileDialog, QAbstractButton
+from PyQt6.QtWidgets import QMessageBox, QFileDialog
 
 from .assets import load_ui
 
@@ -39,37 +38,36 @@ class DirDialog(QFileDialog):
 class RedownloadDialog(QMessageBox):
     """Ask user if files should be redownloaded to new location."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         load_ui(self)
 
     @property
-    def redownload(self) -> bool:
+    def yes(self) -> bool:
         return self.exec() == QMessageBox.StandardButton.Yes
 
 
 class UpdateFoundDialog(QMessageBox):
     """Inform user about a new available update."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         load_ui(self)
-        self.setWindowIcon(Assets.icon())
 
     @property
-    def update(self) -> bool:
+    def yes(self) -> bool:
         return self.exec() == QMessageBox.StandardButton.Open
 
 
 class UniNotSupportedDialog(QMessageBox):
     """Inform user that their university is not supported."""
 
-    def __init__(self, help_url: str):
+    def __init__(self, help_url: str) -> None:
         super().__init__()
         load_ui(self)
         self._help_url = help_url
 
-    def exec(self) -> QMessageBox:
+    def exec(self) -> int:
         result = super().exec()
         if result == QMessageBox.StandardButton.Help:
             webbrowser.open(self._help_url)

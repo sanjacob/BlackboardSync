@@ -19,7 +19,8 @@ from enum import IntEnum
 from pathlib import Path
 
 from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject
-from PyQt6.QtWidgets import QWidget, QLabel, QComboBox, QPushButton, QDialogButtonBox
+from PyQt6.QtWidgets import QWidget, QLabel
+from PyQt6.QtWidgets import QComboBox, QPushButton, QDialogButtonBox
 
 from .assets import load_ui
 from .dialogs import DirDialog

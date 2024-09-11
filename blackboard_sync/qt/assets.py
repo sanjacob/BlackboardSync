@@ -15,7 +15,7 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA  02110-1301, USA.
 
-from enum import Enum, auto
+from enum import Enum
 from pathlib import Path
 
 from PyQt6 import uic
@@ -52,9 +52,8 @@ class AppIcon(Enum):
 def get_theme_icon(icon: AppIcon) -> QIcon:
     return QIcon.fromTheme(icon.value)
 
-#_watermark_filename = 'watermark.png'
-#def watermark() -> QPixmap:
- #   """`QPixmap` of application watermark."""
-  #  wm = QPixmap(str(cls._get_asset_path(cls._watermark_filename)))
-   # wm = wm.scaledToWidth(100)
-    #return wm
+# def watermark() -> QPixmap:
+#   """`QPixmap` of application watermark."""
+#   wm = QPixmap(str(cls._get_asset_path(cls._watermark_filename)))
+#   wm = wm.scaledToWidth(100)
+#   return wm

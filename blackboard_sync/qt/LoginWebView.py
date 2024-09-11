@@ -93,7 +93,7 @@ class LoginWebView(QWidget):
     def _engine_profile(self) -> QWebEngineProfile | None:
         page = self.web_view.page()
         return page.profile() if page else None
-    
+
     @property
     def _cookie_store(self) -> QWebEngineCookieStore | None:
         profile = self._engine_profile

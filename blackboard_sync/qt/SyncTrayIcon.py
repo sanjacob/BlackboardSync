@@ -17,9 +17,9 @@
 
 from PyQt6.QtGui import QAction
 from PyQt6.QtCore import pyqtSignal, QObject
-from PyQt6.QtWidgets import QMenu, QStyle, QSystemTrayIcon
+from PyQt6.QtWidgets import QMenu, QSystemTrayIcon
 
-from .assets import get_icon, logo, get_theme_icon, AppIcon
+from .assets import logo, get_theme_icon, AppIcon
 
 
 class SyncTrayMenu(QMenu):
@@ -100,7 +100,7 @@ class SyncTrayIcon(QSystemTrayIcon):
         open_dir = pyqtSignal()
         show_menu = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
         self.signals = self.Signals()
 
@@ -123,7 +123,7 @@ class SyncTrayIcon(QSystemTrayIcon):
         self._menu.quit.triggered.connect(self.signals.quit)
         self._menu.open_dir.triggered.connect(self.signals.open_dir)
         self._menu.aboutToShow.connect(self.signals.show_menu)
-        
+
         # Add the menu to the tray
         self.setContextMenu(self._menu)
 
@@ -138,10 +138,12 @@ class SyncTrayIcon(QSystemTrayIcon):
 
     def notify(self, title: str, msg: str,
                severity: int = 1, duration: int = 10) -> None:
-        icons = { 0: QSystemTrayIcon.MessageIcon.NoIcon,
-                  1: QSystemTrayIcon.MessageIcon.Information,
-                  2: QSystemTrayIcon.MessageIcon.Warning,
-                  3: QSystemTrayIcon.MessageIcon.Critical }
+        icons = {
+            0: QSystemTrayIcon.MessageIcon.NoIcon,
+            1: QSystemTrayIcon.MessageIcon.Information,
+            2: QSystemTrayIcon.MessageIcon.Warning,
+            3: QSystemTrayIcon.MessageIcon.Critical
+        }
         duration = duration * 1000
         severity = 0 if severity < 0 or severity > 3 else severity
         self.showMessage(title, msg, icons[severity], duration)

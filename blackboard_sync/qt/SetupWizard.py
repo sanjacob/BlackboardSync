@@ -140,7 +140,8 @@ class SetupWizard(QWizard):
 
     @pyqtSlot(int)
     def _toggle_all_content(self, state: int) -> None:
-        self.date_spinbox.setEnabled(Qt.CheckState(state) != Qt.CheckState.Checked)
+        unchecked = Qt.CheckState(state) != Qt.CheckState.Checked
+        self.date_spinbox.setEnabled(unchecked)
 
     def _institution_is_valid(self) -> bool:
         return self.institution == str(self.field("userInstitution"))
