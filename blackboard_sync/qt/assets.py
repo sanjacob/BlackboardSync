@@ -15,9 +15,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA  02110-1301, USA.
 
+from enum import Enum, auto
 from pathlib import Path
 
 from PyQt6 import uic
+from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import QObject
 
 
@@ -27,20 +29,31 @@ def load_ui(qt_obj: QObject) -> None:
     filepath = Path(__file__).parent / filename
     uic.loadUi(filepath.resolve(), qt_obj)
 
-#_icon_filename = 'logo.png'
+
+def get_asset(icon: str) -> Path:
+    """Get the `Path` of a media asset."""
+    return (Path(__file__).parent.parent / 'assets' / icon).resolve()
+
+
+def get_icon(file: str) -> QIcon:
+    return QIcon(str(get_asset(file)))
+
+
+def logo() -> QIcon:
+    return get_icon('logo.png')
+
+
+class AppIcon(Enum):
+    EXIT = QIcon.ThemeIcon.ApplicationExit
+    OPEN = QIcon.ThemeIcon.FolderOpen
+    SYNC = QIcon.ThemeIcon.ViewRefresh
+
+
+def get_theme_icon(icon: AppIcon) -> QIcon:
+    return QIcon.fromTheme(icon.value)
+
 #_watermark_filename = 'watermark.png'
-#@staticmethod
-#def _get_asset_path(icon) -> Path:
- #   """Get the `Path` of a media asset."""
-  #  return (Path(__file__).parent.parent / 'assets' / icon).resolve()
-
-#@classmethod
-#def icon(cls) -> QIcon:
- #   """`QIcon` of application logo."""
-  #  return QIcon(str(cls._get_asset_path(cls._icon_filename)))
-
-#@classmethod
-#def watermark(cls) -> QPixmap:
+#def watermark() -> QPixmap:
  #   """`QPixmap` of application watermark."""
   #  wm = QPixmap(str(cls._get_asset_path(cls._watermark_filename)))
    # wm = wm.scaledToWidth(100)
