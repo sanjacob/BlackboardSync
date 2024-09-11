@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UniNotSupportedDialog</class>
- <widget class="QMessageBox" name="UniNotSupportedDialog">
+ <class>UpdateFoundDialog</class>
+ <widget class="QMessageBox" name="UpdateFoundDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>University not supported</string>
+   <string>New BlackboardSync release available</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -20,16 +20,19 @@
    </iconset>
   </property>
   <property name="text">
-   <string>Unfortunately, your university is not yet supported.</string>
+   <string>A new version of BlackboardSync is now available!</string>
   </property>
   <property name="informativeText">
-   <string>You can help us provide support for it by visiting our website, which you can access by pressing the Help button.</string>
+   <string>Please download the latest version from the official GitHub repository</string>
   </property>
   <property name="standardButtons">
-   <set>QMessageBox::StandardButton::Help|QMessageBox::StandardButton::Ok</set>
+   <set>QMessageBox::StandardButton::Open|QMessageBox::StandardButton::Cancel</set>
+  </property>
+  <property name="defaultButton">
+   <set>QMessageBox::StandardButton::Open</set>
   </property>
   <property name="icon">
-   <set>QMessageBox::Icon::Warning</set>
+   <set>QMessageBox::Icon::Information</set>
   </property>
  </widget>
  <resources/>

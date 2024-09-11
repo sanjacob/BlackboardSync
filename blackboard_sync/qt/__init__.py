@@ -12,7 +12,7 @@ Basic usage:
 
 Full documentation available at <https://blackboardsync.readthedocs.io>.
 
-:copyright: (c) 2021, Jacob Sánchez Pérez.
+:copyright: (c) 2024, Jacob Sánchez Pérez.
 :license: GPL v2.0, see LICENSE for more details.
 """
 
@@ -28,13 +28,24 @@ Full documentation available at <https://blackboardsync.readthedocs.io>.
 
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor,
-# Boston, MA  02110-1301, USA.
-# Also available at https://www.gnu.org/licenses/old-licenses/gpl-2.0.html
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
-from .qt_elements import (SyncPeriod, SetupWizard, LoginWebView, SyncTrayIcon,
-                          SyncTrayMenu, SettingsWindow, RedownloadDialog,
-                          UniNotSupportedDialog, OSUtils, UpdateFoundDialog)
+from .SyncTrayIcon import SyncTrayIcon
+from .SetupWizard import SetupWizard
+from .LoginWebView import LoginWebView
+from .SettingsWindow import SettingsWindow
 
-__all__ = ['SyncPeriod', 'SetupWizard', 'LoginWebView', 'SyncTrayIcon', 'SyncTrayMenu',
-           'SettingsWindow', 'RedownloadDialog', 'UniNotSupportedDialog', 'OSUtils', 'UpdateFoundDialog']
+from .dialogs import RedownloadDialog, UpdateFoundDialog
+from .utils import add_to_startup, open_in_file_browser
+
+__all__ = [
+    'SetupWizard',
+    'LoginWebView',
+    'SettingsWindow',
+    'SyncTrayIcon',
+    'RedownloadDialog',
+    'UpdateFoundDialog',
+    'add_to_startup',
+    'open_in_file_browser'
+]

@@ -22,7 +22,7 @@ from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject
 from PyQt6.QtWidgets import QWidget, QLabel, QComboBox, QPushButton, QDialogButtonBox
 
 from .assets import load_ui
-from .DirDialog import DirDialog
+from .dialogs import DirDialog
 
 
 class SettingsWindow(QWidget):

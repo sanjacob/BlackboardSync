@@ -27,7 +27,8 @@ from PyQt6.QtWidgets import (QWizard, QWizardPage,
                              QLabel, QPushButton)
 
 from .assets import load_ui
-from .DirDialog import DirDialog
+from .dialogs import UniNotSupportedDialog
+from .dialogs import DirDialog
 
 
 class SetupWizard(QWizard):
@@ -125,7 +126,7 @@ class SetupWizard(QWizard):
         # Do not progress if institution is not valid
         if self.currentId() == self.Pages.INSTITUTION:
             if not self._institution_is_valid():
-                # UniNotSupportedDialog("").exec()
+                UniNotSupportedDialog(self._support_url).exec()
                 valid = False
 
         return valid
