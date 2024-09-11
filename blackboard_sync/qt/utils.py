@@ -20,6 +20,8 @@ import sys
 import platform
 import subprocess
 from pathlib import Path
+from enum import IntEnum
+from datetime import datetime, timezone
 
 from PyQt6.QtCore import QSettings
 
@@ -62,3 +64,34 @@ def add_to_startup(app_id: str) -> None:
 
     # Save the settings to create the plist file
     settings.sync()
+
+
+def time_ago(timestamp: datetime) -> str:
+    delta = datetime.now(tz=timezone.utc) - timestamp
+    s = int(delta.total_seconds())
+
+    class Time(IntEnum):
+        SECOND = 1
+        MINUTE = 60
+        HOUR = MINUTE * 60
+        DAY = HOUR * 24
+        WEEK = DAY * 7
+        MONTH = DAY * 30
+        YEAR = DAY * 365
+
+        def __str__(self) -> str:
+            return self.name.lower()
+
+    def get_human_time(seconds: int, unit: Time) -> str:
+        n = seconds // unit
+        s = '' if n == 1 else 's'
+        return f"{n} {unit}{s} ago"
+
+    previous = Time.SECOND
+
+    for unit in Time:
+        if s < unit.value:
+            return get_human_time(s, previous)
+        previous = unit
+
+    return get_human_time(s, Time.YEAR)

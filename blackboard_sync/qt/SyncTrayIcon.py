@@ -15,19 +15,23 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA  02110-1301, USA.
 
+from datetime import datetime
+
 from PyQt6.QtGui import QAction
 from PyQt6.QtCore import pyqtSignal, QObject
 from PyQt6.QtWidgets import QMenu, QSystemTrayIcon
 
 from .assets import logo, get_theme_icon, AppIcon
+from .utils import time_ago
 
 
 class SyncTrayMenu(QMenu):
     _unauthenticated_status = "You haven't logged in"
 
-    def __init__(self, logged_in: bool = False, last_synced: str = ""):
+    def __init__(self, logged_in: bool = False,
+                 last_synced: datetime | None = None):
         super().__init__()
-        self._last_synced = ""
+        self._last_synced: datetime | None = None
 
         self._init_ui()
         self.set_last_synced(last_synced)
@@ -73,13 +77,14 @@ class SyncTrayMenu(QMenu):
         self.log_in.setVisible(not logged_in)
 
         if logged_in:
-            self._status.setText(f"Last Synced: {self._last_synced}")
+            self.set_last_synced(self._last_synced)
         else:
             self._status.setText("Not Logged In")
 
-    def set_last_synced(self, last_synced: str) -> None:
+    def set_last_synced(self, last_synced: datetime | None) -> None:
         self._last_synced = last_synced
-        self._status.setText(f"Last Synced: {last_synced}")
+        human_ago = time_ago(last_synced) if last_synced else "Never"
+        self._status.setText(f"Last Synced: {human_ago}")
 
     def set_currently_syncing(self, syncing: bool) -> None:
         self.refresh.setEnabled(not syncing)
@@ -130,7 +135,7 @@ class SyncTrayIcon(QSystemTrayIcon):
     def set_logged_in(self, value: bool) -> None:
         self._menu.set_logged_in(value)
 
-    def set_last_synced(self, value: str) -> None:
+    def set_last_synced(self, value: datetime | None) -> None:
         self._menu.set_last_synced(value)
 
     def set_currently_syncing(self, syncing: bool) -> None:
