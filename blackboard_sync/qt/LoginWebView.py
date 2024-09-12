@@ -18,7 +18,7 @@
 from requests.cookies import RequestsCookieJar
 
 from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject, QUrl
-from PyQt6.QtWidgets import QWidget, QPushButton
+from PyQt6.QtWidgets import QWidget
 from PyQt6.QtNetwork import QNetworkCookie
 from PyQt6.QtWebEngineCore import QWebEngineCookieStore, QWebEngineProfile
 from PyQt6.QtWebEngineWidgets import QWebEngineView
@@ -32,15 +32,15 @@ class LoginWebView(QWidget):
     class Signals(QObject):
         login_complete = pyqtSignal()
 
-    def __init__(self, start_url: str, target_url: str):
+    def __init__(self):
         super().__init__()
 
         # Typing information
         self.web_view: QWebEngineView
-        self.done_button: QPushButton
 
-        self.start_url = start_url
-        self.target_url = target_url
+        self.start_url: str | None = None
+        self.target_url: str | None = None
+
         self._cookie_jar = RequestsCookieJar()
 
         self.signals = self.Signals()
@@ -49,25 +49,25 @@ class LoginWebView(QWidget):
 
     def _init_ui(self) -> None:
         load_ui(self)
+        self.web_view.loadFinished.connect(self.slot_load_finished)
 
-        self.web_view.load(QUrl.fromUserInput(self.start_url))
+    def load(self, start_url: str, target_url: str) -> None:
+        self.start_url = QUrl.fromUserInput(start_url)
+        self.target_url = target_url
 
-        # Signals
-        self.done_button.clicked.connect(self.signals.login_complete)
+        self.web_view.load(self.start_url)
 
-        # Slots
-        self.web_view.loadFinished.connect(self._load_finished)
         if self._cookie_store is not None:
-            self._cookie_store.cookieAdded.connect(self._cookie_added)
+            self._cookie_store.cookieAdded.connect(self.slot_cookie_added)
 
     @pyqtSlot()
-    def _load_finished(self) -> None:
+    def slot_load_finished(self) -> None:
         """Check if we have reached the target url."""
-        if self.url.startswith(self.target_url):
+        if self.target_url and self.url.startswith(self.target_url):
             self.signals.login_complete.emit()
 
     @pyqtSlot(QNetworkCookie)
-    def _cookie_added(self, cookie: QNetworkCookie) -> None:
+    def slot_cookie_added(self, cookie: QNetworkCookie) -> None:
         """Add the cookie to our own jar."""
         self._cookie_jar.set(
             cookie.name().data().decode(),
@@ -81,7 +81,7 @@ class LoginWebView(QWidget):
         """Restore web view to original state."""
         self.web_view.setPage(None)
         self.clear_browser()
-        self.web_view.load(QUrl.fromUserInput(self.start_url))
+        self.web_view.load(self.start_url)
 
     def clear_browser(self) -> None:
         if self._engine_profile is not None:
@@ -105,6 +105,6 @@ class LoginWebView(QWidget):
         return self.web_view.url().toString()
 
     @property
-    def cookie_jar(self) -> RequestsCookieJar:
+    def cookies(self) -> RequestsCookieJar:
         """Contains session cookies of the current session."""
         return self._cookie_jar

@@ -98,7 +98,7 @@ class SyncTrayIcon(QSystemTrayIcon):
     """Control the application from the system tray."""
 
     class Signals(QObject):
-        sync = pyqtSignal()
+        force_sync = pyqtSignal()
         login = pyqtSignal()
         settings = pyqtSignal()
         reset_setup = pyqtSignal()
@@ -122,7 +122,7 @@ class SyncTrayIcon(QSystemTrayIcon):
         self._menu = SyncTrayMenu()
 
         # Signals
-        self._menu.refresh.triggered.connect(self.signals.sync)
+        self._menu.refresh.triggered.connect(self.signals.force_sync)
         self._menu.log_in.triggered.connect(self.signals.login)
         self._menu.preferences.triggered.connect(self.signals.settings)
         self._menu.reset_setup.triggered.connect(self.signals.reset_setup)
