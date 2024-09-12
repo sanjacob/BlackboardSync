@@ -37,8 +37,8 @@ class UIManager(QObject):
         open_tray = pyqtSignal(bool)
         open_menu = pyqtSignal()
         open_downloads = pyqtSignal()
-        setup = pyqtSignal(int, str, int)
-        config = pyqtSignal(str, int)
+        setup = pyqtSignal(int, Path, int)
+        config = pyqtSignal(Path, int)
         force_sync = pyqtSignal()
         log_out = pyqtSignal()
         log_in = pyqtSignal(RequestsCookieJar)
@@ -91,7 +91,6 @@ class UIManager(QObject):
         self.tray.signals.open_dir.connect(self.signals.open_downloads)
         self.tray.signals.quit.connect(self.signals.quit)
         self.tray.signals.reset_setup.connect(self.slot_open_setup)
-        self.tray.signals.login.connect(self.slot_open_login)
         self.tray.activated.connect(self.slot_open_tray)
         self.tray.signals.quit.connect(self.slot_quit)
 
@@ -112,10 +111,6 @@ class UIManager(QObject):
     def hide(self, widget: QWidget) -> None:
         widget.setVisible(False)
 
-    @pyqtSlot()
-    def slot_open_login(self) -> None:
-        self.show(self.login_window)
-
     @pyqtSlot(QSystemTrayIcon.ActivationReason)
     def slot_open_tray(self,
                        reason: QSystemTrayIcon.ActivationReason) -> None:
@@ -133,8 +128,8 @@ class UIManager(QObject):
     def slot_open_setup(self) -> None:
         self.signals.log_out.emit()
         self.hide(self.login_window)
+        self.hide(self.config_window)
         self.show(self.setup_window)
-        pass
 
     @pyqtSlot()
     def slot_log_in(self) -> None:
@@ -145,9 +140,10 @@ class UIManager(QObject):
     @pyqtSlot()
     def slot_setup(self) -> None:
         self.hide(self.setup_window)
+
         self.signals.setup.emit(self.setup_window.institution_index,
                                 self.setup_window.download_location,
-                                self.setup_window.min_year)
+                                self.setup_window.min_year or 0)
 
     @pyqtSlot()
     def slot_config(self) -> None:
@@ -186,7 +182,7 @@ class UIManager(QObject):
         self.show(self.login_window)
 
     def ask_redownload(self) -> None:
-        if RedownloadDialog().yes:
+        if RedownloadDialog().yes():
             self.signals.redownload.emit()
 
     def notify_error(self) -> None:

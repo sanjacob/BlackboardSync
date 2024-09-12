@@ -42,7 +42,6 @@ class RedownloadDialog(QMessageBox):
         super().__init__()
         load_ui(self)
 
-    @property
     def yes(self) -> bool:
         return self.exec() == QMessageBox.StandardButton.Yes
 
@@ -54,7 +53,6 @@ class UpdateFoundDialog(QMessageBox):
         super().__init__()
         load_ui(self)
 
-    @property
     def yes(self) -> bool:
         return self.exec() == QMessageBox.StandardButton.Open
 

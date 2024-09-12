@@ -60,9 +60,6 @@ class SyncTrayMenu(QMenu):
         self._status.setEnabled(False)
         self.addAction(self._status)
 
-        self.log_in = QAction("Log In")
-        self.addAction(self.log_in)
-
         self.reset_setup = QAction("Redo Setup")
         self.addAction(self.reset_setup)
 
@@ -75,7 +72,6 @@ class SyncTrayMenu(QMenu):
         self.preferences.setVisible(logged_in)
         self.reset_setup.setVisible(not logged_in)
         self.open_dir.setVisible(logged_in)
-        self.log_in.setVisible(not logged_in)
 
         if logged_in:
             self.set_last_synced(self._last_synced)
@@ -99,7 +95,6 @@ class SyncTrayIcon(QSystemTrayIcon):
 
     class Signals(QObject):
         force_sync = pyqtSignal()
-        login = pyqtSignal()
         settings = pyqtSignal()
         reset_setup = pyqtSignal()
         quit = pyqtSignal()
@@ -123,7 +118,6 @@ class SyncTrayIcon(QSystemTrayIcon):
 
         # Signals
         self._menu.refresh.triggered.connect(self.signals.force_sync)
-        self._menu.log_in.triggered.connect(self.signals.login)
         self._menu.preferences.triggered.connect(self.signals.settings)
         self._menu.reset_setup.triggered.connect(self.signals.reset_setup)
         self._menu.quit.triggered.connect(self.signals.quit)
