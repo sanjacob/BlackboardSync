@@ -28,5 +28,13 @@ jobs:
           sudo apt-get install xvfb
           pip install pytest-xvfb
 
+      - name: Run linter
+        run: |
+          flake8 blackboard_sync/qt
+          flake8 blackboard_sync/content
+
+      - name: Run type checker
+        run: mypy --strict blackboard_sync/qt
+
       - name: Run test suite
         run: pytest -vvvv
