@@ -5,8 +5,11 @@ from pydantic import ValidationError
 from requests import RequestException
 from concurrent.futures import ThreadPoolExecutor
 
-from blackboard.api_extended import BlackboardExtended
-from blackboard.blackboard import BBCourseContent, BBResourceType
+from blackboard.blackboard import (
+    BBCourseContent,
+    BBResourceType,
+    BBContentHandler
+)
 from blackboard.exceptions import BBBadRequestError, BBForbiddenError
 
 from . import folder, document, externallink, body, unhandled
@@ -50,7 +53,7 @@ class Content:
                 BBBadRequestError, BBForbiddenError, RequestException):
             logger.warning(f"Error fetching body of {content.title}")
 
-    def write(self, path: Path, executor: ThreadPoolExecutor):
+    def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
         if self.ignore:
             return
 
@@ -68,16 +71,16 @@ class Content:
             self.body.write(path, executor)
 
     @staticmethod
-    def should_download(content: BBCourseContent, job: DownloadJob):
+    def should_download(content: BBCourseContent, job: DownloadJob) -> bool:
         or_guards = [
             job.has_changed(content.modified),
             content.hasChildren,
         ]
 
-        return any(or_guards) and content.availability
+        return any(or_guards) and bool(content.availability)
 
     @staticmethod
-    def get_handler(content_handler):
+    def get_handler(content_handler: BBContentHandler | None):
         match content_handler:
             case BBResourceType.Folder | BBResourceType.Lesson:
                 return folder.Folder

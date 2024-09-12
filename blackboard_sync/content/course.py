@@ -28,7 +28,8 @@ class Course:
         self.children = []
 
         for content in contents:
-            api_path = BBContentPath(course_id=course.id, content_id=content.id)
+            api_path = BBContentPath(course_id=course.id,
+                                     content_id=content.id)
             self.children.append(Content(content, api_path, job))
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:

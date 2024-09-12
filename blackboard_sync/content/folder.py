@@ -1,7 +1,6 @@
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
-from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBCourseContent
 
 from .api_path import BBContentPath
@@ -13,16 +12,16 @@ class Folder:
     """Content of type `x-bb-folder`."""
 
     def __init__(self, _: BBCourseContent, api_path: BBContentPath,
-                 job: DownloadJob):
+                 job: DownloadJob) -> None:
         self.children = []
-        course_id = api_path.get('course_id')
+        course_id = api_path['course_id']
 
         for child in job.session.fetch_content_children(**api_path):
-            self.children.append(
-                content.Content(child, {'content_id': child.id, 'course_id': course_id}, job)
-            )
+            child_path = BBContentPath(content_id=child.id,
+                                       course_id=course_id)
+            self.children.append(content.Content(child, child_path, job))
 
-    def write(self, path: Path, executor: ThreadPoolExecutor):
+    def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
         if self.children:
             path.mkdir(exist_ok=True, parents=True)
 

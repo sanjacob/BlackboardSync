@@ -49,7 +49,8 @@ def test_fstream_write(tmpdir):
     assert not new_file_path.exists()
 
     content = FStream()
-    content.write(new_file_path, contents, mock.Mock(submit=lambda x: x()))
+    content.write_base(new_file_path, mock.Mock(submit=lambda x: x()),
+                       contents)
 
     assert new_file_path.is_file()
 

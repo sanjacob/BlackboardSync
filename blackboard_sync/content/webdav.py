@@ -16,28 +16,29 @@ Parse an html to look for links
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
 
 import mimetypes
 from pathlib import Path
+from requests import Response
 from bs4 import BeautifulSoup
 from typing import List, NamedTuple
 from pathvalidate import sanitize_filename
 from concurrent.futures import ThreadPoolExecutor
 
-from blackboard.api_extended import BlackboardExtended
-from blackboard.blackboard import BBCourseContent
-
 from .base import BStream
 from .job import DownloadJob
+
 
 class Link(NamedTuple):
     href: str
     text: str
 
+
 class ContentParser:
-    def __init__(self, body: str, base_url: str):
+    def __init__(self, body: str, base_url: str) -> None:
         links = []
         soup = BeautifulSoup(body, 'html.parser')
 
@@ -61,31 +62,42 @@ class ContentParser:
     def body(self) -> str:
         return str(self.soup)
 
-def validate_webdav_response(response, link: str, base_url: str):
+
+def validate_webdav_response(response: Response,
+                             link: str, base_url: str) -> bool:
     if response.status_code == 200:
         h = response.headers
         content_type = h.get('Content-Type', '')
         content_len = int(h.get('Content-Length', 0))
 
         # TODO: feature: select mime types
-        len_limit = 1024 * 1024 * 20 # 20 MB
-        return link.startswith(base_url) and 'video' not in content_type and content_len < len_limit
+        len_limit = 1024 * 1024 * 20  # 20 MB
+
+        filters = [
+            link.startswith(base_url),
+            'video' not in content_type,
+            content_len < len_limit
+        ]
+
+        return all(filters)
     return False
+
 
 class WebDavFile(BStream):
     """A Blackboard WebDav file which can be downloaded directly"""
-    def __init__(self, link, job: DownloadJob):
+    def __init__(self, link: Link, job: DownloadJob) -> None:
         self.title = sanitize_filename(link.text, replacement_text="_")
         self.stream = job.session.download_webdav(webdav_url=link.href)
         content_type = self.stream.headers.get('Content-Type', 'text/plain')
         self.extension = mimetypes.guess_extension(content_type)
-        self.valid = validate_webdav_response(self.stream, link.href, job.session.instance_url)
+        self.valid = validate_webdav_response(self.stream, link.href,
+                                              job.session.instance_url)
 
-    def write(self, path: Path, executor: ThreadPoolExecutor):
+    def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
         if self.valid:
             path = Path(path, self.title)
 
             if self.extension:
                 path = path.with_suffix(self.extension)
 
-            super().write(path, self.stream, executor)
+            super().write_base(path, executor, self.stream)
