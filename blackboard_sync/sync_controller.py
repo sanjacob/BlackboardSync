@@ -16,29 +16,26 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
 from requests.cookies import RequestsCookieJar
 
 from .sync import BlackboardSync
 from .__about__ import __id__, __title__, __uri__
-from .updates import check_for_updates
-from .institutions import Institution, InstitutionLogin, get_names, autodetect
-from .qt import LoginWebView, SetupWizard, SettingsWindow, SyncTrayIcon
-from .qt.utils import add_to_startup, open_in_file_browser
-from .qt.dialogs import RedownloadDialog, UpdateFoundDialog
-from .qt.notification import Event
-from .qt.manager import Manager
+from .institutions import get_names, autodetect
+
+from .qt.manager import UIManager
 
 
-class BBSyncController:
+class SyncController:
     """Connects an instance of BlackboardSync with the UI module."""
 
     def __init__(self):
         super().__init__()
         self.model = BlackboardSync()
-        self.ui = Manager(__id__, __title__, __uri__,
-                          get_names(), autodetect())
+        self.ui = UIManager(__id__, __title__, __uri__,
+                            get_names(), autodetect())
 
         first_time = self.model.university is None
 
@@ -82,10 +79,10 @@ class BBSyncController:
 
     def open_tray(self, clicked) -> None:
         if clicked:
-             first_time = self.model.university is None
-             is_logged_in = self.model.is_logged_in
+            first_time = self.model.university is None
+            is_logged_in = self.model.is_logged_in
 
-             self.ui.open_tray(first_time, is_logged_in)
+            self.ui.open_tray(first_time, is_logged_in)
 
         if self.model.has_error:
             self.ui.notify_error()
@@ -121,7 +118,7 @@ class BBSyncController:
         if self.model.is_active:
             self.model.stop_sync()
 
-    #def _check_for_updates(self) -> None:
+    # def _check_for_updates(self) -> None:
     #    if (html_url := check_for_updates()) is not None:
     #        if html_url == 'container':
     #            self.tray.notify(Event.UPDATE_AVAILABLE)
@@ -130,4 +127,4 @@ class BBSyncController:
 
 
 if __name__ == '__main__':
-    controller = BBSyncController()
+    controller = SyncController()

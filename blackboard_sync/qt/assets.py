@@ -23,16 +23,20 @@ from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import QObject
 
 
+ICON_FILENAME = 'logo.png'
+
+
 def load_ui(qt_obj: QObject) -> None:
     """Load a UI file for a `QObject`."""
     filename = qt_obj.__class__.__name__ + ".ui"
     filepath = Path(__file__).parent / filename
-    uic.loadUi(filepath.resolve(), qt_obj)
+    uic.loadUi(filepath.resolve(), qt_obj)  # type: ignore
 
 
 def get_asset(icon: str) -> Path:
     """Get the `Path` of a media asset."""
-    return (Path(__file__).parent.parent / 'assets' / icon).resolve()
+    root_dir = Path(__file__).parent.parent
+    return (root_dir / 'assets' / icon).resolve()
 
 
 def get_icon(file: str) -> QIcon:
@@ -40,7 +44,7 @@ def get_icon(file: str) -> QIcon:
 
 
 def logo() -> QIcon:
-    return get_icon('logo.png')
+    return get_icon(ICON_FILENAME)
 
 
 class AppIcon(Enum):
@@ -51,9 +55,3 @@ class AppIcon(Enum):
 
 def get_theme_icon(icon: AppIcon) -> QIcon:
     return QIcon.fromTheme(icon.value)
-
-# def watermark() -> QPixmap:
-#   """`QPixmap` of application watermark."""
-#   wm = QPixmap(str(cls._get_asset_path(cls._watermark_filename)))
-#   wm = wm.scaledToWidth(100)
-#   return wm

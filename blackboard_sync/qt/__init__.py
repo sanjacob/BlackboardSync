@@ -4,12 +4,6 @@ BlackboardSync Qt GUI.
 ~~~~~~~~~~~~~~~~~~~~~
 
 A graphical interface using Qt for BlackboardSync.
-
-Basic usage:
-    >>> from qt import LoginWebView
-    >>> w = LoginWebView(start_url=..., target_url=...)
-
-
 Full documentation available at <https://blackboardsync.readthedocs.io>.
 
 :copyright: (c) 2024, Jacob Sánchez Pérez.
@@ -36,16 +30,10 @@ from .SetupWizard import SetupWizard
 from .LoginWebView import LoginWebView
 from .SettingsWindow import SettingsWindow
 
-from .dialogs import RedownloadDialog, UpdateFoundDialog
-from .utils import add_to_startup, open_in_file_browser
 
 __all__ = [
     'SetupWizard',
     'LoginWebView',
     'SettingsWindow',
-    'SyncTrayIcon',
-    'RedownloadDialog',
-    'UpdateFoundDialog',
-    'add_to_startup',
-    'open_in_file_browser'
+    'SyncTrayIcon'
 ]

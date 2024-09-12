@@ -16,7 +16,9 @@
 # MA  02110-1301, USA.
 
 import sys
+import webbrowser
 from pathlib import Path
+from datetime import datetime
 from requests.cookies import RequestsCookieJar
 from importlib.metadata import version, PackageNotFoundError
 
@@ -25,10 +27,11 @@ from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QWidget
 
 from . import SetupWizard, LoginWebView, SettingsWindow, SyncTrayIcon
 from .notification import Event
-from .utils import open_in_file_browser
+from .dialogs import RedownloadDialog
+from .utils import add_to_startup, open_in_file_browser
 
 
-class Manager(QObject):
+class UIManager(QObject):
     class Signals(QObject):
         open_settings = pyqtSignal()
         open_tray = pyqtSignal(bool)
@@ -48,6 +51,7 @@ class Manager(QObject):
         self.id = id
         self.title = title
         self.uri = uri
+        self.help_uri = f"{uri}/issues"
 
         self.signals = self.Signals()
 
@@ -65,10 +69,10 @@ class Manager(QObject):
         self._has_shown_error = False
         self._init_ui(universities, autodetected)
 
-
     def _init_ui(self, universities: list[str],
                  autodetected: int | None) -> None:
-        self.setup_window = SetupWizard(self.uri, universities, autodetected)
+        self.setup_window = SetupWizard(self.help_uri,
+                                        universities, autodetected)
         self.login_window = LoginWebView()
         self.config_window = SettingsWindow()
         self.tray = SyncTrayIcon()
@@ -109,43 +113,44 @@ class Manager(QObject):
         widget.setVisible(False)
 
     @pyqtSlot()
-    def slot_open_login(self):
+    def slot_open_login(self) -> None:
         self.show(self.login_window)
 
     @pyqtSlot(QSystemTrayIcon.ActivationReason)
-    def slot_open_tray(self, reason: QSystemTrayIcon.ActivationReason):
+    def slot_open_tray(self,
+                       reason: QSystemTrayIcon.ActivationReason) -> None:
         clicked = reason == QSystemTrayIcon.ActivationReason.Trigger
         self.signals.open_tray.emit(clicked)
 
     @pyqtSlot()
-    def slot_log_out(self):
+    def slot_log_out(self) -> None:
         self.tray.set_logged_in(False)
         self.login_window.restore()
         self.show(self.login_window)
         self.hide(self.config_window)
 
     @pyqtSlot()
-    def slot_open_setup(self):
+    def slot_open_setup(self) -> None:
         self.signals.log_out.emit()
         self.hide(self.login_window)
         self.show(self.setup_window)
         pass
 
     @pyqtSlot()
-    def slot_log_in(self):
+    def slot_log_in(self) -> None:
         self.signals.log_in.emit(self.login_window.cookies)
         self.hide(self.login_window)
         self.tray.set_logged_in(True)
 
     @pyqtSlot()
-    def slot_setup(self):
+    def slot_setup(self) -> None:
         self.hide(self.setup_window)
         self.signals.setup.emit(self.setup_window.institution_index,
                                 self.setup_window.download_location,
                                 self.setup_window.min_year)
 
     @pyqtSlot()
-    def slot_config(self):
+    def slot_config(self) -> None:
         self.hide(self.config_window)
         self.signals.config.emit(self.config_window.download_location,
                                  self.config_window.sync_frequency)
@@ -154,24 +159,26 @@ class Manager(QObject):
     def slot_quit(self) -> None:
         self.app.quit()
 
-    def open_settings(self, download_location, username, sync_interval):
+    def open_settings(self, download_location: Path,
+                      username: str, sync_interval: int) -> None:
         self.config_window.download_location = download_location
         self.config_window.username = username
         self.config_window.sync_frequency = sync_interval
         self.show(self.config_window)
 
-    def open_menu(self, last_sync, is_logged, is_syncing):
+    def open_menu(self, last_sync: datetime,
+                  is_logged: bool, is_syncing: bool) -> None:
         self.tray.set_last_synced(last_sync)
         self.tray.set_logged_in(is_logged)
         self.tray.set_currently_syncing(is_syncing)
 
-    def open_tray(self, first_time, is_logged):
+    def open_tray(self, first_time: bool, is_logged: bool) -> None:
         if first_time:
             self.show(self.setup_window)
         elif not is_logged:
             self.show(self.login_window)
 
-    def open_file(self, file) -> None:
+    def open_file(self, file: Path) -> None:
         open_in_file_browser(file)
 
     def open_login(self, start_url: str, target_url: str) -> None:
@@ -182,8 +189,8 @@ class Manager(QObject):
         if RedownloadDialog().yes:
             self.signals.redownload.emit()
 
-    def notify_error(self):
+    def notify_error(self) -> None:
         if not self._has_shown_error:
             self.tray.notify(Event.DOWNLOAD_ERROR)
-            webbrowser.open(f"{__uri__}/issues")
+            webbrowser.open(self.help_uri)
             self._has_shown_error = True

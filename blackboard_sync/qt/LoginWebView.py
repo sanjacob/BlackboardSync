@@ -32,7 +32,7 @@ class LoginWebView(QWidget):
     class Signals(QObject):
         login_complete = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         # Typing information
@@ -51,11 +51,11 @@ class LoginWebView(QWidget):
         load_ui(self)
         self.web_view.loadFinished.connect(self.slot_load_finished)
 
-    def load(self, start_url: str, target_url: str) -> None:
-        self.start_url = QUrl.fromUserInput(start_url)
+    def load(self, start_url: str | None, target_url: str | None) -> None:
+        self.start_url = start_url
         self.target_url = target_url
 
-        self.web_view.load(self.start_url)
+        self.web_view.load(QUrl.fromUserInput(self.start_url))
 
         if self._cookie_store is not None:
             self._cookie_store.cookieAdded.connect(self.slot_cookie_added)
@@ -81,7 +81,7 @@ class LoginWebView(QWidget):
         """Restore web view to original state."""
         self.web_view.setPage(None)
         self.clear_browser()
-        self.web_view.load(self.start_url)
+        self.load(self.start_url, self.target_url)
 
     def clear_browser(self) -> None:
         if self._engine_profile is not None:
