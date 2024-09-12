@@ -1,12 +1,10 @@
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
-from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBCourseContent
 
 from blackboard.filters import (
     BBAttachmentFilter,
-    BBMembershipFilter,
     BWFilter
 )
 
@@ -32,7 +30,7 @@ class Document:
                 Attachment(attachment, api_path, job)
             )
 
-    def write(self, path: Path, executor: ThreadPoolExecutor):
+    def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
         # If only attachment, just use parent
         if len(self.attachments) > 1:
             path.mkdir(exist_ok=True, parents=True)

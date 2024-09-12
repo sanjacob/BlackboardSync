@@ -1,7 +1,8 @@
+import uuid
+
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
-from blackboard.api_extended import BlackboardExtended
 from blackboard.blackboard import BBAttachment
 
 from .base import BStream
@@ -15,7 +16,9 @@ class Attachment(BStream):
     def __init__(self, attachment: BBAttachment, api_path: BBContentPath,
                  job: DownloadJob):
         self.filename = attachment.fileName
-        self.stream = job.session.download(attachment_id=attachment.id, **api_path)
+        self.stream = job.session.download(attachment_id=attachment.id,
+                                           **api_path)
 
-    def write(self, path: Path, executor: ThreadPoolExecutor):
-        super().write(path / self.filename, self.stream, executor)
+    def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
+        filename = self.filename or str(uuid.uuid1())
+        super().write_base(path / filename, executor, self.stream)
