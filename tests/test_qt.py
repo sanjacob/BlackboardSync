@@ -259,7 +259,6 @@ class TestSyncTrayIcon:
         assert tray_icon._menu._status.text() == 'Not Logged In'
         assert not tray_icon._menu.refresh.isVisible()
         assert not tray_icon._menu.preferences.isVisible()
-        assert tray_icon._menu.log_in.isVisible()
         assert tray_icon._menu._status.isVisible()
         assert tray_icon._menu.quit.isVisible()
 
@@ -269,7 +268,6 @@ class TestSyncTrayIcon:
         assert tray_icon._menu.refresh.isVisible()
         assert tray_icon._menu.refresh.isEnabled()
         assert tray_icon._menu.preferences.isVisible()
-        assert not tray_icon._menu.log_in.isVisible()
         assert tray_icon._menu._status.isVisible()
         assert tray_icon._menu.quit.isVisible()
 
@@ -281,12 +279,6 @@ class TestSyncTrayIcon:
 
         tray_icon.set_currently_syncing(False)
         assert tray_icon._menu.refresh.isEnabled()
-
-    def test_tray_icon_login_signal(self, qtbot, tray_icon):
-        with qtbot.waitSignal(tray_icon.signals.login) as blocker:
-            tray_icon._menu.log_in.trigger()
-
-        assert blocker.signal_triggered
 
     def test_tray_icon_setupwiz_signal(self, qtbot, tray_icon):
         with qtbot.waitSignal(tray_icon.signals.reset_setup) as blocker:
@@ -309,7 +301,7 @@ class TestSyncTrayIcon:
 
     def test_tray_icon_sync_signal(self, qtbot, tray_icon):
         tray_icon.set_logged_in(True)
-        with qtbot.waitSignal(tray_icon.signals.sync) as blocker:
+        with qtbot.waitSignal(tray_icon.signals.force_sync) as blocker:
             tray_icon._menu.refresh.trigger()
 
         assert blocker.signal_triggered
