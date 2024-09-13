@@ -23,8 +23,8 @@ from PyQt6.QtWidgets import QSystemTrayIcon
 
 class Event(Enum):
     UPDATE_AVAILABLE = auto()
-    DOWNLOAD_STARTED = auto()
     DOWNLOAD_ERROR = auto()
+    APP_RUNNING = auto()
 
 
 class Severity(Enum):
@@ -49,18 +49,18 @@ class SyncTrayMsg(NamedTuple):
 _messages = {
     Event.UPDATE_AVAILABLE: SyncTrayMsg(
         'An update is available',
-        'You can update the app from your digital store.',
-        Severity.INFORMATION.value, Duration.SHORT
-    ),
-    Event.DOWNLOAD_STARTED: SyncTrayMsg(
-        'The download has started',
-        'The app is running in the background.',
+        'You can update the app from your digital store',
         Severity.INFORMATION.value, Duration.SHORT
     ),
     Event.DOWNLOAD_ERROR: SyncTrayMsg(
         'The download could not be completed',
-        'There was an error while downloading your content.',
+        'There was an error while downloading your content',
         Severity.WARNING.value, Duration.LONG
+    ),
+    Event.APP_RUNNING: SyncTrayMsg(
+        'The app is running in the background',
+        'Click the tray icon to manage your downloads',
+        Severity.INFORMATION.value, Duration.LONG
     )
 }
 

@@ -107,6 +107,7 @@ class SyncController:
 
     def log_in(self, cookies: RequestsCookieJar) -> None:
         self.model.auth(cookies)
+        self.ui.notify_running()
 
     def log_out(self) -> None:
         if self.model.is_active:

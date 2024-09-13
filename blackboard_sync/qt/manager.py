@@ -185,6 +185,9 @@ class UIManager(QObject):
         if RedownloadDialog().yes():
             self.signals.redownload.emit()
 
+    def notify_running(self) -> None:
+        self.tray.notify(Event.APP_RUNNING)
+
     def notify_error(self) -> None:
         if not self._has_shown_error:
             self.tray.notify(Event.DOWNLOAD_ERROR)
