@@ -38,9 +38,6 @@
   <property name="modal">
    <bool>false</bool>
   </property>
-  <property name="wizardStyle">
-   <enum>QWizard::ClassicStyle</enum>
-  </property>
   <property name="options">
    <set>QWizard::NoBackButtonOnStartPage</set>
   </property>
