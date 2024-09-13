@@ -58,5 +58,5 @@ def get_theme_icon(icon: AppIcon) -> QIcon:
     return QIcon.fromTheme(icon.value)
 
 
-def get_wizard_pixmap(which: QWizard.WizardPixmap):
+def get_wizard_pixmap(which: QWizard.WizardPixmap) -> QPixmap:
     return QPixmap(str(get_asset(f"{which}.png")))
