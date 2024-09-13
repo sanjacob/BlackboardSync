@@ -19,8 +19,9 @@ from enum import Enum
 from pathlib import Path
 
 from PyQt6 import uic
-from PyQt6.QtGui import QIcon
 from PyQt6.QtCore import QObject
+from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtWidgets import QWizard
 
 
 ICON_FILENAME = 'logo.png'
@@ -55,3 +56,7 @@ class AppIcon(Enum):
 
 def get_theme_icon(icon: AppIcon) -> QIcon:
     return QIcon.fromTheme(icon.value)
+
+
+def get_wizard_pixmap(which: QWizard.WizardPixmap):
+    return QPixmap(str(get_asset(f"{which}.png")))

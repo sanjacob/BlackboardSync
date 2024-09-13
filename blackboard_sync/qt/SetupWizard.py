@@ -26,7 +26,7 @@ from PyQt6.QtWidgets import (QWizard, QWizardPage,
                              QCheckBox, QSpinBox,
                              QLabel, QPushButton)
 
-from .assets import load_ui
+from .assets import load_ui, get_wizard_pixmap
 from .dialogs import UniNotSupportedDialog
 from .dialogs import DirDialog
 
@@ -61,6 +61,13 @@ class SetupWizard(QWizard):
 
     def _init_ui(self, selected: int | None) -> None:
         load_ui(self)
+
+        pixmap_roles = [
+            QWizard.WizardPixmap.BackgroundPixmap
+        ]
+
+        for role in pixmap_roles:
+            self.setPixmap(role, get_wizard_pixmap(role))
 
         # Institution
         self.uni_selection_box.addItems(self._institutions)
@@ -105,9 +112,6 @@ class SetupWizard(QWizard):
             property="text",
             changedSignal=self.sync_location_button.clicked
         )
-
-        # self.intro_page.setPixmap(QWizard.WizardPixmap.WatermarkPixmap,
-        #                           Assets.watermark())
 
     def _update_download_location_button(self) -> None:
         dir = self.download_location.name or str(self.download_location)
