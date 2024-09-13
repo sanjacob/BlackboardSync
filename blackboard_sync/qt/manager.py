@@ -22,6 +22,7 @@ from datetime import datetime
 from requests.cookies import RequestsCookieJar
 from importlib.metadata import version, PackageNotFoundError
 
+from PyQt6.QtCore import QLocale, QTranslator, QLibraryInfo
 from PyQt6.QtCore import Qt, pyqtSlot, pyqtSignal, QObject
 from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QWidget
 
@@ -29,6 +30,7 @@ from . import SetupWizard, LoginWebView, SettingsWindow, SyncTrayIcon
 from .notification import Event
 from .dialogs import RedownloadDialog
 from .utils import add_to_startup, open_in_file_browser
+from .assets import get_translations
 
 
 class UIManager(QObject):
@@ -58,6 +60,7 @@ class UIManager(QObject):
         self.app = QApplication(sys.argv)
         self.app.setApplicationName(title)
         self.app.setQuitOnLastWindowClosed(False)
+        self.load_translator()
 
         try:
             __version__ = version(Path(__file__).parent.parent.stem)
@@ -93,6 +96,25 @@ class UIManager(QObject):
         self.tray.signals.reset_setup.connect(self.slot_open_setup)
         self.tray.activated.connect(self.slot_open_tray)
         self.tray.signals.quit.connect(self.slot_quit)
+
+    def load_translator(self) -> None:
+        tr_path = QLibraryInfo.path(QLibraryInfo.LibraryPath.TranslationsPath)
+        self.locale = QLocale.system().name()
+
+        translations = [
+            ('qtbase_{}', tr_path),
+            ('qtwebengine_{}', tr_path),
+            ('{}', get_translations())
+        ]
+
+        self.translators = []
+
+        for filename, path in translations:
+            translator = QTranslator()
+
+            if translator.load(filename.format(self.locale), path):
+                self.app.installTranslator(translator)
+                self.translators.append(translator)
 
     def start(self, first_time: bool) -> None:
         if first_time:

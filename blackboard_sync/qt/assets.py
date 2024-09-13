@@ -40,6 +40,11 @@ def get_asset(icon: str) -> Path:
     return (root_dir / 'assets' / icon).resolve()
 
 
+def get_translations() -> str:
+    qt_dir = Path(__file__).parent
+    return str((qt_dir / "translations").resolve())
+
+
 def get_icon(file: str) -> QIcon:
     return QIcon(str(get_asset(file)))
 
