@@ -122,7 +122,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - run: sudo apt install pyqt6-dev-tools
+      - run: sudo apt install qttools5-dev-tools
       - run: lrelease blackboard_sync/qt/translations/*.ts
       - uses: actions/upload-artifact@v4
         with:
