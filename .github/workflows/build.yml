@@ -118,17 +118,6 @@ jobs:
           git push --tags
         working-directory: metadata
 
-  translations:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - run: sudo apt install pyqt6-dev-tools
-      - run: lrelease blackboard_sync/qt/translations/*.ts
-      - uses: actions/upload-artifact@v4
-        with:
-          name: translations
-          path: blackboard_sync/qt/translations
-
   pypi:
     needs: [ test ]
     runs-on: ubuntu-latest
