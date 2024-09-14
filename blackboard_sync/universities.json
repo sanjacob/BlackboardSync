@@ -581,18 +581,26 @@
       "target_url": "https://blackboard.snu.edu.in/ultra/"
     },
     "network": {
-      "name": ["SNU"]
+      "name": [
+        "SNU"
+      ]
     },
     "api_url": "https://blackboard.snu.edu.in"
   },
   {
     "name": "University of Texas at Dallas",
     "short_name": "UTD",
+    "country": "US",
     "login": {
       "start_url": "https://elearning.utdallas.edu",
       "target_url": "https://elearning.utdallas.edu/ultra/"
     },
-    "api_url": "https://elearning.utdallas.edu/"
+    "network": {
+      "name": [
+        "UTDALLAS"
+      ]
+    },
+    "api_url": "https://elearning.utdallas.edu"
   },
   {
     "name": "Fakeboard",
