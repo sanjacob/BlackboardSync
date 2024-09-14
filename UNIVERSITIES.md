@@ -139,6 +139,7 @@ If this is not something you'd like, please let me know.
 - University of Connecticut
 - Schoolcraft College
 - Texas Tech University
+- University of Texas at Dallas
 
 ###### Canada
 

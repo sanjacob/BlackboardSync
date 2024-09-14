@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add mock Blackboard instance for manual testing
 - Automatic university detection based on ISP
 - Add support for Shiv Nadar University (@depleur)
+- Add support for University of Texas at Dallas (@JadedCtrl)
 
 ### Fixed
 - Unicode paths will be used by default on Windows
