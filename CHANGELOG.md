@@ -29,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Automatic university detection based on ISP
 - Add support for Shiv Nadar University (@depleur)
 - Add support for University of Texas at Dallas (@JadedCtrl)
+- Add support for Humber College Institute of Technology and Advanced Learning (@ColeAnthonyCapilongo5735)
 
 ### Fixed
 - Unicode paths will be used by default on Windows
