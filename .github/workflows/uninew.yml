@@ -67,7 +67,7 @@ jobs:
         uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
         id: header
         with:
-          key: "${{ steps.country.outputs.name }}"
+          key: "${{ steps.country.outputs.iso-2 }}"
           map: |
             {
               "MX": { "section": "Mexico" },
