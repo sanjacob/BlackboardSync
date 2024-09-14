@@ -20,6 +20,9 @@ jobs:
       ISSUE_NUMBER: ${{ github.event.issue.number }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.AUTOPR_PAT }}
+
       - uses: stefanbuck/github-issue-parser@v3
         id: issue
         with:
@@ -61,7 +64,6 @@ jobs:
               },
               "api_url": "${{ env.UNI_START_URL }}"
             }
-
 
       - name: Map country code to country section
         uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
@@ -147,4 +149,4 @@ jobs:
 
           Closes #$ISSUE_NUMBER" || true
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.AUTOPR_PAT }}
