@@ -610,6 +610,11 @@
       "start_url": "https://learn.humber.ca",
       "target_url": "https://learn.humber.ca/ultra/"
     },
+    "network": {
+      "name": [
+        "HUMBERCXNET1"
+      ]
+    },
     "api_url": "https://learn.humber.ca"
   },
   {
