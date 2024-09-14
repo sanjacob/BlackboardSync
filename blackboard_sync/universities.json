@@ -603,6 +603,16 @@
     "api_url": "https://elearning.utdallas.edu"
   },
   {
+    "name": "Humber College Institute of Technology and Advanced Learning",
+    "short_name": "Humber Polytechnic",
+    "country": "CA",
+    "login": {
+      "start_url": "https://learn.humber.ca",
+      "target_url": "https://learn.humber.ca/ultra/"
+    },
+    "api_url": "https://learn.humber.ca"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {

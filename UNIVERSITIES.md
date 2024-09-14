@@ -145,6 +145,7 @@ If this is not something you'd like, please let me know.
 
 - Georgian College
 - Seneca Polytechnic
+- Humber College Institute of Technology and Advanced Learning
 
 ### South America
 
