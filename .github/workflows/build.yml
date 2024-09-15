@@ -318,6 +318,7 @@ jobs:
   deploy-msstore:
     runs-on: windows-latest
     needs: [ package-windows-msix ]
+    if: ${{ false }}
     steps:
       - uses: actions/download-artifact@v4
         with:
@@ -333,8 +334,6 @@ jobs:
           --sellerId ${{ secrets.MS_SELLER_ID }}
           --clientId ${{ secrets.MS_CLIENT_ID }}
           --clientSecret ${{ secrets.MS_CLIENT_KEY }}
-
-      - run: ls
 
       - name: Publish package in Microsoft Store
         run: >
