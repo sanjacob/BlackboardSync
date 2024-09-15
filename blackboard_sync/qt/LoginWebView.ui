@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>LoginWebView</class>
- <widget class="QWidget" name="LoginWindow">
+ <widget class="QWidget" name="LoginWebView">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -37,16 +37,6 @@
      </property>
      <property name="statusTip">
       <string/>
-     </property>
-    </widget>
-   </item>
-   <item>
-    <widget class="QPushButton" name="done_button">
-     <property name="toolTip">
-      <string>This window should close automatically, otherwise please click</string>
-     </property>
-     <property name="text">
-      <string>Click If Stuck After Logging In</string>
      </property>
     </widget>
    </item>

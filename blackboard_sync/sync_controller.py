@@ -2,7 +2,7 @@
 
 """BlackboardSync Controller."""
 
-# Copyright (C) 2021, Jacob Sánchez Pérez
+# Copyright (C) 2024, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -16,211 +16,116 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
-import sys
-import webbrowser
-from typing import Optional
-from importlib.metadata import version, PackageNotFoundError
-
-from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QApplication, QStyleFactory, QSystemTrayIcon, QWidget
+from requests.cookies import RequestsCookieJar
 
 from .sync import BlackboardSync
-from .__about__ import __title__
-from .updates import check_for_updates
-from .institutions import Institution, InstitutionLogin, get_names, autodetect
-from .qt.qt_elements import (LoginWebView, SyncTrayIcon, SettingsWindow,
-                             RedownloadDialog, OSUtils, SetupWizard, UpdateFoundDialog)
+from .__about__ import __id__, __title__, __uri__
+from .institutions import get_names, autodetect
+
+from .qt.manager import UIManager
 
 
-class BBSyncController:
+class SyncController:
     """Connects an instance of BlackboardSync with the UI module."""
 
-    tray_msg = {
-        "container_update": ('Updates available', 'You can update BlackboardSync from the Software Center', 1, 4),
-        "download_started": ('The download has started', 'BlackboardSync is running in the background. Find it in the system tray.'),
-        "download_error": ('The download cannot be completed', 'There was an error validating your course content. Please report this issue.', 3, 10)
-    }
-
     def __init__(self):
-        """Create an instance of the BlackboardSync Desktop App."""
-        # Create model, which will try to retrieve existing configuration
-        # If unsuccessful, we bring up login page
+        super().__init__()
         self.model = BlackboardSync()
+        self.ui = UIManager(__id__, __title__, __uri__,
+                            get_names(), autodetect())
 
-        self.app = QApplication(sys.argv)
-        self.app.setApplicationName(__title__)
+        first_time = self.model.university is None
 
-        try:
-            __version__ = version("blackboard_sync")
-        except PackageNotFoundError:
-            pass
-        else:
-            self.app.setApplicationVersion(__version__)
+        if not first_time:
+            self.open_login()
 
-        QApplication.setStyle(QStyleFactory.create("Fusion"))
+        self.init_signals()
+        self.ui.start(first_time)
 
-        self._init_ui()
-        self._has_notified_error = False
+    def init_signals(self):
+        self.ui.signals.open_settings.connect(self.open_settings)
+        self.ui.signals.open_tray.connect(self.open_tray)
+        self.ui.signals.open_downloads.connect(self.open_downloads)
+        self.ui.signals.open_menu.connect(self.open_menu)
+        self.ui.signals.setup.connect(self.setup)
+        self.ui.signals.config.connect(self.config)
+        self.ui.signals.redownload.connect(self.redownload)
+        self.ui.signals.force_sync.connect(self.force_sync)
+        self.ui.signals.log_in.connect(self.log_in)
+        self.ui.signals.log_out.connect(self.log_out)
+        self.ui.signals.quit.connect(self.quit)
 
-        if self.model.university is None:
-            OSUtils.add_to_startup()
-            self._show_setup_window()
-        else:
-            self._build_login_window(self.model.university.login)
-            self._show_login_window()
-        self.app.exec()
+    def open_login(self) -> None:
+        start_url = str(self.model.university.login.start_url)
+        target_url = str(self.model.university.login.target_url)
 
-    def _init_ui(self) -> None:
-        self.setup_window = SetupWizard(get_names(), autodetect())
-        self.setup_window.accepted.connect(self._setup_complete)
+        self.ui.open_login(start_url, target_url)
 
-        self.login_window : Optional[LoginWebView] = None
+    def force_sync(self) -> None:
+        self.model.force_sync()
 
-        self.config_window = SettingsWindow()
+    def open_settings(self) -> None:
+        self.ui.open_settings(self.model.download_location,
+                              self.model.username,
+                              self.model.sync_interval)
 
-        self.config_window.log_out_signal.connect(self._log_out)
-        self.config_window.setup_wiz_signal.connect(self._reset_setup)
-        self.config_window.save_signal.connect(self._save_setting_changes)
+    def open_menu(self) -> None:
+        self.ui.open_menu(self.model.last_sync_time,
+                          self.model.is_logged_in,
+                          self.model.is_syncing)
 
-        self.tray = SyncTrayIcon()
-        self.tray.quit_signal.connect(self._stop)
-        self.tray.login_signal.connect(self._show_login_window)
-        self.tray.settings_signal.connect(self._show_config_window)
-        self.tray.reset_setup_signal.connect(self._reset_setup)
-        self.tray.sync_signal.connect(self._force_sync)
-        self.tray.activated.connect(self._tray_icon_activated)
-        self.tray.open_dir_signal.connect(self._open_download_dir)
-        self.tray.show_menu_signal.connect(self._update_tray_menu)
+    def open_tray(self, clicked) -> None:
+        if clicked:
+            first_time = self.model.university is None
+            is_logged_in = self.model.is_logged_in
 
-        self.app.setQuitOnLastWindowClosed(False)
+            self.ui.open_tray(first_time, is_logged_in)
 
-    def _setup_complete(self) -> None:
-        self.setup_window.setVisible(False)
-        self.model.setup(self.setup_window.institution_index,
-                         self.setup_window.download_location,
-                         self.setup_window.min_year)
-        self._build_login_window(self.model.university.login)
-        self._show_login_window()
+        if self.model.has_error:
+            self.ui.notify_error()
 
-    def _build_login_window(self, uni_login_info: InstitutionLogin) -> None:
-        # Get login url from uni DB
-        self.login_window = LoginWebView(start_url=str(uni_login_info.start_url),
-                                         target_url=str(uni_login_info.target_url))
-        self.login_window.login_complete_signal.connect(self._login_complete)
+    def open_downloads(self) -> None:
+        self.ui.open_file(self.model.download_location)
 
-    def _login_complete(self) -> None:
-        if self.login_window is None:
-            return
+    def setup(self, institution_index: int,
+              download_location: str, min_year: int) -> None:
+        self.model.setup(institution_index, download_location, min_year)
+        self.open_login()
 
-        self.app.setOverrideCursor(Qt.CursorShape.WaitCursor)
-        # Call login function on sync
-        auth = self.model.auth(self.login_window.cookie_jar)
-        self.tray.set_logged_in(auth)
-        self.login_window.setVisible(False)
-        self.app.restoreOverrideCursor()
-        self._check_for_updates()
-        self.tray.show_msg(*(self.tray_msg["download_started"]))
+    def config(self, download_location: str, sync_frequency: int) -> None:
+        if self.model.download_location != download_location:
+            self.model.download_location = download_location
+            self.ui.ask_redownload()
 
-    def _reset_setup(self) -> None:
-        # Hide login window and show setup wizard
-        if self.login_window is not None:
-            self._log_out()
-            self.login_window.setVisible(False)
-        self._show_setup_window()
+        self.model.sync_interval = sync_frequency
 
-    def _check_for_updates(self) -> None:
-        if (html_url := check_for_updates()) is not None:
-            if html_url == 'container':
-                self.tray.show_msg(*(self.tray_msg["container_update"]))
-            elif UpdateFoundDialog().should_update:
-                webbrowser.open(html_url)
+    def redownload(self) -> None:
+        self.model.redownload()
 
-    def _show_login_window(self) -> None:
-        if self.login_window is not None:
-            self._show_window(self.login_window)
+    def log_in(self, cookies: RequestsCookieJar) -> None:
+        self.model.auth(cookies)
+        self.ui.notify_running()
 
-    def _show_setup_window(self) -> None:
-        self._show_window(self.setup_window)
-
-    def _show_config_window(self) -> None:
-        # Update displayed settings
-        self.config_window.download_location = self.model.download_location
-        self.config_window.username = self.model.username
-        self.config_window.sync_frequency = self.model.sync_interval
-        self._show_window(self.config_window)
-
-    def _show_window(self, window: QWidget) -> None:
-        window.setWindowState(Qt.WindowState.WindowNoState)
-        window.show()
-        window.setFocus()
-
-    def _open_download_dir(self) -> None:
-        # Open folder in browser
-        OSUtils.open_dir_in_file_browser(self.model.download_location)
-
-    def _tray_icon_activated(self, activation_reason: QSystemTrayIcon.ActivationReason) -> None:
-        if activation_reason == QSystemTrayIcon.ActivationReason.Trigger:
-            if self.model.university is None:
-                self._show_setup_window()
-            # if not logged in
-            elif not self.model.is_logged_in:
-                self._show_login_window()
-        if self.model.has_error and not self._has_notified_error:
-            self.tray.show_msg(*(self.tray_msg["download_error"]))
-            webbrowser.open("https://github.com/sanjacob/BlackboardSync/issues")
-            self._has_notified_error = True
-
-    def _log_out(self) -> None:
+    def log_out(self) -> None:
         if self.model.is_active:
             self.model.stop_sync()
 
         self.model.log_out()
-        self.tray.set_logged_in(False)
-        
-        if self.login_window is not None:
-            self.login_window.restore()
-            self.login_window.setVisible(True)
 
-        self.config_window.setVisible(False)
-
-    def _save_setting_changes(self) -> None:
-        self.config_window.setVisible(False)
-
-        if self.model.download_location != self.config_window.download_location:
-            redownload = RedownloadDialog().redownload
-            self.model.download_location = self.config_window.download_location
-
-            if redownload:
-                self.model.redownload()
-
-        self.model.sync_interval = self.config_window.sync_frequency
-
-    def _force_sync(self) -> None:
-        self.model.force_sync()
-
-    def _update_tray_menu(self) -> None:
-        # Update last sync time
-        last_sync = self.model.last_sync_time
-        last_sync_str = "Never"
-
-        if last_sync is not None:
-            last_sync_str = last_sync.strftime("%Y-%m-%d %H:%M:%S")
-
-        self.tray.update_last_synced(last_sync_str)
-        self.tray.set_logged_in(self.model.is_logged_in)
-        if self.login_window is not None:
-            self.login_window.setVisible(not self.model.is_logged_in)
-
-        # Disable button if currently syncing
-        self.tray.toggle_currently_syncing(self.model.is_syncing)
-
-    def _stop(self) -> None:
+    def quit(self) -> None:
         if self.model.is_active:
             self.model.stop_sync()
-        self.app.quit()
+
+    # def _check_for_updates(self) -> None:
+    #    if (html_url := check_for_updates()) is not None:
+    #        if html_url == 'container':
+    #            self.tray.notify(Event.UPDATE_AVAILABLE)
+    #        elif UpdateFoundDialog().should_update:
+    #            webbrowser.open(html_url)
 
 
 if __name__ == '__main__':
-    controller = BBSyncController()
+    controller = SyncController()

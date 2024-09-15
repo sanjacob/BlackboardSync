@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>UniNotSupportedDialog</class>
- <widget class="QMessageBox" name="UniNotSupportedDialog">
+ <class>RedownloadDialog</class>
+ <widget class="QMessageBox" name="RedownloadDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>University not supported</string>
+   <string>Redownload all files?</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -20,16 +20,19 @@
    </iconset>
   </property>
   <property name="text">
-   <string>Unfortunately, your university is not yet supported.</string>
+   <string>Should BlackboardSync redownload all files to the new location?</string>
   </property>
   <property name="informativeText">
-   <string>You can help us provide support for it by visiting our website, which you can access by pressing the Help button.</string>
+   <string>Answer no if you intend to move all past downloads manually (Recommended)</string>
   </property>
   <property name="standardButtons">
-   <set>QMessageBox::StandardButton::Help|QMessageBox::StandardButton::Ok</set>
+   <set>QMessageBox::StandardButton::Yes|QMessageBox::StandardButton::No</set>
+  </property>
+  <property name="defaultButton">
+   <set>QMessageBox::StandardButton::No</set>
   </property>
   <property name="icon">
-   <set>QMessageBox::Icon::Warning</set>
+   <set>QMessageBox::Icon::Question</set>
   </property>
  </widget>
  <resources/>

@@ -1,6 +1,6 @@
-"""BlackboardSync Graphical Interface Tests"""
+"""Graphical Interface Tests"""
 
-# Copyright (C) 2021, Jacob Sánchez Pérez
+# Copyright (C) 2024, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -14,18 +14,29 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
 
 import pytest
 import requests
+from datetime import datetime, timezone
+
 from PyQt6.QtCore import Qt
 from PyQt6.QtTest import QTest
 from PyQt6.QtWidgets import QApplication, QFileDialog, QDialogButtonBox
 
-from blackboard_sync.qt import SyncPeriod, SyncTrayIcon, SettingsWindow
-from blackboard_sync.qt.qt_elements import (SetupWizard, LoginWebView,
-                                            RedownloadDialog)
+from blackboard_sync.qt import (
+    SetupWizard,
+    LoginWebView,
+    SettingsWindow,
+    SyncTrayIcon,
+)
+
+from blackboard_sync.qt.dialogs import (
+    UniNotSupportedDialog,
+    DirDialog
+)
 
 
 @pytest.fixture
@@ -43,18 +54,13 @@ def tray_icon():
 @pytest.fixture
 def make_setup_wizard(monkeypatch):
     def _make_setup_wizard(institutions: list[str]):
-        wizard = SetupWizard(institutions)
+        wizard = SetupWizard("", institutions)
+
         # Don't show uni not supported dialog
-        monkeypatch.setattr(wizard, "_show_not_supported_dialog", lambda *args: None)
+        monkeypatch.setattr(UniNotSupportedDialog, "exec", lambda *args: True)
+
         # Don't show file chooser dialog
         monkeypatch.setattr(QFileDialog, "exec", lambda *args: True)
-
-        class DirectoryMock:
-
-            def path():
-                """."""
-                return ''
-
         monkeypatch.setattr(QFileDialog, "directory", lambda *args: "/")
 
         # monkeypatch.setattr(wizard, "_", lambda *args: None)
@@ -157,6 +163,8 @@ class TestSetupWizard:
         assert wizard.institution_index == 3
 
 
+SyncPeriod = SettingsWindow.SyncPeriod
+
 class TestSettingsWindow:
     user = 'exampleUser'
     data_source = 'exampleDataSource'
@@ -170,9 +178,7 @@ class TestSettingsWindow:
                                                       tmp_path, monkeypatch):
         qtbot.addWidget(settings_window)
 
-        monkeypatch.setattr(
-            settings_window, "_file_chooser_dialog", lambda *args: tmp_path
-        )
+        monkeypatch.setattr(DirDialog, "choose", lambda *args: tmp_path)
 
         qtbot.mouseClick(settings_window.select_download_location, Qt.MouseButton.LeftButton)
         assert settings_window.download_location == tmp_path
@@ -225,7 +231,7 @@ class TestSettingsWindow:
     def test_settings_window_log_out_signal(self, qtbot, settings_window):
         qtbot.addWidget(settings_window)
 
-        with qtbot.waitSignal(settings_window.log_out_signal) as blocker:
+        with qtbot.waitSignal(settings_window.signals.log_out) as blocker:
             qtbot.mouseClick(settings_window.log_out_button, Qt.MouseButton.LeftButton)
 
         assert blocker.signal_triggered
@@ -233,17 +239,17 @@ class TestSettingsWindow:
     def test_settings_window_setup_wizard_signal(self, qtbot, settings_window):
         qtbot.addWidget(settings_window)
 
-        with qtbot.waitSignal(settings_window.setup_wiz_signal) as blocker:
+        with qtbot.waitSignal(settings_window.signals.setup_wiz) as blocker:
             qtbot.mouseClick(settings_window.setup_button, Qt.MouseButton.LeftButton)
 
         assert blocker.signal_triggered
 
     def test_settings_window_save_signal(self, qtbot, settings_window):
         qtbot.addWidget(settings_window)
+        save_btn = settings_window.button_box.button(QDialogButtonBox.StandardButton.Save)
 
-        with qtbot.waitSignal(settings_window.save_signal) as blocker:
-            qtbot.mouseClick(settings_window.button_box.button(QDialogButtonBox.StandardButton.Save),
-                             Qt.MouseButton.LeftButton)
+        with qtbot.waitSignal(settings_window.signals.save) as blocker:
+            qtbot.mouseClick(save_btn, Qt.MouseButton.LeftButton)
 
         assert blocker.signal_triggered
 
@@ -253,7 +259,6 @@ class TestSyncTrayIcon:
         assert tray_icon._menu._status.text() == 'Not Logged In'
         assert not tray_icon._menu.refresh.isVisible()
         assert not tray_icon._menu.preferences.isVisible()
-        assert tray_icon._menu.log_in.isVisible()
         assert tray_icon._menu._status.isVisible()
         assert tray_icon._menu.quit.isVisible()
 
@@ -263,53 +268,46 @@ class TestSyncTrayIcon:
         assert tray_icon._menu.refresh.isVisible()
         assert tray_icon._menu.refresh.isEnabled()
         assert tray_icon._menu.preferences.isVisible()
-        assert not tray_icon._menu.log_in.isVisible()
         assert tray_icon._menu._status.isVisible()
         assert tray_icon._menu.quit.isVisible()
 
     def test_tray_icon_currently_syncing(self, qtbot, tray_icon):
         tray_icon.set_logged_in(True)
-        tray_icon.toggle_currently_syncing(True)
+        tray_icon.set_currently_syncing(True)
         assert tray_icon._menu._status.text() == 'Downloading now...'
         assert not tray_icon._menu.refresh.isEnabled()
 
-        tray_icon.toggle_currently_syncing(False)
+        tray_icon.set_currently_syncing(False)
         assert tray_icon._menu.refresh.isEnabled()
 
-    def test_tray_icon_login_signal(self, qtbot, tray_icon):
-        with qtbot.waitSignal(tray_icon.login_signal) as blocker:
-            tray_icon._menu.log_in.trigger()
-
-        assert blocker.signal_triggered
-
     def test_tray_icon_setupwiz_signal(self, qtbot, tray_icon):
-        with qtbot.waitSignal(tray_icon.reset_setup_signal) as blocker:
+        with qtbot.waitSignal(tray_icon.signals.reset_setup) as blocker:
             tray_icon._menu.reset_setup.trigger()
 
         assert blocker.signal_triggered
 
     def test_tray_icon_quit_signal(self, qtbot, tray_icon):
-        with qtbot.waitSignal(tray_icon.quit_signal) as blocker:
+        with qtbot.waitSignal(tray_icon.signals.quit) as blocker:
             tray_icon._menu.quit.trigger()
 
         assert blocker.signal_triggered
 
     def test_tray_icon_settings_signal(self, qtbot, tray_icon):
         tray_icon.set_logged_in(True)
-        with qtbot.waitSignal(tray_icon.settings_signal) as blocker:
+        with qtbot.waitSignal(tray_icon.signals.settings) as blocker:
             tray_icon._menu.preferences.trigger()
 
         assert blocker.signal_triggered
 
     def test_tray_icon_sync_signal(self, qtbot, tray_icon):
         tray_icon.set_logged_in(True)
-        with qtbot.waitSignal(tray_icon.sync_signal) as blocker:
+        with qtbot.waitSignal(tray_icon.signals.force_sync) as blocker:
             tray_icon._menu.refresh.trigger()
 
         assert blocker.signal_triggered
 
     def test_tray_icon_last_synced(self, qtbot, tray_icon):
-        exampleDate = '1970-01-10'
-        tray_icon.update_last_synced(exampleDate)
+        exampleDate = datetime(year=1970, month=1, day=10, tzinfo=timezone.utc)
+        tray_icon.set_last_synced(exampleDate)
         assert tray_icon._menu._last_synced == exampleDate
-        assert exampleDate in tray_icon._menu._status.text()
+        assert '54 years' in tray_icon._menu._status.text()

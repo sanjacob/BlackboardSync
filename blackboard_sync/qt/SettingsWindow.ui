@@ -29,11 +29,6 @@
    <iconset>
     <normaloff>../assets/logo.png</normaloff>../assets/logo.png</iconset>
   </property>
-  <property name="styleSheet">
-   <string notr="true">QWidget#SettingsWindow { background-color: #241f21 }
-QLabel:enabled {color:white}
-</string>
-  </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
     <spacer name="horizontalSpacer">
@@ -53,22 +48,6 @@ QLabel:enabled {color:white}
    </item>
    <item>
     <layout class="QVBoxLayout" name="verticalLayout_2">
-     <item>
-      <spacer name="verticalSpacer_2">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>0</width>
-         <height>12</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
      <item>
       <widget class="QLabel" name="download_location_label">
        <property name="font">
@@ -115,22 +94,6 @@ QLabel:enabled {color:white}
       </widget>
      </item>
      <item>
-      <spacer name="verticalSpacer_3">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>0</width>
-         <height>12</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
       <widget class="QLabel" name="frequency_label">
        <property name="font">
         <font>
@@ -170,22 +133,6 @@ QLabel:enabled {color:white}
         </property>
        </item>
       </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer_6">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>0</width>
-         <height>12</height>
-        </size>
-       </property>
-      </spacer>
      </item>
      <item>
       <widget class="QLabel" name="session_label">
@@ -240,7 +187,7 @@ QLabel:enabled {color:white}
           </font>
          </property>
          <property name="text">
-          <string>Setup Wizard</string>
+          <string>Initial Setup</string>
          </property>
         </widget>
        </item>
@@ -277,22 +224,6 @@ QLabel:enabled {color:white}
         <set>QDialogButtonBox::Cancel|QDialogButtonBox::Save</set>
        </property>
       </widget>
-     </item>
-     <item>
-      <spacer name="verticalSpacer">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-       <property name="sizeType">
-        <enum>QSizePolicy::Fixed</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>0</width>
-         <height>12</height>
-        </size>
-       </property>
-      </spacer>
      </item>
     </layout>
    </item>
