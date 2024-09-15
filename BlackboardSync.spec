@@ -27,7 +27,15 @@ a = Analysis(
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
-    excludes=[],
+    excludes=[
+        'PyQt6.QtQml',
+        'PyQt6.QtQuick',
+        'PyQt6.QtQuick3D',
+        'PyQt6.QtSensors',
+        'PyQt6.QtPositioning',
+        'PyQt6.QtOpenGL',
+        'PyQt6.QtPdf',
+    ],
     noarchive=False,
     optimize=0,
 )
