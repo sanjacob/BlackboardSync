@@ -73,10 +73,12 @@ jobs:
       - name: Run jinja2
         run: python packaging/replace.py $VERSION
 
-      - run: cp LICENSE replaced
-
-      - run: cp packaging/windows/*.ico replaced
-      - run: cp packaging/linux/icon.svg replaced
+      - name: Copy icons and license
+        run: |
+          cp LICENSE replaced
+          cp packaging/windows/*.ico replaced
+          cp packaging/windows/*.png replaced
+          cp packaging/linux/icon.svg replaced
 
       - uses: actions/upload-artifact@v4
         with:
@@ -271,7 +273,75 @@ jobs:
           name: ${{ format('package-{0}', matrix.os) }}
           path: dist/*.dmg
 
-  gh-release:
+  package-windows-msix:
+    needs: [ pyinstaller, version, package-prep ]
+    runs-on: windows-latest
+    env:
+      VERSION: ${{ needs.version.outputs.code }}
+      KIT_PATH: 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: packaging
+          path: packaging
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: build-windows-latest
+
+      - run: tar -xvf build.tar
+
+      - name: Add App Certification Kit to path
+        run: echo $env:KIT_PATH >> $env:GITHUB_PATH
+
+      - name: Build .msix package
+        run: MakeAppx.exe build /f PackagingLayout.xml /op ..
+        working-directory: packaging
+
+      - name: Compress .msixbundle
+        run: >
+          Compress-Archive
+          -Path *.msixbundle
+          -DestinationPath msixupload.zip
+
+      - name: Rename .zip file to .msixupload
+        run: >
+          Move-Item
+          -Path msixupload.zip
+          -Destination app.bbsync.BlackboardSync.msixupload
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: package-msixupload
+          path: '*.msixupload'
+
+  deploy-msstore:
+    runs-on: windows-latest
+    needs: [ package-windows-msix ]
+    if: ${{ false }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: package-msixupload
+
+      - name: Setup Microsoft Store Developer CLI
+        uses: microsoft/setup-msstore-cli@v1
+
+      - name: Configure Microsoft Store Developer CLI
+        run: >
+          msstore reconfigure
+          --tenantId ${{ secrets.MS_TENANT_ID }}
+          --sellerId ${{ secrets.MS_SELLER_ID }}
+          --clientId ${{ secrets.MS_CLIENT_ID }}
+          --clientSecret ${{ secrets.MS_CLIENT_KEY }}
+
+      - name: Publish package in Microsoft Store
+        run: >
+          msstore publish app.bbsync.BlackboardSync.msixupload
+          --appId ${{ secrets.MS_APP_ID }}
+          --noCommit -v
+
+  deploy-github:
     if: startsWith(github.ref, 'refs/tags/')
     needs: [ package-windows, package-macos, release-notes ]
     runs-on: ubuntu-latest
@@ -282,16 +352,16 @@ jobs:
     steps:
       - uses: actions/download-artifact@v4
         with:
-          path: ./dist
           pattern: package-*
           merge-multiple: true
+
       - uses: softprops/action-gh-release@v1
         with:
           body: ${{ env.RELEASE_NOTES }}
           prerelease: ${{ env.PRE_RELEASE }}
           files: |
-            dist/*.exe
-            dist/*.dmg
+            '*.exe'
+            '*.dmg'
 
   pr-comment:
     if: ${{ github.event_name == 'pull_request' }}

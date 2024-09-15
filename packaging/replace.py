@@ -3,6 +3,7 @@ import sys
 sys.path.insert(0, os.path.abspath('.'))
 
 from typing import Any
+from packaging.version import Version
 
 from jinja2 import Environment, select_autoescape
 from jinja2 import FileSystemLoader
@@ -24,6 +25,11 @@ from blackboard_sync import (
 from releases import get_releases
 
 
+def get_version_base(version: str) -> str:
+    v = Version(version)
+    return v.base_version
+
+
 def replace_templates(template_files, context, outdir) -> int:
     folders = ["packaging/windows", "packaging/macos", "packaging/linux"]
 
@@ -43,8 +49,13 @@ def replace_templates(template_files, context, outdir) -> int:
 
 def main(argv: list[str]) -> int:
     __version__ = argv[1]
+    __version_base__ = get_version_base(__version__)
 
     template_files = [
+        # Windows (MSIX)
+        "AppXManifest.xml",
+        "PackagingLayout.xml",
+
         # Windows
         "pkg_win.nsi",
 
@@ -60,6 +71,7 @@ def main(argv: list[str]) -> int:
         'package': __id__,
         'title':__title__,
         'version':__version__,
+        'version_base': __version_base__,
         'author':__author__,
         'summary':__summary__,
         'homepage':__homepage__,

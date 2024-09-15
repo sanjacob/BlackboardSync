@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Package
+  xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
+  xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
+  xmlns:uap10="http://schemas.microsoft.com/appx/manifest/uap/windows10/10"
+  xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities">
+
+  <Identity Name="{{ publisher }}.27984CD41C10"
+    Version="{{ version_base }}.0"
+    Publisher="CN=08B29936-C25A-4550-B7B9-EF5FF06CAC8A"
+    ProcessorArchitecture="x64" />
+
+  <Properties>
+    <DisplayName>{{ title }}</DisplayName>
+    <PublisherDisplayName>{{ publisher }}</PublisherDisplayName>
+    <Description>{{ summary }}</Description>
+    <Logo>Icons\icon-150.png</Logo>
+  </Properties>
+
+  <Resources>
+    <Resource Language="en-us" />
+  </Resources>
+
+  <Dependencies>
+    <TargetDeviceFamily Name="Windows.Desktop"
+      MinVersion="10.0.17763.0"
+      MaxVersionTested="10.0.26100.0" />
+  </Dependencies>
+
+  <Capabilities>
+    <Capability Name="internetClient" />
+    <rescap:Capability Name="runFullTrust" />
+  </Capabilities>
+
+  <Applications>
+    <Application Id="{{ package }}"
+      Executable="BlackboardSync.exe"
+      EntryPoint="Windows.FullTrustApplication"
+      uap10:RuntimeBehavior="packagedClassicApp"
+      uap10:TrustLevel="mediumIL">
+
+      <uap:VisualElements
+        DisplayName="{{ title }}"
+        Description="{{ summary }}"
+        Square150x150Logo="Icons\icon-150.png"
+        Square44x44Logo="Icons\icon-44.png"
+        BackgroundColor="transparent" />
+    </Application>
+  </Applications>
+</Package>

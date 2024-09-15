@@ -1,0 +1,13 @@
+<PackagingLayout xmlns="http://schemas.microsoft.com/appx/makeappx/2017">
+  <PackageFamily ID="{{ package }}" FlatBundle="false"
+    ManifestPath="AppXManifest.xml" ResourceManager="false">
+
+    <Package ID="x64" ProcessorArchitecture="x64">
+      <Files>
+        <File DestinationPath="**" SourcePath="..\dist\BlackboardSync\**"/>
+        <File DestinationPath="Icons\*.png" SourcePath="*.png"/>
+      </Files>
+    </Package>
+
+  </PackageFamily>
+</PackagingLayout>
