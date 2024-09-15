@@ -4,7 +4,7 @@
 
     <Package ID="x64" ProcessorArchitecture="x64">
       <Files>
-        <File DestinationPath="**" SourcePath="..\dist\BBSync\**"/>
+        <File DestinationPath="**" SourcePath="..\dist\BlackboardSync\**"/>
         <File DestinationPath="Icons\*.png" SourcePath="*.png"/>
       </Files>
     </Package>

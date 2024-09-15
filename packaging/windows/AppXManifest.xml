@@ -34,7 +34,7 @@
 
   <Applications>
     <Application Id="{{ package }}"
-      Executable="BBSync.exe"
+      Executable="BlackboardSync.exe"
       EntryPoint="Windows.FullTrustApplication"
       uap10:RuntimeBehavior="packagedClassicApp"
       uap10:TrustLevel="mediumIL">
