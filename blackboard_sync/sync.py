@@ -23,6 +23,7 @@ Automatically sync content from Blackboard
 import time
 import logging
 import threading
+from requests import RequestException
 from pathlib import Path
 from typing import Optional
 from datetime import datetime, timezone, timedelta
@@ -117,6 +118,8 @@ class BlackboardSync:
             u_sess.fetch_users(user_id='me')
         except (BBUnauthorizedError, BBForbiddenError):
             logger.warning("Credentials are incorrect")
+        except RequestException:
+            logger.warning("Error while making auth request")
         else:
             logger.info("Logged in successfully")
             self.sess = u_sess
