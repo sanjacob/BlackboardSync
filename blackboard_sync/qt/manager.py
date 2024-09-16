@@ -28,7 +28,7 @@ from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QWidget
 
 from . import SetupWizard, LoginWebView, SettingsWindow, SyncTrayIcon
 from .notification import Event
-from .dialogs import RedownloadDialog
+from .dialogs import RedownloadDialog, LoginErrorDialog
 from .utils import add_to_startup, open_in_file_browser
 from .assets import get_translations
 
@@ -156,6 +156,8 @@ class UIManager(QObject):
     @pyqtSlot()
     def slot_log_in(self) -> None:
         self.signals.log_in.emit(self.login_window.cookies)
+
+    def log_in(self) -> None:
         self.hide(self.login_window)
         self.tray.set_logged_in(True)
 
@@ -210,7 +212,12 @@ class UIManager(QObject):
     def notify_running(self) -> None:
         self.tray.notify(Event.APP_RUNNING)
 
-    def notify_error(self) -> None:
+    def notify_login_error(self) -> None:
+        LoginErrorDialog(self.help_uri).exec()
+        self.login_window.restore()
+        self.show(self.login_window)
+
+    def notify_sync_error(self) -> None:
         if not self._has_shown_error:
             self.tray.notify(Event.DOWNLOAD_ERROR)
             webbrowser.open(self.help_uri)

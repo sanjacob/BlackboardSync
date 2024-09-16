@@ -29,12 +29,11 @@ from datetime import datetime, timezone, timedelta
 
 from requests.cookies import RequestsCookieJar
 
-from .config import SyncConfig
-from .download import BlackboardDownload
-
 from blackboard.api_extended import BlackboardExtended
 from blackboard.exceptions import BBUnauthorizedError, BBForbiddenError
 
+from .config import SyncConfig
+from .download import BlackboardDownload
 from .institutions import Institution, get_by_index
 
 logger = logging.getLogger(__name__)
@@ -105,16 +104,17 @@ class BlackboardSync:
 
         self._config.min_year = min_year
 
-    def auth(self, cookie_jar: RequestsCookieJar) -> bool:
+    def auth(self, cookies: RequestsCookieJar) -> bool:
         """Create a new Blackboard session with the given cookies."""
         if self.university is None:
             return False
 
-        self._cookies = cookie_jar
         api_url = str(self.university.api_url)
 
         try:
-            u_sess = BlackboardExtended(api_url, cookies=cookie_jar)
+            u_sess = BlackboardExtended(api_url, cookies=cookies)
+            # should trigger exception if not authenticated
+            u_sess.fetch_users(user_id='me')
         except (BBUnauthorizedError, BBForbiddenError):
             logger.warning("Credentials are incorrect")
         else:
@@ -176,7 +176,8 @@ class BlackboardSync:
                 time.sleep(self._check_sleep_time)
 
         if reload_session:
-            self.auth(self._cookies)
+            pass
+            #self.auth(self._cookies)
 
     def start_sync(self) -> bool:
         """Starts Sync thread or returns False if not possible."""

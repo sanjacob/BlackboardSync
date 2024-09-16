@@ -85,7 +85,7 @@ class SyncController:
             self.ui.open_tray(first_time, is_logged_in)
 
         if self.model.has_error:
-            self.ui.notify_error()
+            self.ui.notify_sync_error()
 
     def open_downloads(self) -> None:
         self.ui.open_file(self.model.download_location)
@@ -106,8 +106,11 @@ class SyncController:
         self.model.redownload()
 
     def log_in(self, cookies: RequestsCookieJar) -> None:
-        self.model.auth(cookies)
-        self.ui.notify_running()
+        if self.model.auth(cookies):
+            self.ui.log_in()
+            self.ui.notify_running()
+        else:
+            self.ui.notify_login_error()
 
     def log_out(self) -> None:
         if self.model.is_active:
