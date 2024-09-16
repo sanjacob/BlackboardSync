@@ -21,7 +21,7 @@ from enum import Enum, IntEnum, auto
 
 from PyQt6.QtWidgets import QSystemTrayIcon
 from PyQt6.QtCore import QCoreApplication, QObject
-tr = partial(QCoreApplication.translate, 'Messages')
+tr = partial(QCoreApplication.translate, 'TrayMessages')
 
 
 class Event(Enum):

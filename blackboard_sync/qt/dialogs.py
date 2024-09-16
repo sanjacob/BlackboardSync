@@ -19,10 +19,13 @@ import webbrowser
 from pathlib import Path
 from functools import partial
 
-from PyQt6.QtCore import QCoreApplication
+from PyQt6.QtCore import QCoreApplication, QObject
 from PyQt6.QtWidgets import QMessageBox, QFileDialog
 
 from .assets import logo
+
+
+tr = partial(QCoreApplication.translate, 'Dialogs')
 
 
 class DirDialog(QFileDialog):
@@ -37,95 +40,74 @@ class DirDialog(QFileDialog):
         return None
 
 
-class RedownloadDialog(QMessageBox):
-    """Ask user if files should be redownloaded to new location."""
-
+class Dialogs(QObject):
     def __init__(self) -> None:
         super().__init__()
-        tr = partial(QCoreApplication.translate, self.__class__.__name__)
-        self.setText(tr(
-            "Should BlackboardSync redownload all files?"
-        ))
-        self.setInformativeText(tr(
+
+
+    def redownload_dialog(self) -> bool:
+        q = QMessageBox()
+        q.setText(tr("Should BlackboardSync redownload all files?"))
+        q.setInformativeText(tr(
             "Answer no if you intend to move all past downloads manually"
             " (Recommended)."
         ))
-        self.setStandardButtons(
+        q.setStandardButtons(
             QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
         )
-        self.setDefaultButton(QMessageBox.StandardButton.No)
-        self.setIcon(QMessageBox.Icon.Question)
-        self.setWindowIcon(logo())
-
-    def yes(self) -> bool:
-        return self.exec() == QMessageBox.StandardButton.Yes
+        q.setDefaultButton(QMessageBox.StandardButton.No)
+        q.setIcon(QMessageBox.Icon.Question)
+        q.setWindowIcon(logo())
+        return q.exec() == QMessageBox.StandardButton.Yes
 
 
-class UpdateFoundDialog(QMessageBox):
-    """Inform user about a new available update."""
-
-    def __init__(self) -> None:
-        super().__init__()
-        tr = partial(QCoreApplication.translate, self.__class__.__name__)
-        self.setText(tr(
+    def update_found_dialog(self) -> int:
+        q = QMessageBox()
+        q.setText(tr(
             "A new version of BlackboardSync is now available!"
         ))
-        self.setInformativeText(tr(
+        q.setInformativeText(tr(
             "Please download the latest version from your preferred store."
         ))
+        q.setStandardButtons(QMessageBox.StandardButton.Ok)
+        q.setIcon(QMessageBox.Icon.Information)
+        q.setWindowIcon(logo())
+        return q.exec()
 
-        self.setStandardButtons(QMessageBox.StandardButton.Ok)
-        self.setIcon(QMessageBox.Icon.Information)
-        self.setWindowIcon(logo())
 
-
-class UniNotSupportedDialog(QMessageBox):
-    """Inform user that their university is not supported."""
-
-    def __init__(self, url: str) -> None:
-        super().__init__()
-        tr = partial(QCoreApplication.translate, self.__class__.__name__)
-        self.setText(tr(
+    def uni_not_supported_dialog(self, url: str) -> None:
+        q = QMessageBox()
+        q.setText(tr(
             "Unfortunately, your university is not yet supported"
         ))
-        self.setInformativeText(tr(
+        q.setInformativeText(tr(
             "You can help us provide support for it by visiting our website, "
             "which you can access by pressing the help button."
         ))
-        self.setStandardButtons(
+        q.setStandardButtons(
             QMessageBox.StandardButton.Help | QMessageBox.StandardButton.Ok
         )
-        self.setIcon(QMessageBox.Icon.Warning)
-        self.setWindowIcon(logo())
-        self._url = url
+        q.setIcon(QMessageBox.Icon.Warning)
+        q.setWindowIcon(logo())
 
-    def exec(self) -> int:
-        result = super().exec()
-        if result == QMessageBox.StandardButton.Help:
-            webbrowser.open(self._url)
-        return result
+        if q.exec() == QMessageBox.StandardButton.Help:
+            webbrowser.open(url)
 
 
-class LoginErrorDialog(QMessageBox):
-    def __init__(self, url: str) -> None:
-        super().__init__()
-        tr = partial(QCoreApplication.translate, self.__class__.__name__)
-        self.setText(tr(
+    def login_error_dialog(self, url: str) -> None:
+        q = QMessageBox()
+        q.setText(tr(
             "There was an issue logging you in"
         ))
-        self.setInformativeText(tr(
+        q.setInformativeText(tr(
             "Please try again later, and if the error persists"
             " contact our support by pressing the button below."
         ))
-        self.setStandardButtons(
+        q.setStandardButtons(
             QMessageBox.StandardButton.Help | QMessageBox.StandardButton.Ok
         )
-        self.setIcon(QMessageBox.Icon.Warning)
-        self.setWindowIcon(logo())
-        self._url = url
+        q.setIcon(QMessageBox.Icon.Warning)
+        q.setWindowIcon(logo())
 
-    def exec(self) -> int:
-        result = super().exec()
-        if result == QMessageBox.StandardButton.Help:
-            webbrowser.open(self._url)
-        return result
+        if q.exec() == QMessageBox.StandardButton.Help:
+            webbrowser.open(url)
