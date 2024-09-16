@@ -27,8 +27,7 @@ from PyQt6.QtWidgets import (QWizard, QWizardPage,
                              QLabel, QPushButton)
 
 from .assets import load_ui, get_wizard_pixmap
-from .dialogs import UniNotSupportedDialog
-from .dialogs import DirDialog
+from .dialogs import DirDialog, Dialogs
 
 
 class SetupWizard(QWizard):
@@ -99,6 +98,8 @@ class SetupWizard(QWizard):
         if selected is not None:
             self.uni_selection_box.setCurrentIndex(selected)
 
+        self.dialogs = Dialogs()
+
     def register_fields(self) -> None:
         # Make these actions obligatory
         self.uni_selection_page.registerField(
@@ -130,7 +131,7 @@ class SetupWizard(QWizard):
         # Do not progress if institution is not valid
         if self.currentId() == self.Pages.INSTITUTION:
             if not self._institution_is_valid():
-                UniNotSupportedDialog(self._support_url).exec()
+                self.dialogs.uni_not_supported_dialog(self._support_url)
                 valid = False
 
         return valid

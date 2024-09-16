@@ -17,10 +17,15 @@
 
 import webbrowser
 from pathlib import Path
+from functools import partial
 
+from PyQt6.QtCore import QCoreApplication, QObject
 from PyQt6.QtWidgets import QMessageBox, QFileDialog
 
-from .assets import load_ui
+from .assets import logo
+
+
+tr = partial(QCoreApplication.translate, 'Dialogs')
 
 
 class DirDialog(QFileDialog):
@@ -35,38 +40,70 @@ class DirDialog(QFileDialog):
         return None
 
 
-class RedownloadDialog(QMessageBox):
-    """Ask user if files should be redownloaded to new location."""
-
+class Dialogs(QObject):
     def __init__(self) -> None:
         super().__init__()
-        load_ui(self)
 
-    def yes(self) -> bool:
-        return self.exec() == QMessageBox.StandardButton.Yes
+    def redownload_dialog(self) -> bool:
+        q = QMessageBox()
+        q.setText(tr("Should BlackboardSync redownload all files?"))
+        q.setInformativeText(tr(
+            "Answer no if you intend to move all past downloads manually"
+            " (Recommended)."
+        ))
+        q.setStandardButtons(
+            QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No
+        )
+        q.setDefaultButton(QMessageBox.StandardButton.No)
+        q.setIcon(QMessageBox.Icon.Question)
+        q.setWindowIcon(logo())
+        return q.exec() == QMessageBox.StandardButton.Yes
 
+    def update_found_dialog(self) -> int:
+        q = QMessageBox()
+        q.setText(tr(
+            "A new version of BlackboardSync is now available!"
+        ))
+        q.setInformativeText(tr(
+            "Please download the latest version from your preferred store."
+        ))
+        q.setStandardButtons(QMessageBox.StandardButton.Ok)
+        q.setIcon(QMessageBox.Icon.Information)
+        q.setWindowIcon(logo())
+        return q.exec()
 
-class UpdateFoundDialog(QMessageBox):
-    """Inform user about a new available update."""
+    def uni_not_supported_dialog(self, url: str) -> None:
+        q = QMessageBox()
+        q.setText(tr(
+            "Unfortunately, your university is not yet supported"
+        ))
+        q.setInformativeText(tr(
+            "You can help us provide support for it by visiting our website, "
+            "which you can access by pressing the help button."
+        ))
+        q.setStandardButtons(
+            QMessageBox.StandardButton.Help | QMessageBox.StandardButton.Ok
+        )
+        q.setIcon(QMessageBox.Icon.Warning)
+        q.setWindowIcon(logo())
 
-    def __init__(self) -> None:
-        super().__init__()
-        load_ui(self)
+        if q.exec() == QMessageBox.StandardButton.Help:
+            webbrowser.open(url)
 
-    def yes(self) -> bool:
-        return self.exec() == QMessageBox.StandardButton.Open
+    def login_error_dialog(self, url: str) -> None:
+        q = QMessageBox()
+        q.setText(tr(
+            "There was an issue logging you in"
+        ))
+        q.setInformativeText(tr(
+            "Please try again later, and if the error persists"
+            " contact our support by pressing the button below."
+        ))
+        q.setStandardButtons(
+            QMessageBox.StandardButton.Help | QMessageBox.StandardButton.Ok
+        )
+        q.setIcon(QMessageBox.Icon.Warning)
+        q.setWindowIcon(logo())
 
-
-class UniNotSupportedDialog(QMessageBox):
-    """Inform user that their university is not supported."""
-
-    def __init__(self, help_url: str) -> None:
-        super().__init__()
-        load_ui(self)
-        self._help_url = help_url
-
-    def exec(self) -> int:
-        result = super().exec()
-        if result == QMessageBox.StandardButton.Help:
-            webbrowser.open(self._help_url)
-        return result
+        if q.exec() == QMessageBox.StandardButton.Help:
+            webbrowser.open(url)

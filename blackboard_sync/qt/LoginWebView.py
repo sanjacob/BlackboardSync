@@ -49,16 +49,22 @@ class LoginWebView(QWidget):
 
     def _init_ui(self) -> None:
         load_ui(self)
+        self.init_signals()
+
+    def init_signals(self) -> None:
+        profile, cookie_store = self.get_profile_and_cookie_store()
         self.web_view.loadFinished.connect(self.slot_load_finished)
+
+        if profile is not None:
+            profile.clearHttpCacheCompleted.connect(self.slot_cache_cleared)
+        if cookie_store is not None:
+            cookie_store.cookieAdded.connect(self.slot_cookie_added)
 
     def load(self, start_url: str | None, target_url: str | None) -> None:
         self.start_url = start_url
         self.target_url = target_url
 
         self.web_view.load(QUrl.fromUserInput(self.start_url))
-
-        if self._cookie_store is not None:
-            self._cookie_store.cookieAdded.connect(self.slot_cookie_added)
 
     @pyqtSlot()
     def slot_load_finished(self) -> None:
@@ -77,27 +83,38 @@ class LoginWebView(QWidget):
             secure=cookie.isSecure()
         )
 
-    def restore(self) -> None:
-        """Restore web view to original state."""
-        self.web_view.setPage(None)
-        self.clear_browser()
+    @pyqtSlot()
+    def slot_cache_cleared(self) -> None:
         self.load(self.start_url, self.target_url)
 
+    def restore(self) -> None:
+        """Restore web view to original state."""
+        self.clear_browser()
+
     def clear_browser(self) -> None:
-        if self._engine_profile is not None:
-            self._engine_profile.clearHttpCache()
-        if self._cookie_store is not None:
-            self._cookie_store.deleteAllCookies()
+        profile, cookie_store = self.get_profile_and_cookie_store()
 
-    @property
-    def _engine_profile(self) -> QWebEngineProfile | None:
+        if cookie_store is not None:
+            cookie_store.deleteAllCookies()
+        if profile is not None:
+            profile.clearHttpCache()
+
+        self._cookie_jar = RequestsCookieJar()
+
+    def get_profile_and_cookie_store(
+        self
+    ) -> tuple[QWebEngineProfile | None, QWebEngineCookieStore | None]:
         page = self.web_view.page()
-        return page.profile() if page else None
+        profile = None
+        cookie_store = None
 
-    @property
-    def _cookie_store(self) -> QWebEngineCookieStore | None:
-        profile = self._engine_profile
-        return profile.cookieStore() if profile else None
+        if page is not None:
+            profile = page.profile()
+
+        if profile is not None:
+            cookie_store = profile.cookieStore()
+
+        return (profile, cookie_store)
 
     @property
     def url(self) -> str:

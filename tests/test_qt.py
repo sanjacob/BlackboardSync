@@ -33,10 +33,7 @@ from blackboard_sync.qt import (
     SyncTrayIcon,
 )
 
-from blackboard_sync.qt.dialogs import (
-    UniNotSupportedDialog,
-    DirDialog
-)
+from blackboard_sync.qt.dialogs import DirDialog, Dialogs
 
 
 @pytest.fixture
@@ -57,7 +54,7 @@ def make_setup_wizard(monkeypatch):
         wizard = SetupWizard("", institutions)
 
         # Don't show uni not supported dialog
-        monkeypatch.setattr(UniNotSupportedDialog, "exec", lambda *args: True)
+        monkeypatch.setattr(Dialogs, "uni_not_supported_dialog", lambda *args: True)
 
         # Don't show file chooser dialog
         monkeypatch.setattr(QFileDialog, "exec", lambda *args: True)
