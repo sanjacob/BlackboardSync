@@ -16,11 +16,12 @@ BlackboardSync configuration manager
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
 import logging
 import configparser
-from typing import Any, Optional
+from typing import Any
 from pathlib import Path
 from functools import wraps
 from datetime import datetime
@@ -36,10 +37,14 @@ logger = logging.getLogger(__name__)
 class Config(configparser.ConfigParser):
     """Base configuration manager class, which wraps a ConfigParser."""
 
-
     def __init__(self, config_file: Path, *args, **kwargs):
-        super().__init__(converters={'path': Path, 'date': datetime.fromisoformat},
-                         interpolation=None, *args, **kwargs)
+        converters: dict[str, Callable[[str], Any]] = {
+            'path': Path, 'date': datetime.fromisoformat
+        }
+
+        super().__init__(converters=converters, interpolation=None,
+                         *args, **kwargs)
+
         self._config_file = config_file
         self.read(self._config_file)
 
@@ -68,8 +73,11 @@ class SyncConfig(Config):
     _config_filename = "blackboard_sync"
 
     def __init__(self, custom_dir=None):
-        config_dir = custom_dir or Path(user_config_dir(appauthor=__author__, roaming=True))
-        super().__init__(config_dir / self._config_filename, empty_lines_in_values=False)
+        default_dir = Path(user_config_dir(appauthor=__author__, roaming=True))
+
+        config_dir = custom_dir or default_dir
+        super().__init__(config_dir / self._config_filename,
+                         empty_lines_in_values=False)
 
         if 'Sync' not in self:
             self['Sync'] = {}
@@ -77,19 +85,19 @@ class SyncConfig(Config):
         self._sync = self['Sync']
 
     @property
-    def last_sync_time(self) -> Optional[datetime]:
+    def last_sync_time(self) -> datetime | None:
         return self._sync.getdate('last_sync_time')
 
     @last_sync_time.setter
     @Config.persist
-    def last_sync_time(self, last: Optional[datetime]) -> None:
+    def last_sync_time(self, last: datetime | None) -> None:
         if last is None:
             self.remove_option('Sync', 'last_sync_time')
         else:
             self._sync['last_sync_time'] = last.isoformat()
 
     @property
-    def download_location(self) -> Optional[Path]:
+    def download_location(self) -> Path | None:
         # Default download location
         default = Path(Path.home(), 'Downloads', 'BlackboardSync')
         return self._sync.getpath('download_location') or default
@@ -100,7 +108,7 @@ class SyncConfig(Config):
         self._sync['download_location'] = str(sync_dir)
 
     @property
-    def university_index(self) -> Optional[int]:
+    def university_index(self) -> int | None:
         return self._sync.getint('university')
 
     @university_index.setter
@@ -109,10 +117,10 @@ class SyncConfig(Config):
         self._sync['university'] = str(university)
 
     @property
-    def min_year(self) -> Optional[int]:
+    def min_year(self) -> int | None:
         return self._sync.getint('min_year')
 
     @min_year.setter
     @Config.persist
-    def min_year(self, year: Optional[int])-> None:
+    def min_year(self, year: int | None) -> None:
         self._sync['min_year'] = str(year or 0)

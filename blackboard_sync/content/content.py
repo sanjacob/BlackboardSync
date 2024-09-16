@@ -43,7 +43,7 @@ class Content:
         try:
             self.handler = Handler(content, api_path, job)
         except (ValidationError, JSONDecodeError,
-                BBBadRequestError, BBForbiddenError, RequestException):
+                BBBadRequestError, BBForbiddenError):
             logger.exception(f"Error fetching {content.title}")
 
         try:

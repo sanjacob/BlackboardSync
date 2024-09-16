@@ -16,35 +16,37 @@ Checks for updates in GitHub.
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
 import requests
 from pathlib import Path
 from typing import Optional
 from packaging import version
-from importlib.metadata import version, PackageNotFoundError
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as get_version
 
 
 def is_inside_container() -> bool:
     return Path('/.flatpak-info').exists()
 
+
 def check_for_updates() -> Optional[str]:
     """Checks if there is a newer release than the current on Github."""
-    # Get version
     try:
-        __version__ = version("blackboard_sync")
+        __version__ = get_version("blackboard_sync")
     except PackageNotFoundError:
         return None
 
-    url = 'https://api.github.com/repos/sanjacob/BlackboardSync/releases/latest'
+    domain = "https://api.github.com"
+    url = f"{domain}/repos/sanjacob/BlackboardSync/releases/latest"
+
     response = requests.get(url, timeout=2000)
+
     if response.status_code == 200:
         json_response = response.json()
         tag = json_response['tag_name']
         tag = tag[1:] if tag[0] == 'v' else tag
-        if version.parse(tag) > version.parse(__version__):
-            return 'container' if is_inside_container() else json_response['html_url']
 
+        return version.parse(tag) > version.parse(__version__)
     return None
-
-
