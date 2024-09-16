@@ -44,7 +44,6 @@ class Dialogs(QObject):
     def __init__(self) -> None:
         super().__init__()
 
-
     def redownload_dialog(self) -> bool:
         q = QMessageBox()
         q.setText(tr("Should BlackboardSync redownload all files?"))
@@ -60,7 +59,6 @@ class Dialogs(QObject):
         q.setWindowIcon(logo())
         return q.exec() == QMessageBox.StandardButton.Yes
 
-
     def update_found_dialog(self) -> int:
         q = QMessageBox()
         q.setText(tr(
@@ -73,7 +71,6 @@ class Dialogs(QObject):
         q.setIcon(QMessageBox.Icon.Information)
         q.setWindowIcon(logo())
         return q.exec()
-
 
     def uni_not_supported_dialog(self, url: str) -> None:
         q = QMessageBox()
@@ -92,7 +89,6 @@ class Dialogs(QObject):
 
         if q.exec() == QMessageBox.StandardButton.Help:
             webbrowser.open(url)
-
 
     def login_error_dialog(self, url: str) -> None:
         q = QMessageBox()
