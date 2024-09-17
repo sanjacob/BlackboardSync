@@ -59,7 +59,7 @@ class AppIcon(Enum):
     SYNC = QIcon.ThemeIcon.ViewRefresh
     HELP = QIcon.ThemeIcon.HelpAbout
     HOME = QIcon.ThemeIcon.GoHome
-    BACK = QIcon.ThemeIcon.GoPrevious
+    BACK = QIcon.ThemeIcon.EditUndo
 
 
 def get_theme_icon(icon: AppIcon) -> QIcon:
