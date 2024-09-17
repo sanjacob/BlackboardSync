@@ -62,10 +62,6 @@ class LoginWebView(QWidget):
 
         self._init_ui()
 
-    def cancel_watchdog(self) -> None:
-        if self.watchdog:
-            self.watchdog.cancel()
-
     def _init_ui(self) -> None:
         load_ui(self)
 
@@ -162,6 +158,10 @@ class LoginWebView(QWidget):
             cookie_store = profile.cookieStore()
 
         return (profile, cookie_store)
+
+    def cancel_watchdog(self) -> None:
+        if self.watchdog:
+            self.watchdog.cancel()
 
     @property
     def url(self) -> str:
