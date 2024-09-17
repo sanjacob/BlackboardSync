@@ -59,19 +59,6 @@ class Dialogs(QObject):
         q.setWindowIcon(logo())
         return q.exec() == QMessageBox.StandardButton.Yes
 
-    def update_found_dialog(self) -> int:
-        q = QMessageBox()
-        q.setText(tr(
-            "A new version of BlackboardSync is now available!"
-        ))
-        q.setInformativeText(tr(
-            "Please download the latest version from your preferred store."
-        ))
-        q.setStandardButtons(QMessageBox.StandardButton.Ok)
-        q.setIcon(QMessageBox.Icon.Information)
-        q.setWindowIcon(logo())
-        return q.exec()
-
     def uni_not_supported_dialog(self, url: str) -> None:
         q = QMessageBox()
         q.setText(tr(

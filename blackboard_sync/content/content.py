@@ -24,7 +24,7 @@ class Content:
     """Content factory for all types."""
 
     def __init__(self, content: BBCourseContent, api_path: BBContentPath,
-                 job: DownloadJob):
+                 job: DownloadJob) -> None:
 
         logger.info(f"{content.title}[{content.contentHandler}]")
 

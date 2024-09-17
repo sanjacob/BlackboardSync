@@ -25,11 +25,11 @@ mass download all user content from Blackboard
 import logging
 from pathlib import Path
 from datetime import datetime, timezone
-from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.api_extended import BlackboardExtended
 from blackboard.filters import BBMembershipFilter, BWFilter
 
+from .executor import SyncExecutor
 from .content.job import DownloadJob
 from .content.course import Course
 
@@ -63,7 +63,7 @@ class BlackboardDownload:
         self._user_id = sess.user_id
         self._download_location = download_location
         self._min_year = min_year
-        self.executor = ThreadPoolExecutor(max_workers=8)
+        self.executor = SyncExecutor()
         self.cancelled = False
 
         if last_downloaded is not None:
@@ -104,7 +104,9 @@ class BlackboardDownload:
             Course(course, job).write(self.download_location, self.executor)
 
         logger.info("Shutting down download workers")
+
         self.executor.shutdown(wait=True, cancel_futures=self.cancelled)
+        self.executor.raise_exceptions()
 
         return start_time if not self.cancelled else None
 

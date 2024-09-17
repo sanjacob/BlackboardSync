@@ -16,7 +16,6 @@
 # MA  02110-1301, USA.
 
 import sys
-import webbrowser
 from pathlib import Path
 from datetime import datetime
 from requests.cookies import RequestsCookieJar
@@ -69,7 +68,6 @@ class UIManager(QObject):
         else:
             self.app.setApplicationVersion(__version__)
 
-        self._has_shown_error = False
         self._init_ui(universities, autodetected)
 
     def _init_ui(self, universities: list[str],
@@ -219,7 +217,7 @@ class UIManager(QObject):
         self.show(self.login_window)
 
     def notify_sync_error(self) -> None:
-        if not self._has_shown_error:
-            self.tray.notify(Event.DOWNLOAD_ERROR)
-            webbrowser.open(self.help_uri)
-            self._has_shown_error = True
+        self.tray.notify(Event.DOWNLOAD_ERROR)
+
+    def notify_update(self) -> None:
+        self.tray.notify(Event.UPDATE_AVAILABLE)

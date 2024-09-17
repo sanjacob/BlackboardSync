@@ -21,22 +21,17 @@ Checks for updates in GitHub.
 
 import requests
 from pathlib import Path
-from typing import Optional
 from packaging import version
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as get_version
 
 
-def is_inside_container() -> bool:
-    return Path('/.flatpak-info').exists()
-
-
-def check_for_updates() -> Optional[str]:
+def check_for_updates() -> bool:
     """Checks if there is a newer release than the current on Github."""
     try:
         __version__ = get_version("blackboard_sync")
     except PackageNotFoundError:
-        return None
+        return False
 
     domain = "https://api.github.com"
     url = f"{domain}/repos/sanjacob/BlackboardSync/releases/latest"
@@ -49,4 +44,4 @@ def check_for_updates() -> Optional[str]:
         tag = tag[1:] if tag[0] == 'v' else tag
 
         return version.parse(tag) > version.parse(__version__)
-    return None
+    return False

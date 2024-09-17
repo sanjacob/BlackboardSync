@@ -25,6 +25,7 @@ from .sync import BlackboardSync
 from .__about__ import __id__, __title__, __uri__
 from .institutions import get_names, autodetect
 
+from .updates import check_for_updates
 from .qt.manager import UIManager
 
 
@@ -77,15 +78,15 @@ class SyncController:
                           self.model.is_logged_in,
                           self.model.is_syncing)
 
+        if self.model.has_error:
+            self.ui.notify_sync_error()
+
     def open_tray(self, clicked) -> None:
         if clicked:
             first_time = self.model.university is None
             is_logged_in = self.model.is_logged_in
 
             self.ui.open_tray(first_time, is_logged_in)
-
-        if self.model.has_error:
-            self.ui.notify_sync_error()
 
     def open_downloads(self) -> None:
         self.ui.open_file(self.model.download_location)
@@ -109,6 +110,7 @@ class SyncController:
         if self.model.auth(cookies):
             self.ui.log_in()
             self.ui.notify_running()
+            self.check_for_updates()
         else:
             self.ui.notify_login_error()
 
@@ -122,12 +124,9 @@ class SyncController:
         if self.model.is_active:
             self.model.stop_sync()
 
-    # def _check_for_updates(self) -> None:
-    #    if (html_url := check_for_updates()) is not None:
-    #        if html_url == 'container':
-    #            self.tray.notify(Event.UPDATE_AVAILABLE)
-    #        elif UpdateFoundDialog().should_update:
-    #            webbrowser.open(html_url)
+    def check_for_updates(self) -> None:
+        if check_for_updates():
+            self.ui.notify_update()
 
 
 if __name__ == '__main__':

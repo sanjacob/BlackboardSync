@@ -44,7 +44,6 @@ class BlackboardSync:
     """Represents an instance of the BlackboardSync application."""
 
     _log_directory = "log"
-    _app_name = 'blackboard_sync'
 
     # Seconds between each check of time elapsed since last sync
     _check_sleep_time = 10
@@ -85,7 +84,7 @@ class BlackboardSync:
             self.university = get_by_index(self._config.university_index)
 
         if self._config.last_sync_time is not None:
-            self._update_next_sync()
+            self.schedule_next_sync(self._config.last_sync_time)
 
         if self.download_location is not None:
             self._add_logger_file_handler()
@@ -158,7 +157,9 @@ class BlackboardSync:
         except RequestException:
             logger.exception("Network failure")
             self._has_error = True
-            self.stop_sync()
+
+            # manually postpone next sync job
+            self.schedule_next_sync(datetime.now(timezone.utc))
         else:
             return start_time
         return None
@@ -243,15 +244,12 @@ class BlackboardSync:
     def last_sync_time(self, last_time: datetime | None) -> None:
         """Updates the last sync time recorded."""
         self._config.last_sync_time = last_time
-        self._update_next_sync()
+        self.schedule_next_sync(last_time)
 
-    def _update_next_sync(self) -> None:
-        """Store the calculated datetime when next download should happen."""
-        last_sync_time = self._config.last_sync_time
-
-        if last_sync_time is not None:
-            self._next_sync = (last_sync_time +
-                               timedelta(seconds=self._sync_interval))
+    def schedule_next_sync(self, start_time: datetime | None) -> None:
+        if start_time is not None:
+            delay = timedelta(seconds=self._sync_interval)
+            self._next_sync = start_time + delay
 
     @property
     def next_sync(self) -> datetime | None:
@@ -316,4 +314,7 @@ class BlackboardSync:
     @property
     def has_error(self) -> bool:
         """Flag indicates an error resulting in no downloads."""
-        return self._has_error
+        if self._has_error:
+            self._has_error = False
+            return True
+        return False
