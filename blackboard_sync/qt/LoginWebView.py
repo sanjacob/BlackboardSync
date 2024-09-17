@@ -15,15 +15,23 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA  02110-1301, USA.
 
+import webbrowser
+from functools import partial
+from threading import Timer
 from requests.cookies import RequestsCookieJar
 
+from PyQt6.QtCore import QCoreApplication
 from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject, QUrl
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QPushButton, QLabel
 from PyQt6.QtNetwork import QNetworkCookie
 from PyQt6.QtWebEngineCore import QWebEngineCookieStore, QWebEngineProfile
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
-from .assets import load_ui
+from .assets import load_ui, get_theme_icon, AppIcon
+
+
+tr = partial(QCoreApplication.translate, 'LoginWebView')
+WATCHDOG_DELAY = 30
 
 
 class LoginWebView(QWidget):
@@ -32,28 +40,48 @@ class LoginWebView(QWidget):
     class Signals(QObject):
         login_complete = pyqtSignal()
 
-    def __init__(self) -> None:
+    def __init__(self, help_url: str) -> None:
         super().__init__()
 
         # Typing information
         self.web_view: QWebEngineView
+        self.home_button: QPushButton
+        self.back_button: QPushButton
+        self.help_button: QPushButton
+        self.status: QLabel
+
+        self.watchdog: Timer | None
 
         self.start_url: str | None = None
         self.target_url: str | None = None
 
         self._cookie_jar = RequestsCookieJar()
+        self.help_url = help_url
 
         self.signals = self.Signals()
 
         self._init_ui()
 
+    def cancel_watchdog(self) -> None:
+        if self.watchdog:
+            self.watchdog.cancel()
+
     def _init_ui(self) -> None:
         load_ui(self)
+
+        self.home_button.setIcon(get_theme_icon(AppIcon.HOME))
+        self.back_button.setIcon(get_theme_icon(AppIcon.BACK))
+        self.help_button.setIcon(get_theme_icon(AppIcon.HELP))
+        self.help_button.setVisible(False)
+
         self.init_signals()
 
     def init_signals(self) -> None:
         profile, cookie_store = self.get_profile_and_cookie_store()
         self.web_view.loadFinished.connect(self.slot_load_finished)
+        self.home_button.clicked.connect(self.home)
+        self.back_button.clicked.connect(self.web_view.back)
+        self.help_button.clicked.connect(self.slot_help)
 
         if profile is not None:
             profile.clearHttpCacheCompleted.connect(self.slot_cache_cleared)
@@ -64,12 +92,21 @@ class LoginWebView(QWidget):
         self.start_url = start_url
         self.target_url = target_url
 
+        # start watchdog
+        self.watchdog = Timer(WATCHDOG_DELAY, self.show_help)
+        self.watchdog.start()
+
+        self.home()
+
+    def home(self) -> None:
         self.web_view.load(QUrl.fromUserInput(self.start_url))
 
     @pyqtSlot()
     def slot_load_finished(self) -> None:
         """Check if we have reached the target url."""
         if self.target_url and self.url.startswith(self.target_url):
+            if self.watchdog:
+                self.watchdog.cancel()
             self.signals.login_complete.emit()
 
     @pyqtSlot(QNetworkCookie)
@@ -85,7 +122,17 @@ class LoginWebView(QWidget):
 
     @pyqtSlot()
     def slot_cache_cleared(self) -> None:
-        self.load(self.start_url, self.target_url)
+        self.home()
+
+    @pyqtSlot()
+    def slot_help(self) -> None:
+        webbrowser.open(self.help_url)
+
+    def show_help(self) -> None:
+        self.status.setText(tr(
+            "Trouble logging in? Press the help button to let us know."
+        ))
+        self.help_button.setVisible(True)
 
     def restore(self) -> None:
         """Restore web view to original state."""
