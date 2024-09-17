@@ -74,7 +74,7 @@ class UIManager(QObject):
                  autodetected: int | None) -> None:
         self.setup_window = SetupWizard(self.help_uri,
                                         universities, autodetected)
-        self.login_window = LoginWebView()
+        self.login_window = LoginWebView(self.help_uri)
         self.config_window = SettingsWindow()
         self.tray = SyncTrayIcon()
         self.dialogs = Dialogs()
@@ -176,6 +176,7 @@ class UIManager(QObject):
 
     @pyqtSlot()
     def slot_quit(self) -> None:
+        self.login_window.cancel_watchdog()
         self.app.quit()
 
     def open_settings(self, download_location: Path,

@@ -57,6 +57,9 @@ class AppIcon(Enum):
     EXIT = QIcon.ThemeIcon.ApplicationExit
     OPEN = QIcon.ThemeIcon.FolderOpen
     SYNC = QIcon.ThemeIcon.ViewRefresh
+    HELP = QIcon.ThemeIcon.HelpAbout
+    HOME = QIcon.ThemeIcon.GoHome
+    BACK = QIcon.ThemeIcon.EditUndo
 
 
 def get_theme_icon(icon: AppIcon) -> QIcon:
