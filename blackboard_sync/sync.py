@@ -1,10 +1,10 @@
 """
-BlackboardSync.
+Blackboard Sync
 
-Automatically sync content from Blackboard
+Download your Blackboard Learn content automatically.
 """
 
-# Copyright (C) 2023, Jacob Sánchez Pérez
+# Copyright (C) 2024, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
 # modify it under the terms of the GNU General Public License
@@ -18,14 +18,14 @@ Automatically sync content from Blackboard
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
 import time
 import logging
 import threading
-from requests import RequestException
 from pathlib import Path
-from typing import Optional
+from requests import RequestException
 from datetime import datetime, timezone, timedelta
 
 from requests.cookies import RequestsCookieJar
@@ -44,19 +44,15 @@ class BlackboardSync:
     """Represents an instance of the BlackboardSync application."""
 
     _log_directory = "log"
-    _app_name = 'blackboard_sync'
 
     # Seconds between each check of time elapsed since last sync
     _check_sleep_time = 10
-    # Sync thread max retries
-    _max_retries = 3
 
-
-    def __init__(self):
+    def __init__(self) -> None:
         """Create an instance of the program."""
 
         # Download job
-        self._download = None
+        self._download: BlackboardDownload | None = None
 
         # Time between each sync in seconds
         self._sync_interval = 60 * 30
@@ -77,8 +73,8 @@ class BlackboardSync:
 
         logger.debug("Initialising BlackboardSync")
 
-        self.university : Optional[Institution] = None
-        self.sess : Optional[BlackboardSession] = None
+        self.university: Institution | None = None
+        self.sess: BlackboardExtended | None = None
 
         # Attempt to load existing configuration
         self._config = SyncConfig()
@@ -88,13 +84,13 @@ class BlackboardSync:
             self.university = get_by_index(self._config.university_index)
 
         if self._config.last_sync_time is not None:
-            self._update_next_sync()
+            self.schedule_next_sync(self._config.last_sync_time)
 
         if self.download_location is not None:
             self._add_logger_file_handler()
 
     def setup(self, university_index: int, download_location: Path,
-              min_year: Optional[int] = None) -> None:
+              min_year: int | None = None) -> None:
         """Setup the university information."""
         self.university_index = university_index
         self.download_location = download_location
@@ -134,58 +130,67 @@ class BlackboardSync:
         self.sess = None
         self._is_logged_in = False
 
+    def download(self) -> datetime | None:
+        user_session = self.sess
+
+        if user_session is None or self.university is None:
+            return None
+
+        if self.download_location is None:
+            return None
+
+        self._download = BlackboardDownload(
+            user_session,
+            self.download_location,
+            self.last_sync_time,
+            self.min_year
+        )
+
+        if not self._is_active:
+            return None
+
+        try:
+            start_time = self._download.download()
+        except BBUnauthorizedError:
+            logger.exception("User session expired")
+            self.log_out()
+        except RequestException:
+            logger.exception("Network failure")
+            self._has_error = True
+
+            # manually postpone next sync job
+            self.schedule_next_sync(datetime.now(timezone.utc))
+        else:
+            return start_time
+        return None
+
     def _sync_task(self) -> None:
-        """Constantly check if the data is outdated and if so start a download job.
+        """Constantly check if data is outdated and if so start download.
 
         Method run by Sync thread.
         """
-        reload_session = False
-        failed_attempts = 0
-
         while self._is_active:
             if self.outdated or self._force_sync:
-                logger.debug("Syncing now")
+                logger.info("Syncing now")
                 self._is_syncing = True
 
-                # Download from last datetime
-                user_session = self.sess
+                start_time = self.download()
 
-                if user_session is not None and self.university is not None:
-                    self._download = BlackboardDownload(user_session,
-                                                        self.download_location,
-                                                        self.last_sync_time,
-                                                        self.min_year)
+                if start_time is not None:
+                    self.last_sync_time = start_time
 
-                try:
-                    if not self._is_active:
-                        self._download.cancel()
-                    job_start_time = self._download.download()
-                    if job_start_time is not None:
-                        self.last_sync_time = job_start_time
-                    failed_attempts = 0
-                except BBUnauthorizedError:
-                    logger.exception("User session expired")
-                    reload_session = True
-                    self.log_out()
-
-                # Could not sync
-                if failed_attempts >= self._max_retries:
-                    self.log_out()
-
-                # Reset force sync flag
+                # Reset sync flags
                 self._force_sync = False
                 self._is_syncing = False
+
             if self._is_active:
                 time.sleep(self._check_sleep_time)
-
-        if reload_session:
-            pass
-            #self.auth(self._cookies)
 
     def start_sync(self) -> bool:
         """Starts Sync thread or returns False if not possible."""
         if self._has_error:
             return False
+
         logger.info("Starting sync thread")
         self._is_active = True
         self.sync_thread = threading.Thread(target=self._sync_task)
@@ -202,6 +207,9 @@ class BlackboardSync:
 
     def _add_logger_file_handler(self) -> None:
         filename = f"sync_log_{datetime.now():%Y-%m-%d}.log"
+
+        if self.download_location is None:
+            return
 
         log_dir = Path(self.download_location / self._log_directory)
         log_dir.mkdir(exist_ok=True, parents=True)
@@ -224,44 +232,43 @@ class BlackboardSync:
         self.last_sync_time = None
 
     @property
-    def username(self) -> Optional[str]:
+    def username(self) -> str | None:
         return self.sess.user_id if self.sess is not None else None
 
     @property
-    def last_sync_time(self) -> Optional[datetime]:
+    def last_sync_time(self) -> datetime | None:
         """Datetime right before last download job started."""
         return self._config.last_sync_time
 
     @last_sync_time.setter
-    def last_sync_time(self, last_time: Optional[datetime]):
+    def last_sync_time(self, last_time: datetime | None) -> None:
         """Updates the last sync time recorded."""
         self._config.last_sync_time = last_time
-        self._update_next_sync()
+        self.schedule_next_sync(last_time)
 
-    def _update_next_sync(self) -> None:
-        """Store a calculated datetime when next sync should take place."""
-        if self.last_sync_time is not None:
-            self._next_sync = (self._config.last_sync_time +
-                               timedelta(seconds=self._sync_interval))
+    def schedule_next_sync(self, start_time: datetime | None) -> None:
+        if start_time is not None:
+            delay = timedelta(seconds=self._sync_interval)
+            self._next_sync = start_time + delay
 
     @property
-    def next_sync(self) -> datetime:
+    def next_sync(self) -> datetime | None:
         """Time when last sync will be outdated."""
         return self._next_sync
 
     @property
     def outdated(self) -> bool:
         """Return true if last download job is outdated."""
-        if self._config.last_sync_time is None:
+        if self.next_sync is None:
             return True
         return datetime.now(timezone.utc) >= self.next_sync
 
     @property
-    def min_year(self) -> int:
+    def min_year(self) -> int | None:
         return self._config.min_year
 
     @property
-    def university_index(self):
+    def university_index(self) -> int | None:
         return self._config.university_index
 
     @university_index.setter
@@ -270,12 +277,12 @@ class BlackboardSync:
         self.university = get_by_index(uni_index)
 
     @property
-    def download_location(self) -> Path:
-        """Location to where all Blackboard content will be downloaded."""
+    def download_location(self) -> Path | None:
+        """Location to where all the content will be downloaded."""
         return self._config.download_location
 
     @download_location.setter
-    def download_location(self, value) -> None:
+    def download_location(self, value: Path) -> None:
         if value != self.download_location:
             self._config.download_location = value
             self._add_logger_file_handler()
@@ -307,4 +314,7 @@ class BlackboardSync:
     @property
     def has_error(self) -> bool:
         """Flag indicates an error resulting in no downloads."""
-        return self._has_error
+        if self._has_error:
+            self._has_error = False
+            return True
+        return False

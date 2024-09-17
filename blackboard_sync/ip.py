@@ -28,7 +28,7 @@ def find_my_ip() -> str | None:
     try:
         r = requests.get(IP_API, timeout=IP_TIMEOUT)
         r.raise_for_status()
-    except requests.RequestException: 
+    except requests.RequestException:
         return None
     else:
         return r.text

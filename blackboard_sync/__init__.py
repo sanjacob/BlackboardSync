@@ -42,6 +42,12 @@ from .__about__ import (
     __copyright__
 )
 
+__all__ = [
+    '__id__', '__title__', '__summary__', '__uri__', '__homepage__',
+    '__author__', '__email__', '__publisher__', '__license__',
+    '__license_spdx__', '__copyright__'
+]
+
 # Console Output
 logger = logging.getLogger(__name__)
 logger.addHandler(logging.StreamHandler())

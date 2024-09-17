@@ -19,23 +19,17 @@ mass download all user content from Blackboard
 #
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
+# Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+# MA  02110-1301, USA.
 
 import logging
-import platform
-from requests.exceptions import RequestException
 from pathlib import Path
-from typing import Optional
-from dateutil.parser import parse
 from datetime import datetime, timezone
-from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.api_extended import BlackboardExtended
-from blackboard.blackboard import BBCourseContent, BBResourceType
 from blackboard.filters import BBMembershipFilter, BWFilter
 
-from .content import ExternalLink, ContentBody, Document, Folder, Content
-from .content import BBContentPath
+from .executor import SyncExecutor
 from .content.job import DownloadJob
 from .content.course import Course
 
@@ -50,8 +44,8 @@ class BlackboardDownload:
 
     def __init__(self, sess: BlackboardExtended,
                  download_location: Path,
-                 last_downloaded: Optional[datetime] = None,
-                 min_year: Optional[int] = None):
+                 last_downloaded: datetime | None = None,
+                 min_year: int | None = None):
         """BlackboardDownload constructor
 
         Download all files in blackboard recursively to download_location,
@@ -61,22 +55,21 @@ class BlackboardDownload:
 
         :param BlackboardExtended sess: UCLan BB user session
         :param (str / Path) download_location: Where files will be stored
-        :param str last_downloaded: Files modified before this will not be downloaded
-        :param min_year: Only courses created on or after this year will be downloaded
+        :param str last_downloaded: Files modified before are ignored
+        :param min_year: Courses created before are ignored
         """
 
         self._sess = sess
         self._user_id = sess.user_id
         self._download_location = download_location
         self._min_year = min_year
-        self.executor = ThreadPoolExecutor(max_workers=8)
+        self.executor = SyncExecutor()
         self.cancelled = False
 
         if last_downloaded is not None:
             self._last_downloaded = last_downloaded
 
-
-    def download(self) -> Optional[datetime]:
+    def download(self) -> datetime | None:
         """Retrieve the user's courses, and start download of all contents
 
         :return: Datetime when method was called.
@@ -99,7 +92,8 @@ class BlackboardDownload:
         courses = self._sess.ex_fetch_courses(user_id=self.user_id,
                                               result_filter=course_filter)
 
-        job = DownloadJob(session=self._sess, last_downloaded=self._last_downloaded)
+        job = DownloadJob(session=self._sess,
+                          last_downloaded=self._last_downloaded)
 
         for course in courses:
             if self.cancelled:
@@ -109,8 +103,10 @@ class BlackboardDownload:
 
             Course(course, job).write(self.download_location, self.executor)
 
-        logger.info(f"Shutting down download workers")
+        logger.info("Shutting down download workers")
+
         self.executor.shutdown(wait=True, cancel_futures=self.cancelled)
+        self.executor.raise_exceptions()
 
         return start_time if not self.cancelled else None
 
