@@ -46,7 +46,7 @@ class Dialogs(QObject):
 
     def redownload_dialog(self) -> bool:
         q = QMessageBox()
-        q.setText(tr("Should BlackboardSync redownload all files?"))
+        q.setText(tr("Do you wish to redownload all files?"))
         q.setInformativeText(tr(
             "Answer no if you intend to move all past downloads manually"
             " (Recommended)."

@@ -64,7 +64,7 @@ class SyncTrayMenu(QMenu):
         self._status.setEnabled(False)
         self.addAction(self._status)
 
-        self.reset_setup = QAction(tr("Redo Setup"))
+        self.reset_setup = QAction(tr("Setup"))
         self.addAction(self.reset_setup)
 
         self.quit = QAction(tr("Quit"))
@@ -80,12 +80,12 @@ class SyncTrayMenu(QMenu):
         if logged_in:
             self.set_last_synced(self._last_synced)
         else:
-            self._status.setText(tr("Not Logged In"))
+            self._status.setText(tr("Not logged in"))
 
     def set_last_synced(self, last_synced: datetime | None) -> None:
         self._last_synced = last_synced
         human_ago = time_ago(last_synced) if last_synced else "Never"
-        self._status.setText(tr("Last Synced: ") + human_ago)
+        self._status.setText(tr("Last synced: ") + human_ago)
 
     def set_currently_syncing(self, syncing: bool) -> None:
         self.refresh.setEnabled(not syncing)
