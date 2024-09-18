@@ -13,6 +13,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Refactor download module into several content classes
 - Improve testing and automated builds pipeline
 - Upgrade multiple modules to latest versions
+- Improve login browser experience
+- Application name and id changed in PyInstaller builds
+- macOS build now hides the dock icon (@depleur's suggestion)
+- Assignment and lesson content now supported
 
 ### Added
 - Add support for University of Pretoria (@whipped-cream)
@@ -30,10 +34,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Shiv Nadar University (@depleur)
 - Add support for University of Texas at Dallas (@JadedCtrl)
 - Add support for Humber College Institute of Technology and Advanced Learning (@ColeAnthonyCapilongo5735)
+- Add support for translations
+- Add Spanish (es), French (fr), German (de) translations
 
 ### Fixed
 - Unicode paths will be used by default on Windows
 - Bug preventing settings window from opening
+- API session is now first tested before downloading
+- API authentication errors are now handled correctly
+- Download errors are now handled better
+- Errors that happen while streaming responses are now handled
+- PyInstaller build is now smaller
+- Overall app stability improved
 
 ## [0.11.4] - 2024-04-10
 
