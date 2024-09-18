@@ -119,10 +119,6 @@ class TimeStrings(QObject):
     def template(self) -> str:
         return self.tr("{n} {name} ago")
 
-    @property
-    def suffix(self) -> str:
-        return self.tr("ago")
-
 
 def time_ago(timestamp: datetime) -> str:
     delta = datetime.now(tz=timezone.utc) - timestamp

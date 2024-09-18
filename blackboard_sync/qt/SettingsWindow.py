@@ -103,6 +103,8 @@ class SettingsWindow(QWidget):
     @username.setter
     def username(self, username: str) -> None:
         if username:
-            self.current_session_label.setText(f"Logged in as {username}")
+            self.current_session_label.setText(
+                self.tr("Logged in as ") + username)
         else:
-            self.current_session_label.setText("Not currently logged in")
+            self.current_session_label.setText(
+                self.tr("Not currently logged in"))

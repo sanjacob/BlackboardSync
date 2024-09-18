@@ -16,11 +16,9 @@
 # MA  02110-1301, USA.
 
 import webbrowser
-from functools import partial
 from threading import Timer
 from requests.cookies import RequestsCookieJar
 
-from PyQt6.QtCore import QCoreApplication
 from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject, QUrl
 from PyQt6.QtWidgets import QWidget, QPushButton, QLabel
 from PyQt6.QtNetwork import QNetworkCookie
@@ -30,7 +28,6 @@ from PyQt6.QtWebEngineWidgets import QWebEngineView
 from .assets import load_ui, get_theme_icon, AppIcon
 
 
-tr = partial(QCoreApplication.translate, 'LoginWebView')
 WATCHDOG_DELAY = 30
 
 
@@ -125,7 +122,7 @@ class LoginWebView(QWidget):
         webbrowser.open(self.help_url)
 
     def show_help(self) -> None:
-        self.status.setText(tr(
+        self.status.setText(self.tr(
             "Trouble logging in? Press the help button to let us know."
         ))
         self.help_button.setVisible(True)

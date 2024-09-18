@@ -17,15 +17,11 @@
 
 import webbrowser
 from pathlib import Path
-from functools import partial
 
-from PyQt6.QtCore import QCoreApplication, QObject
+from PyQt6.QtCore import QObject
 from PyQt6.QtWidgets import QMessageBox, QFileDialog
 
 from .assets import logo
-
-
-tr = partial(QCoreApplication.translate, 'Dialogs')
 
 
 class DirDialog(QFileDialog):
@@ -46,8 +42,8 @@ class Dialogs(QObject):
 
     def redownload_dialog(self) -> bool:
         q = QMessageBox()
-        q.setText(tr("Do you wish to redownload all files?"))
-        q.setInformativeText(tr(
+        q.setText(self.tr("Do you wish to redownload all files?"))
+        q.setInformativeText(self.tr(
             "Answer no if you intend to move all past downloads manually"
             " (Recommended)."
         ))
@@ -61,10 +57,10 @@ class Dialogs(QObject):
 
     def uni_not_supported_dialog(self, url: str) -> None:
         q = QMessageBox()
-        q.setText(tr(
+        q.setText(self.tr(
             "Unfortunately, your university is not yet supported"
         ))
-        q.setInformativeText(tr(
+        q.setInformativeText(self.tr(
             "You can help us provide support for it by visiting our website, "
             "which you can access by pressing the help button."
         ))
@@ -79,10 +75,10 @@ class Dialogs(QObject):
 
     def login_error_dialog(self, url: str) -> None:
         q = QMessageBox()
-        q.setText(tr(
+        q.setText(self.tr(
             "There was an issue logging you in"
         ))
-        q.setInformativeText(tr(
+        q.setInformativeText(self.tr(
             "Please try again later, and if the error persists"
             " contact our support by pressing the button below."
         ))
