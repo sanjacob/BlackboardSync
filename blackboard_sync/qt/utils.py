@@ -23,7 +23,7 @@ from pathlib import Path
 from enum import IntEnum
 from datetime import datetime, timezone
 
-from PyQt6.QtCore import QSettings
+from PyQt6.QtCore import QSettings, QObject
 
 
 def open_in_file_browser(file: Path) -> None:
@@ -66,26 +66,73 @@ def add_to_startup(app_id: str) -> None:
     settings.sync()
 
 
+class Time(IntEnum):
+    SECOND = 1
+    MINUTE = 60
+    HOUR = MINUTE * 60
+    DAY = HOUR * 24
+    WEEK = DAY * 7
+    MONTH = DAY * 30
+    YEAR = DAY * 365
+
+
+class TimeStrings(QObject):
+    def get_name(self, unit: Time, plural: bool) -> str:
+        # it's not as simple as appending an 's'
+        if plural:
+            return self.get_plural_name(unit)
+
+        match unit:
+            case Time.SECOND:
+                return self.tr("second")
+            case Time.MINUTE:
+                return self.tr("minute")
+            case Time.HOUR:
+                return self.tr("hour")
+            case Time.DAY:
+                return self.tr("day")
+            case Time.WEEK:
+                return self.tr("week")
+            case Time.MONTH:
+                return self.tr("month")
+            case Time.YEAR:
+                return self.tr("year")
+
+    def get_plural_name(self, unit: Time) -> str:
+        match unit:
+            case Time.SECOND:
+                return self.tr("seconds")
+            case Time.MINUTE:
+                return self.tr("minutes")
+            case Time.HOUR:
+                return self.tr("hours")
+            case Time.DAY:
+                return self.tr("days")
+            case Time.WEEK:
+                return self.tr("weeks")
+            case Time.MONTH:
+                return self.tr("months")
+            case Time.YEAR:
+                return self.tr("years")
+
+    @property
+    def template(self) -> str:
+        return self.tr("{n} {name} ago")
+
+    @property
+    def suffix(self) -> str:
+        return self.tr("ago")
+
+
 def time_ago(timestamp: datetime) -> str:
     delta = datetime.now(tz=timezone.utc) - timestamp
     s = int(delta.total_seconds())
 
-    class Time(IntEnum):
-        SECOND = 1
-        MINUTE = 60
-        HOUR = MINUTE * 60
-        DAY = HOUR * 24
-        WEEK = DAY * 7
-        MONTH = DAY * 30
-        YEAR = DAY * 365
-
-        def __str__(self) -> str:
-            return self.name.lower()
-
     def get_human_time(seconds: int, unit: Time) -> str:
         n = seconds // unit
-        s = '' if n == 1 else 's'
-        return f"{n} {unit}{s} ago"
+        t = TimeStrings()
+        name = t.get_name(unit, n != 1)
+        return t.template.format(n=n, name=name)
 
     previous = Time.SECOND
 
