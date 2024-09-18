@@ -15,13 +15,11 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA  02110-1301, USA.
 
-from functools import partial
 from typing import NamedTuple
 from enum import Enum, IntEnum, auto
 
 from PyQt6.QtWidgets import QSystemTrayIcon
-from PyQt6.QtCore import QCoreApplication, QObject
-tr = partial(QCoreApplication.translate, 'TrayMessages')
+from PyQt6.QtCore import QObject
 
 
 class Event(Enum):
@@ -55,18 +53,18 @@ class TrayMessages(QObject):
 
         self.messages = {
             Event.UPDATE_AVAILABLE: SyncTrayMsg(
-                tr('An update is available'),
-                tr('You can update the app from your digital store'),
+                self.tr('An update is available'),
+                self.tr('You can update the app from your digital store'),
                 Severity.INFORMATION.value, Duration.SHORT
             ),
             Event.DOWNLOAD_ERROR: SyncTrayMsg(
-                tr('The download could not be completed'),
-                tr('There was an error while downloading your content'),
+                self.tr('The download could not be completed'),
+                self.tr('There was an error while downloading your content'),
                 Severity.WARNING.value, Duration.LONG
             ),
             Event.APP_RUNNING: SyncTrayMsg(
-                tr('The app is running in the background'),
-                tr('Click the tray icon to manage your downloads'),
+                self.tr('The app is running in the background'),
+                self.tr('Click the tray icon to manage your downloads'),
                 Severity.INFORMATION.value, Duration.LONG
             )
         }

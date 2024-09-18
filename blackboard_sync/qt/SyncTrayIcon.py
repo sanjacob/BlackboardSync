@@ -15,20 +15,15 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA  02110-1301, USA.
 
-from functools import partial
 from datetime import datetime
 
 from PyQt6.QtGui import QAction
 from PyQt6.QtCore import pyqtSignal, QObject
 from PyQt6.QtWidgets import QMenu, QSystemTrayIcon
 
-from PyQt6.QtCore import QCoreApplication
-
 from .assets import logo, get_theme_icon, AppIcon
 from .utils import time_ago
 from .notification import Event, TrayMessages
-
-tr = partial(QCoreApplication.translate, 'SyncTrayMenu')
 
 
 class SyncTrayMenu(QMenu):
@@ -47,27 +42,27 @@ class SyncTrayMenu(QMenu):
         close_icon = get_theme_icon(AppIcon.EXIT)
         open_dir_icon = get_theme_icon(AppIcon.OPEN)
 
-        self.refresh = QAction(tr("Sync now"))
+        self.refresh = QAction(self.tr("Sync now"))
         self.refresh.setIcon(sync_icon)
         self.addAction(self.refresh)
 
-        self.open_dir = QAction(tr("Open downloads"))
+        self.open_dir = QAction(self.tr("Open downloads"))
         self.open_dir.setIcon(open_dir_icon)
         self.addAction(self.open_dir)
 
-        self.preferences = QAction(tr("Preferences"))
+        self.preferences = QAction(self.tr("Preferences"))
         self.addAction(self.preferences)
 
         self.addSeparator()
 
-        self._status = QAction(tr("You haven't logged in"))
+        self._status = QAction(self.tr("You haven't logged in"))
         self._status.setEnabled(False)
         self.addAction(self._status)
 
-        self.reset_setup = QAction(tr("Redo Setup"))
+        self.reset_setup = QAction(self.tr("Setup"))
         self.addAction(self.reset_setup)
 
-        self.quit = QAction(tr("Quit"))
+        self.quit = QAction(self.tr("Quit"))
         self.quit.setIcon(close_icon)
         self.addAction(self.quit)
 
@@ -80,18 +75,18 @@ class SyncTrayMenu(QMenu):
         if logged_in:
             self.set_last_synced(self._last_synced)
         else:
-            self._status.setText(tr("Not Logged In"))
+            self._status.setText(self.tr("Not logged in"))
 
     def set_last_synced(self, last_synced: datetime | None) -> None:
         self._last_synced = last_synced
         human_ago = time_ago(last_synced) if last_synced else "Never"
-        self._status.setText(tr("Last Synced: ") + human_ago)
+        self._status.setText(self.tr("Last synced: ") + human_ago)
 
     def set_currently_syncing(self, syncing: bool) -> None:
         self.refresh.setEnabled(not syncing)
 
         if syncing:
-            self._status.setText(tr("Downloading now..."))
+            self._status.setText(self.tr("Downloading now..."))
 
 
 class SyncTrayIcon(QSystemTrayIcon):
