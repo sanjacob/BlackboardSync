@@ -67,7 +67,7 @@ def make_setup_wizard(monkeypatch):
 
 
 class TestSetupWizard:
-    intro = 'You are a few steps away from syncing your Blackboard content straight to your device!'
+    intro = 'You are a few steps away from syncing your Blackboard Learn content straight to your device!'
     uni_selection = 'First, tell us where you study'
     location_selection = 'Where do you want files to be downloaded?'
     page_number = 4
@@ -253,7 +253,7 @@ class TestSettingsWindow:
 
 class TestSyncTrayIcon:
     def test_tray_icon_initial_state(self, qtbot, tray_icon):
-        assert tray_icon._menu._status.text() == 'Not Logged In'
+        assert tray_icon._menu._status.text() == 'Not logged in'
         assert not tray_icon._menu.refresh.isVisible()
         assert not tray_icon._menu.preferences.isVisible()
         assert tray_icon._menu._status.isVisible()
@@ -261,7 +261,7 @@ class TestSyncTrayIcon:
 
     def test_tray_icon_logged_in_state(self, qtbot, tray_icon):
         tray_icon.set_logged_in(True)
-        assert tray_icon._menu._status.text() != 'Not Logged In'
+        assert tray_icon._menu._status.text() != 'Not logged in'
         assert tray_icon._menu.refresh.isVisible()
         assert tray_icon._menu.refresh.isEnabled()
         assert tray_icon._menu.preferences.isVisible()
