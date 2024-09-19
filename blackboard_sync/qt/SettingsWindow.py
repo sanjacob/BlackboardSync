@@ -111,7 +111,7 @@ class SettingsWindow(QWidget):
                 self.tr("Not currently logged in"))
 
     @property
-    def version(self) -> str:
+    def version(self) -> str | None:
         return self.version_label.text()
 
     @version.setter
