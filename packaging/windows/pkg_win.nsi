@@ -84,7 +84,7 @@ Section "Uninstall"
   RMDir /r $INSTDIR
 
   ; Run on Startup
-  DeleteRegKey HKCU '${AUTORUN_REGKEY}\{{ title }}'
+  DeleteRegValue HKCU ${AUTORUN_REGKEY} '{{ title }}'
 
   ; Install Directory
   DeleteRegKey HKCU 'Software\{{ title }}'
