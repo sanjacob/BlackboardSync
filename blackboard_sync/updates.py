@@ -28,8 +28,10 @@ from importlib.metadata import version as get_version
 
 def check_for_updates() -> bool:
     """Checks if there is a newer release than the current on Github."""
+    package = __package__.replace('_', '')
+
     try:
-        __version__ = get_version(__package__)
+        __version__ = get_version(package)
     except PackageNotFoundError:
         return False
 
