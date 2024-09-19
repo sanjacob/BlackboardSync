@@ -29,7 +29,7 @@ from importlib.metadata import version as get_version
 def check_for_updates() -> bool:
     """Checks if there is a newer release than the current on Github."""
     try:
-        __version__ = get_version("blackboard_sync")
+        __version__ = get_version(__package__)
     except PackageNotFoundError:
         return False
 

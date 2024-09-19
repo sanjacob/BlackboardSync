@@ -179,11 +179,12 @@ class UIManager(QObject):
         self.login_window.cancel_watchdog()
         self.app.quit()
 
-    def open_settings(self, download_location: Path,
-                      username: str, sync_interval: int) -> None:
+    def open_settings(self, download_location: Path, username: str,
+                      sync_interval: int, version: str) -> None:
         self.config_window.download_location = download_location
         self.config_window.username = username
         self.config_window.sync_frequency = sync_interval
+        self.config_window.version = version
         self.show(self.config_window)
 
     def open_menu(self, last_sync: datetime,
