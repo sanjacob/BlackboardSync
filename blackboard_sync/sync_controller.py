@@ -20,6 +20,8 @@
 # MA  02110-1301, USA.
 
 from requests.cookies import RequestsCookieJar
+from importlib.metadata import PackageNotFoundError
+from importlib.metadata import version as get_version
 
 from .sync import BlackboardSync
 from .__about__ import __id__, __title__, __uri__
@@ -69,9 +71,18 @@ class SyncController:
         self.model.force_sync()
 
     def open_settings(self) -> None:
+        __version__ = None
+        package = __package__.replace('_', '')
+
+        try:
+            __version__ = get_version(package)
+        except PackageNotFoundError:
+            pass
+
         self.ui.open_settings(self.model.download_location,
                               self.model.username,
-                              self.model.sync_interval)
+                              self.model.sync_interval,
+                              __version__)
 
     def open_menu(self) -> None:
         self.ui.open_menu(self.model.last_sync_time,

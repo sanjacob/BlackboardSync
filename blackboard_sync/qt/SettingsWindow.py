@@ -46,6 +46,7 @@ class SettingsWindow(QWidget):
         self.frequency_combo: QComboBox
         self.current_session_label: QLabel
         self.download_location_hint: QLabel
+        self.version_label: QLabel
         self.select_download_location: QPushButton
         self.log_out_button: QPushButton
         self.setup_button: QPushButton
@@ -108,3 +109,13 @@ class SettingsWindow(QWidget):
         else:
             self.current_session_label.setText(
                 self.tr("Not currently logged in"))
+
+    @property
+    def version(self) -> str | None:
+        return self.version_label.text()
+
+    @version.setter
+    def version(self, value: str | None) -> None:
+        if value is None:
+            value = self.tr("No version detected")
+        self.version_label.setText(value)

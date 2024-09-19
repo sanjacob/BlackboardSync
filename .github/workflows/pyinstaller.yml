@@ -15,6 +15,10 @@ jobs:
     runs-on: ${{ inputs.runs-on }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ inputs.python-version }}
@@ -23,6 +27,9 @@ jobs:
         with:
           from-pipfile: true
           dev: true
+
+      - name: Install current package
+        run: pip install .
 
       - name: Run PyInstaller
         run: "pyinstaller BlackboardSync.spec --noconfirm --clean"
