@@ -71,18 +71,13 @@
     <name>SettingsWindow</name>
     <message>
         <location filename="../SettingsWindow.ui" line="0"/>
-        <source>Settings</source>
+        <source>Preferences</source>
         <translation>Preferencias</translation>
     </message>
     <message>
         <location filename="../SettingsWindow.ui" line="0"/>
         <source>Download location</source>
         <translation>Ubicación de descarga</translation>
-    </message>
-    <message>
-        <location filename="../SettingsWindow.ui" line="0"/>
-        <source>Location to be shown here</source>
-        <translation>Ubicación se mostrará aquí</translation>
     </message>
     <message>
         <location filename="../SettingsWindow.ui" line="0"/>
@@ -116,11 +111,6 @@
     </message>
     <message>
         <location filename="../SettingsWindow.ui" line="0"/>
-        <source>Logged in as</source>
-        <translation>Ingresaste como</translation>
-    </message>
-    <message>
-        <location filename="../SettingsWindow.ui" line="0"/>
         <source>Log out</source>
         <translation>Cerrar sesión</translation>
     </message>
@@ -130,14 +120,19 @@
         <translation>Configuración</translation>
     </message>
     <message>
-        <location filename="../SettingsWindow.py" line="107"/>
+        <location filename="../SettingsWindow.py" line="108"/>
         <source>Logged in as </source>
         <translation>Ingresaste como </translation>
     </message>
     <message>
-        <location filename="../SettingsWindow.py" line="110"/>
+        <location filename="../SettingsWindow.py" line="111"/>
         <source>Not currently logged in</source>
         <translation>No has ingresado</translation>
+    </message>
+    <message>
+        <location filename="../SettingsWindow.py" line="120"/>
+        <source>No version detected</source>
+        <translation>Versión desconocida</translation>
     </message>
 </context>
 <context>
