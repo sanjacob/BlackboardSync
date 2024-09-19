@@ -180,7 +180,7 @@ class UIManager(QObject):
         self.app.quit()
 
     def open_settings(self, download_location: Path, username: str,
-                      sync_interval: int, version: str) -> None:
+                      sync_interval: int, version: str | None) -> None:
         self.config_window.download_location = download_location
         self.config_window.username = username
         self.config_window.sync_frequency = sync_interval

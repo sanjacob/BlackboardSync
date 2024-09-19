@@ -71,7 +71,7 @@ class SyncController:
         self.model.force_sync()
 
     def open_settings(self) -> None:
-        __version__ = ""
+        __version__ = None
 
         try:
             __version__ = get_version(__package__)

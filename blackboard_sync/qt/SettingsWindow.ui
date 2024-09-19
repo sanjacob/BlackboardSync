@@ -23,7 +23,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Settings</string>
+   <string>Preferences</string>
   </property>
   <property name="windowIcon">
    <iconset>
@@ -89,7 +89,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Location to be shown here</string>
+        <string/>
        </property>
        <property name="wordWrap">
         <bool>true</bool>
@@ -207,7 +207,7 @@
         </font>
        </property>
        <property name="text">
-        <string>Logged in as</string>
+        <string/>
        </property>
       </widget>
      </item>

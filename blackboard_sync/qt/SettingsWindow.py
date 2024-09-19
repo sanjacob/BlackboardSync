@@ -115,5 +115,7 @@ class SettingsWindow(QWidget):
         return self.version_label.text()
 
     @version.setter
-    def version(self, value: str) -> None:
+    def version(self, value: str | None) -> None:
+        if value is None:
+            value = self.tr("No version detected")
         self.version_label.setText(value)
