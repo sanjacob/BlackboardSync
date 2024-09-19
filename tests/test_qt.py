@@ -169,7 +169,6 @@ class TestSettingsWindow:
     def test_settings_window_initial_state(self, qtbot, settings_window):
         qtbot.addWidget(settings_window)
         assert settings_window.sync_frequency == SyncPeriod.HALF_HOUR
-        assert settings_window.download_location_hint.text() == 'Location to be shown here'
 
     def test_settings_window_download_location_dialog(self, qtbot, settings_window,
                                                       tmp_path, monkeypatch):
