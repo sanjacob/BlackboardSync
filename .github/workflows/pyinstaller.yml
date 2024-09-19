@@ -24,6 +24,9 @@ jobs:
           from-pipfile: true
           dev: true
 
+      - name: Install current package
+        run: pip install .
+
       - name: Run PyInstaller
         run: "pyinstaller BlackboardSync.spec --noconfirm --clean"
 

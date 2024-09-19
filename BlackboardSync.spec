@@ -1,6 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 import platform
+from PyInstaller.utils.hooks import copy_metadata
 
 
 def get_icon():
@@ -11,11 +12,13 @@ def get_icon():
 
 def get_datas():
     s = "\\" if platform.system() == "Windows" else "/"
+    metadata = copy_metadata('blackboardsync')[0]
 
     return [
         (f"blackboard_sync{s}assets", f"blackboard_sync{s}assets"),
         (f"blackboard_sync{s}qt", f"blackboard_sync{s}qt"),
-        (f"blackboard_sync{s}universities.json", f"blackboard_sync")
+        (f"blackboard_sync{s}universities.json", f"blackboard_sync"),
+        metadata
     ]
 
 a = Analysis(

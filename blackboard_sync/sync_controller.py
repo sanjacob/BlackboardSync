@@ -72,9 +72,10 @@ class SyncController:
 
     def open_settings(self) -> None:
         __version__ = None
+        package = __package__.replace('_', '')
 
         try:
-            __version__ = get_version(__package__)
+            __version__ = get_version(package)
         except PackageNotFoundError:
             pass
 
