@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.0] - 2024-09-20
+
 ### Changed
 - Remove hardcoded minimum year in setup wizard
 - Upgrade to PyQt6
