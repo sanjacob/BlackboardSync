@@ -14,16 +14,6 @@ env:
   PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
 
 jobs:
-  test-ref:
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "$GITHUB_REF_NAME"
-      - run: echo "$GITHUB_BASE_REF"
-      - run: echo "$GITHUB_HEAD_REF"
-      - run: echo "${{ env.GITHUB_REF_NAME }}"
-      - run: echo "${{ env.GITHUB_BASE_REF }}"
-      - run: echo "${{ env.GITHUB_HEAD_REF }}"
-
   test:
     uses: ./.github/workflows/pytest.yml
     with:
@@ -161,6 +151,7 @@ jobs:
       FLATHUB_TOKEN: ${{ github.event_name == 'push' && secrets.FLATHUB_PAT || secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
+
       - uses: sanjacob/python-flatpak-generator-action@v1.3
         with:
           flatpak-repo: 'sanjacob/app.bbsync.BlackboardSync'
@@ -180,8 +171,8 @@ jobs:
 
       - name: Update other sources manually
         env:
-          REPOSITORY_REF: ${{ github.event_name == 'push' && env.GITHUB_REF_NAME || env.GITHUB_HEAD_REF }}
-          METADATA_REF: ${{ github.event_name == 'push' && env.GITHUB_REF_NAME || 'master' }}
+          REPOSITORY_REF: ${{ github.event_name == 'push' && github.ref_name || github.head_ref }}
+          METADATA_REF: ${{ github.event_name == 'push' && github.ref_name || 'master' }}
         run: |
           ../my-tools/*.py *.yml --update PyO3/maturin $MATURIN_REF
           ../my-tools/*.py *.yml --update pydantic/pydantic-core $PYDANTIC_CORE_REF
