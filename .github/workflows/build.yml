@@ -14,6 +14,16 @@ env:
   PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
 
 jobs:
+  test-ref:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "$GITHUB_REF_NAME"
+      - run: echo "$GITHUB_BASE_REF"
+      - run: echo "$GITHUB_HEAD_REF"
+      - run: echo "${{ env.GITHUB_REF_NAME }}"
+      - run: echo "${{ env.GITHUB_BASE_REF }}"
+      - run: echo "${{ env.GITHUB_HEAD_REF }}"
+
   test:
     uses: ./.github/workflows/pytest.yml
     with:
