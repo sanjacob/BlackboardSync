@@ -38,7 +38,7 @@ class Content:
 
         Handler = Content.get_handler(content.contentHandler)
 
-        self.title = content.title_path_safe
+        self.title = content.title_path_safe.replace('.', '_')
 
         try:
             self.handler = Handler(content, api_path, job)
