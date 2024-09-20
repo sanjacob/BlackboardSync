@@ -149,6 +149,8 @@ jobs:
       SETUPTOOLS_RUST_REF: v1.10.1
       FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
       FLATHUB_TOKEN: ${{ github.event_name == 'push' && secrets.FLATHUB_PAT || secrets.GITHUB_TOKEN }}
+      REPOSITORY_REF: ${{ github.event_name == 'push' && env.GITHUB_REF_NAME || env.GITHUB_HEAD_REF }}
+      METADATA_REF: ${{ github.event_name == 'push' && env.GITHUB_REF_NAME || 'master' }}
     steps:
       - uses: actions/checkout@v4
       - uses: sanjacob/python-flatpak-generator-action@v1.3
@@ -169,13 +171,10 @@ jobs:
           chmod +x my-tools/*.py
 
       - name: Update other sources manually
-        env:
-          REMOTE_REF: ${{ github.event_name == 'push' && env.GITHUB_REF_NAME || env.GITHUB_BASE_REF }}
-          METADATA_REF: ${{ github.event_name == 'push' && env.GITHUB_REF_NAME || 'master' }}
         run: |
           ../my-tools/*.py *.yml --update PyO3/maturin $MATURIN_REF
           ../my-tools/*.py *.yml --update pydantic/pydantic-core $PYDANTIC_CORE_REF
-          ../my-tools/*.py *.yml --update sanjacob/BlackboardSync $REMOTE_REF
+          ../my-tools/*.py *.yml --update sanjacob/BlackboardSync $REPOSITORY_REF
           ../my-tools/*.py *.yml --update sanjacob/app.bbsync.BlackboardSync.metadata $METADATA_REF
         working-directory: flathub
 
