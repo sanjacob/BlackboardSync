@@ -151,7 +151,7 @@ jobs:
       FLATHUB_TOKEN: ${{ github.event_name == 'push' && secrets.FLATHUB_PAT || secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - uses: sanjacob/python-flatpak-generator-action@v1.2
+      - uses: sanjacob/python-flatpak-generator-action@master
         with:
           flatpak-repo: 'sanjacob/app.bbsync.BlackboardSync'
           flatpak-repo-branch: ${{ env.FLATHUB_BRANCH }}
