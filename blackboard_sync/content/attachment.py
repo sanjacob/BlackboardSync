@@ -1,4 +1,5 @@
 import uuid
+import mimetypes
 
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
@@ -15,10 +16,21 @@ class Attachment(BStream):
 
     def __init__(self, attachment: BBAttachment, api_path: BBContentPath,
                  job: DownloadJob):
-        self.filename = attachment.fileName
+        filename = attachment.fileName or str(uuid.uuid1())
+        name_ext = '.' + filename.split('.')[-1]
+
+        # Guess extension based on content
+        mime = attachment.mimeType or 'text/plain'
+        real_ext = mimetypes.guess_extension(mime, strict=False)
+        possible_ext = mimetypes.guess_all_extensions(mime, strict=False)
+
+        if name_ext in possible_ext:
+            self.filename = filename
+        else:
+            self.filename = filename + real_ext
+
         self.stream = job.session.download(attachment_id=attachment.id,
                                            **api_path)
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
-        filename = self.filename or str(uuid.uuid1())
-        super().write_base(path / filename, executor, self.stream)
+        super().write_base(path / self.filename, executor, self.stream)

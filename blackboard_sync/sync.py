@@ -154,8 +154,8 @@ class BlackboardSync:
         except BBUnauthorizedError:
             logger.exception("User session expired")
             self.log_out()
-        except RequestException:
-            logger.exception("Network failure")
+        except (RequestException, OSError):
+            logger.exception("Download error")
             self._has_error = True
 
             # manually postpone next sync job
