@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Name conflict between content and attachment
+- Handle OSError in download workers
+- Folder names should not contain dots
+
 ## [0.17.0] - 2024-09-20
 
 ### Changed
