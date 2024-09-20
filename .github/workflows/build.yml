@@ -88,7 +88,8 @@ jobs:
   package-metadata:
     needs: [ package-prep ]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
+    env:
+      METADATA_TOKEN: ${{ github.event_name == 'push' && secrets.METADATA_PAT || secrets.GITHUB_TOKEN }}
     steps:
       - name: Clone metadata repository
         uses: actions/checkout@v4
@@ -96,7 +97,7 @@ jobs:
           repository: "sanjacob/app.bbsync.BlackboardSync.metadata"
           ref: "master"
           path: metadata
-          token: ${{ secrets.METADATA_PAT }}
+          token: ${{ env.METADATA_TOKEN }}
 
       - uses: actions/download-artifact@v4
         with:
@@ -143,19 +144,20 @@ jobs:
   flatpak:
     needs: [ test, package-metadata ]
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     env:
       MATURIN_REF: v1.7.1
       SETUPTOOLS_RUST_REF: v1.10.1
       FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
+      FLATHUB_TOKEN: ${{ github.event_name == 'push' && secrets.FLATHUB_PAT || secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
-      - uses: sanjacob/python-flatpak-generator-action@v1.1
+      - uses: sanjacob/python-flatpak-generator-action@v1.2
         with:
           flatpak-repo: 'sanjacob/app.bbsync.BlackboardSync'
           flatpak-repo-branch: ${{ env.FLATHUB_BRANCH }}
-          flatpak-repo-secret: ${{ secrets.FLATHUB_PAT }}
+          flatpak-repo-secret: ${{ env.FLATHUB_TOKEN }}
           use-pipfile: true
+          from-pipfile: true
           python-version: ${{ env.PYTHON_VER }}
           maturin-version: ${{ env.MATURIN_REF }}
           setuptools-rust-version: ${{ env.SETUPTOOLS_RUST_REF }}
@@ -179,13 +181,13 @@ jobs:
           name: flatpak-repo
           path: flathub
 
-      - if: startsWith(github.ref, 'refs/tags/')
+      - if: github.event_name == 'push'
         run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
         working-directory: flathub
 
-      - if: startsWith(github.ref, 'refs/tags/')
+      - if: github.event_name == 'push'
         run: |
           git add .
           git commit -m "Generated from $GITHUB_REF_NAME"
