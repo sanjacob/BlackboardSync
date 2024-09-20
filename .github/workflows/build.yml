@@ -366,8 +366,8 @@ jobs:
           body: ${{ env.RELEASE_NOTES }}
           prerelease: ${{ env.PRE_RELEASE }}
           files: |
-            '*.exe'
-            '*.dmg'
+            '**/*.exe'
+            '**/*.dmg'
 
   pr-comment:
     if: ${{ github.event_name == 'pull_request' }}
