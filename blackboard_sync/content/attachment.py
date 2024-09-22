@@ -21,12 +21,12 @@ class Attachment(BStream):
 
         # Guess extension based on content
         mime = attachment.mimeType or 'text/plain'
-        real_ext = mimetypes.guess_extension(mime, strict=False)
         possible_ext = mimetypes.guess_all_extensions(mime, strict=False)
 
         if name_ext in possible_ext:
             self.filename = filename
         else:
+            real_ext = possible_ext[0] if possible_ext else '.txt'
             self.filename = filename + real_ext
 
         self.stream = job.session.download(attachment_id=attachment.id,
