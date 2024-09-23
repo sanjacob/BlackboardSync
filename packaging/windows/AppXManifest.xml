@@ -19,6 +19,9 @@
 
   <Resources>
     <Resource Language="en-us" />
+    <Resource Language="es" />
+    <Resource Language="fr" />
+    <Resource Language="de" />
   </Resources>
 
   <Dependencies>
