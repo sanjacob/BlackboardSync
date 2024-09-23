@@ -4,8 +4,6 @@ description: >
   of your university or college to Blackboard Sync
 title: "[New University]: "
 labels: ["uni-new"]
-assignees:
-  - sanjacob
 body:
   - type: markdown
     attributes:
