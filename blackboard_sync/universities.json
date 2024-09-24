@@ -643,6 +643,11 @@
       "start_url": "https://www.learn.ed.ac.uk",
       "target_url": "https://www.learn.ed.ac.uk/ultra/"
     },
+    "network": {
+      "name": [
+        "UNI-EDINBURGH-LINR"
+      ]
+    },
     "api_url": "https://www.learn.ed.ac.uk"
   },
   {
