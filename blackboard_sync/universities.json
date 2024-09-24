@@ -636,6 +636,16 @@
     "api_url": "https://bblearn.evansville.edu"
   },
   {
+    "name": "The University of Edinburgh",
+    "short_name": "Oilthigh Dhùn Èideann",
+    "country": "GB",
+    "login": {
+      "start_url": "https://www.learn.ed.ac.uk",
+      "target_url": "https://www.learn.ed.ac.uk/ultra/"
+    },
+    "api_url": "https://www.learn.ed.ac.uk"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
