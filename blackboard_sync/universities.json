@@ -625,6 +625,14 @@
       "start_url": "https://bblearn.evansville.edu",
       "target_url": "https://bblearn.evansville.edu/ultra/"
     },
+    "network": {
+      "name": [
+        "UE1",
+        "UE2",
+        "UE3",
+        "UE4"
+      ]
+    },
     "api_url": "https://bblearn.evansville.edu"
   },
   {
