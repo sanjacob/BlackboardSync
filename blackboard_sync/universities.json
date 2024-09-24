@@ -618,6 +618,16 @@
     "api_url": "https://learn.humber.ca"
   },
   {
+    "name": "University of Evansville",
+    "short_name": "UE",
+    "country": "US",
+    "login": {
+      "start_url": "https://bblearn.evansville.edu",
+      "target_url": "https://bblearn.evansville.edu/ultra/"
+    },
+    "api_url": "https://bblearn.evansville.edu"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
