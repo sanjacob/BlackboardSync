@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Add support for University of Evansville (@lukebsa)
 
 ## [0.17.1] - 2024-09-22
 

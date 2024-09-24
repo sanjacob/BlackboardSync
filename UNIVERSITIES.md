@@ -140,6 +140,7 @@ If this is not something you'd like, please let me know.
 - Schoolcraft College
 - Texas Tech University
 - University of Texas at Dallas
+- University of Evansville
 
 ###### Canada
 
