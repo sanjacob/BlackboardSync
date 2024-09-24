@@ -98,11 +98,12 @@ If this is not something you'd like, please let me know.
 - University of Derby
 - University of Manchester
 - University of York
-- The University of Edinburgh
 
 ###### Scotland
 
 - University of Aberdeen
+- The University of Edinburgh
+- Glasgow Caledonian University
 
 ###### Northern Ireland
 

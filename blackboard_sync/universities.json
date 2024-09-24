@@ -651,6 +651,16 @@
     "api_url": "https://www.learn.ed.ac.uk"
   },
   {
+    "name": "Glasgow Caledonian University",
+    "short_name": "GCU",
+    "country": "GB",
+    "login": {
+      "start_url": "https://blackboard.gcal.ac.uk",
+      "target_url": "https://blackboard.gcal.ac.uk/ultra/"
+    },
+    "api_url": "https://blackboard.gcal.ac.uk"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
