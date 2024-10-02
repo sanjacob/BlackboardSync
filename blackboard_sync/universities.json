@@ -661,6 +661,16 @@
     "api_url": "https://blackboard.gcal.ac.uk"
   },
   {
+    "name": "Mid-State Technical College",
+    "short_name": "MSTC",
+    "country": "US",
+    "login": {
+      "start_url": "mstc.blackboard.com",
+      "target_url": "https://mstc.blackboard.com/ultra/institution-page/"
+    },
+    "api_url": "mstc.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
