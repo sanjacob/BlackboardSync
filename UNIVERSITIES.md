@@ -143,6 +143,7 @@ If this is not something you'd like, please let me know.
 - Texas Tech University
 - University of Texas at Dallas
 - University of Evansville
+- Mid-State Technical College
 
 ###### Canada
 
