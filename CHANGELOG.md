@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Long paths on Windows for all operations
+
 ### Added
 - Add support for University of Evansville (@lukebsa)
 - Add support for The University of Edinburgh (@sanjacob)
