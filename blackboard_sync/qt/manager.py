@@ -28,7 +28,7 @@ from PyQt6.QtWidgets import QApplication, QSystemTrayIcon, QWidget
 from . import SetupWizard, LoginWebView, SettingsWindow, SyncTrayIcon
 from .notification import Event
 from .dialogs import Dialogs
-from .utils import add_to_startup, open_in_file_browser
+from .utils import add_to_startup, open_in_file_browser, windows_safe_path
 from .assets import get_translations
 
 
@@ -164,15 +164,16 @@ class UIManager(QObject):
     def slot_setup(self) -> None:
         self.hide(self.setup_window)
 
+        sync_dir = windows_safe_path(self.setup_window.download_location)
         self.signals.setup.emit(self.setup_window.institution_index,
-                                self.setup_window.download_location,
-                                self.setup_window.min_year or 0)
+                                sync_dir, self.setup_window.min_year or 0)
 
     @pyqtSlot()
     def slot_config(self) -> None:
         self.hide(self.config_window)
-        self.signals.config.emit(self.config_window.download_location,
-                                 self.config_window.sync_frequency)
+
+        sync_dir = windows_safe_path(self.config_window.download_location)
+        self.signals.config.emit(sync_dir, self.config_window.sync_frequency)
 
     @pyqtSlot()
     def slot_quit(self) -> None:
