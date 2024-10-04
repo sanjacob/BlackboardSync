@@ -1,16 +1,7 @@
-import platform
 from pathlib import Path
 from requests import Response
 
 from concurrent.futures import ThreadPoolExecutor
-
-
-def windows_safe_path(path: Path) -> Path:
-    UNC_PREFIX = u'\\\\?\\'
-
-    if platform.system() == "Windows":
-        return Path(UNC_PREFIX + str(path))
-    return path
 
 
 class BStream:
@@ -20,8 +11,6 @@ class BStream:
     def write_base(self, path: Path, executor: ThreadPoolExecutor,
                    stream: Response) -> None:
         """Schedule the write operation."""
-
-        path = windows_safe_path(path)
 
         def _write() -> None:
             with path.open("wb") as f:
@@ -37,8 +26,6 @@ class FStream:
     def write_base(self, path: Path, executor: ThreadPoolExecutor,
                    body: str) -> None:
         """Schedule the write operation."""
-
-        path = windows_safe_path(path)
 
         def _write() -> None:
             with path.open('w', encoding='utf-8') as f:

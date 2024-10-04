@@ -1,3 +1,5 @@
+"""Some UI and OS-dependent utility functions."""
+
 # Copyright (C) 2024, Jacob Sánchez Pérez
 
 # This program is free software; you can redistribute it and/or
@@ -138,3 +140,11 @@ def time_ago(timestamp: datetime) -> str:
         previous = unit
 
     return get_human_time(s, Time.YEAR)
+
+
+def windows_safe_path(path: Path) -> Path:
+    UNC_PREFIX = u'\\\\?\\'
+
+    if platform.system() == "Windows":
+        return Path(UNC_PREFIX + str(path))
+    return path
