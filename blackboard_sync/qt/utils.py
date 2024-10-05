@@ -146,5 +146,6 @@ def windows_safe_path(path: Path) -> Path:
     UNC_PREFIX = u'\\\\?\\'
 
     if platform.system() == "Windows":
-        return Path(UNC_PREFIX + str(path))
+        if not path.drive.startswith(UNC_PREFIX):
+            return Path(UNC_PREFIX + str(path))
     return path
