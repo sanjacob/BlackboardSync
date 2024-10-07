@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Long paths on Windows for all operations
+- PyPI distribution missing dependency
 
 ### Added
 - Add support for University of Evansville (@lukebsa)
