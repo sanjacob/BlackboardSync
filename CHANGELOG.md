@@ -6,9 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.17.4] - 2024-10-12
+
 ### Fixed
 - Long paths on Windows for all operations
 - PyPI distribution missing dependency
+- Just handle any exception from download job
 
 ### Added
 - Add support for University of Evansville (@lukebsa)

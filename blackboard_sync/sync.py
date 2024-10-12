@@ -154,7 +154,7 @@ class BlackboardSync:
         except BBUnauthorizedError:
             logger.exception("User session expired")
             self.log_out()
-        except (RequestException, OSError):
+        except Exception:
             logger.exception("Download error")
             self._has_error = True
 
