@@ -117,6 +117,7 @@ body_template = dedent("""
       </body>
     </html>""").lstrip()
 
+
 def create_body(title: str, body_html: str, body_text: str) -> str:
     return body_template.format(title=title,
                                 body_html=body_html,
