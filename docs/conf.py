@@ -15,6 +15,7 @@ import sys
 sys.path.insert(0, os.path.abspath('..'))
 
 from importlib.metadata import version as get_version
+from importlib.metadata import PackageNotFoundError
 
 from blackboard_sync import __about__
 
@@ -25,7 +26,11 @@ copyright = __about__.__copyright__
 author = __about__.__author__
 
 # The full version, including alpha/beta/rc tags
-release = get_version("blackboard_sync")
+try:
+    release = get_version("blackboard_sync")
+except PackageNotFoundError as e:
+    release = "0.0.1"
+
 version = ".".join(release.split('.')[:2])
 
 # -- General configuration ---------------------------------------------------

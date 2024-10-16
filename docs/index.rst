@@ -43,7 +43,7 @@ From PyPI
 .. code-block:: bash
 
    $ python3 -m pip install blackboardsync
-   $ python3 -m blackboard_sync # notice the underscore
+   $ blackboardsync
 
 
 
@@ -56,6 +56,5 @@ to understand the internals of BlackboardSync more.
 .. toctree::
    :maxdepth: 2
 
-   dev/bb_api
    dev/sync_api
    dev/qt_api

@@ -2,10 +2,14 @@
 recommonmark==0.7.1
 sphinx==7.4.7; python_version >= '3.9'
 sphinx-rtd-theme==2.0.0; python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4, 3.5'
+pyqt6==6.7.1
+pyqt6-webengine==6.7.0
 pydantic==2.9.2
-pyqt5==5.15.11
 appdirs==1.4.4
 python-dateutil==2.9.0.post0
 beautifulsoup4==4.12.3
 pathvalidate==3.2.1
-pyqtwebengine==5.15.7
+whoisit==3.0.4
+bwfilters==0.1.0
+setuptools==75.1.0
+setuptools-scm==8.1.0
