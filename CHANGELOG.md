@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Links are now not assumed to have an 'href' attribute
 - Avoid parsing empty descriptions
 - Webdav filenames are URL decoded
+- Documentation build at readthedocs.org
 
 ### Changed
 - File logging level is now WARNING rather than ERROR
