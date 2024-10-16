@@ -20,7 +20,6 @@ Checks for updates in GitHub.
 # MA  02110-1301, USA.
 
 import requests
-from pathlib import Path
 from packaging import version
 from importlib.metadata import PackageNotFoundError
 from importlib.metadata import version as get_version

@@ -2,11 +2,8 @@ from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.blackboard import BBCourseContent
-
-from blackboard.filters import (
-    BBAttachmentFilter,
-    BWFilter
-)
+from blackboard.filters import BBAttachmentFilter
+from bwfilters import BWFilter
 
 from .attachment import Attachment
 from .api_path import BBContentPath

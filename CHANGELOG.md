@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Images contained within descriptions are also downloaded
+
+### Fixed
+- Links are now not assumed to have an 'href' attribute
+- Avoid parsing empty descriptions
+
+### Changed
+- File logging level is now WARNING rather than ERROR
+
 ## [0.17.4] - 2024-10-12
 
 ### Fixed

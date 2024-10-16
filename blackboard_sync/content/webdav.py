@@ -39,20 +39,30 @@ class Link(NamedTuple):
 
 class ContentParser:
     def __init__(self, body: str, base_url: str) -> None:
-        links = []
         soup = BeautifulSoup(body, 'html.parser')
 
-        for link in soup.find_all('a'):
-            # Add link for later download
-            links.append(Link(href=link.get('href'), text=link.text.strip()))
+        a = self._find_replace(soup, 'a', 'href', base_url)
+        img = self._find_replace(soup, 'img', 'src', base_url)
+        self._links = [*a, *img]
 
-            # Replace for local instance
-            if link['href'].startswith(base_url):
-                filename = link.text.strip()
-                link['href'] = filename
-                link.string = filename
-        self._links = links
         self.soup = soup
+
+    def _find_replace(self, soup: BeautifulSoup,
+                      tag: str, attr: str, base_url: str) -> list[Link]:
+        links = []
+
+        for el in soup.find_all(tag):
+            # Add link for later download
+            uri = el.get(attr)
+
+            if uri:
+                filename = uri.split('/')[-1]
+                links.append(Link(href=uri, text=filename))
+
+                # Replace for local instance
+                if uri.startswith(base_url):
+                    el[attr] = filename
+        return links
 
     @property
     def links(self) -> List[Link]:

@@ -37,7 +37,6 @@ class Content:
             return
 
         Handler = Content.get_handler(content.contentHandler)
-
         self.title = content.title_path_safe.replace('.', '_')
 
         try:

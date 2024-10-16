@@ -14,12 +14,19 @@ class ContentBody(FStream):
 
     def __init__(self, content: BBCourseContent, _: None,
                  job: DownloadJob) -> None:
-        parser = ContentParser(content.body or "", job.session.instance_url)
+        if not content.body:
+            self.ignore = True
+            return
+
+        parser = ContentParser(content.body, job.session.instance_url)
         self.body = parser.body
         self.children = [WebDavFile(ln, job) for ln in parser.links]
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
-        super().write_base(path / f"{path.stem}.html", executor, self.body)
+        if self.ignore:
+            return
+
+        self.write_base(path / f"{path.stem}.html", executor, self.body)
 
         for child in self.children:
             child.write(path, executor)
