@@ -24,6 +24,7 @@ import mimetypes
 from pathlib import Path
 from requests import Response
 from bs4 import BeautifulSoup
+from urllib.parse import unquote
 from typing import List, NamedTuple
 from pathvalidate import sanitize_filename
 from concurrent.futures import ThreadPoolExecutor
@@ -38,21 +39,36 @@ class Link(NamedTuple):
 
 
 class ContentParser:
-    def __init__(self, body: str, base_url: str) -> None:
-        links = []
+    def __init__(self, body: str, base_url: str,
+                 *, find_links: bool = True) -> None:
         soup = BeautifulSoup(body, 'html.parser')
+        self._links = []
 
-        for link in soup.find_all('a'):
+        if find_links:
+            a = self._find_replace(soup, 'a', 'href', base_url)
+            img = self._find_replace(soup, 'img', 'src', base_url)
+            self._links = [*a, *img]
+
+        self._body = str(soup)
+        self._text = soup.text
+
+    def _find_replace(self, soup: BeautifulSoup,
+                      tag: str, attr: str, base_url: str) -> list[Link]:
+        links = []
+
+        for el in soup.find_all(tag):
             # Add link for later download
-            links.append(Link(href=link.get('href'), text=link.text.strip()))
+            uri = el.get(attr)
 
-            # Replace for local instance
-            if link['href'].startswith(base_url):
-                filename = link.text.strip()
-                link['href'] = filename
-                link.string = filename
-        self._links = links
-        self.soup = soup
+            if uri:
+                # Handle url-encoding
+                filename = unquote(uri.split('/')[-1])
+                links.append(Link(href=uri, text=filename))
+
+                # Replace for local instance
+                if uri.startswith(base_url):
+                    el[attr] = filename
+        return links
 
     @property
     def links(self) -> List[Link]:
@@ -60,7 +76,11 @@ class ContentParser:
 
     @property
     def body(self) -> str:
-        return str(self.soup)
+        return self._body
+
+    @property
+    def text(self) -> str:
+        return self._text
 
 
 def validate_webdav_response(response: Response,

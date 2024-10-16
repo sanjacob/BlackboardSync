@@ -41,4 +41,4 @@ class SyncExecutor(ThreadPoolExecutor):
         done, not_done = wait_futures(self.futures, timeout)
 
         for future in done:
-            error = future.result()
+            future.result()

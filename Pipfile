@@ -17,6 +17,7 @@ packaging = "==24.1"
 beautifulsoup4 = "==4.12.3"
 bblearn = ">=0.3.4.post0"
 whoisit = "*"
+bwfilters = "*"
 
 [dev-packages]
 coverage = "*"
