@@ -24,6 +24,7 @@ import mimetypes
 from pathlib import Path
 from requests import Response
 from bs4 import BeautifulSoup
+from urllib.parse import unquote
 from typing import List, NamedTuple
 from pathvalidate import sanitize_filename
 from concurrent.futures import ThreadPoolExecutor
@@ -38,14 +39,18 @@ class Link(NamedTuple):
 
 
 class ContentParser:
-    def __init__(self, body: str, base_url: str) -> None:
+    def __init__(self, body: str, base_url: str,
+                 *, find_links: bool = True) -> None:
         soup = BeautifulSoup(body, 'html.parser')
+        self._links = []
 
-        a = self._find_replace(soup, 'a', 'href', base_url)
-        img = self._find_replace(soup, 'img', 'src', base_url)
-        self._links = [*a, *img]
+        if find_links:
+            a = self._find_replace(soup, 'a', 'href', base_url)
+            img = self._find_replace(soup, 'img', 'src', base_url)
+            self._links = [*a, *img]
 
-        self.soup = soup
+        self._body = str(soup)
+        self._text = soup.text
 
     def _find_replace(self, soup: BeautifulSoup,
                       tag: str, attr: str, base_url: str) -> list[Link]:
@@ -56,7 +61,8 @@ class ContentParser:
             uri = el.get(attr)
 
             if uri:
-                filename = uri.split('/')[-1]
+                # Handle url-encoding
+                filename = unquote(uri.split('/')[-1])
                 links.append(Link(href=uri, text=filename))
 
                 # Replace for local instance
@@ -70,7 +76,11 @@ class ContentParser:
 
     @property
     def body(self) -> str:
-        return str(self.soup)
+        return self._body
+
+    @property
+    def text(self) -> str:
+        return self._text
 
 
 def validate_webdav_response(response: Response,

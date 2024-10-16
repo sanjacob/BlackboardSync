@@ -8,13 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Images contained within descriptions are also downloaded
+- Body descriptions can be shared via WebShare or email
 
 ### Fixed
 - Links are now not assumed to have an 'href' attribute
 - Avoid parsing empty descriptions
+- Webdav filenames are URL decoded
 
 ### Changed
 - File logging level is now WARNING rather than ERROR
+- Body descriptions have custom styling rather than pure html
 
 ## [0.17.4] - 2024-10-12
 
