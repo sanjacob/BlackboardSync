@@ -31,7 +31,8 @@ dependencies = [
     "requests>=2.25.0",
     "packaging>=23.1",
     "bblearn>=0.3.0",
-    "whoisit"
+    "whoisit",
+    "bwfilters"
 ]
 
 [project.scripts]
