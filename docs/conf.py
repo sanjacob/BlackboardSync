@@ -26,11 +26,7 @@ copyright = __about__.__copyright__
 author = __about__.__author__
 
 # The full version, including alpha/beta/rc tags
-try:
-    release = get_version("blackboard_sync")
-except PackageNotFoundError as e:
-    release = "0.0.1"
-
+release = get_version("blackboardsync")
 version = ".".join(release.split('.')[:2])
 
 # -- General configuration ---------------------------------------------------
