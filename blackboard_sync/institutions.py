@@ -82,8 +82,9 @@ class Institution(BaseModel):
 
 def load() -> list[Institution]:
     db = []
+    db_file = Path(__file__).parent / UNIVERSITY_DB
 
-    with (Path(__file__).parent / UNIVERSITY_DB).open() as f:
+    with db_file.open(encoding='utf-8') as f:
         db = json.load(f)
 
     return [Institution(**uni) for uni in db]
