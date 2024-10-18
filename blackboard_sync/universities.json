@@ -671,6 +671,16 @@
     "api_url": "https://mstc.blackboard.com"
   },
   {
+    "name": "École supérieure privée d'ingénierie et de technologie",
+    "short_name": "ESPRIT",
+    "country": "TN",
+    "login": {
+      "start_url": "https://esprit.blackboard.com",
+      "target_url": "https://esprit.blackboard.com/ultra/"
+    },
+    "api_url": "https://esprit.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
