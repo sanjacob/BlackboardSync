@@ -186,7 +186,7 @@ If this is not something you'd like, please let me know.
 ### Africa
 
 - University of Pretoria
-- École supérieure privée d'ingénierie et de technologie
+- Ecole Sup Privée d'Ingénierie et de Technologies
 
 If any information here seems wrong, please let me know in the issues.
 
