@@ -688,6 +688,11 @@
       "start_url": "https://vuws.westernsydney.edu.au",
       "target_url": "https://vuws.westernsydney.edu.au/ultra/"
     },
+    "network": {
+      "name": [
+        "UWSNET"
+      ]
+    },
     "api_url": "https://vuws.westernsydney.edu.au"
   },
   {
