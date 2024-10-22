@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.18.0] - 2024-10-22
+
 ### Added
 - Images contained within descriptions are also downloaded
 - Body descriptions can be shared via WebShare or email
