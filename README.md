@@ -8,9 +8,12 @@ incremental download of all your Blackboard content,
 such as lecture slides, lab sheets, and other attachments.
 
 <div align="center">
-	<img src="https://github.com/sanjacob/BlackboardSync/assets/52013991/b7414212-034a-42a6-ab20-bb51394d885e" height="auto" width="75%" />
+	<img src="https://github.com/sanjacob/BlackboardSync/assets/52013991/b7414212-034a-42a6-ab20-bb51394d885e"
+         height="auto" width="75%" />
 </div>
+</br>
 
+[Join the Matrix room to hear about updates, ask for help, and more!][matrix]
 
 ## About
 
@@ -67,7 +70,8 @@ or would like to see which universities are currently supported,
 #### Flathub
 
 <a href="https://flathub.org/apps/app.bbsync.BlackboardSync">
-  <img alt="Download on Flathub" src="https://flathub.org/api/badge?svg&locale=en" width="200"/>
+  <img alt="Download on Flathub"
+       src="https://flathub.org/api/badge?svg&locale=en" width="200"/>
 </a>
 
 #### Windows (.exe) and MacOS (.dmg)
@@ -77,7 +81,8 @@ Please first download the [latest release][stable].
 **MacOS Installation**
 
 You will need to confirm the installation in `System Preferences > Security and Privacy`.
-You can see the specific steps in the GIF below. After the program has been installed, you may eject the mounted disk.
+You can see the specific steps in the GIF below.
+After the program has been installed, you may eject the mounted disk.
 
 ![MacOSInstall][MacOSInstall]
 
@@ -137,7 +142,8 @@ If you wish to contribute in a different way, please inquire.
 
 [![License: GPL  v2][license-shield]][gnu]
 
-This software is distributed under the [General Public License v2.0][license], more information available at the [Free Software Foundation][gnu].
+This software is distributed under the [General Public License v2.0][license],
+more information available at the [Free Software Foundation][gnu].
 
 
 ## Acknowledgements
@@ -146,7 +152,8 @@ This software is distributed under the [General Public License v2.0][license], m
 
 [PyInstaller][pyinstaller]
 
-README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew], and [Rita Łyczywek][bulldogjob]
+README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew],
+and [Rita Łyczywek][bulldogjob]
 
 Flathub team for their quick work in approving the app :heart:
 
