@@ -681,6 +681,16 @@
     "api_url": "https://esprit.blackboard.com"
   },
   {
+    "name": "Western Sydney University",
+    "short_name": "WSU",
+    "country": "AU",
+    "login": {
+      "start_url": "https://vuws.westernsydney.edu.au",
+      "target_url": "https://vuws.westernsydney.edu.au/ultra/"
+    },
+    "api_url": "https://vuws.westernsydney.edu.au"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {

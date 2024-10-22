@@ -178,6 +178,7 @@ If this is not something you'd like, please let me know.
 - University of Western Australia
 - Griffith University
 - Curtin University
+- Western Sydney University
 
 ###### New Zealand
 
