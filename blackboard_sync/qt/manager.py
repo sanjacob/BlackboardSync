@@ -177,7 +177,7 @@ class UIManager(QObject):
 
     @pyqtSlot()
     def slot_quit(self) -> None:
-        self.login_window.cancel_watchdog()
+        self.login_window.close()
         self.app.quit()
 
     def open_settings(self, download_location: Path, username: str,

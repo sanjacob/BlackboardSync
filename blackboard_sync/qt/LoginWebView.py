@@ -22,13 +22,14 @@ from requests.cookies import RequestsCookieJar
 from PyQt6.QtCore import pyqtSlot, pyqtSignal, QObject, QUrl
 from PyQt6.QtWidgets import QWidget, QPushButton, QLabel
 from PyQt6.QtNetwork import QNetworkCookie
-from PyQt6.QtWebEngineCore import QWebEngineCookieStore, QWebEngineProfile
+from PyQt6.QtWebEngineCore import QWebEnginePage, QWebEngineProfile
 from PyQt6.QtWebEngineWidgets import QWebEngineView
 
 from .assets import load_ui, get_theme_icon, AppIcon
 
 
 WATCHDOG_DELAY = 30
+PROFILE_STORAGE_NAME = "BlackboardLogin"
 
 
 class LoginWebView(QWidget):
@@ -56,7 +57,6 @@ class LoginWebView(QWidget):
         self.help_url = help_url
 
         self.signals = self.Signals()
-
         self._init_ui()
 
     def _init_ui(self) -> None:
@@ -67,17 +67,21 @@ class LoginWebView(QWidget):
         self.help_button.setIcon(get_theme_icon(AppIcon.HELP))
         self.help_button.setVisible(False)
 
+        # Since Qt6 a persistent profile must be created manually
+        self.profile = QWebEngineProfile(PROFILE_STORAGE_NAME)
+        self.page = QWebEnginePage(self.profile)
+        self.web_view.setPage(self.page)
+
         self.init_signals()
 
     def init_signals(self) -> None:
-        profile, cookie_store = self.get_profile_and_cookie_store()
         self.web_view.loadFinished.connect(self.slot_load_finished)
         self.home_button.clicked.connect(self.home)
         self.back_button.clicked.connect(self.web_view.back)
         self.help_button.clicked.connect(self.slot_help)
+        self.profile.clearHttpCacheCompleted.connect(self.slot_cache_cleared)
 
-        if profile is not None:
-            profile.clearHttpCacheCompleted.connect(self.slot_cache_cleared)
+        cookie_store = self.profile.cookieStore()
         if cookie_store is not None:
             cookie_store.cookieAdded.connect(self.slot_cookie_added)
 
@@ -132,31 +136,22 @@ class LoginWebView(QWidget):
         self.clear_browser()
 
     def clear_browser(self) -> None:
-        profile, cookie_store = self.get_profile_and_cookie_store()
-
+        cookie_store = self.profile.cookieStore()
         if cookie_store is not None:
             cookie_store.deleteAllCookies()
-        if profile is not None:
-            profile.clearHttpCache()
 
+        self.profile.clearHttpCache()
         self._cookie_jar = RequestsCookieJar()
 
-    def get_profile_and_cookie_store(
-        self
-    ) -> tuple[QWebEngineProfile | None, QWebEngineCookieStore | None]:
-        page = self.web_view.page()
-        profile = None
-        cookie_store = None
+    def close(self) -> None:
+        self.web_view.setPage(None)
+        # Should destroy underlying Qt Objects
+        del self.page
+        del self.profile
 
-        if page is not None:
-            profile = page.profile()
+        self.page = None
+        self.profile = None
 
-        if profile is not None:
-            cookie_store = profile.cookieStore()
-
-        return (profile, cookie_store)
-
-    def cancel_watchdog(self) -> None:
         if self.watchdog:
             self.watchdog.cancel()
 
