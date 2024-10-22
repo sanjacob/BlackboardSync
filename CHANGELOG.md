@@ -17,6 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Avoid parsing empty descriptions
 - Webdav filenames are URL decoded
 - Documentation build at readthedocs.org
+- Login browser cache and cookie storage
 
 ### Changed
 - File logging level is now WARNING rather than ERROR
