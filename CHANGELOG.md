@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 - Images contained within descriptions are also downloaded
 - Body descriptions can be shared via WebShare or email
+- Add support for École Supérieure Privée d'Ingénierie et de Technologies (@TheLime1)
 
 ### Fixed
 - Links are now not assumed to have an 'href' attribute
