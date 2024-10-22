@@ -143,14 +143,11 @@ class LoginWebView(QWidget):
         self.profile.clearHttpCache()
         self._cookie_jar = RequestsCookieJar()
 
-    def close(self) -> None:
+    def shutdown(self) -> None:
         self.web_view.setPage(None)
         # Should destroy underlying Qt Objects
         del self.page
         del self.profile
-
-        self.page = None
-        self.profile = None
 
         if self.watchdog:
             self.watchdog.cancel()
