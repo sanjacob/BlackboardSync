@@ -696,6 +696,16 @@
     "api_url": "https://vuws.westernsydney.edu.au"
   },
   {
+    "name": "Universidad Pablo de Olavide",
+    "short_name": "UPO",
+    "country": "ES",
+    "login": {
+      "start_url": "https://campusvirtual.upo.es",
+      "target_url": "https://campusvirtual.upo.es/ultra/"
+    },
+    "api_url": "https://campusvirtual.upo.es"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
