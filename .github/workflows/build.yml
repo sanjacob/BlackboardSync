@@ -204,7 +204,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-12, macos-14, windows-latest]
+        os: [macos-13, macos-14, windows-latest]
     with:
       python-version: "3.11.9"
       runs-on: ${{ matrix.os }}
@@ -244,7 +244,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-12, macos-14]
+        os: [macos-13, macos-14]
     env:
       BUILD_SCRIPT: "packaging/pkg_macos.sh"
       VERSION: ${{ needs.version.outputs.code }}
@@ -269,7 +269,7 @@ jobs:
 
       - name: Sign and Package into DMG
         env:
-          ARCH: ${{ matrix.os == 'macos-12' && 'x86_64' || 'arm64' }}
+          ARCH: ${{ matrix.os == 'macos-13' && 'x86_64' || 'arm64' }}
         run: |
           chmod +x $BUILD_SCRIPT
           $BUILD_SCRIPT "blackboard_sync-$VERSION_$ARCH"
@@ -384,7 +384,7 @@ jobs:
           message: >
             The build process has succeeded.
 
-            Please test either `package-macos-12` (x86_64),
+            Please test either `package-macos-13` (x86_64),
             `package-macos-14` (arm64), or `package-windows-latest`.
 
             You can find them
