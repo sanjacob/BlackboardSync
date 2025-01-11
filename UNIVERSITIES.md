@@ -145,6 +145,7 @@ If this is not something you'd like, please let me know.
 - University of Texas at Dallas
 - University of Evansville
 - Mid-State Technical College
+- University of Maryland, Baltimore County
 
 ###### Canada
 
