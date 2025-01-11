@@ -29,6 +29,7 @@ class ExternalLink(FStream):
             path = path.with_suffix(".url")
         else:
             body = self.create_unix_body(self.url)
+            path = path.with_suffix(".desktop")
 
         super().write_base(path, executor, body)
 
