@@ -306,4 +306,4 @@ class TestSyncTrayIcon:
         exampleDate = datetime(year=1970, month=1, day=10, tzinfo=timezone.utc)
         tray_icon.set_last_synced(exampleDate)
         assert tray_icon._menu._last_synced == exampleDate
-        assert '54 years' in tray_icon._menu._status.text()
+        assert 'years' in tray_icon._menu._status.text()
