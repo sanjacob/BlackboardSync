@@ -706,6 +706,16 @@
     "api_url": "https://campusvirtual.upo.es"
   },
   {
+    "name": "University of Maryland, Baltimore County",
+    "short_name": "UMBC",
+    "country": "US",
+    "login": {
+      "start_url": "https://blackboard.umbc.edu",
+      "target_url": "https://blackboard.umbc.edu/ultra/"
+    },
+    "api_url": "https://blackboard.umbc.edu"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {

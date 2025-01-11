@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Add support for Universidad Pablo de Olavide (@davidsollodp)
+- Add support for University of Maryland, Baltimore County (@ghost)
 
 ## [0.18.0] - 2024-10-22
 
