@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Add support for Universidad Pablo de Olavide (@davidsollodp)
+
 ## [0.18.0] - 2024-10-22
 
 ### Added
@@ -13,7 +16,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Body descriptions can be shared via WebShare or email
 - Add support for École Supérieure Privée d'Ingénierie et de Technologies (@TheLime1)
 - Add support for Western Sydney University (Jo Miyeon)
-- Add support for Universidad Pablo de Olavide (@davidsollodp)
 
 ### Fixed
 - Links are now not assumed to have an 'href' attribute
