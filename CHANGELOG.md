@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Universidad Pablo de Olavide (@davidsollodp)
 - Add support for University of Maryland, Baltimore County (@ghost)
 - Add support for Syracuse University (@363843342)
+- Add support for University of Illinois Chicago (@hoangngo-sudo)
 
 ## [0.18.0] - 2024-10-22
 

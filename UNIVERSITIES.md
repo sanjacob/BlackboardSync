@@ -147,6 +147,7 @@ If this is not something you'd like, please let me know.
 - Mid-State Technical College
 - University of Maryland, Baltimore County
 - Syracuse University
+- University of Illinois Chicago
 
 ###### Canada
 
