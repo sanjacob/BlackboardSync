@@ -703,6 +703,11 @@
       "start_url": "https://campusvirtual.upo.es",
       "target_url": "https://campusvirtual.upo.es/ultra/"
     },
+    "network": {
+      "name": [
+        "UPO"
+      ]
+    },
     "api_url": "https://campusvirtual.upo.es"
   },
   {
@@ -712,6 +717,11 @@
     "login": {
       "start_url": "https://blackboard.umbc.edu",
       "target_url": "https://blackboard.umbc.edu/ultra/"
+    },
+    "network": {
+      "name": [
+        "UMBCNET"
+      ]
     },
     "api_url": "https://blackboard.umbc.edu"
   },
