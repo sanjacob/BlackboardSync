@@ -748,6 +748,11 @@
       "start_url": "https://uic.blackboard.com",
       "target_url": "https://uic.blackboard.com/ultra/"
     },
+    "network": {
+      "name": [
+        "UIC-NET"
+      ]
+    },
     "api_url": "https://uic.blackboard.com"
   },
   {
