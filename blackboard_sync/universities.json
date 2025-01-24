@@ -726,6 +726,16 @@
     "api_url": "https://blackboard.umbc.edu"
   },
   {
+    "name": "Syracuse University",
+    "short_name": "SU",
+    "country": "US",
+    "login": {
+      "start_url": "https://blackboard.syracuse.edu",
+      "target_url": "https://blackboard.syracuse.edu/ultra/"
+    },
+    "api_url": "https://blackboard.syracuse.edu"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
