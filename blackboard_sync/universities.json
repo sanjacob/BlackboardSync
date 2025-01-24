@@ -741,6 +741,16 @@
     "api_url": "https://blackboard.syracuse.edu"
   },
   {
+    "name": "University of Illinois Chicago",
+    "short_name": "UIC",
+    "country": "US",
+    "login": {
+      "start_url": "https://uic.blackboard.com",
+      "target_url": "https://uic.blackboard.com/ultra/"
+    },
+    "api_url": "https://uic.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
