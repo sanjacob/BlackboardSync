@@ -756,6 +756,20 @@
     "api_url": "https://uic.blackboard.com"
   },
   {
+    "name": "Università Bocconi",
+    "country": "IT",
+    "login": {
+      "start_url": "https://blackboard.unibocconi.it",
+      "target_url": "https://blackboard.unibocconi.it/ultra/"
+    },
+    "network": {
+      "name": [
+        "UNI-BOCCONI"
+      ]
+    },
+    "api_url": "https://blackboard.unibocconi.it"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
