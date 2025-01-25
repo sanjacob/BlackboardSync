@@ -125,6 +125,7 @@ If this is not something you'd like, please let me know.
 - Centro Universitario de Tecnología y Arte Digital
 - OBS Business School
 - Universidad Pablo de Olavide
+- Università Bocconi
 
 ### North America
 
