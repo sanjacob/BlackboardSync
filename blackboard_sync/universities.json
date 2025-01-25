@@ -757,11 +757,15 @@
   },
   {
     "name": "Università Bocconi",
-    "short_name": "",
     "country": "IT",
     "login": {
       "start_url": "https://blackboard.unibocconi.it",
       "target_url": "https://blackboard.unibocconi.it/ultra/"
+    },
+    "network": {
+      "name": [
+        "UNI-BOCCONI"
+      ]
     },
     "api_url": "https://blackboard.unibocconi.it"
   },
