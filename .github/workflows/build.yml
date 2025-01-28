@@ -145,8 +145,8 @@ jobs:
     needs: [ test, package-metadata ]
     runs-on: ubuntu-latest
     env:
-      MATURIN_REF: v1.7.1
-      SETUPTOOLS_RUST_REF: v1.10.1
+      MATURIN_REF: v1.8.1
+      SETUPTOOLS_RUST_REF: v1.10.2
       FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
       FLATHUB_TOKEN: ${{ github.event_name == 'push' && secrets.FLATHUB_PAT || secrets.GITHUB_TOKEN }}
     steps:
