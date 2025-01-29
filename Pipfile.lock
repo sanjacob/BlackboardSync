@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "1623ab515cbc2655153ac00e4465017e34de02675b64f2279c5c3408a5e5a78e"
+            "sha256": "651ccd4ccb2c62c92f59072f0fa864404bb992e3e1767d5ffbb189fe90cf5aca"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -564,25 +564,27 @@
         },
         "pyqt6-webengine": {
             "hashes": [
-                "sha256:098b5f8d5903a3091010098694f84dd786cca878ee28a5a3ce651507d5d65468",
-                "sha256:1a3df9d6ac2dfa1bb3b826f3926c13db5b6d427e96e8d574c5aa5445a8b13db8",
-                "sha256:68edc7adb6d9e275f5de956881e79cca0d71fad439abeaa10d823bff5ac55001",
-                "sha256:b4272943ef8c71b77d2421409982ddef56ff4c97be415b808f09b3507991460b",
-                "sha256:e79191e626303b11ae9a3ee98e70160f50bc90a9c4df92df17bade8290e139e8"
+                "sha256:5b5090dcc71dd36172ca8370db7dcaadfa0a022a8e58f6e172301289036c666b",
+                "sha256:5b9231b58014965b72504e49f39a6dbc3ecd05d4d725af011d75e6c8a7e2d5f7",
+                "sha256:64045ea622b6a41882c2b18f55ae9714b8660acff06a54e910eb72822c2f3ff2",
+                "sha256:c549f0f72c285eeea94000f6764dfaebf6bb3b13224580c7169a409bf1bf1bb7",
+                "sha256:c7a5731923112acf23fbf93efad91f7b1545221063572106273e34c15a029fe7",
+                "sha256:d7366809d681bcc096fa565f2a81d0ab040f7da5bb4f12f78e834a2b173c87d1"
             ],
             "index": "pypi",
-            "markers": "python_version >= '3.8'",
-            "version": "==6.7.0"
+            "markers": "python_version >= '3.9'",
+            "version": "==6.8.0"
         },
         "pyqt6-webengine-qt6": {
             "hashes": [
-                "sha256:304b0eda7cbd0bb6dd20428a5ac6bb627d7836e3e1baad483f48dcd0faa862c8",
-                "sha256:68812b2a5d0d417ce32dc4d11a304e7838e02c51013712e7533faf03448672d9",
-                "sha256:8f254cf647e90c3a7d43ee6ccb57c4e3b260620d60ca77ac1829f3030de57d12",
-                "sha256:acbc53c350d8154bbd3c159918379dba24096caa790c6dd5721c67577e63f0af",
-                "sha256:eaba7cc77178449f59f1301925c48846f0cd0318036e3866631d910bd2c97275"
+                "sha256:0405b6ce35f406affb27547c6c3608dc82405568af71505fefae4081c8b4ac39",
+                "sha256:0ced2a10433da2571cfa29ed882698e0e164184d54068d17ba73799c45af5f0f",
+                "sha256:79f67a459ecb452f865e04f19122a1d6f30c83d9a1ffd06e7e6f0d652204083a",
+                "sha256:8059118591641cc9da6616343d893c77fbd065bef3e0764679543345e2c75123",
+                "sha256:a375dbb34e03707b0ab4830b61e4d77a31dc3ef880421c8936472f2af34a3f80",
+                "sha256:e36574aa55b30633a12aa000835f01e488a0f0c13513fd9a0d50c2281e0a9068"
             ],
-            "version": "==6.7.3"
+            "version": "==6.8.1"
         },
         "pyqt6-webenginesubwheel-qt6": {
             "hashes": [
