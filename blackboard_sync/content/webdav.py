@@ -64,7 +64,7 @@ class ContentParser:
 
             if uri:
                 # Parse JSON dataset
-                filename = _parse_bbfile(el) if is_link else None
+                filename = self._parse_bbfile(el) if is_link else None
                 # Handle url-encoding
                 filename = filename or unquote(uri.split('/')[-1])
                 links.append(Link(href=uri, text=filename))
