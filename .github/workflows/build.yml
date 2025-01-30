@@ -134,6 +134,10 @@ jobs:
           from-pipfile: true
           dev: true
       - run: python -m build
+      - uses: actions/upload-artifact@v4
+        with:
+          name: build-python
+          path: dist
       - name: Deploy to PyPI
         if: startsWith(github.ref, 'refs/tags/')
         env:
