@@ -1,3 +1,4 @@
+from datetime import datetime
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
@@ -12,8 +13,13 @@ from .webdav import WebDavFile, ContentParser
 class ContentBody(FStream):
     """Process the content body to find WebDav files."""
 
-    def __init__(self, content: BBCourseContent, _: None,
-                 job: DownloadJob) -> None:
+    def __init__(
+        self,
+        content: BBCourseContent,
+        _: None,
+        job: DownloadJob,
+        modified_time: datetime | None = None,
+    ) -> None:
         self.ignore = False
 
         if not content.body:
@@ -21,6 +27,7 @@ class ContentBody(FStream):
             return
 
         title = content.title or "Untitled"
+        self.modified_time = modified_time
         parser = ContentParser(content.body, job.session.instance_url)
 
         self.body = create_body(title, parser.body, parser.text)
@@ -30,7 +37,9 @@ class ContentBody(FStream):
         if self.ignore:
             return
 
-        self.write_base(path / f"{path.stem}.html", executor, self.body)
+        self.write_base(
+            path / f"{path.stem}.html", executor, self.body, self.modified_time
+        )
 
         for child in self.children:
             child.write(path, executor)

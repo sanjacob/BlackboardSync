@@ -41,4 +41,6 @@ class Attachment(BStream):
                                            **api_path)
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
-        super().write_base(path / self.filename, executor, self.stream)
+        super().write_base(
+            path / self.filename, executor, self.stream, self.modified_time
+        )
