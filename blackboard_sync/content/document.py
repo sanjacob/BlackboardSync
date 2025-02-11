@@ -21,11 +21,12 @@ class Document:
         filtered_attachments = list(att_filter.filter(attachments))
 
         self.attachments = []
+        modified_time = content.modified if content else None
 
         for i, attachment in enumerate(filtered_attachments):
             self.attachments.append(
                 Attachment(
-                    attachment, api_path, job, modified_time=content.modified
+                    attachment, api_path, job, modified_time=modified_time
                 )
             )
 
