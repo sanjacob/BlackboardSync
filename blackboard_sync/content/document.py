@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from concurrent.futures import ThreadPoolExecutor
 
@@ -21,12 +22,12 @@ class Document:
         filtered_attachments = list(att_filter.filter(attachments))
 
         self.attachments = []
-        modified_time = content.modified if content else None
+        self.modified_time = content.modified if content else None
 
         for i, attachment in enumerate(filtered_attachments):
             self.attachments.append(
                 Attachment(
-                    attachment, api_path, job, modified_time=modified_time
+                    attachment, api_path, job, modified_time=self.modified_time
                 )
             )
 
@@ -39,6 +40,11 @@ class Document:
 
         for attachment in self.attachments:
             attachment.write(path, executor)
+
+        if self.modified_time and self.attachments:
+            timestamp = self.modified_time.timestamp()
+            path.touch(exist_ok=True)
+            os.utime(path, (timestamp, timestamp))
 
     @property
     def create_dir(self) -> bool:
