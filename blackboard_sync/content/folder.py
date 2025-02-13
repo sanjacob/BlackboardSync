@@ -29,9 +29,10 @@ class Folder:
 
         for child in self.children:
             child.write(path, executor)
-        
+
         if self.modified_time:
-            os.utime(path, (self.modified_time.timestamp(), self.modified_time.timestamp()))
+            timestamp = self.modified_time.timestamp()
+            os.utime(path, (timestamp, timestamp))
 
     @property
     def create_dir(self) -> bool:
