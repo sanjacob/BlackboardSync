@@ -42,4 +42,4 @@ class ContentBody(FStream):
         )
 
         for child in self.children:
-            child.write(path, executor)
+            child.write(path, executor, self.modified_time)
