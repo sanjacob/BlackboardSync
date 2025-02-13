@@ -15,7 +15,7 @@ class Folder:
     def __init__(self, coursecontent: BBCourseContent, api_path: BBContentPath,
                  job: DownloadJob) -> None:
         self.children = []
-        self.modified_time = coursecontent.modified_time
+        self.modified_time = coursecontent.modified if coursecontent else None
         course_id = api_path['course_id']
 
         for child in job.session.fetch_content_children(**api_path):
