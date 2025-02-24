@@ -1123,12 +1123,12 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:8ed6c6ae47e7d26d869c1dc3dee04e8fc50c95240715bb9915ded88d6d920f0e",
-                "sha256:a6e1f66de84de3152d57f595a187a123ce3ecdea9dc8ef51ff8dcaa069137085"
+                "sha256:6600a03dfe5406bee9a74eb0b92f0aa40b5b7f3df84ae6bc2a564edc3bb6168b",
+                "sha256:9cf339b28e5c394f811eaa43023a118e7c4d384102b7b06bab91b6d06cc0437f"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==6.124.7"
+            "version": "==6.127.1"
         },
         "id": {
             "hashes": [
