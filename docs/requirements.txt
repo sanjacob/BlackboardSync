@@ -13,5 +13,5 @@ whoisit==3.0.4
 bblearn==0.3.6
 bwfilters==0.1.0
 setuptools==75.8.0
-setuptools-scm==8.1.0
+setuptools-scm==8.2.0
 -e .
