@@ -1107,7 +1107,7 @@
                 "sha256:3111b9d131c238bec2f8f516e123e14ba243563fb135d3fe885990585aa7795b",
                 "sha256:47c2edf7c6738fafb49fd34290706d1a1a2f4d1c6df275526b62cbb4aa5393cc"
             ],
-            "markers": "python_version < '3.11'",
+            "markers": "python_version >= '3.7'",
             "version": "==1.2.2"
         },
         "flake8": {
@@ -1119,12 +1119,12 @@
         },
         "hypothesis": {
             "hashes": [
-                "sha256:725343a65846c3627399398a6206adca3e1433786fdcfaa16ca0d114900849a5",
-                "sha256:9b1b5e4e8adc82d01351d4e814ebdd38e2f3173f489de098b418c7a026f100c0"
+                "sha256:4967702ee2f8c8d7d0d50f14940c3496bd32ac8b8a2b362ace34c722e842d00b",
+                "sha256:9b5292f3f2d505bf0f3e060b1c12f3643fa9b7cd036f41f3456c5f7cc7f73164"
             ],
             "index": "pypi",
             "markers": "python_version >= '3.9'",
-            "version": "==6.127.2"
+            "version": "==6.127.6"
         },
         "id": {
             "hashes": [
