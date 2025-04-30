@@ -785,6 +785,16 @@
     "api_url": "https://blackboard.sanjac.edu"
   },
   {
+    "name": "Atlantic Technical University Donegal",
+    "short_name": "ATU",
+    "country": "IE",
+    "login": {
+      "start_url": "https://lyitbb.blackboard.com",
+      "target_url": "https://lyitbb.blackboard.com/ultra/"
+    },
+    "api_url": "https://lyitbb.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
