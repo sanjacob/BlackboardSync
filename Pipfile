@@ -37,7 +37,7 @@ build = "*"
 setuptools-scm = {version = ">=6.2"}
 pillow = "*"
 hypothesis = "*"
-pefile = "*"
+pefile = "==2023.2.7"
 types-requests = "*"
 types-beautifulsoup4 = "*"
 types-appdirs = "*"
