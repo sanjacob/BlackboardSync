@@ -41,13 +41,16 @@ jobs:
           NAME: ${{ steps.issue.outputs.issueparser_name }}
           START_URL: ${{ steps.issue.outputs.issueparser_login-start-url }}
           TARGET_URL: ${{ steps.issue.outputs.issueparser_login-target-url }}
+          NETWORK: ${{ steps.issue.outputs.issueparser_network-name }}
         run: |
           echo "UNI_NAME=$NAME" >> $GITHUB_ENV
           echo "UNI_START_URL=${START_URL%'/'}" >> $GITHUB_ENV
           echo "UNI_TARGET_URL=${TARGET_URL%'/'}/" >> $GITHUB_ENV
+          echo "UNI_NETWORK=$NETWORK" >> $GITHUB_ENV
 
-      - name: Insert university into database
+      - name: Insert university into database (no network)
         uses: sanjacob/json-insert@v1.1
+        if: ${{ !UNI_NETWORK }}
         env:
           UNI_SHORT_NAME: ${{ steps.issue.outputs.issueparser_short-name }}
         with:
@@ -61,6 +64,31 @@ jobs:
               "login": {
                 "start_url": "${{ env.UNI_START_URL }}",
                 "target_url": "${{ env.UNI_TARGET_URL }}"
+              },
+              "api_url": "${{ env.UNI_START_URL }}"
+            }
+
+      - name: Insert university into database (network)
+        uses: sanjacob/json-insert@v1.1
+        if: ${{ UNI_NETWORK }}
+        env:
+          UNI_SHORT_NAME: ${{ steps.issue.outputs.issueparser_short-name }}
+        with:
+          file: blackboard_sync/universities.json
+          index: -2
+          item: |
+            {
+              "name": "${{ env.UNI_NAME }}",
+              "short_name": "${{ env.UNI_SHORT_NAME }}",
+              "country": "${{ steps.country.outputs.iso-2 }}",
+              "login": {
+                "start_url": "${{ env.UNI_START_URL }}",
+                "target_url": "${{ env.UNI_TARGET_URL }}"
+              },
+              "network": {
+                "name": [
+                  "${{ env.UNI_NETWORK }}"
+                ]
               },
               "api_url": "${{ env.UNI_START_URL }}"
             }

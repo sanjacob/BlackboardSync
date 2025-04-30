@@ -309,26 +309,24 @@ body:
       placeholder: ex. https://portal.uclan.ac.uk/ultra
     validations:
       required: true
-  - type: textarea
-    id: network
+  - type: input
+    id: network-name
     attributes:
-      label: University network information
+      label: University network name
       description: >
         Network data used for automatic university detection.
 
-        Simply copy the details shown [here](
+        Simply copy the network name as shown [here](
         https://74mxmsvvgqw6t23xycgaauf3cy0vyncw.lambda-url.eu-west-2.on.aws/)
-        as visited from a university network.
+        when visited from a university network.
+
+        Please leave empty if not applicable, or you are unable to check for
+        some other reason.
 
         Read UNIVERSITIES.md for more information.
-      placeholder: >
-        Name: UNI-CENT-LANCS
-
-        Description: University of Central Lancashire
-
-        Country: GB
+      placeholder: UNI-CENT-LANCS
     validations:
-      required: true
+      required: false
   - type: textarea
     id: data-sources
     attributes:
