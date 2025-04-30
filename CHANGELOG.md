@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Università Bocconi (@giuliofrey)
 - Add support for San Jacinto College (@Pulsate8416)
 - Add support for Atlantic Technical University Donegal (@mpmmtc)
+- Add support for Austin Community College (@arkysan)
 
 ## [0.18.0] - 2024-10-22
 

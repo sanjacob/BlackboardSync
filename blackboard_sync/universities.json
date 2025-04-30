@@ -795,6 +795,21 @@
     "api_url": "https://lyitbb.blackboard.com"
   },
   {
+    "name": "Austin Community College",
+    "short_name": "ACC",
+    "country": "US",
+    "login": {
+      "start_url": "https://acconline.austincc.edu",
+      "target_url": "https://acconline.austincc.edu/ultra/"
+    },
+    "network": {
+      "name": [
+        "AUSTIN-CC"
+      ]
+    },
+    "api_url": "https://acconline.austincc.edu"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
