@@ -50,7 +50,7 @@ jobs:
 
       - name: Insert university into database (no network)
         uses: sanjacob/json-insert@v1.1
-        if: ${{ !UNI_NETWORK }}
+        if: ${{ !env.UNI_NETWORK }}
         env:
           UNI_SHORT_NAME: ${{ steps.issue.outputs.issueparser_short-name }}
         with:
@@ -70,7 +70,7 @@ jobs:
 
       - name: Insert university into database (network)
         uses: sanjacob/json-insert@v1.1
-        if: ${{ UNI_NETWORK }}
+        if: ${{ env.UNI_NETWORK }}
         env:
           UNI_SHORT_NAME: ${{ steps.issue.outputs.issueparser_short-name }}
         with:
