@@ -21,7 +21,7 @@ bwfilters = "==0.1.0"
 
 [dev-packages]
 coverage = "*"
-pyinstaller = "==6.10.0"
+pyinstaller = "==6.13.0"
 pywin32-ctypes = "==0.2.3"
 sphinx = "*"
 recommonmark = "*"
@@ -37,7 +37,7 @@ build = "*"
 setuptools-scm = {version = ">=6.2"}
 pillow = "*"
 hypothesis = "*"
-pefile = "*"
+pefile = "==2023.2.7"
 types-requests = "*"
 types-beautifulsoup4 = "*"
 types-appdirs = "*"
