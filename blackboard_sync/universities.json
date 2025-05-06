@@ -810,6 +810,21 @@
     "api_url": "https://acconline.austincc.edu"
   },
   {
+    "name": "University of Massachusetts: Lowell",
+    "short_name": "UMass Lowell",
+    "country": "US",
+    "login": {
+      "start_url": "https://lowell.umassonline.net",
+      "target_url": "https://lowell.umassonline.net/ultra/"
+    },
+    "network": {
+      "name": [
+        "ULOWELL"
+      ]
+    },
+    "api_url": "https://lowell.umassonline.net"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
