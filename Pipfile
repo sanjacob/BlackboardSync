@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "==2.32.3"
+requests = "==2.32.4"
 lxml = "==5.4.0"
 appdirs = "==1.4.4"
 python-dateutil = "==2.9.0.post0"
