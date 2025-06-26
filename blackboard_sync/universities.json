@@ -810,6 +810,16 @@
     "api_url": "https://acconline.austincc.edu"
   },
   {
+    "name": "Halmstad University",
+    "short_name": "HH",
+    "country": "SE",
+    "login": {
+      "start_url": "https://bb.hh.se",
+      "target_url": "https://bb.hh.se/ultra/"
+    },
+    "api_url": "https://bb.hh.se"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
