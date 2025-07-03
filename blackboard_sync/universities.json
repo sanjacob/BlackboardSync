@@ -810,6 +810,21 @@
     "api_url": "https://acconline.austincc.edu"
   },
   {
+    "name": "Utrecht University",
+    "short_name": "UU",
+    "country": "NL",
+    "login": {
+      "start_url": "https://uu.blackboard.com",
+      "target_url": "https://uu.blackboard.com/ultra/institution-page/"
+    },
+    "network": {
+      "name": [
+        "Utrecht University"
+      ]
+    },
+    "api_url": "https://uu.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
