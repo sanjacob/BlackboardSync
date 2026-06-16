@@ -825,6 +825,21 @@
     "api_url": "https://lowell.umassonline.net"
   },
   {
+    "name": "University of Miami",
+    "short_name": "UM",
+    "country": "US",
+    "login": {
+      "start_url": "https://www.courses.miami.edu/webapps/login",
+      "target_url": "https://www.courses.miami.edu/ultra/"
+    },
+    "network": {
+      "name": [
+        "MIAMI-ECE"
+      ]
+    },
+    "api_url": "https://www.courses.miami.edu/webapps/login"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
