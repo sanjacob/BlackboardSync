@@ -4,7 +4,7 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-requests = "==2.32.3"
+requests = "==2.34.2"
 lxml = "==5.4.0"
 appdirs = "==1.4.4"
 python-dateutil = "==2.9.0.post0"
@@ -38,7 +38,6 @@ setuptools-scm = {version = ">=6.2"}
 pillow = "*"
 hypothesis = "*"
 pefile = "==2023.2.7"
-types-requests = "*"
 types-beautifulsoup4 = "*"
 types-appdirs = "*"
 types-python-dateutil = "*"
