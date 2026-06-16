@@ -810,6 +810,16 @@
     "api_url": "https://acconline.austincc.edu"
   },
   {
+    "name": "Instituto Tecnológico de Buenos Aires",
+    "short_name": "ITBA",
+    "country": "AR",
+    "login": {
+      "start_url": "https://campus.itba.edu.ar",
+      "target_url": "https://campus.itba.edu.ar/ultra/"
+    },
+    "api_url": "https://campus.itba.edu.ar"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
