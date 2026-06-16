@@ -28,7 +28,7 @@ recommonmark = "*"
 pytest = "*"
 twine = ">=5.1.1"
 mypy = "*"
-pytest-qt = ">=4.2.0"
+pytest-qt = ">=4.5.0"
 python-lsp-server = {extras = ["all"], version = "*"}
 isort = "*"
 black = "*"
