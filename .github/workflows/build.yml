@@ -234,6 +234,8 @@ jobs:
 
       - run: tar -xvf build.tar
 
+      - run: choco install nsis
+
       - name: Create windows installer
         uses: joncloud/makensis-action@v4.1
         with:
