@@ -153,6 +153,7 @@ If this is not something you'd like, please let me know.
 - San Jacinto College
 - Austin Community College
 - University of Massachusetts Lowell
+- University of Miami
 
 ###### Canada
 

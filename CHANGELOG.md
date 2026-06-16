@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Atlantic Technical University Donegal (@mpmmtc)
 - Add support for Austin Community College (@arkysan)
 - Add support for University of Massachusetts Lowell (@EastArctica)
+- Add support for University of Miami (@nearposting)
 
 ## [0.18.0] - 2024-10-22
 
