@@ -107,17 +107,32 @@ class WebDavFile(BStream):
     """A Blackboard WebDav file which can be downloaded directly"""
     def __init__(self, link: Link, job: DownloadJob) -> None:
         self.title = sanitize_filename(link.text, replacement_text="_")
-        self.stream = job.session.download_webdav(webdav_url=link.href)
-        content_type = self.stream.headers.get('Content-Type', 'text/plain')
-        self.extension = mimetypes.guess_extension(content_type)
-        self.valid = validate_webdav_response(self.stream, link.href,
-                                              job.session.instance_url)
+        # Store download parameters; defer opening the connection until write()
+        self._session = job.session
+        self._link = link
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
-        if self.valid:
-            path = Path(path, self.title)
+        session = self._session
+        link = self._link
+        title = self.title
 
-            if self.extension:
-                path = path.with_suffix(self.extension)
+        def _download_and_write() -> None:
+            stream = session.download_webdav(webdav_url=link.href)
+            try:
+                content_type = stream.headers.get('Content-Type', 'text/plain')
+                extension = mimetypes.guess_extension(content_type)
+                valid = validate_webdav_response(stream, link.href,
+                                                 session.instance_url)
+                if not valid:
+                    return
 
-            super().write_base(path, executor, self.stream)
+                dest = Path(path, title)
+                if extension:
+                    dest = dest.with_suffix(extension)
+
+                BStream._write_stream(dest, stream)
+            finally:
+                # Necessary because BStream._write_stream does not handle case when valid==False
+                stream.close() 
+
+        executor.submit(_download_and_write)
