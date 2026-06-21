@@ -226,6 +226,15 @@
     "api_url": "https://blackboard.ohio.edu"
   },
   {
+    "name": "Cleveland State University",
+    "short_name": "CSU",
+    "login": {
+      "start_url":"https://bb-csuohio.blackboard.com",
+      "target_url":"https://bb-csuohio.blackboard.com/ultra/"
+    },
+    "api_url": "https://bb-csuohio.blackboard.com"
+  },
+  {
     "name": "Princess Nourah Bint Abdulrahman University",
     "short_name": "PNU",
     "login": {

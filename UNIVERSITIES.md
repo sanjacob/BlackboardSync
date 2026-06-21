@@ -137,6 +137,7 @@ If this is not something you'd like, please let me know.
 - Alaska Pacific University
 - Youngstown State University
 - Ohio University
+- Cleveland State University
 - Post University
 - The University of Alabama
 - Concordia University Wisconsin & Ann Arbor
