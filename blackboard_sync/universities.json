@@ -840,6 +840,16 @@
     "api_url": "https://www.courses.miami.edu/webapps/login"
   },
   {
+    "name": "Nanyang Technological University",
+    "short_name": "NTU",
+    "country": "SG",
+    "login": {
+      "start_url": "https://ntulearn.ntu.edu.sg",
+      "target_url": "https://ntulearn.ntu.edu.sg/ultra/"
+    },
+    "api_url": "https://ntulearn.ntu.edu.sg"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
