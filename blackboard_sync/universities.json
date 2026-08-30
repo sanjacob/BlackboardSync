@@ -840,6 +840,16 @@
     "api_url": "https://www.courses.miami.edu/webapps/login"
   },
   {
+    "name": "University of West London",
+    "short_name": "UWL",
+    "country": "GB",
+    "login": {
+      "start_url": "https://online.uwl.ac.uk",
+      "target_url": "https://online.uwl.ac.uk/ultra/"
+    },
+    "api_url": "https://online.uwl.ac.uk"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
