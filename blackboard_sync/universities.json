@@ -840,6 +840,21 @@
     "api_url": "https://www.courses.miami.edu/webapps/login"
   },
   {
+    "name": "Notre Dame University",
+    "short_name": "NDU",
+    "country": "LB",
+    "login": {
+      "start_url": "https://bb.ndu.edu.lb",
+      "target_url": "https://bb.ndu.edu.lb/ultra/"
+    },
+    "network": {
+      "name": [
+        "INCO-MNT"
+      ]
+    },
+    "api_url": "https://bb.ndu.edu.lb"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
