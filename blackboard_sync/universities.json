@@ -840,6 +840,21 @@
     "api_url": "https://www.courses.miami.edu/webapps/login"
   },
   {
+    "name": "Norges teknisk-naturvitenskapelige universitet",
+    "short_name": "NTNU",
+    "country": "NO",
+    "login": {
+      "start_url": "https://ntnu.blackboard.com",
+      "target_url": "https://ntnu.blackboard.com/ultra/institution-page/"
+    },
+    "network": {
+      "name": [
+        "NTNUNET"
+      ]
+    },
+    "api_url": "https://ntnu.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
