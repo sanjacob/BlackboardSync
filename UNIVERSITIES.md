@@ -127,6 +127,7 @@ If this is not something you'd like, please let me know.
 - Universidad Pablo de Olavide
 - Università Bocconi
 - Atlantic Technical University Donegal
+- Norges teknisk-naturvitenskapelige universitet
 
 ### North America
 
