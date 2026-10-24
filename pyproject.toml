@@ -50,6 +50,7 @@ lint = [
     "types-appdirs>=1.4.3.5",
     "types-python-dateutil>=2.9.0.20261021",
     "tiny-api-client>=1.4.0",  # provides the tiny_api_client.mypy plugin
+    "ruff>=0.17.2",
 ]
 docs = [
     "sphinx>=9.2.0",
