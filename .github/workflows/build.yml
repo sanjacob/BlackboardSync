@@ -132,11 +132,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VER }}
-      - uses: sanjacob/pipenv-requirements@v1
-        with:
-          from-pipfile: true
-          dev: true
-      - run: python -m build
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+      - run: uv sync --locked --only-group package
+      - run: uv build
       - uses: actions/upload-artifact@v4
         with:
           name: build-python
@@ -146,64 +145,7 @@ jobs:
         env:
           TWINE_USERNAME: ${{ secrets.TWINE_USERNAME }}
           TWINE_PASSWORD: ${{ secrets.TWINE_PASSWORD }}
-        run: twine upload dist/*
-
-  flatpak:
-    needs: [ test, package-metadata ]
-    runs-on: ubuntu-latest
-    env:
-      MATURIN_REF: v1.8.1
-      SETUPTOOLS_RUST_REF: v1.10.2
-      FLATHUB_BRANCH: ${{ contains(github.ref_name, '-') && 'beta' || 'master' }}
-      FLATHUB_TOKEN: ${{ github.event_name == 'push' && secrets.FLATHUB_PAT || secrets.GITHUB_TOKEN }}
-    steps:
-      - uses: actions/checkout@v4
-
-      - uses: sanjacob/python-flatpak-generator-action@v1.3
-        with:
-          flatpak-repo: 'sanjacob/app.bbsync.BlackboardSync'
-          flatpak-repo-branch: ${{ env.FLATHUB_BRANCH }}
-          flatpak-repo-secret: ${{ env.FLATHUB_TOKEN }}
-          use-pipfile: true
-          from-pipfile: true
-          python-version: ${{ env.PYTHON_VER }}
-          maturin-version: ${{ env.MATURIN_REF }}
-          setuptools-rust-version: ${{ env.SETUPTOOLS_RUST_REF }}
-
-      - name: Fetch my-tools
-        run: |
-          mkdir my-tools
-          git clone https://gist.github.com/b0ed4ff1be1e4d13ac47e21132b92dbd.git my-tools
-          chmod +x my-tools/*.py
-
-      - name: Update other sources manually
-        env:
-          REPOSITORY_REF: ${{ github.event_name == 'push' && github.ref_name || github.head_ref }}
-          METADATA_REF: ${{ github.event_name == 'push' && github.ref_name || 'master' }}
-        run: |
-          ../my-tools/*.py *.yml --update PyO3/maturin $MATURIN_REF
-          ../my-tools/*.py *.yml --update pydantic/pydantic-core $PYDANTIC_CORE_REF
-          ../my-tools/*.py *.yml --update sanjacob/BlackboardSync $REPOSITORY_REF
-          ../my-tools/*.py *.yml --update sanjacob/app.bbsync.BlackboardSync.metadata $METADATA_REF
-        working-directory: flathub
-
-      - uses: actions/upload-artifact@v4
-        with:
-          name: flatpak-repo
-          path: flathub
-
-      - if: github.event_name == 'push'
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-        working-directory: flathub
-
-      - if: github.event_name == 'push'
-        run: |
-          git add .
-          git commit -m "Generated from $GITHUB_REF_NAME"
-          git push origin HEAD
-        working-directory: flathub
+        run: uv run --no-sync twine upload dist/*
 
   pyinstaller:
     needs: [ test ]
