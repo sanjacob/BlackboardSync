@@ -20,19 +20,17 @@ classifiers = [
     "Topic :: Education"
 ]
 dependencies = [
-    "pyqt6>=6.7.1",
-    "pyqt6-webengine>=6.7.0",
-    "beautifulsoup4>=4.12.2",
-    "pydantic>=2.1.1",
-    "pathvalidate>=3.1.0",
-    "python-dateutil==2.9.0.post0",
+    "pyqt6>=6.11.0",
+    "pyqt6-webengine>=6.11.0",
+    "beautifulsoup4>=4.15.0",
+    "pydantic>=2.14.1",
+    "pathvalidate>=3.3.1",
     "appdirs==1.4.4",
-    "lxml>=4.7.1",
-    "requests>=2.25.0",
-    "packaging>=23.1",
+    "requests>=2.34.2",
+    "packaging>=26.3",
     "bblearn>=0.3.0",
     "whoisit",
-    "bwfilters"
+    "bwfilters",
 ]
 
 [project.scripts]
@@ -43,15 +41,12 @@ test = [
     "pytest>=9.1.1",
     "pytest-qt>=4.5.0",
     "pytest-mock>=3.17.0",
-    "pytest-xvfb>=3.0.0",
+    "pytest-xvfb>=3.1.1",
     "hypothesis>=6.170.9",
     "coverage>=7.17.0",
 ]
 lint = [
-    "flake8>=7.4.1",
     "mypy>=2.4.0",
-    "black>=26.10.1",
-    "isort>=9.0.2",
     "types-appdirs>=1.4.3.5",
     "types-python-dateutil>=2.9.0.20261021",
     "tiny-api-client>=1.4.0",  # provides the tiny_api_client.mypy plugin
@@ -63,9 +58,8 @@ docs = [
 ]
 package = [
     "pyinstaller>=6.21.0",
-    "pillow>=13.0.0",  # icon conversion for macOS builds
     "build>=1.6.1",
-    "twine>=6.2.0",
+    "twine>=7.0.0",
 ]
 
 [tool.uv]
