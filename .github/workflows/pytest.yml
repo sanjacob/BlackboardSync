@@ -18,23 +18,22 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - uses: sanjacob/pipenv-requirements@v1
-        with:
-          from-pipfile: true
-          dev: true
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
 
       - name: Install XVFB for gui testing
-        run: |
-          sudo apt-get install xvfb
-          pip install pytest-xvfb
+        run: sudo apt-get install xvfb
+
+      - name: Install requirements
+        run: uv sync --locked --group test --group lint
 
       - name: Run linter
         run: |
-          flake8 blackboard_sync/qt
-          flake8 blackboard_sync/content
+          uv run --no-sync flake8 blackboard_sync/qt
+          uv run --no-sync flake8 blackboard_sync/content
 
       - name: Run type checker
-        run: mypy --strict blackboard_sync/qt
+        run: uv run --no-sync mypy --strict blackboard_sync/qt
 
       - name: Run test suite
-        run: pytest -vvvv
+        run: uv run --no-sync pytest -vvvv

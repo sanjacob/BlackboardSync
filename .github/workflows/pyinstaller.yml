@@ -23,16 +23,14 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
 
-      - uses: sanjacob/pipenv-requirements@v1
-        with:
-          from-pipfile: true
-          dev: true
+      - name: Install the latest version of uv
+        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
 
       - name: Install current package
-        run: pip install .
+        run: uv sync --locked --no-editable --no-default-groups --group package
 
       - name: Run PyInstaller
-        run: "pyinstaller BlackboardSync.spec --noconfirm --clean"
+        run: "uv run --no-sync pyinstaller BlackboardSync.spec --noconfirm --clean"
 
       - name: Compress macOS build
         if: startsWith(inputs.runs-on, 'macos')
