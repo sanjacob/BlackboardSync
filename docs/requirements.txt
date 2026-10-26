@@ -6,7 +6,7 @@ pyqt6==6.9.0
 pyqt6-webengine==6.9.0
 pydantic==2.10.6
 appdirs==1.4.4
-python-dateutil==2.9.0.post0
+python-dateutil==3.0.0
 beautifulsoup4==4.13.3
 pathvalidate==3.2.3
 whoisit==3.0.4
