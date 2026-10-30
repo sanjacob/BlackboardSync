@@ -20,9 +20,9 @@ from pathlib import Path
 # from typing import override
 from datetime import datetime
 
-from PyQt6.QtCore import pyqtSlot, Qt
+from PyQt6.QtCore import pyqtSlot, Qt, QSortFilterProxyModel
 from PyQt6.QtWidgets import (QWizard, QWizardPage,
-                             QCompleter, QComboBox,
+                             QComboBox,
                              QCheckBox, QSpinBox,
                              QLabel, QPushButton)
 
@@ -70,13 +70,29 @@ class SetupWizard(QWizard):
 
         # Institution
         self.uni_selection_box.addItems(self._institutions)
+
+        # The completer's own popup is unreliable to show on some
+        # window managers/compositors, so instead the combobox's
+        # native (and reliably working) dropdown is filtered live
+        # as the user types.
+        # Take ownership of the combobox's auto-created model so it
+        # is not deleted once the box's model is replaced below.
+        uni_model = self.uni_selection_box.model()
+        assert uni_model is not None
+        uni_model.setParent(self)
+
+        self.uni_filter = QSortFilterProxyModel(self)
+        self.uni_filter.setSourceModel(uni_model)
+        self.uni_filter.setFilterCaseSensitivity(
+            Qt.CaseSensitivity.CaseInsensitive
+        )
+        self.uni_selection_box.setModel(self.uni_filter)
         self.uni_selection_box.clearEditText()
         self.autodetect_label.setVisible(selected is not None)
 
-        self.completer = QCompleter(self._institutions, self)
-        self.completer.setCaseSensitivity(Qt.CaseSensitivity.CaseInsensitive)
-        self.completer.setFilterMode(Qt.MatchFlag.MatchContains)
-        self.uni_selection_box.setCompleter(self.completer)
+        uni_edit = self.uni_selection_box.lineEdit()
+        assert uni_edit is not None
+        uni_edit.textEdited.connect(self._filter_institutions)
 
         # Download location
         self.sync_location_button.clicked.connect(
@@ -136,6 +152,17 @@ class SetupWizard(QWizard):
 
         return valid
 
+    @pyqtSlot(str)
+    def _filter_institutions(self, text: str) -> None:
+        self.uni_filter.setFilterFixedString(text)
+        # Filtering the model can reset the line edit's text
+        # (e.g. to follow the new current index), so it must be
+        # restored to what the user actually typed.
+        edit = self.uni_selection_box.lineEdit()
+        assert edit is not None
+        if edit.text() != text:
+            edit.setText(text)
+
     @pyqtSlot()
     def _choose_location(self) -> None:
         location = DirDialog().choose()
@@ -154,12 +181,24 @@ class SetupWizard(QWizard):
     @property
     def institution(self) -> str:
         """Name of selected institution."""
-        return self.uni_selection_box.itemText(self.institution_index)
+        index = self.uni_selection_box.currentIndex()
+        return self.uni_selection_box.itemText(index)
 
     @property
     def institution_index(self) -> int:
-        """Index of selected institution."""
-        return self.uni_selection_box.currentIndex()
+        """Index of selected institution in the original, unfiltered
+        list of institutions (as opposed to the combobox's own
+        current index, which is relative to the filtered model and
+        would otherwise point at the wrong institution)."""
+        proxy_index = self.uni_selection_box.currentIndex()
+
+        if proxy_index < 0:
+            return proxy_index
+
+        source_index = self.uni_filter.mapToSource(
+            self.uni_filter.index(proxy_index, 0)
+        )
+        return source_index.row()
 
     @property
     def download_location(self) -> Path:
