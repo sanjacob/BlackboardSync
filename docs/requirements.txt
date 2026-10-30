@@ -9,7 +9,7 @@ appdirs==1.4.4
 python-dateutil==2.9.0.post0
 beautifulsoup4==4.13.3
 pathvalidate==3.2.3
-whoisit==3.0.4
+whoisit==4.1.0
 bblearn==0.3.6
 bwfilters==0.1.0
 setuptools==75.8.0

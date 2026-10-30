@@ -1756,7 +1756,7 @@ wheels = [
 
 [[package]]
 name = "whoisit"
-version = "4.0.5"
+version = "4.1.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
@@ -1765,7 +1765,7 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/06/ee/780dc414201da4ff711c72b40d531d98648555a0dd3ffdb6622ae717e9ec/whoisit-4.0.5.tar.gz", hash = "sha256:e959aa8105564ea608b3797f14cfcf131baf6e8c34e9fbdf0306257ef432d338", size = 43578, upload-time = "2026-09-21T15:02:08.691Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/6d/ca/489a2ec1d1e7f3809502790849ccb3b51e8406f0d819efec9a5b51420973/whoisit-4.1.0.tar.gz", hash = "sha256:7bdfe52b1cc6934b4f6ba5589c9b623b509453c52ed176ab7d7964a957c7bbab", size = 71202, upload-time = "2026-10-26T13:57:22.514Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/ba/7f/a88b9a1dd39a4b736eda37a1ec3b4c698ffd6a9436caac265bf7a46192d7/whoisit-4.0.5-py3-none-any.whl", hash = "sha256:c19eed7a50a848329d96eafa5509706ddb19ce81fcae9c33b6422f1e0959ea4f", size = 28380, upload-time = "2026-09-21T15:02:07.15Z" },
+    { url = "https://files.pythonhosted.org/packages/65/56/397fcf90ff1dc675110fae08d755d2ba3e11fb56f0b89113d3872a63193c/whoisit-4.1.0-py3-none-any.whl", hash = "sha256:ff3861d0ed1f3188a6204aa33fce91a5ae5dd2358c7827b42bed46a3e67be7fb", size = 42418, upload-time = "2026-10-26T13:57:20.948Z" },
 ]
