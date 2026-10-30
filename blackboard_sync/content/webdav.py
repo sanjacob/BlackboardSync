@@ -20,10 +20,14 @@ Parse an html to look for links
 # MA  02110-1301, USA.
 
 
+import re
+import json
 import mimetypes
 from pathlib import Path
 from requests import Response
+from requests.structures import CaseInsensitiveDict
 from bs4 import BeautifulSoup
+from bs4.element import Tag
 from urllib.parse import unquote
 from typing import List, NamedTuple
 from pathvalidate import sanitize_filename
@@ -31,6 +35,48 @@ from concurrent.futures import ThreadPoolExecutor
 
 from .base import BStream
 from .job import DownloadJob
+
+
+# Matches filename="..." and the RFC 5987 filename*=UTF-8''... form
+_DISPOSITION_FILENAME_RE = re.compile(
+    r"filename\*?=(?:UTF-8'')?\"?([^\";]+)\"?", re.IGNORECASE
+)
+
+
+def filename_from_disposition(
+    headers: CaseInsensitiveDict,
+) -> str | None:
+    """Extract the real filename from a Content-Disposition header.
+
+    Blackboard WebDav links do not always embed the file's actual
+    name in the URL (some are just opaque content ids), so the
+    response header is the only reliable source for it.
+    """
+    disposition = headers.get('Content-Disposition', '')
+    match = _DISPOSITION_FILENAME_RE.search(disposition)
+    return unquote(match.group(1)) if match else None
+
+
+def filename_from_bbfile(el: Tag) -> str | None:
+    """Extract the real filename from Blackboard's own editor metadata.
+
+    Links/images inserted through Blackboard's rich text editor
+    carry a `data-bbfile` attribute with a JSON blob describing the
+    original file (its real name, mimetype, etc). The URL itself is
+    often just an opaque content id, so this is the only place the
+    human-readable filename set in the Blackboard UI is available.
+    """
+    raw = el.get('data-bbfile')
+
+    if not raw:
+        return None
+
+    try:
+        data = json.loads(raw)
+    except (json.JSONDecodeError, TypeError):
+        return None
+
+    return data.get('linkName') or data.get('displayName')
 
 
 class Link(NamedTuple):
@@ -61,8 +107,13 @@ class ContentParser:
             uri = el.get(attr)
 
             if uri:
-                # Handle url-encoding
-                filename = unquote(uri.split('/')[-1])
+                # Prefer the real filename Blackboard's editor stores
+                # in data-bbfile; the URL itself is often just an
+                # opaque content id with no readable name in it.
+                path = uri.split('?', 1)[0]
+                url_filename = unquote(path.split('/')[-1])
+                filename = filename_from_bbfile(el) or url_filename
+
                 links.append(Link(href=uri, text=filename))
 
                 # Replace for local instance
@@ -106,10 +157,16 @@ def validate_webdav_response(response: Response,
 class WebDavFile(BStream):
     """A Blackboard WebDav file which can be downloaded directly"""
     def __init__(self, link: Link, job: DownloadJob) -> None:
-        self.title = sanitize_filename(link.text, replacement_text="_")
         self.stream = job.session.download_webdav(webdav_url=link.href)
+
+        filename = filename_from_disposition(self.stream.headers) or link.text
+        self.title = sanitize_filename(filename, replacement_text="_")
+
         content_type = self.stream.headers.get('Content-Type', 'text/plain')
-        self.extension = mimetypes.guess_extension(content_type)
+        # Only guess an extension if the real filename didn't come
+        # with one already (e.g. link.text with no suffix at all).
+        self.extension = (None if Path(self.title).suffix
+                          else mimetypes.guess_extension(content_type))
         self.valid = validate_webdav_response(self.stream, link.href,
                                               job.session.instance_url)
 
