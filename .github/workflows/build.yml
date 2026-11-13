@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  PYTHON_VER: "3.14.9"
+  PYTHON_VER: "3.14.10"
   NAME: "BlackboardSync"
   PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
 
@@ -17,7 +17,7 @@ jobs:
   test:
     uses: ./.github/workflows/pytest.yml
     with:
-      python-version: "3.14.9"
+      python-version: "3.14.10"
 
   version:
     needs: [ test ]
@@ -25,11 +25,11 @@ jobs:
     outputs:
       code: ${{ steps.version-check.outputs.code }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           fetch-tags: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VER }}
       - run: |
@@ -44,9 +44,9 @@ jobs:
     outputs:
       body: ${{ steps.extract-release-notes.outputs.release_notes }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - id: extract-release-notes
-        uses: ffurrer2/extract-release-notes@v2
+        uses: ffurrer2/extract-release-notes@v3
         with:
           prerelease: ${{ env.PRE_RELEASE }}
 
@@ -56,12 +56,12 @@ jobs:
     env:
       VERSION: ${{ needs.version.outputs.code }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           fetch-tags: true
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VER }}
 
@@ -80,7 +80,7 @@ jobs:
           cp packaging/windows/*.png replaced
           cp packaging/linux/icon.svg replaced
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: packaging
           path: replaced/
@@ -92,14 +92,14 @@ jobs:
       METADATA_TOKEN: ${{ github.event_name == 'push' && secrets.METADATA_PAT || secrets.GITHUB_TOKEN }}
     steps:
       - name: Clone metadata repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: "sanjacob/app.bbsync.BlackboardSync.metadata"
           ref: "master"
           path: metadata
           token: ${{ env.METADATA_TOKEN }}
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: packaging
           path: metadata
@@ -125,18 +125,18 @@ jobs:
     needs: [ test ]
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           fetch-tags: true
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ env.PYTHON_VER }}
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
       - run: uv sync --locked --only-group package
       - run: uv build
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: build-python
           path: dist
@@ -153,9 +153,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-14, macos-15, windows-latest]
+        os: [macos-26, macos-26-intel, windows-latest]
     with:
-      python-version: "3.14.9"
+      python-version: "3.14.10"
       runs-on: ${{ matrix.os }}
 
   package-windows:
@@ -165,12 +165,12 @@ jobs:
       BUILD_SCRIPT: "packaging/pkg_win.nsi"
       VERSION: ${{ needs.version.outputs.code }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: packaging
           path: ./packaging
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: build-windows-latest
 
@@ -179,12 +179,12 @@ jobs:
       - run: choco install nsis
 
       - name: Create windows installer
-        uses: joncloud/makensis-action@v4.1
+        uses: joncloud/makensis-action@v5.0
         with:
           script-file: ${{ env.BUILD_SCRIPT }}
           arguments: "/V3 /DVERSION=${{ env.VERSION }}"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: package-windows-latest
           path: dist/*.exe
@@ -195,17 +195,17 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [macos-14, macos-15]
+        os: [macos-26, macos-26-intel]
     env:
       BUILD_SCRIPT: "packaging/pkg_macos.sh"
       VERSION: ${{ needs.version.outputs.code }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: packaging
           path: ./packaging
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: ${{ format('build-{0}', matrix.os) }}
 
@@ -213,19 +213,19 @@ jobs:
 
       - name: Import signing certificate
         if: github.event_name == 'push'
-        uses: apple-actions/import-codesign-certs@v3
+        uses: apple-actions/import-codesign-certs@v7
         with:
           p12-file-base64: ${{ secrets.BB_P12 }}
           p12-password: ${{ secrets.BB_P12_PASSWORD }}
 
       - name: Sign and Package into DMG
         env:
-          ARCH: ${{ matrix.os == 'macos-13' && 'x86_64' || 'arm64' }}
+          ARCH: ${{ matrix.os == 'macos-26-intel' && 'x86_64' || 'arm64' }}
         run: |
           chmod +x $BUILD_SCRIPT
-          $BUILD_SCRIPT "blackboard_sync-$VERSION_$ARCH"
+          $BUILD_SCRIPT "blackboard_sync-${VERSION}_${ARCH}"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: ${{ format('package-{0}', matrix.os) }}
           path: dist/*.dmg
@@ -237,12 +237,12 @@ jobs:
       VERSION: ${{ needs.version.outputs.code }}
       KIT_PATH: 'C:\Program Files (x86)\Windows Kits\10\App Certification Kit'
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: packaging
           path: packaging
 
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: build-windows-latest
 
@@ -267,7 +267,7 @@ jobs:
           -Path msixupload.zip
           -Destination app.bbsync.BlackboardSync.msixupload
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: package-msixupload
           path: '*.msixupload'
@@ -277,7 +277,7 @@ jobs:
     needs: [ package-windows-msix ]
     if: ${{ false }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           name: package-msixupload
 
@@ -307,12 +307,12 @@ jobs:
     env:
       RELEASE_NOTES: ${{ needs.release-notes.outputs.body }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v8
         with:
           pattern: package-*
           merge-multiple: true
 
-      - uses: softprops/action-gh-release@v2.0.8
+      - uses: softprops/action-gh-release@v3.0.4
         with:
           body: ${{ env.RELEASE_NOTES }}
           prerelease: ${{ env.PRE_RELEASE }}
@@ -329,14 +329,14 @@ jobs:
     env:
       ACTION_RUNS: https://github.com/sanjacob/BlackboardSync/actions/runs/
     steps:
-      - uses: mshick/add-pr-comment@v2
+      - uses: mshick/add-pr-comment@v3
         continue-on-error: true
         with:
           message: >
             The build process has succeeded.
 
-            Please test either `package-macos-13` (x86_64),
-            `package-macos-14` (arm64), or `package-windows-latest`.
+            Please test either `package-macos-26-intel` (x86_64),
+            `package-macos-26` (arm64), or `package-windows-latest`.
 
             You can find them
             [here](${{ format('{0}{1}', env.ACTION_RUNS, github.run_id) }})
