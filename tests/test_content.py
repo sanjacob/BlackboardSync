@@ -218,3 +218,62 @@ def test_unhandled():
     content = Unhandled(mock.Mock(title="Content title"), None, mock.Mock())
     content.write(None, executor)
     executor.submit.assert_not_called()
+
+
+def make_child(title, ignore=False):
+    child = mock.Mock()
+    child.title = title
+    child.ignore = ignore
+    return child
+
+
+def test_folder_write_collapses_single_child_with_same_title(tmpdir):
+    """A folder whose only child shares its own title (how
+    Blackboard models a folder's single "page") should be written
+    directly into the folder, instead of creating a redundant
+    nested folder with the same name."""
+    executor = mock.Mock()
+    path = Path(tmpdir, 'Lecture notes')
+
+    folder = Folder.__new__(Folder)
+    folder.children = [make_child('Lecture notes')]
+    folder.write(path, executor)
+
+    folder.children[0].write.assert_called_once_with(Path(tmpdir), executor)
+
+
+def test_folder_write_does_not_collapse_different_title(tmpdir):
+    executor = mock.Mock()
+    path = Path(tmpdir, 'Lecture notes')
+
+    folder = Folder.__new__(Folder)
+    folder.children = [make_child('Lect01.pdf')]
+    folder.write(path, executor)
+
+    folder.children[0].write.assert_called_once_with(path, executor)
+
+
+def test_folder_write_does_not_collapse_multiple_children(tmpdir):
+    executor = mock.Mock()
+    path = Path(tmpdir, 'Lecture notes')
+
+    folder = Folder.__new__(Folder)
+    folder.children = [make_child('Lecture notes'), make_child('Other.pdf')]
+    folder.write(path, executor)
+
+    for child in folder.children:
+        child.write.assert_called_once_with(path, executor)
+
+
+def test_folder_write_does_not_collapse_ignored_child(tmpdir):
+    """Even if the title matches, an ignored child has no `.title`
+    attribute set (see Content.__init__), so it must not be used to
+    decide whether to collapse the folder."""
+    executor = mock.Mock()
+    path = Path(tmpdir, 'Lecture notes')
+
+    folder = Folder.__new__(Folder)
+    folder.children = [make_child('Lecture notes', ignore=True)]
+    folder.write(path, executor)
+
+    folder.children[0].write.assert_called_once_with(path, executor)

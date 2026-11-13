@@ -25,6 +25,20 @@ class Folder:
         if self.children:
             path.mkdir(exist_ok=True, parents=True)
 
+        # Blackboard sometimes models a folder's single "page" as a
+        # separate content item sharing the folder's own title. If
+        # left alone, that doubles up the folder on disk (e.g.
+        # "Lecture notes/Lecture notes/..."). When this folder has
+        # exactly one child with the same title, skip the extra
+        # nesting level and write the child directly into this
+        # folder's own directory.
+        only_child = self.children[0] if len(self.children) == 1 else None
+
+        if (only_child is not None and not only_child.ignore
+                and only_child.title == path.name):
+            only_child.write(path.parent, executor)
+            return
+
         for child in self.children:
             child.write(path, executor)
 
