@@ -18,6 +18,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for University of Massachusetts Lowell (@EastArctica)
 - Add support for University of Miami (@nearposting)
 
+### Changed
+- Require Python 3.15
+
 ## [0.18.0] - 2024-10-22
 
 ### Added

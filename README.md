@@ -43,7 +43,7 @@ or would like to see which universities are currently supported,
 
 **Built with:**
 
-- [Python 3.11][python]
+- [Python 3.15][python]
 - [PyQt6][pyqt]
 
 
@@ -96,7 +96,7 @@ blackboardsync
 
 #### From source
 
-##### Requires [Python >=3.14.9,<3.15, pip][python], [pipenv][pipenv], [git][git]
+##### Requires [Python >=3.15,<3.16, pip][python], [pipenv][pipenv], [git][git]
 
 ```bash
 git clone https://github.com/sanjacob/BlackboardSync.git

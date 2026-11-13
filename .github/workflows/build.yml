@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 env:
-  PYTHON_VER: "3.14.10"
+  PYTHON_VER: "3.15.2"
   NAME: "BlackboardSync"
   PRE_RELEASE: ${{ contains(github.ref_name, '-') }}
 
@@ -17,7 +17,7 @@ jobs:
   test:
     uses: ./.github/workflows/pytest.yml
     with:
-      python-version: "3.14.10"
+      python-version: "3.15.2"
 
   version:
     needs: [ test ]
@@ -155,7 +155,7 @@ jobs:
       matrix:
         os: [macos-26, macos-26-intel, windows-latest]
     with:
-      python-version: "3.14.10"
+      python-version: "3.15.2"
       runs-on: ${{ matrix.os }}
 
   package-windows:
