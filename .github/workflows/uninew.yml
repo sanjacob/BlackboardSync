@@ -94,7 +94,7 @@ jobs:
             }
 
       - name: Map country code to country section
-        uses: kanga333/variable-mapper@3681b75f5c6c00162721168fb91ab74925eaebcb # v0.3.0
+        uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352 # v0.3.0 + node20 (fork commit)
         id: header
         with:
           key: "${{ steps.country.outputs.iso-2 }}"
@@ -111,7 +111,7 @@ jobs:
 
       - name: Map country code to continent section
         if: ${{ steps.header.outputs.section == '' }}
-        uses: kanga333/variable-mapper@3681b75f5c6c00162721168fb91ab74925eaebcb # v0.3.0
+        uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352 # v0.3.0 + node20 (fork commit)
         id: header-b
         with:
           key: "${{ steps.country.outputs.continent }}"
