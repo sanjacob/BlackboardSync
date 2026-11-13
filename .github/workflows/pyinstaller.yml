@@ -14,17 +14,17 @@ jobs:
   pyinstaller:
     runs-on: ${{ inputs.runs-on }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           fetch-depth: 0
           fetch-tags: true
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: ${{ inputs.python-version }}
 
       - name: Install the latest version of uv
-        uses: astral-sh/setup-uv@07a047e608db84b3d8c06cd9a7c7dcc9c355c18e # v10.3.2
+        uses: astral-sh/setup-uv@68559e99cc807c1eb7e9238fd43a15bba460eec2 # v10.3.3
 
       - name: Install current package
         run: uv sync --locked --no-editable --no-default-groups --group package
@@ -41,7 +41,7 @@ jobs:
         run: "tar -czvf build.tar dist/*"
 
       - name: Upload build
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ format('build-{0}', inputs.runs-on) }}
           path: build.tar

@@ -19,7 +19,7 @@ jobs:
       ISSUE_ID: ${{ github.event.issue.id }}
       ISSUE_NUMBER: ${{ github.event.issue.number }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
         with:
           token: ${{ secrets.AUTOPR_PAT }}
 
@@ -94,7 +94,7 @@ jobs:
             }
 
       - name: Map country code to country section
-        uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
+        uses: kanga333/variable-mapper@3681b75f5c6c00162721168fb91ab74925eaebcb # v0.3.0
         id: header
         with:
           key: "${{ steps.country.outputs.iso-2 }}"
@@ -111,7 +111,7 @@ jobs:
 
       - name: Map country code to continent section
         if: ${{ steps.header.outputs.section == '' }}
-        uses: kanga333/variable-mapper@c140b458cb69bd8c9c5eccd41e83aadc597c1352
+        uses: kanga333/variable-mapper@3681b75f5c6c00162721168fb91ab74925eaebcb # v0.3.0
         id: header-b
         with:
           key: "${{ steps.country.outputs.continent }}"
