@@ -839,6 +839,21 @@
     },
     "api_url": "https://www.courses.miami.edu/webapps/login"
   },
+    {
+    "name": "Lebanese American University",
+    "short_name": "LAU",
+    "country": "LB",
+    "login": {
+      "start_url": "https://elearn.lau.edu.lb/",
+      "target_url": "https://elearn.lau.edu.lb/ultra/stream"
+    },
+    "network": {
+      "name": [
+        "LB-TERRANET"
+      ]
+    },
+    "api_url": "https://elearn.lau.edu.lb/"
+  },
   {
     "name": "Fakeboard",
     "short_name": "dev",
