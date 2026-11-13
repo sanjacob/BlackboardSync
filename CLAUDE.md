@@ -1,7 +1,7 @@
 # BlackboardSync — agent reference
 
 PyQt6 tray app: logs into Blackboard Learn via an embedded browser, then periodically downloads course content.
-Python 3.14 only, deps via **uv** (CONTRIBUTING.md's pipenv instructions are outdated).
+Python 3.15 only, deps via **uv** (CONTRIBUTING.md's pipenv instructions are outdated).
 
 ```bash
 uv sync --locked
