@@ -19,7 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for University of Miami (@nearposting)
 
 ### Changed
-- Require Python 3.15
+- Build with Python 3.15 (3.14 still supported)
 
 ## [0.18.0] - 2024-10-22
 

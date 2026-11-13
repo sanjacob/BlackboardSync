@@ -96,7 +96,7 @@ blackboardsync
 
 #### From source
 
-##### Requires [Python >=3.15,<3.16, pip][python], [pipenv][pipenv], [git][git]
+##### Requires [Python >=3.14,<3.16, pip][python], [pipenv][pipenv], [git][git]
 
 ```bash
 git clone https://github.com/sanjacob/BlackboardSync.git
