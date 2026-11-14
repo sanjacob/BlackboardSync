@@ -47,4 +47,4 @@ __publisher__ = "WeAreMagic"
 __license__ = "GNU General Public License v2.0 only"
 __license_spdx__ = "GPL-2.0-only"
 
-__copyright__ = f"2024, {__author__}"
+__copyright__ = f"2024-2026, {__author__}"
