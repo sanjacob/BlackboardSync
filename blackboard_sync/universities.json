@@ -915,6 +915,22 @@
     "api_url": "https://ntulearn.ntu.edu.sg"
   },
   {
+    "name": "Paris Lodron Universität Salzburg",
+    "short_name": "PLUS",
+    "country": "AT",
+    "login": {
+      "start_url": "https://elearn.sbg.ac.at",
+      "target_url": "https://elearn.sbg.ac.at/ultra/"
+    },
+    "network": {
+      "name": [
+        "UNI-SALZBURG",
+        "UNISBG"
+      ]
+    },
+    "api_url": "https://elearn.sbg.ac.at"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
