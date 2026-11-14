@@ -1112,6 +1112,21 @@
     "api_url": "https://blackboard.aber.ac.uk"
   },
   {
+    "name": "ILERNA",
+    "short_name": "",
+    "country": "ES",
+    "login": {
+      "start_url": "https://campus.ilerna.com",
+      "target_url": "https://campus.ilerna.com/ultra/"
+    },
+    "network": {
+      "name": [
+        "ILERNA"
+      ]
+    },
+    "api_url": "https://campus.ilerna.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
