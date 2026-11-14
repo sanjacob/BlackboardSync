@@ -20,6 +20,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Universidad San Pablo CEU (@h-rodriguez-1)
 - Add support for Halmstad University (@Fyroeo)
 - Add support for Instituto Tecnológico de Buenos Aires (@jackpc476)
+- Add support for Qatar University (@doitheturtle)
 
 ### Changed
 - Build with Python 3.15 (3.14 still supported)

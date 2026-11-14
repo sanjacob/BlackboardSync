@@ -885,6 +885,21 @@
     "api_url": "https://campus.itba.edu.ar"
   },
   {
+    "name": "Qatar University",
+    "short_name": "QU",
+    "country": "QA",
+    "login": {
+      "start_url": "https://elearning.qu.edu.qa",
+      "target_url": "https://elearning.qu.edu.qa/ultra/"
+    },
+    "network": {
+      "name": [
+        "QUNET"
+      ]
+    },
+    "api_url": "https://elearning.qu.edu.qa"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
