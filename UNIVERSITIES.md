@@ -157,6 +157,7 @@ If this is not something you'd like, please let me know.
 - Austin Community College
 - University of Massachusetts Lowell
 - University of Miami
+- Albizu University
 
 ###### Canada
 

@@ -946,6 +946,16 @@
     "api_url": "https://adamson.blackboard.com"
   },
   {
+    "name": "Albizu University",
+    "short_name": "UCA",
+    "country": "PR",
+    "login": {
+      "start_url": "https://bb.albizu.edu",
+      "target_url": "https://bb.albizu.edu/ultra/"
+    },
+    "api_url": "https://bb.albizu.edu"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
