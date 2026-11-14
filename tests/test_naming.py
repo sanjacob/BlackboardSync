@@ -9,11 +9,12 @@ from blackboard_sync.content import Course
 from blackboard_sync.content.attachment import Attachment
 from blackboard_sync.content.externallink import ExternalLink
 from blackboard_sync.content.webdav import WebDavFile
-from blackboard_sync.content.naming import safe_filename, MAX_NAME_BYTES
+from blackboard_sync.content.naming import (
+    safe_filename, MAX_NAME_BYTES, MAX_SUFFIX_BYTES
+)
 
 
 LONG_TITLE = "Lecture notes " * 30  # 420 characters
-SUFFIXES = ["", ".html", ".url", ".desktop", ".pdf"]
 
 
 def run_now() -> mock.Mock:
@@ -24,13 +25,18 @@ def stream(data: bytes = b"data") -> mock.Mock:
     return mock.Mock(iter_content=lambda chunk_size: [data])
 
 
-@given(st.text(), st.sampled_from(SUFFIXES))
+@given(st.text(), st.text())
 def test_safe_filename_fits(name: str, suffix: str) -> None:
     result = safe_filename(name, suffix)
-    assert len(result.encode()) <= MAX_NAME_BYTES
-    assert result.endswith(suffix)
+    assert 0 < len(result.encode()) <= MAX_NAME_BYTES
     assert not set(result) & set('/\\:*?"<>|\0')
-    assert result != suffix
+
+
+@given(st.text(), st.from_regex(r"\.[a-z0-9]{1,10}", fullmatch=True))
+def test_safe_filename_keeps_extension(name: str, ext: str) -> None:
+    result = safe_filename(name, ext)
+    assert result.endswith(ext)
+    assert len(result.encode()) <= MAX_NAME_BYTES
 
 
 def test_safe_filename_keeps_valid_names() -> None:
@@ -47,6 +53,17 @@ def test_safe_filename_counts_bytes() -> None:
     result = safe_filename("é" * 300, ".html")
     assert result.endswith(".html")
     assert len(result.encode()) <= MAX_NAME_BYTES
+
+
+def test_safe_filename_long_or_invalid_suffix() -> None:
+    long_suffix = "." + "y" * 300
+    result = safe_filename("a", long_suffix)
+    assert len(result.encode()) == MAX_NAME_BYTES
+    assert result.startswith("a.yyy")
+
+    assert safe_filename("a", ".p/f") == "a.p_f"
+    assert safe_filename("a", "." + "z" * MAX_SUFFIX_BYTES).startswith("a")
+    assert safe_filename("con", ".txt") != "con.txt"
 
 
 def test_safe_filename_separators_and_fallback() -> None:

@@ -26,6 +26,10 @@ from pathvalidate import sanitize_filename
 # (ext4, APFS) or 255 UTF-16 units (NTFS); 255 UTF-8 bytes fits both.
 MAX_NAME_BYTES = 255
 
+# A suffix longer than this is not a real file extension (e.g. the text
+# after a dot in a sentence-like title), so it is shortened with the name.
+MAX_SUFFIX_BYTES = 32
+
 
 def safe_filename(name: str, suffix: str = "",
                   fallback: str = "Untitled") -> str:
@@ -35,11 +39,21 @@ def safe_filename(name: str, suffix: str = "",
     them, `:` or `?` on Windows) are replaced with '_', so a course syncs
     to the same names on Windows, macOS and Linux. `name` is shortened
     so that the result, suffix included, fits within MAX_NAME_BYTES.
-    The suffix (e.g. a file extension) is kept intact.
+    The suffix (e.g. a file extension) is kept intact unless it is
+    longer than MAX_SUFFIX_BYTES.
     """
-    suffix = sanitize_filename(suffix, replacement_text="_",
-                               platform="universal")
+    suffix = _sanitize(suffix)
+
+    if len(suffix.encode()) > MAX_SUFFIX_BYTES:
+        name, suffix = name + suffix, ""
+
     max_len = MAX_NAME_BYTES - len(suffix.encode())
-    stem = sanitize_filename(name, replacement_text="_",
+    stem = _sanitize(name, max_len) or fallback
+
+    # Check the joined name too, e.g. "con" + ".txt" is reserved on Windows
+    return _sanitize(stem + suffix)
+
+
+def _sanitize(name: str, max_len: int = MAX_NAME_BYTES) -> str:
+    return sanitize_filename(name, replacement_text="_",
                              platform="universal", max_len=max_len)
-    return (stem or fallback) + suffix
