@@ -924,7 +924,8 @@
     },
     "network": {
       "name": [
-        "UNI-SALZBURG"
+        "UNI-SALZBURG",
+        "UNISBG"
       ]
     },
     "api_url": "https://elearn.sbg.ac.at"
