@@ -172,6 +172,7 @@ If this is not something you'd like, please let me know.
 - Universidad Tecnologica del Salvador
 - Universidad Ana G. Mendez
 - Instituto Tecnológico de Buenos Aires
+- Universidad del Pacífico
 
 ###### Mexico
 
