@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools_scm>=8"]
+requires = ["setuptools>=77", "setuptools_scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -11,10 +11,11 @@ authors = [
 description = "Sync your blackboard content to your device"
 readme = "README.md"
 requires-python = ">=3.14,<3.16"
+license = "GPL-2.0-only"
+license-files = ["LICENSE"]
 classifiers = [
     "Programming Language :: Python :: 3.14",
     "Programming Language :: Python :: 3.15",
-    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
     "Operating System :: OS Independent",
     "Intended Audience :: Education",
     "Intended Audience :: End Users/Desktop",
@@ -79,6 +80,7 @@ default-groups = "all"
 packages = [
     "blackboard_sync",
     "blackboard_sync.qt",
+    "blackboard_sync.qt.translations",
     "blackboard_sync.content",
     "blackboard_sync.assets"
 ]
