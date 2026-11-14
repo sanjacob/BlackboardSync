@@ -1056,6 +1056,16 @@
     "api_url": "https://online.uwl.ac.uk"
   },
   {
+    "name": "Notre Dame University-Louaize",
+    "short_name": "NDU",
+    "country": "LB",
+    "login": {
+      "start_url": "https://bb.ndu.edu.lb",
+      "target_url": "https://bb.ndu.edu.lb/ultra/"
+    },
+    "api_url": "https://bb.ndu.edu.lb"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {

@@ -194,6 +194,7 @@ If this is not something you'd like, please let me know.
 - Nanyang Technological University
 - Adamson University
 - Singapore University of Technology and Design
+- Notre Dame University-Louaize
 
 ### Australia
 
