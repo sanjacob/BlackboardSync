@@ -931,6 +931,21 @@
     "api_url": "https://elearn.sbg.ac.at"
   },
   {
+    "name": "Adamson University",
+    "short_name": "AdU",
+    "country": "PH",
+    "login": {
+      "start_url": "https://adamson.blackboard.com",
+      "target_url": "https://adamson.blackboard.com/ultra/"
+    },
+    "network": {
+      "name": [
+        "ADAMSON-PH"
+      ]
+    },
+    "api_url": "https://adamson.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
