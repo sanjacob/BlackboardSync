@@ -974,6 +974,22 @@
     "api_url": "https://aulavirtual.up.edu.pe"
   },
   {
+    "name": "Fordham University",
+    "short_name": "",
+    "country": "US",
+    "login": {
+      "start_url": "https://fordham.blackboard.com",
+      "target_url": "https://fordham.blackboard.com/ultra/"
+    },
+    "network": {
+      "name": [
+        "FORDHAM",
+        "FORDHAM-UNI"
+      ]
+    },
+    "api_url": "https://fordham.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
