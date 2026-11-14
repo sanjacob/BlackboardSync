@@ -1,3 +1,4 @@
+import os
 import uuid
 import mimetypes
 
@@ -7,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 from blackboard.blackboard import BBAttachment
 
 from .base import BStream
+from .naming import safe_filename
 from .api_path import BBContentPath
 from .job import DownloadJob
 
@@ -23,11 +25,11 @@ class Attachment(BStream):
         mime = attachment.mimeType or 'text/plain'
         possible_ext = mimetypes.guess_all_extensions(mime, strict=False)
 
-        if name_ext in possible_ext:
-            self.filename = filename
-        else:
-            real_ext = possible_ext[0] if possible_ext else '.txt'
-            self.filename = filename + real_ext
+        if name_ext not in possible_ext:
+            filename += possible_ext[0] if possible_ext else '.txt'
+
+        stem, ext = os.path.splitext(filename)
+        self.filename = safe_filename(stem, ext)
 
         self.stream = job.session.download(attachment_id=attachment.id,
                                            **api_path)

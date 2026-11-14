@@ -6,6 +6,7 @@ from blackboard.blackboard import BBCourseContent
 
 from .base import FStream
 from .job import DownloadJob
+from .naming import safe_filename
 
 
 class ExternalLink(FStream):
@@ -22,14 +23,14 @@ class ExternalLink(FStream):
         if self.url is None:
             return
 
-        path = path / path.stem
-
         if platform.system() in ["Windows", "Darwin"]:
             body = f"[InternetShortcut]\nURL={self.url}"
-            path = path.with_suffix(".url")
+            suffix = ".url"
         else:
             body = self.create_unix_body(self.url)
-            path = path.with_suffix(".desktop")
+            suffix = ".desktop"
+
+        path = path / safe_filename(path.name, suffix)
 
         super().write_base(path, executor, body)
 
