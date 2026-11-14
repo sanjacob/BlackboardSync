@@ -1019,7 +1019,8 @@
     },
     "network": {
       "name": [
-        "SUTD-AS-AP"
+        "SUTD-AS-AP",
+        "SUTD-SG"
       ]
     },
     "api_url": "https://edimension.sutd.edu.sg"
