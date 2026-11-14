@@ -1010,6 +1010,22 @@
     "api_url": "https://luminate.centennialcollege.ca"
   },
   {
+    "name": "Singapore University of Technology and Design",
+    "short_name": "SUTD",
+    "country": "SG",
+    "login": {
+      "start_url": "https://edimension.sutd.edu.sg",
+      "target_url": "https://edimension.sutd.edu.sg/ultra/"
+    },
+    "network": {
+      "name": [
+        "SUTD-AS-AP",
+        "SUTD-SG"
+      ]
+    },
+    "api_url": "https://edimension.sutd.edu.sg"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
