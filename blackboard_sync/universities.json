@@ -870,6 +870,21 @@
     "api_url": "https://bb.hh.se"
   },
   {
+    "name": "Instituto Tecnológico de Buenos Aires",
+    "short_name": "ITBA",
+    "country": "AR",
+    "login": {
+      "start_url": "https://campus.itba.edu.ar",
+      "target_url": "https://campus.itba.edu.ar/ultra/"
+    },
+    "network": {
+      "name": [
+        "AR-ITBA-LACNIC"
+      ]
+    },
+    "api_url": "https://campus.itba.edu.ar"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
