@@ -990,6 +990,26 @@
     "api_url": "https://fordham.blackboard.com"
   },
   {
+    "name": "Centennial College",
+    "short_name": "",
+    "country": "CA",
+    "login": {
+      "start_url": "https://luminate.centennialcollege.ca",
+      "target_url": "https://luminate.centennialcollege.ca/ultra/"
+    },
+    "network": {
+      "name": [
+        "IDC-CENCOL",
+        "CENCOL-CA1",
+        "CENCOL2",
+        "CENCOL",
+        "CENCOL-CA",
+        "IDC-CENCOL1"
+      ]
+    },
+    "api_url": "https://luminate.centennialcollege.ca"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
