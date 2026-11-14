@@ -99,6 +99,7 @@ If this is not something you'd like, please let me know.
 - University of Manchester
 - University of York
 - University of West London
+- Aberystwyth University
 
 ###### Scotland
 
