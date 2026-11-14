@@ -1026,6 +1026,21 @@
     "api_url": "https://edimension.sutd.edu.sg"
   },
   {
+    "name": "Johnson & Wales University",
+    "short_name": "JWU",
+    "country": "US",
+    "login": {
+      "start_url": "https://ulearn.jwu.edu",
+      "target_url": "https://ulearn.jwu.edu/ultra/"
+    },
+    "network": {
+      "name": [
+        "JWUEDU"
+      ]
+    },
+    "api_url": "https://ulearn.jwu.edu"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
