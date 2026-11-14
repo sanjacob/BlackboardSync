@@ -2,6 +2,7 @@ import uuid
 import mimetypes
 
 from pathlib import Path
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.blackboard import BBAttachment
@@ -16,7 +17,8 @@ class Attachment(BStream):
     """File attached to a content."""
 
     def __init__(self, attachment: BBAttachment, api_path: BBContentPath,
-                 job: DownloadJob):
+                 job: DownloadJob, modified: datetime | None = None):
+        self.modified = modified
         filename = attachment.fileName or str(uuid.uuid1())
         name_ext = '.' + filename.split('.')[-1]
 
@@ -36,4 +38,5 @@ class Attachment(BStream):
                                            **api_path)
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
-        super().write_base(path / self.filename, executor, self.stream)
+        super().write_base(path / self.filename, executor, self.stream,
+                           self.modified)

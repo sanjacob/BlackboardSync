@@ -22,6 +22,8 @@ Parse an html to look for links
 
 import mimetypes
 from pathlib import Path
+from datetime import datetime
+from email.utils import parsedate_to_datetime
 from requests import Response
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
@@ -104,6 +106,19 @@ def validate_webdav_response(response: Response,
     return False
 
 
+def last_modified(response: Response) -> datetime | None:
+    """Return the Last-Modified time of an HTTP response, if valid."""
+    header = response.headers.get('Last-Modified')
+
+    if not header:
+        return None
+
+    try:
+        return parsedate_to_datetime(header)
+    except (TypeError, ValueError):
+        return None
+
+
 class WebDavFile(BStream):
     """A Blackboard WebDav file which can be downloaded directly"""
     def __init__(self, link: Link, job: DownloadJob) -> None:
@@ -113,6 +128,7 @@ class WebDavFile(BStream):
         self.extension = mimetypes.guess_extension(content_type)
         self.valid = validate_webdav_response(self.stream, link.href,
                                               job.session.instance_url)
+        self.modified = last_modified(self.stream)
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
         if self.valid:
@@ -123,4 +139,4 @@ class WebDavFile(BStream):
 
             path = Path(path, safe_filename(name.stem, name.suffix))
 
-            super().write_base(path, executor, self.stream)
+            super().write_base(path, executor, self.stream, self.modified)

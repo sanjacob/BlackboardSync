@@ -1,10 +1,10 @@
 import logging
 from pathlib import Path
 from datetime import datetime
-from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.blackboard import BBCourse
 
+from ..executor import SyncExecutor
 from .api_path import BBContentPath
 from .job import DownloadJob
 from .content import Content
@@ -25,6 +25,7 @@ class Course:
         self.year = self.get_year(course.created)
         self.title = safe_filename(course.title or '',
                                    fallback='Untitled Course')
+        self.modified = course.modified
 
         contents = job.session.fetch_contents(course_id=course.id)
         self.children = []
@@ -34,7 +35,7 @@ class Course:
                                      content_id=content.id)
             self.children.append(Content(content, api_path, job))
 
-    def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
+    def write(self, path: Path, executor: SyncExecutor) -> None:
         if self.ignore:
             return
 
@@ -42,6 +43,8 @@ class Course:
 
         for child in self.children:
             child.write(path, executor)
+
+        executor.set_dir_mtime(path, self.modified)
 
     @staticmethod
     def get_year(created: datetime | None) -> str:

@@ -75,18 +75,19 @@ def test_safe_filename_separators_and_fallback() -> None:
 
 
 def test_long_course_title() -> None:
-    course = BBCourse(id="_1_1", title=LONG_TITLE + "I/II",
+    course = BBCourse(id="_1_1", name="MATH101 : " + LONG_TITLE + "I/II",
                       availability=BBAvailability(available="Yes"))
     job = mock.Mock()
     job.session.fetch_contents.return_value = []
 
     title = Course(course, job).title
+    assert title.startswith("Lecture notes")
     assert len(title.encode()) <= MAX_NAME_BYTES
     assert "/" not in title
 
 
 def test_long_external_link_is_written(tmp_path: Path) -> None:
-    content = mock.Mock()
+    content = mock.Mock(modified=None)
     content.contentHandler.url = "https://example.com"
     link = ExternalLink(content, None, mock.Mock())
 
@@ -128,6 +129,7 @@ def test_long_webdav_file_is_written(tmp_path: Path) -> None:
     webdav.title = LONG_TITLE
     webdav.extension = ".docx"
     webdav.valid = True
+    webdav.modified = None
     webdav.stream = stream()
 
     webdav.write(tmp_path, run_now())

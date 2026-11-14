@@ -22,6 +22,7 @@ class ContentBody(FStream):
             return
 
         title = content.title or "Untitled"
+        self.modified = content.modified
         parser = ContentParser(content.body, job.session.instance_url)
 
         self.body = create_body(title, parser.body, parser.text)
@@ -32,7 +33,7 @@ class ContentBody(FStream):
             return
 
         filename = safe_filename(path.name, ".html")
-        self.write_base(path / filename, executor, self.body)
+        self.write_base(path / filename, executor, self.body, self.modified)
 
         for child in self.children:
             child.write(path, executor)

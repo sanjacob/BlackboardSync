@@ -24,7 +24,7 @@ class Document:
 
         for i, attachment in enumerate(filtered_attachments):
             self.attachments.append(
-                Attachment(attachment, api_path, job)
+                Attachment(attachment, api_path, job, content.modified)
             )
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
