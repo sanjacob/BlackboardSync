@@ -983,7 +983,8 @@
     },
     "network": {
       "name": [
-        "FORDHAM"
+        "FORDHAM",
+        "FORDHAM-UNI"
       ]
     },
     "api_url": "https://fordham.blackboard.com"
