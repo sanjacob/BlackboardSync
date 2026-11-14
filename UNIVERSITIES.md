@@ -186,6 +186,7 @@ If this is not something you'd like, please let me know.
 - Shiv Nadar University
 - Qatar University
 - Nanyang Technological University
+- Adamson University
 
 ### Australia
 
