@@ -849,7 +849,8 @@
     },
     "network": {
       "name": [
-        "LB-TERRANET"
+        "LAU-LEB",
+        "LB-LAU"
       ]
     },
     "api_url": "https://elearn.lau.edu.lb/"
