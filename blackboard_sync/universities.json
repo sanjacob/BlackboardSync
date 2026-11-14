@@ -1066,6 +1066,21 @@
     "api_url": "https://bb.ndu.edu.lb"
   },
   {
+    "name": "Norges teknisk-naturvitenskapelige universitet",
+    "short_name": "NTNU",
+    "country": "NO",
+    "login": {
+      "start_url": "https://ntnu.blackboard.com",
+      "target_url": "https://ntnu.blackboard.com/ultra/"
+    },
+    "network": {
+      "name": [
+        "NTNU"
+      ]
+    },
+    "api_url": "https://ntnu.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {

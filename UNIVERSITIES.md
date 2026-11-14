@@ -131,6 +131,7 @@ If this is not something you'd like, please let me know.
 - Universidad San Pablo CEU
 - Halmstad University
 - Paris Lodron Universität Salzburg
+- Norges teknisk-naturvitenskapelige universitet
 
 ### North America
 
