@@ -1096,6 +1096,21 @@
     "api_url": "https://ultra.edu.kuleuven.cloud"
   },
   {
+    "name": "Aberystwyth University",
+    "short_name": "",
+    "country": "GB",
+    "login": {
+      "start_url": "https://blackboard.aber.ac.uk",
+      "target_url": "https://blackboard.aber.ac.uk/ultra/"
+    },
+    "network": {
+      "name": [
+        "ABERYSTWYTH-UNIV"
+      ]
+    },
+    "api_url": "https://blackboard.aber.ac.uk"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
