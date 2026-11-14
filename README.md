@@ -148,8 +148,6 @@ more information available at the [Free Software Foundation][gnu].
 README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew],
 and [Rita Łyczywek][bulldogjob]
 
-Flathub team for their quick work in approving the app :heart:
-
 
 <!-- Project -->
 
