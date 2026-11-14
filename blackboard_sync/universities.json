@@ -965,7 +965,10 @@
     },
     "network": {
       "name": [
-        "PE-UNPA-LACNIC"
+        "PE-UNPA-LACNIC",
+        "PE-UNPA3-LACNIC",
+        "PE-UNPA4-LACNIC",
+        "PE-UNPA8-LACNIC"
       ]
     },
     "api_url": "https://aulavirtual.up.edu.pe"
