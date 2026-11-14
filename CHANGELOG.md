@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- File and folder names are shortened to fit the 255-byte limit, keeping their extension
+- Course titles and attachment names with characters the system rejects (such as `/`) are sanitised
+
 ## [0.19.0] - 2026-11-14
 
 ### Added

@@ -31,6 +31,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from .base import BStream
 from .job import DownloadJob
+from .naming import safe_filename
 
 
 class Link(NamedTuple):
@@ -115,9 +116,11 @@ class WebDavFile(BStream):
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
         if self.valid:
-            path = Path(path, self.title)
+            name = Path(self.title or "Untitled")
 
             if self.extension:
-                path = path.with_suffix(self.extension)
+                name = name.with_suffix(self.extension)
+
+            path = Path(path, safe_filename(name.stem, name.suffix))
 
             super().write_base(path, executor, self.stream)
