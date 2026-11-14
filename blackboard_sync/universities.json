@@ -840,6 +840,21 @@
     "api_url": "https://www.courses.miami.edu/webapps/login"
   },
   {
+    "name": "Universidad San Pablo CEU",
+    "short_name": "USP CEU",
+    "country": "ES",
+    "login": {
+      "start_url": "https://ceu.blackboard.com",
+      "target_url": "https://ceu.blackboard.com/ultra/"
+    },
+    "network": {
+      "name": [
+        "FUSP-CEU"
+      ]
+    },
+    "api_url": "https://ceu.blackboard.com"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
