@@ -29,7 +29,7 @@ def test_safe_filename_fits(name: str, suffix: str) -> None:
     result = safe_filename(name, suffix)
     assert len(result.encode()) <= MAX_NAME_BYTES
     assert result.endswith(suffix)
-    assert "/" not in result and "\0" not in result
+    assert not set(result) & set('/\\:*?"<>|\0')
     assert result != suffix
 
 
@@ -51,6 +51,8 @@ def test_safe_filename_counts_bytes() -> None:
 
 def test_safe_filename_separators_and_fallback() -> None:
     assert safe_filename("Maths I/II") == "Maths I_II"
+    assert safe_filename("Intro: Maths?") == "Intro_ Maths_"
+    assert safe_filename("con") == "con_"
     assert safe_filename("") == "Untitled"
     assert safe_filename("", fallback="Untitled Course") == "Untitled Course"
 
