@@ -1081,6 +1081,21 @@
     "api_url": "https://ntnu.blackboard.com"
   },
   {
+    "name": "KU Leuven",
+    "short_name": "",
+    "country": "BE",
+    "login": {
+      "start_url": "https://ultra.edu.kuleuven.cloud",
+      "target_url": "https://ultra.edu.kuleuven.cloud/ultra/"
+    },
+    "network": {
+      "name": [
+        "KULEUVENNET"
+      ]
+    },
+    "api_url": "https://ultra.edu.kuleuven.cloud"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {

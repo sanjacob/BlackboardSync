@@ -33,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for University of West London (@jakubroj)
 - Add support for Notre Dame University-Louaize (@UnnamedH)
 - Add support for Norges teknisk-naturvitenskapelige universitet (@joachim-frydenlund)
+- Add support for KU Leuven (@Martinus2004)
 
 ### Changed
 - Build with Python 3.15 (3.14 still supported)
