@@ -28,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Universidad del Pacífico (@johnbarraza)
 - Add support for Fordham University (@wukkeen)
 - Add support for Centennial College (@hsiaalex)
+- Add support for Singapore University of Technology and Design (@rnadomdude)
 
 ### Changed
 - Build with Python 3.15 (3.14 still supported)

@@ -191,6 +191,7 @@ If this is not something you'd like, please let me know.
 - Qatar University
 - Nanyang Technological University
 - Adamson University
+- Singapore University of Technology and Design
 
 ### Australia
 
