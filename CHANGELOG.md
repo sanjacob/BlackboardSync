@@ -24,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Nanyang Technological University (@edloseee)
 - Add support for Paris Lodron Universität Salzburg (@arcane-nika)
 - Add support for Adamson University (@Furshia)
+- Add support for Albizu University (@dereckgonzalez2000-pixel)
 
 ### Changed
 - Build with Python 3.15 (3.14 still supported)
