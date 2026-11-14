@@ -37,8 +37,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for Aberystwyth University (@ewill1875)
 - Add support for ILERNA (@candyperfumegirl)
 
+### Fixed
+- External links on Linux are saved with a .desktop extension
+
 ### Changed
 - Build with Python 3.15 (3.14 still supported)
+- Python 3.14 or newer is now required
+- Pillow is no longer a build dependency
+- Network autodetection for University of Maryland, Baltimore County and Universidad Pablo de Olavide
 
 ## [0.18.0] - 2024-10-22
 
