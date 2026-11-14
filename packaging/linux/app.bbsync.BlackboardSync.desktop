@@ -1,7 +1,0 @@
-[Desktop Entry]
-Type=Application
-Name={{ title }}
-Comment={{ summary }}
-Exec=blackboardsync
-Icon={{ package }}
-Categories=Education;Network;

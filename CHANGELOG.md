@@ -40,6 +40,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - External links on Linux are saved with a .desktop extension
 
+### Removed
+- Flatpak packaging (the Flathub package is end-of-life; on Linux, install from PyPI)
+
 ### Changed
 - Build with Python 3.15 (3.14 still supported)
 - Python 3.14 or newer is now required

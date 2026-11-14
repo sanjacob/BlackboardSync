@@ -67,13 +67,6 @@ or would like to see which universities are currently supported,
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
 </a>
 
-#### Flathub
-
-<a href="https://flathub.org/apps/app.bbsync.BlackboardSync">
-  <img alt="Download on Flathub"
-       src="https://flathub.org/api/badge?svg&locale=en" width="200"/>
-</a>
-
 #### Windows (.exe) and MacOS (.dmg)
 
 Please first download the [latest release][stable].
