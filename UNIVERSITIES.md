@@ -184,6 +184,7 @@ If this is not something you'd like, please let me know.
 - Hong Kong Community College
 - Shiv Nadar University
 - Qatar University
+- Nanyang Technological University
 
 ### Australia
 
