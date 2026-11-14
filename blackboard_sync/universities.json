@@ -999,7 +999,12 @@
     },
     "network": {
       "name": [
-        "IDC-CENCOL"
+        "IDC-CENCOL",
+        "CENCOL-CA1",
+        "CENCOL2",
+        "CENCOL",
+        "CENCOL-CA",
+        "IDC-CENCOL1"
       ]
     },
     "api_url": "https://luminate.centennialcollege.ca"
