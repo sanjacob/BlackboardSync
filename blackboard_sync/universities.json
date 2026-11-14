@@ -855,6 +855,21 @@
     "api_url": "https://ceu.blackboard.com"
   },
   {
+    "name": "Halmstad University",
+    "short_name": "HH",
+    "country": "SE",
+    "login": {
+      "start_url": "https://bb.hh.se",
+      "target_url": "https://bb.hh.se/ultra/"
+    },
+    "network": {
+      "name": [
+        "HHNET"
+      ]
+    },
+    "api_url": "https://bb.hh.se"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {

@@ -128,6 +128,7 @@ If this is not something you'd like, please let me know.
 - Università Bocconi
 - Atlantic Technical University Donegal
 - Universidad San Pablo CEU
+- Halmstad University
 
 ### North America
 
