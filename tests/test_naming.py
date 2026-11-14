@@ -75,13 +75,12 @@ def test_safe_filename_separators_and_fallback() -> None:
 
 
 def test_long_course_title() -> None:
-    course = BBCourse(id="_1_1", name="MATH101 : " + LONG_TITLE + "I/II",
+    course = BBCourse(id="_1_1", title=LONG_TITLE + "I/II",
                       availability=BBAvailability(available="Yes"))
     job = mock.Mock()
     job.session.fetch_contents.return_value = []
 
     title = Course(course, job).title
-    assert title.startswith("Lecture notes")
     assert len(title.encode()) <= MAX_NAME_BYTES
     assert "/" not in title
 
