@@ -158,6 +158,7 @@ If this is not something you'd like, please let me know.
 - University of Massachusetts Lowell
 - University of Miami
 - Albizu University
+- Fordham University
 
 ###### Canada
 
