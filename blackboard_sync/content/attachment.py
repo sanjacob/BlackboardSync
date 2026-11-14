@@ -1,4 +1,3 @@
-import os
 import uuid
 import mimetypes
 
@@ -25,10 +24,12 @@ class Attachment(BStream):
         mime = attachment.mimeType or 'text/plain'
         possible_ext = mimetypes.guess_all_extensions(mime, strict=False)
 
-        if name_ext not in possible_ext:
-            filename += possible_ext[0] if possible_ext else '.txt'
+        if name_ext in possible_ext:
+            stem, ext = filename.removesuffix(name_ext), name_ext
+        else:
+            stem = filename
+            ext = possible_ext[0] if possible_ext else '.txt'
 
-        stem, ext = os.path.splitext(filename)
         self.filename = safe_filename(stem, ext)
 
         self.stream = job.session.download(attachment_id=attachment.id,
