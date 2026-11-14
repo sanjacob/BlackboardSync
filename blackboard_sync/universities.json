@@ -956,6 +956,21 @@
     "api_url": "https://bb.albizu.edu"
   },
   {
+    "name": "Universidad del Pacífico",
+    "short_name": "UP",
+    "country": "PE",
+    "login": {
+      "start_url": "https://aulavirtual.up.edu.pe",
+      "target_url": "https://aulavirtual.up.edu.pe/ultra/"
+    },
+    "network": {
+      "name": [
+        "PE-UNPA-LACNIC"
+      ]
+    },
+    "api_url": "https://aulavirtual.up.edu.pe"
+  },
+  {
     "name": "Fakeboard",
     "short_name": "dev",
     "login": {
