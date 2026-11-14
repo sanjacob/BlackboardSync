@@ -129,6 +129,7 @@ If this is not something you'd like, please let me know.
 - Atlantic Technical University Donegal
 - Universidad San Pablo CEU
 - Halmstad University
+- Paris Lodron Universität Salzburg
 
 ### North America
 
