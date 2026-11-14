@@ -845,7 +845,7 @@
     "country": "LB",
     "login": {
       "start_url": "https://elearn.lau.edu.lb/",
-      "target_url": "https://elearn.lau.edu.lb/ultra/stream"
+      "target_url": "https://elearn.lau.edu.lb/ultra/"
     },
     "network": {
       "name": [
