@@ -4,6 +4,7 @@ from concurrent.futures import ThreadPoolExecutor
 from blackboard.blackboard import BBCourseContent
 
 from .base import FStream
+from .naming import safe_filename
 from .job import DownloadJob
 from .templates import create_body
 from .webdav import WebDavFile, ContentParser
@@ -30,7 +31,8 @@ class ContentBody(FStream):
         if self.ignore:
             return
 
-        self.write_base(path / f"{path.stem}.html", executor, self.body)
+        filename = safe_filename(path.name, ".html")
+        self.write_base(path / filename, executor, self.body)
 
         for child in self.children:
             child.write(path, executor)

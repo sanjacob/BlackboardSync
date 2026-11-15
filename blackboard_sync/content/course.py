@@ -8,6 +8,7 @@ from blackboard.blackboard import BBCourse
 from .api_path import BBContentPath
 from .job import DownloadJob
 from .content import Content
+from .naming import safe_filename
 
 logger = logging.getLogger(__name__)
 
@@ -22,7 +23,8 @@ class Course:
             return
 
         self.year = self.get_year(course.created)
-        self.title = course.title or 'Untitled Course'
+        self.title = safe_filename(course.title or '',
+                                   fallback='Untitled Course')
 
         contents = job.session.fetch_contents(course_id=course.id)
         self.children = []

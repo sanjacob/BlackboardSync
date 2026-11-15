@@ -98,6 +98,8 @@ If this is not something you'd like, please let me know.
 - University of Derby
 - University of Manchester
 - University of York
+- University of West London
+- Aberystwyth University
 
 ###### Scotland
 
@@ -127,6 +129,12 @@ If this is not something you'd like, please let me know.
 - Universidad Pablo de Olavide
 - Università Bocconi
 - Atlantic Technical University Donegal
+- Universidad San Pablo CEU
+- Halmstad University
+- Paris Lodron Universität Salzburg
+- Norges teknisk-naturvitenskapelige universitet
+- KU Leuven
+- ILERNA
 
 ### North America
 
@@ -154,12 +162,16 @@ If this is not something you'd like, please let me know.
 - Austin Community College
 - University of Massachusetts Lowell
 - University of Miami
+- Albizu University
+- Fordham University
+- Johnson & Wales University
 
 ###### Canada
 
 - Georgian College
 - Seneca Polytechnic
 - Humber College Institute of Technology and Advanced Learning
+- Centennial College
 
 ### South America
 
@@ -167,6 +179,8 @@ If this is not something you'd like, please let me know.
 - Universidad de Palermo
 - Universidad Tecnologica del Salvador
 - Universidad Ana G. Mendez
+- Instituto Tecnológico de Buenos Aires
+- Universidad del Pacífico
 
 ###### Mexico
 
@@ -181,6 +195,11 @@ If this is not something you'd like, please let me know.
 - Hong Kong Community College
 - Shiv Nadar University
 - Lebanese American University
+- Qatar University
+- Nanyang Technological University
+- Adamson University
+- Singapore University of Technology and Design
+- Notre Dame University-Louaize
 
 ### Australia
 

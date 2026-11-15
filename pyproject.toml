@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=64", "setuptools_scm>=8"]
+requires = ["setuptools>=77", "setuptools_scm>=8"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -10,37 +10,64 @@ authors = [
 ]
 description = "Sync your blackboard content to your device"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.14,<3.16"
+license = "GPL-2.0-only"
+license-files = ["LICENSE"]
 classifiers = [
-    "Programming Language :: Python :: 3.10",
-    "License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
+    "Programming Language :: Python :: 3.14",
+    "Programming Language :: Python :: 3.15",
     "Operating System :: OS Independent",
     "Intended Audience :: Education",
     "Intended Audience :: End Users/Desktop",
     "Topic :: Education"
 ]
 dependencies = [
-    "pyqt6>=6.7.1",
-    "pyqt6-webengine>=6.7.0",
-    "beautifulsoup4>=4.12.2",
-    "pydantic>=2.1.1",
-    "pathvalidate>=3.1.0",
-    "python-dateutil==2.9.0.post0",
+    "pyqt6>=6.11.0",
+    "pyqt6-webengine>=6.11.0",
+    "beautifulsoup4>=4.15.0",
+    "pydantic>=2.14.1",
+    "pathvalidate>=3.3.1",
     "appdirs==1.4.4",
-    "lxml>=4.7.1",
-    "requests>=2.25.0",
-    "packaging>=23.1",
+    "requests>=2.34.2",
+    "packaging>=26.3",
     "bblearn>=0.3.0",
     "whoisit",
-    "bwfilters"
+    "bwfilters",
 ]
 
 [project.scripts]
 blackboardsync = "blackboard_sync:__main__.main"
 
-[project.optional-dependencies]
-test = ["pytest", "hypothesis", "coverage", "pytest-qt", "pytest-mock"]
-package = ["pyinstaller>=5.13.2", "build", "twine"]
+[dependency-groups]
+test = [
+    "pytest>=9.1.1",
+    "pytest-qt>=4.5.0",
+    "pytest-mock>=3.17.0",
+    "pytest-xvfb>=3.1.1",
+    "hypothesis>=6.170.9",
+    "coverage>=7.17.0",
+]
+lint = [
+    "flake8>=7.4.1",
+    "mypy>=2.4.0",
+    "types-appdirs>=1.4.3.5",
+    "types-python-dateutil>=2.9.0.20261021",
+    "tiny-api-client>=1.4.0",  # provides the tiny_api_client.mypy plugin
+    "ruff>=0.17.2",
+]
+docs = [
+    "sphinx>=9.2.0",
+    "sphinx-rtd-theme>=3.1.0",
+    "recommonmark>=0.7.1",
+]
+package = [
+    "pyinstaller>=6.21.0",
+    "build>=1.6.1",
+    "twine>=7.0.0",
+]
+
+[tool.uv]
+default-groups = "all"
 
 [project.urls]
 "Homepage" = "https://bbsync.app"
@@ -53,6 +80,7 @@ package = ["pyinstaller>=5.13.2", "build", "twine"]
 packages = [
     "blackboard_sync",
     "blackboard_sync.qt",
+    "blackboard_sync.qt.translations",
     "blackboard_sync.content",
     "blackboard_sync.assets"
 ]
