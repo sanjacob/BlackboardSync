@@ -1,8 +1,8 @@
 from pathlib import Path
-from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.blackboard import BBCourseContent
 
+from ..executor import SyncExecutor
 from .api_path import BBContentPath
 from .job import DownloadJob
 from . import content
@@ -21,7 +21,7 @@ class Folder:
                                        course_id=course_id)
             self.children.append(content.Content(child, child_path, job))
 
-    def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
+    def write(self, path: Path, executor: SyncExecutor) -> None:
         if self.children:
             path.mkdir(exist_ok=True, parents=True)
 

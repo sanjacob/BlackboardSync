@@ -22,6 +22,9 @@ Parse an html to look for links
 
 import mimetypes
 from pathlib import Path
+from functools import partial
+from datetime import datetime
+from email.utils import parsedate_to_datetime
 from requests import Response
 from bs4 import BeautifulSoup
 from urllib.parse import unquote
@@ -31,6 +34,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 from .base import BStream
 from .job import DownloadJob
+from .naming import safe_filename
 
 
 class Link(NamedTuple):
@@ -103,36 +107,47 @@ def validate_webdav_response(response: Response,
     return False
 
 
+def last_modified(response: Response) -> datetime | None:
+    """Return the Last-Modified time of an HTTP response, if valid."""
+    header = response.headers.get('Last-Modified')
+
+    if not header:
+        return None
+
+    try:
+        return parsedate_to_datetime(header)
+    except (TypeError, ValueError):
+        return None
+
+
 class WebDavFile(BStream):
     """A Blackboard WebDav file which can be downloaded directly"""
     def __init__(self, link: Link, job: DownloadJob) -> None:
         self.title = sanitize_filename(link.text, replacement_text="_")
-        # Store download parameters; defer opening the connection until write()
-        self._session = job.session
-        self._link = link
+        self.href = link.href
+        self.instance_url = job.session.instance_url
+
+        # Not downloaded yet: the worker that saves the file opens it
+        self._download = partial(job.session.download_webdav,
+                                 webdav_url=link.href)
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
-        session = self._session
-        link = self._link
-        title = self.title
+        def save(stream: Response) -> None:
+            self._save(path, stream)
 
-        def _download_and_write() -> None:
-            stream = session.download_webdav(webdav_url=link.href)
-            try:
-                content_type = stream.headers.get('Content-Type', 'text/plain')
-                extension = mimetypes.guess_extension(content_type)
-                valid = validate_webdav_response(stream, link.href,
-                                                 session.instance_url)
-                if not valid:
-                    return
+        super().write_base(executor, self._download, save, self.title)
 
-                dest = Path(path, title)
-                if extension:
-                    dest = dest.with_suffix(extension)
+    def _save(self, path: Path, stream: Response) -> None:
+        """Save the file if the response is one we want to keep."""
+        if not validate_webdav_response(stream, self.href, self.instance_url):
+            return
 
-                BStream._write_stream(dest, stream)
-            finally:
-                # Necessary because BStream._write_stream does not handle case when valid==False
-                stream.close() 
+        content_type = stream.headers.get('Content-Type', 'text/plain')
+        extension = mimetypes.guess_extension(content_type)
+        name = Path(self.title or "Untitled")
 
-        executor.submit(_download_and_write)
+        if extension:
+            name = name.with_suffix(extension)
+
+        path = Path(path, safe_filename(name.stem, name.suffix))
+        self.save_stream(path, stream, last_modified(stream))

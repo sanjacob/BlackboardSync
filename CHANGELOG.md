@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
+- Downloaded files and folders keep their modification time from Blackboard
+
+### Fixed
+- File and folder names are shortened to fit the 255-byte limit, keeping their extension
+- Downloads no longer keep a network connection open per pending file, which could exhaust the system's sockets and freeze macOS (@Tokarak)
+- Attachment names are sanitised the same way on every OS (e.g. `/` and `:` become `_`)
+
+## [0.19.0] - 2026-11-14
+
+### Added
 - Add support for Universidad Pablo de Olavide (@davidsollodp)
 - Add support for University of Maryland, Baltimore County (@ghost)
 - Add support for Syracuse University (@363843342)
@@ -15,6 +25,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add support for San Jacinto College (@Pulsate8416)
 - Add support for Atlantic Technical University Donegal (@mpmmtc)
 - Add support for Austin Community College (@arkysan)
+- Add support for University of Massachusetts Lowell (@EastArctica)
+- Add support for University of Miami (@nearposting)
+- Add support for Universidad San Pablo CEU (@h-rodriguez-1)
+- Add support for Halmstad University (@Fyroeo)
+- Add support for Instituto Tecnológico de Buenos Aires (@jackpc476)
+- Add support for Qatar University (@doitheturtle)
+- Add support for Nanyang Technological University (@edloseee)
+- Add support for Paris Lodron Universität Salzburg (@arcane-nika)
+- Add support for Adamson University (@Furshia)
+- Add support for Albizu University (@dereckgonzalez2000-pixel)
+- Add support for Universidad del Pacífico (@johnbarraza)
+- Add support for Fordham University (@wukkeen)
+- Add support for Centennial College (@hsiaalex)
+- Add support for Singapore University of Technology and Design (@rnadomdude)
+- Add support for Johnson & Wales University (@elijah-pelton)
+- Add support for University of West London (@jakubroj)
+- Add support for Notre Dame University-Louaize (@UnnamedH)
+- Add support for Norges teknisk-naturvitenskapelige universitet (@joachim-frydenlund)
+- Add support for KU Leuven (@Martinus2004)
+- Add support for Aberystwyth University (@ewill1875)
+- Add support for ILERNA (@candyperfumegirl)
+
+### Fixed
+- External links on Linux are saved with a .desktop extension
+
+### Removed
+- Flatpak packaging (the Flathub package is end-of-life; on Linux, install from PyPI)
+
+### Changed
+- Build with Python 3.15 (3.14 still supported)
+- Python 3.14 or newer is now required
+- Pillow is no longer a build dependency
+- Network autodetection for University of Maryland, Baltimore County and Universidad Pablo de Olavide
 
 ## [0.18.0] - 2024-10-22
 

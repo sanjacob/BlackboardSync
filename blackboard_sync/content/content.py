@@ -3,7 +3,6 @@ from pathlib import Path
 from json import JSONDecodeError
 from pydantic import ValidationError
 from requests import RequestException
-from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.blackboard import (
     BBCourseContent,
@@ -14,6 +13,7 @@ from blackboard.exceptions import BBBadRequestError, BBForbiddenError
 
 from . import folder, document, externallink, body, unhandled
 
+from ..executor import SyncExecutor
 from .api_path import BBContentPath
 from .job import DownloadJob
 
@@ -38,6 +38,7 @@ class Content:
 
         Handler = Content.get_handler(content.contentHandler)
         self.title = content.title_path_safe.replace('.', '_')
+        self.modified = content.modified
 
         try:
             self.handler = Handler(content, api_path, job)
@@ -52,7 +53,7 @@ class Content:
                 BBBadRequestError, BBForbiddenError, RequestException):
             logger.warning(f"Error fetching body of {content.title}")
 
-    def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
+    def write(self, path: Path, executor: SyncExecutor) -> None:
         if self.ignore:
             return
 
@@ -68,6 +69,9 @@ class Content:
         if self.body is not None:
             path.mkdir(exist_ok=True, parents=True)
             self.body.write(path, executor)
+
+        # Only applies if a folder was created for this content
+        executor.set_dir_mtime(path, self.modified)
 
     @staticmethod
     def should_download(content: BBCourseContent, job: DownloadJob) -> bool:

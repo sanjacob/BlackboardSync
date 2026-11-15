@@ -43,7 +43,7 @@ or would like to see which universities are currently supported,
 
 **Built with:**
 
-- [Python 3.11][python]
+- [Python 3.15][python]
 - [PyQt6][pyqt]
 
 
@@ -65,13 +65,6 @@ or would like to see which universities are currently supported,
 
 <a href="https://apps.microsoft.com/detail/9NSXZGKPNX2H?cid=github-readme&mode=mini">
 	<img src="https://get.microsoft.com/images/en-us%20dark.svg" width="200"/>
-</a>
-
-#### Flathub
-
-<a href="https://flathub.org/apps/app.bbsync.BlackboardSync">
-  <img alt="Download on Flathub"
-       src="https://flathub.org/api/badge?svg&locale=en" width="200"/>
 </a>
 
 #### Windows (.exe) and MacOS (.dmg)
@@ -96,7 +89,7 @@ blackboardsync
 
 #### From source
 
-##### Requires [Python >=3.10, pip][python], [pipenv][pipenv], [git][git]
+##### Requires [Python >=3.14,<3.16, pip][python], [pipenv][pipenv], [git][git]
 
 ```bash
 git clone https://github.com/sanjacob/BlackboardSync.git
@@ -154,8 +147,6 @@ more information available at the [Free Software Foundation][gnu].
 
 README templates/guide by [tonycrosby-tech][tonycrosby], [neildrew][neildrew],
 and [Rita Łyczywek][bulldogjob]
-
-Flathub team for their quick work in approving the app :heart:
 
 
 <!-- Project -->

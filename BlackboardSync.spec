@@ -7,6 +7,9 @@ from PyInstaller.utils.hooks import copy_metadata
 def get_icon():
     if platform.system() == 'Windows':
         return 'packaging\\windows\\icon.ico'
+    if platform.system() == 'Darwin':
+        # Prebuilt .icns (scripts/make_icns.py) so PyInstaller needs no Pillow
+        return 'packaging/macos/icon.icns'
     return 'blackboard_sync/assets/logo.png'
 
 
@@ -75,7 +78,7 @@ coll = COLLECT(
 app = BUNDLE(
     coll,
     name="BlackboardSync.app",
-    icon='blackboard_sync/assets/logo.png',
+    icon=get_icon(),
     bundle_indentifier='app.bbsync.BlackboardSync',
     info_plist={
         'LSUIElement': True

@@ -1,12 +1,17 @@
 import uuid
 import mimetypes
 
+from functools import partial
+
 from pathlib import Path
+from datetime import datetime
+from requests import Response
 from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.blackboard import BBAttachment
 
 from .base import BStream
+from .naming import safe_filename
 from .api_path import BBContentPath
 from .job import DownloadJob
 
@@ -15,7 +20,8 @@ class Attachment(BStream):
     """File attached to a content."""
 
     def __init__(self, attachment: BBAttachment, api_path: BBContentPath,
-                 job: DownloadJob):
+                 job: DownloadJob, modified: datetime | None = None):
+        self.modified = modified
         filename = attachment.fileName or str(uuid.uuid1())
         name_ext = '.' + filename.split('.')[-1]
 
@@ -24,24 +30,21 @@ class Attachment(BStream):
         possible_ext = mimetypes.guess_all_extensions(mime, strict=False)
 
         if name_ext in possible_ext:
-            self.filename = filename
+            stem, ext = filename.removesuffix(name_ext), name_ext
         else:
-            real_ext = possible_ext[0] if possible_ext else '.txt'
-            self.filename = filename + real_ext
+            stem = filename
+            ext = possible_ext[0] if possible_ext else '.txt'
 
-        # Store download parameters; defer opening the connection until write()
-        self._session = job.session
-        self._attachment_id = attachment.id
-        self._api_path = api_path
+        self.filename = safe_filename(stem, ext)
+
+        # Not downloaded yet: the worker that saves the file opens it
+        self._download = partial(job.session.download,
+                                 attachment_id=attachment.id, **api_path)
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
-        session = self._session
-        attachment_id = self._attachment_id
-        api_path = self._api_path
         filepath = path / self.filename
 
-        def _download_and_write() -> None:
-            stream = session.download(attachment_id=attachment_id, **api_path)
-            BStream._write_stream(filepath, stream)
+        def save(stream: Response) -> None:
+            self.save_stream(filepath, stream, self.modified)
 
-        executor.submit(_download_and_write)
+        super().write_base(executor, self._download, save, self.filename)

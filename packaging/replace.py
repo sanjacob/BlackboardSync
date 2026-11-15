@@ -22,8 +22,6 @@ from blackboard_sync import (
     __copyright__
 )
 
-from releases import get_releases
-
 
 def get_version_base(version: str) -> str:
     v = Version(version)
@@ -31,7 +29,7 @@ def get_version_base(version: str) -> str:
 
 
 def replace_templates(template_files, context, outdir) -> int:
-    folders = ["packaging/windows", "packaging/macos", "packaging/linux"]
+    folders = ["packaging/windows", "packaging/macos"]
 
     env = Environment(
         loader=FileSystemLoader(folders),
@@ -61,10 +59,6 @@ def main(argv: list[str]) -> int:
 
         # macOS
         "pkg_macos.sh",
-
-        # Linux
-        "app.bbsync.BlackboardSync.desktop",
-        "app.bbsync.BlackboardSync.metainfo.xml"
     ]
 
     context = {
@@ -80,7 +74,6 @@ def main(argv: list[str]) -> int:
         'license':__license__,
         'license_spdx':__license_spdx__,
         'copyright':__copyright__,
-        'releases':get_releases()
     }
 
     os.mkdir("replaced")
