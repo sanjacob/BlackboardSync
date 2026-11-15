@@ -17,7 +17,7 @@ class BStream:
 
     The download is started by the worker thread that saves it, rather than
     when the content tree is built, so at most one connection per worker is
-    open at a time. The connection is always closed afterwards (#685).
+    open at a time. The connection is always closed afterwards.
     """
     CHUNK_SIZE = 1024
 
