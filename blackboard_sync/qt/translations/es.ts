@@ -307,42 +307,32 @@
 <context>
     <name>TrayMessages</name>
     <message>
-        <location filename="../notification.py" line="57"/>
+        <location filename="../notification.py" line="56"/>
         <source>An update is available</source>
         <translation>Una actualización está disponible</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="58"/>
+        <location filename="../notification.py" line="57"/>
         <source>You can update the app from your digital store</source>
         <translation>Puedes actualizar la app desde tu tienda digital</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="62"/>
+        <location filename="../notification.py" line="61"/>
         <source>The download could not be completed</source>
         <translation>La descarga no se pudo completar</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="63"/>
+        <location filename="../notification.py" line="62"/>
         <source>There was an error while downloading your content</source>
         <translation>Hubo un error al descargar tu contenido</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="67"/>
-        <source>Your network connection seems unstable</source>
-        <translation>Tu conexión de red parece inestable</translation>
-    </message>
-    <message>
-        <location filename="../notification.py" line="68"/>
-        <source>Some downloads were interrupted. They are resumed automatically, but syncing may take longer</source>
-        <translation>Algunas descargas se interrumpieron. Se reanudan automáticamente, pero la sincronización puede tardar más</translation>
-    </message>
-    <message>
-        <location filename="../notification.py" line="73"/>
+        <location filename="../notification.py" line="66"/>
         <source>The app is running in the background</source>
         <translation>La app está corriendo en el fondo</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="74"/>
+        <location filename="../notification.py" line="67"/>
         <source>Click the tray icon to manage your downloads</source>
         <translation>Puedes gestionar tus descargas desde la bandeja</translation>
     </message>
