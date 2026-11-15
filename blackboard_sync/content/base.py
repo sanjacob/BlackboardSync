@@ -1,28 +1,57 @@
 import os
+import logging
 from pathlib import Path
 from datetime import datetime
 from requests import Response
+from collections.abc import Callable
 
 from concurrent.futures import ThreadPoolExecutor
 
+from blackboard.exceptions import BBBadRequestError, BBForbiddenError
+
+logger = logging.getLogger(__name__)
+
 
 class BStream:
-    """Base class for content that can be downloaded as a byte stream."""
+    """Base class for content that can be downloaded as a byte stream.
+
+    The download is started by the worker thread that saves it, rather than
+    when the content tree is built, so at most one connection per worker is
+    open at a time. The connection is always closed afterwards.
+    """
     CHUNK_SIZE = 1024
 
-    def write_base(self, path: Path, executor: ThreadPoolExecutor,
-                   stream: Response,
-                   modified: datetime | None = None) -> None:
-        """Schedule the write operation."""
+    def write_base(self, executor: ThreadPoolExecutor,
+                   download: Callable[[], Response],
+                   save: Callable[[Response], None], name: str) -> None:
+        """Schedule `download`, then `save` with its response.
 
-        def _write() -> None:
-            with path.open("wb") as f:
-                for chunk in stream.iter_content(chunk_size=self.CHUNK_SIZE):
-                    f.write(chunk)
+        A file the server refuses to send is logged and skipped, so it does
+        not fail the rest of the sync.
+        """
 
-            set_mtime(path, modified)
+        def _download_and_save() -> None:
+            try:
+                stream = download()
+            except (BBBadRequestError, BBForbiddenError):
+                logger.warning(f"Could not download {name}", exc_info=True)
+                return
 
-        executor.submit(_write)
+            try:
+                save(stream)
+            finally:
+                stream.close()
+
+        executor.submit(_download_and_save)
+
+    def save_stream(self, path: Path, stream: Response,
+                    modified: datetime | None = None) -> None:
+        """Write `stream` to `path`. Runs on the worker thread."""
+        with path.open("wb") as f:
+            for chunk in stream.iter_content(chunk_size=self.CHUNK_SIZE):
+                f.write(chunk)
+
+        set_mtime(path, modified)
 
 
 class FStream:

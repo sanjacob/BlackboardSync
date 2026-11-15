@@ -8,7 +8,7 @@ from blackboard.blackboard import BBAttachment, BBCourse, BBAvailability
 from blackboard_sync.content import Course
 from blackboard_sync.content.attachment import Attachment
 from blackboard_sync.content.externallink import ExternalLink
-from blackboard_sync.content.webdav import WebDavFile
+from blackboard_sync.content.webdav import Link, WebDavFile
 from blackboard_sync.content.naming import (
     safe_filename, MAX_NAME_BYTES, MAX_SUFFIX_BYTES
 )
@@ -125,14 +125,18 @@ def test_attachment_name_with_separator(tmp_path: Path) -> None:
 
 
 def test_long_webdav_file_is_written(tmp_path: Path) -> None:
-    webdav = WebDavFile.__new__(WebDavFile)
-    webdav.title = LONG_TITLE
-    webdav.extension = ".docx"
-    webdav.valid = True
-    webdav.modified = None
-    webdav.stream = stream()
+    docx = ("application/vnd.openxmlformats-officedocument"
+            ".wordprocessingml.document")
+    response = stream()
+    response.status_code = 200
+    response.headers = {"Content-Type": docx}
 
-    webdav.write(tmp_path, run_now())
+    job = mock.Mock()
+    job.session.instance_url = "https://example.com"
+    job.session.download_webdav.return_value = response
+    link = Link(href="https://example.com/bbcswebdav/file", text=LONG_TITLE)
+
+    WebDavFile(link, job).write(tmp_path, run_now())
 
     [written] = tmp_path.iterdir()
     assert written.suffix == ".docx"

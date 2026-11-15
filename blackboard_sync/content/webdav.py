@@ -22,6 +22,7 @@ Parse an html to look for links
 
 import mimetypes
 from pathlib import Path
+from functools import partial
 from datetime import datetime
 from email.utils import parsedate_to_datetime
 from requests import Response
@@ -123,20 +124,30 @@ class WebDavFile(BStream):
     """A Blackboard WebDav file which can be downloaded directly"""
     def __init__(self, link: Link, job: DownloadJob) -> None:
         self.title = sanitize_filename(link.text, replacement_text="_")
-        self.stream = job.session.download_webdav(webdav_url=link.href)
-        content_type = self.stream.headers.get('Content-Type', 'text/plain')
-        self.extension = mimetypes.guess_extension(content_type)
-        self.valid = validate_webdav_response(self.stream, link.href,
-                                              job.session.instance_url)
-        self.modified = last_modified(self.stream)
+        self.href = link.href
+        self.instance_url = job.session.instance_url
+
+        # Not downloaded yet: the worker that saves the file opens it
+        self._download = partial(job.session.download_webdav,
+                                 webdav_url=link.href)
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
-        if self.valid:
-            name = Path(self.title or "Untitled")
+        def save(stream: Response) -> None:
+            self._save(path, stream)
 
-            if self.extension:
-                name = name.with_suffix(self.extension)
+        super().write_base(executor, self._download, save, self.title)
 
-            path = Path(path, safe_filename(name.stem, name.suffix))
+    def _save(self, path: Path, stream: Response) -> None:
+        """Save the file if the response is one we want to keep."""
+        if not validate_webdav_response(stream, self.href, self.instance_url):
+            return
 
-            super().write_base(path, executor, self.stream, self.modified)
+        content_type = stream.headers.get('Content-Type', 'text/plain')
+        extension = mimetypes.guess_extension(content_type)
+        name = Path(self.title or "Untitled")
+
+        if extension:
+            name = name.with_suffix(extension)
+
+        path = Path(path, safe_filename(name.stem, name.suffix))
+        self.save_stream(path, stream, last_modified(stream))

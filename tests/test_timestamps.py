@@ -39,7 +39,7 @@ def mtime(path: Path) -> datetime:
 
 def test_bstream_sets_mtime(tmp_path: Path) -> None:
     path = tmp_path / "file.bin"
-    BStream().write_base(path, run_now(), stream(), FILE_TIME)
+    BStream().save_stream(path, stream(), FILE_TIME)
     assert mtime(path) == FILE_TIME
 
 

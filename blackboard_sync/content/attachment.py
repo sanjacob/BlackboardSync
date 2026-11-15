@@ -1,8 +1,11 @@
 import uuid
 import mimetypes
 
+from functools import partial
+
 from pathlib import Path
 from datetime import datetime
+from requests import Response
 from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.blackboard import BBAttachment
@@ -34,9 +37,14 @@ class Attachment(BStream):
 
         self.filename = safe_filename(stem, ext)
 
-        self.stream = job.session.download(attachment_id=attachment.id,
-                                           **api_path)
+        # Not downloaded yet: the worker that saves the file opens it
+        self._download = partial(job.session.download,
+                                 attachment_id=attachment.id, **api_path)
 
     def write(self, path: Path, executor: ThreadPoolExecutor) -> None:
-        super().write_base(path / self.filename, executor, self.stream,
-                           self.modified)
+        filepath = path / self.filename
+
+        def save(stream: Response) -> None:
+            self.save_stream(filepath, stream, self.modified)
+
+        super().write_base(executor, self._download, save, self.filename)
