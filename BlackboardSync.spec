@@ -81,6 +81,8 @@ app = BUNDLE(
     icon=get_icon(),
     bundle_indentifier='app.bbsync.BlackboardSync',
     info_plist={
-        'LSUIElement': True
+        'LSUIElement': True,
+        # Quarantine the files the app creates, as browsers do for downloads
+        'LSFileQuarantineEnabled': True
     },
 )

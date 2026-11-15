@@ -11,7 +11,7 @@ from concurrent.futures import ThreadPoolExecutor
 from blackboard.blackboard import BBAttachment
 
 from .base import BStream
-from .naming import safe_filename
+from .naming import safe_filename, split_extension
 from .api_path import BBContentPath
 from .job import DownloadJob
 
@@ -23,17 +23,12 @@ class Attachment(BStream):
                  job: DownloadJob, modified: datetime | None = None):
         self.modified = modified
         filename = attachment.fileName or str(uuid.uuid1())
-        name_ext = '.' + filename.split('.')[-1]
+        stem, ext = split_extension(filename)
 
-        # Guess extension based on content
-        mime = attachment.mimeType or 'text/plain'
-        possible_ext = mimetypes.guess_all_extensions(mime, strict=False)
-
-        if name_ext in possible_ext:
-            stem, ext = filename.removesuffix(name_ext), name_ext
-        else:
-            stem = filename
-            ext = possible_ext[0] if possible_ext else '.txt'
+        # Keep the uploaded name; only guess an extension if it has none
+        if not ext:
+            mime = attachment.mimeType or 'text/plain'
+            ext = mimetypes.guess_extension(mime, strict=False) or '.txt'
 
         self.filename = safe_filename(stem, ext)
 

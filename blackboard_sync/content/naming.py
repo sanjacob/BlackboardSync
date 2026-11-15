@@ -54,6 +54,19 @@ def safe_filename(name: str, suffix: str = "",
     return _sanitize(stem + suffix)
 
 
+def split_extension(name: str) -> tuple[str, str]:
+    """Split a file name into its stem and extension, e.g. ('notes', '.pdf').
+
+    Only a short alphanumeric suffix containing a letter counts as an
+    extension, so names like 'Chapter 3.1' or 'v2. final' have none.
+    """
+    stem, dot, ext = name.rpartition('.')
+
+    if dot and stem and ext.isalnum() and not ext.isdigit() and len(ext) <= 10:
+        return stem, dot + ext
+    return name, ''
+
+
 def _sanitize(name: str, max_len: int = MAX_NAME_BYTES) -> str:
     return sanitize_filename(name, replacement_text="_",
                              platform="universal", max_len=max_len)
