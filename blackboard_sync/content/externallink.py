@@ -15,6 +15,7 @@ class ExternalLink(FStream):
     def __init__(self, content: BBCourseContent, _: None,
                  job: DownloadJob) -> None:
         self.url = None
+        self.modified = content.modified
 
         if content.contentHandler is not None:
             self.url = content.contentHandler.url
@@ -32,7 +33,7 @@ class ExternalLink(FStream):
 
         path = path / safe_filename(path.name, suffix)
 
-        super().write_base(path, executor, body)
+        super().write_base(path, executor, body, self.modified)
 
     def create_unix_body(self, url: str) -> str:
         return f"[Desktop Entry]\nIcon=text-html\nType=Link\nURL[$e]={url}"

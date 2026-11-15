@@ -106,6 +106,7 @@ class BlackboardDownload:
         logger.info("Shutting down download workers")
 
         self.executor.shutdown(wait=True, cancel_futures=self.cancelled)
+        self.executor.apply_dir_times()
         self.executor.raise_exceptions()
 
         return start_time if not self.cancelled else None

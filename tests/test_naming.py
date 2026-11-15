@@ -86,7 +86,7 @@ def test_long_course_title() -> None:
 
 
 def test_long_external_link_is_written(tmp_path: Path) -> None:
-    content = mock.Mock()
+    content = mock.Mock(modified=None)
     content.contentHandler.url = "https://example.com"
     link = ExternalLink(content, None, mock.Mock())
 
@@ -128,6 +128,7 @@ def test_long_webdav_file_is_written(tmp_path: Path) -> None:
     webdav.title = LONG_TITLE
     webdav.extension = ".docx"
     webdav.valid = True
+    webdav.modified = None
     webdav.stream = stream()
 
     webdav.write(tmp_path, run_now())

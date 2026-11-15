@@ -15,7 +15,10 @@
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
 # MA  02110-1301, USA.
 
+import os
 from typing import Any
+from pathlib import Path
+from datetime import datetime
 from collections.abc import Callable
 
 from concurrent.futures import ThreadPoolExecutor, Future
@@ -26,6 +29,7 @@ class SyncExecutor(ThreadPoolExecutor):
     def __init__(self, max_workers: int | None = None) -> None:
         super().__init__(max_workers)
         self.futures: list[Future[Any]] = []
+        self.dir_times: dict[Path, datetime] = {}
 
     def submit(self, fn: Callable[..., Any], /,
                *args: Any, **kwargs: Any) -> Future[Any]:
@@ -42,3 +46,25 @@ class SyncExecutor(ThreadPoolExecutor):
 
         for future in done:
             future.result()
+
+    def set_dir_mtime(self, path: Path, modified: datetime | None) -> None:
+        """Set the modification time of directory `path` after shutdown.
+
+        Writing files into a directory updates its modification time, so
+        directory times can only be applied once every write has finished.
+        """
+        if modified is not None:
+            self.dir_times[path] = modified
+
+    def apply_dir_times(self) -> None:
+        """Apply the times recorded by `set_dir_mtime`.
+
+        Must be called after `shutdown`. Directories that were never
+        created (e.g. nothing in them was downloaded) are skipped.
+        """
+        for path, modified in self.dir_times.items():
+            if path.is_dir():
+                timestamp = modified.timestamp()
+                os.utime(path, (timestamp, timestamp))
+
+        self.dir_times.clear()

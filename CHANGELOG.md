@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Downloaded files and folders keep their modification time from Blackboard
+
 ### Fixed
 - File and folder names are shortened to fit the 255-byte limit, keeping their extension
 - Course titles and attachment names are sanitised the same way on every OS (e.g. `/` and `:` become `_`)
