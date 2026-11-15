@@ -222,5 +222,8 @@ class UIManager(QObject):
     def notify_sync_error(self) -> None:
         self.tray.notify(Event.DOWNLOAD_ERROR)
 
+    def notify_unstable_network(self) -> None:
+        self.tray.notify(Event.UNSTABLE_NETWORK)
+
     def notify_update(self) -> None:
         self.tray.notify(Event.UPDATE_AVAILABLE)

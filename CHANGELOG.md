@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Downloaded files and folders keep their modification time from Blackboard
+- A notification warns when the network connection is unstable
 
 ### Fixed
 - File and folder names are shortened to fit the 255-byte limit, keeping their extension
 - Downloads no longer keep a network connection open per pending file, which could exhaust the system's sockets and freeze macOS (@Tokarak)
+- Interrupted downloads resume from where they stopped instead of failing the sync
 - Attachment names are sanitised the same way on every OS (e.g. `/` and `:` become `_`)
 
 ## [0.19.0] - 2026-11-14

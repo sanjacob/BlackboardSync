@@ -89,7 +89,12 @@ class SyncController:
                           self.model.is_logged_in,
                           self.model.is_syncing)
 
-        if self.model.has_error:
+        has_error = self.model.has_error
+
+        # An unstable network explains most download errors, so say that
+        if self.model.unstable_network:
+            self.ui.notify_unstable_network()
+        elif has_error:
             self.ui.notify_sync_error()
 
     def open_tray(self, clicked) -> None:

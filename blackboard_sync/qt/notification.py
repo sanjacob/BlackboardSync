@@ -25,6 +25,7 @@ from PyQt6.QtCore import QObject
 class Event(Enum):
     UPDATE_AVAILABLE = auto()
     DOWNLOAD_ERROR = auto()
+    UNSTABLE_NETWORK = auto()
     APP_RUNNING = auto()
 
 
@@ -60,6 +61,12 @@ class TrayMessages(QObject):
             Event.DOWNLOAD_ERROR: SyncTrayMsg(
                 self.tr('The download could not be completed'),
                 self.tr('There was an error while downloading your content'),
+                Severity.WARNING.value, Duration.LONG
+            ),
+            Event.UNSTABLE_NETWORK: SyncTrayMsg(
+                self.tr('Your network connection seems unstable'),
+                self.tr('Some downloads were interrupted. They are resumed '
+                        'automatically, but syncing may take longer'),
                 Severity.WARNING.value, Duration.LONG
             ),
             Event.APP_RUNNING: SyncTrayMsg(
