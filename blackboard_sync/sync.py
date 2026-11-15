@@ -26,6 +26,11 @@ import logging
 import threading
 from pathlib import Path
 from requests import RequestException
+from requests.exceptions import (
+    ChunkedEncodingError,
+    ConnectionError,
+    Timeout
+)
 from datetime import datetime, timezone, timedelta
 
 from requests.cookies import RequestsCookieJar
@@ -38,6 +43,9 @@ from .download import BlackboardDownload
 from .institutions import Institution, get_by_index
 
 logger = logging.getLogger(__name__)
+
+# Exceptions that mean the network failed, rather than Blackboard or the app
+NETWORK_ERRORS = (ConnectionError, Timeout, ChunkedEncodingError)
 
 
 class BlackboardSync:
@@ -70,6 +78,8 @@ class BlackboardSync:
         self._is_active = False
         # Flag to know if download thread has errors
         self._has_error = False
+        # Flag to know if the network failed during a download
+        self._unstable_network = False
 
         logger.debug("Initialising BlackboardSync")
 
@@ -154,14 +164,20 @@ class BlackboardSync:
         except BBUnauthorizedError:
             logger.exception("User session expired")
             self.log_out()
-        except Exception:
+        except Exception as error:
             logger.exception("Download error")
             self._has_error = True
+
+            if isinstance(error, NETWORK_ERRORS):
+                self._unstable_network = True
 
             # manually postpone next sync job
             self.schedule_next_sync(datetime.now(timezone.utc))
         else:
             return start_time
+        finally:
+            if self._download.network_unstable:
+                self._unstable_network = True
         return None
 
     def _sync_task(self) -> None:
@@ -310,6 +326,17 @@ class BlackboardSync:
     def is_syncing(self) -> bool:
         """Flag raised everytime a download job is running."""
         return self._is_syncing
+
+    @property
+    def unstable_network(self) -> bool:
+        """Flag indicates the network failed during a download.
+
+        Set by any interruption, even one the download recovered from.
+        """
+        if self._unstable_network:
+            self._unstable_network = False
+            return True
+        return False
 
     @property
     def has_error(self) -> bool:
