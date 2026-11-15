@@ -8,9 +8,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Downloaded files and folders keep their modification time from Blackboard
+- Downloaded files are marked as coming from the internet (Mark of the Web on Windows, quarantine on macOS), as browsers do
 
 ### Fixed
 - File and folder names are shortened to fit the 255-byte limit, keeping their extension
+- Attachments keep their own extension (e.g. `.ipynb`, `.m`) instead of gaining one guessed from their type; an extension is only guessed when the name has none
 - Downloads no longer keep a network connection open per pending file, which could exhaust the system's sockets and freeze macOS (@Tokarak)
 - Attachment names are sanitised the same way on every OS (e.g. `/` and `:` become `_`)
 

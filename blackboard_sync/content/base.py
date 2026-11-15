@@ -1,4 +1,5 @@
 import os
+import sys
 import logging
 from pathlib import Path
 from datetime import datetime
@@ -51,6 +52,7 @@ class BStream:
             for chunk in stream.iter_content(chunk_size=self.CHUNK_SIZE):
                 f.write(chunk)
 
+        mark_downloaded(path)
         set_mtime(path, modified)
 
 
@@ -65,9 +67,32 @@ class FStream:
             with path.open('w', encoding='utf-8') as f:
                 f.write(body)
 
+            mark_downloaded(path)
             set_mtime(path, modified)
 
         executor.submit(_write)
+
+
+def mark_downloaded(path: Path) -> None:
+    """Mark `path` as downloaded from the internet, as browsers do.
+
+    On Windows this writes the Mark of the Web (a Zone.Identifier stream
+    for the Internet zone), so SmartScreen and Office's Protected View
+    treat the file with the same care as a browser download. Must run
+    before `set_mtime`, as writing the stream updates the file's time.
+
+    macOS quarantines files the app creates through LSFileQuarantineEnabled
+    in its Info.plist instead. Other platforms have no equivalent.
+    """
+    if sys.platform != 'win32':
+        return
+
+    try:
+        with open(f"{path}:Zone.Identifier", 'w', encoding='utf-8') as f:
+            f.write("[ZoneTransfer]\nZoneId=3\n")
+    except OSError:
+        # e.g. FAT32 drives and some network shares have no such streams
+        logger.debug(f"Could not mark {path} as downloaded", exc_info=True)
 
 
 def set_mtime(path: Path, modified: datetime | None) -> None:
