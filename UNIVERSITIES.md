@@ -194,6 +194,7 @@ If this is not something you'd like, please let me know.
 - The Chinese University of Hong Kong, Shenzhen
 - Hong Kong Community College
 - Shiv Nadar University
+- Lebanese American University
 - Qatar University
 - Nanyang Technological University
 - Adamson University
