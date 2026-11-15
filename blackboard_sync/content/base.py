@@ -13,6 +13,8 @@ from concurrent.futures import ThreadPoolExecutor
 
 from blackboard.exceptions import BBBadRequestError, BBForbiddenError
 
+from ..executor import SyncExecutor
+
 logger = logging.getLogger(__name__)
 
 # Raised while reading a response body when the connection breaks part way
@@ -38,12 +40,15 @@ class ResumableResponse:
     count, so a slow but progressing download is never abandoned.
 
     Everything other than reading (status, headers, ...) comes from the
-    first response.
+    first response. `on_interrupt` is called on every network failure,
+    including those that are recovered from.
     """
 
     def __init__(self, response: Response, download: Callable[..., Response],
-                 max_retries: int, retry_delay: float) -> None:
+                 max_retries: int, retry_delay: float,
+                 on_interrupt: Callable[[], None] | None = None) -> None:
         self._first = response
+        self._on_interrupt = on_interrupt
         self._current = response
         self._download = download
         self.max_retries = max_retries
@@ -94,6 +99,9 @@ class ResumableResponse:
 
                 return
             except INTERRUPTED:
+                if self._on_interrupt is not None:
+                    self._on_interrupt()
+
                 if not skip and str(received) == _length(self._first):
                     return  # every byte arrived before the connection broke
 
@@ -229,8 +237,14 @@ class BStream:
                 logger.warning(f"Could not download {name}", exc_info=True)
                 return
 
+            on_interrupt = None
+
+            if isinstance(executor, SyncExecutor):
+                on_interrupt = executor.report_network_error
+
             stream = ResumableResponse(response, download,
-                                       self.MAX_RETRIES, self.RETRY_DELAY)
+                                       self.MAX_RETRIES, self.RETRY_DELAY,
+                                       on_interrupt)
 
             try:
                 save(cast(Response, stream))

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 - Downloaded files and folders keep their modification time from Blackboard
+- A notification warns when the network connection is unstable
 
 ### Fixed
 - File and folder names are shortened to fit the 255-byte limit, keeping their extension

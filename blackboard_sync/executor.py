@@ -30,6 +30,9 @@ class SyncExecutor(ThreadPoolExecutor):
         super().__init__(max_workers)
         self.futures: list[Future[Any]] = []
         self.dir_times: dict[Path, datetime] = {}
+        # Set if any download was interrupted by the network, even if it
+        # was then resumed successfully
+        self.network_unstable = False
 
     def submit(self, fn: Callable[..., Any], /,
                *args: Any, **kwargs: Any) -> Future[Any]:
@@ -46,6 +49,10 @@ class SyncExecutor(ThreadPoolExecutor):
 
         for future in done:
             future.result()
+
+    def report_network_error(self) -> None:
+        """Record that the network failed during a download."""
+        self.network_unstable = True
 
     def set_dir_mtime(self, path: Path, modified: datetime | None) -> None:
         """Set the modification time of directory `path` after shutdown.

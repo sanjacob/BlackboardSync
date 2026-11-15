@@ -69,6 +69,11 @@ class BlackboardDownload:
         if last_downloaded is not None:
             self._last_downloaded = last_downloaded
 
+    @property
+    def network_unstable(self) -> bool:
+        """True if the network failed at any point during the download."""
+        return self.executor.network_unstable
+
     def download(self) -> datetime | None:
         """Retrieve the user's courses, and start download of all contents
 
