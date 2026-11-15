@@ -307,32 +307,42 @@
 <context>
     <name>TrayMessages</name>
     <message>
-        <location filename="../notification.py" line="56"/>
+        <location filename="../notification.py" line="57"/>
         <source>An update is available</source>
         <translation>Ein Update ist verfügbar</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="57"/>
+        <location filename="../notification.py" line="58"/>
         <source>You can update the app from your digital store</source>
         <translation>Sie können die App in Ihrem digitalen Store aktualisieren</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="61"/>
+        <location filename="../notification.py" line="62"/>
         <source>The download could not be completed</source>
         <translation>Der Download konnte nicht abgeschlossen werden</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="62"/>
+        <location filename="../notification.py" line="63"/>
         <source>There was an error while downloading your content</source>
         <translation>Beim Herunterladen Ihrer Inhalte ist ein Fehler aufgetreten</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="66"/>
+        <location filename="../notification.py" line="67"/>
+        <source>Your network connection seems unstable</source>
+        <translation>Ihre Netzwerkverbindung scheint instabil zu sein</translation>
+    </message>
+    <message>
+        <location filename="../notification.py" line="68"/>
+        <source>Some downloads were interrupted. They are resumed automatically, but syncing may take longer</source>
+        <translation>Einige Downloads wurden unterbrochen. Sie werden automatisch fortgesetzt, aber die Synchronisierung kann länger dauern</translation>
+    </message>
+    <message>
+        <location filename="../notification.py" line="73"/>
         <source>The app is running in the background</source>
         <translation>Die App läuft im Hintergrund</translation>
     </message>
     <message>
-        <location filename="../notification.py" line="67"/>
+        <location filename="../notification.py" line="74"/>
         <source>Click the tray icon to manage your downloads</source>
         <translation>Klicken Sie auf das Symbol im Tray, um Ihre Downloads zu verwalten</translation>
     </message>
